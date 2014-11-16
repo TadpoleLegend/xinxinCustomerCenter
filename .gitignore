@@ -1,0 +1,11 @@
+/target
+.project
+.settings/
+.classpath
+*.log
+*.log.*
+*.jpg
+*.png
+*.class
+src/main/resources/db_server.properties
+src/main/webapp/img/

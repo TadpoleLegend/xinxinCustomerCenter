@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.custom.i18n.resources" value="i18n.engine,i18n.static,ApplicationMessages" />
+	<constant name="struts.action.extension" value="ls" />
+	<constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />
+	
+	<package name="" namespace="/" extends="struts-default">
+		<result-types>
+			 <result-type name="json" class="org.apache.struts2.json.JSONResult" />
+			 <result-type name="redirect" class="org.apache.struts2.dispatcher.ServletRedirectResult"/> 
+		</result-types>
+		<action name="home">
+			<result>index.jsp</result>
+		</action>
+		<action name="customer">
+			<result>customer.jsp</result>
+		</action>
+		<action name="findAllProblems" class="commonAction" method="findAllProblems">
+			<result name="success" type="json">
+				<param name="root">problems</param>
+			</result>
+		</action>
+		<action name="findAllSteps" class="commonAction" method="findAllSteps">
+			<result name="success" type="json">
+				<param name="root">steps</param>
+			</result>
+		</action>
+		<action name="findAllProvinces" class="commonAction" method="findAllProvinces">
+			<result name="success" type="json">
+				<param name="root">provinces</param>
+			</result>
+		</action>
+	</package>
+	
+	<package name="user" namespace="/user" extends="struts-default">
+		<result-types>
+			 <result-type name="json" class="org.apache.struts2.json.JSONResult" />
+			 <result-type name="redirect" class="org.apache.struts2.dispatcher.ServletRedirectResult"/> 
+		</result-types>
+		<action name="hello" class="userAction" method="doLogin">
+			<result name="success" type="redirectAction">
+				<param name="actionName">load</param>
+				<param name="namespace">/user</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+		
+		<action name="logoff" class="userAction" method="doLogoff">
+			<result name="success" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+		
+		<action name="loadGrab" class="userAction" method="loadGrabPage">
+			<result name="success">bus/user_grab.jsp</result>
+		</action>
+		<action name="loadAssignLocation" class="userAction"
+			method="loadAssignLocationToUser">
+			<result name="success">bus/assign_location_to_user.jsp</result>
+		</action>
+		<action name="loadUser">
+			<result>bus/user.jsp</result>
+		</action>
+		<action name="conf">
+			<result>bus/configuration.jsp</result>
+		</action>
+
+	</package>
+	<package name="json" namespace="/" extends="json-default">
+		<result-types>
+			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
+		</result-types>
+		<action name="ajaxFindUser" class="userAction" method="ajaxFindUser">
+			<result name="success" type="json">
+				<param name="root">users</param>
+			</result>
+		</action>
+		<action name="getAllUserAccounts" class="userAction" method="getAllUserAccounts">
+			<result name="success" type="json">
+				<param name="root">usersList</param>
+			</result>
+		</action>
+		<action name="loadAllUsers" class="userAction" method="loadAllUsers">
+			<result name="success" type="json">
+				<param name="root">users</param>
+			</result>
+		</action>
+		<action name="createUser" class="userAction" method="createUser">
+			<result name="success" type="json">
+				<param name="root">user</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root">users</param>
+			</result>
+		</action>
+		<action name="saveProblem" class="configurationAction" method="saveProblem">
+			<result name="success" type="json">
+				<param name="root">problemOperating</param>
+			</result>
+		</action>
+		<action name="getAllProblems" class="configurationAction"
+			method="getAllProblems">
+			<result name="success" type="json">
+				<param name="root">problems</param>
+			</result>
+		</action>
+		<action name="saveStep" class="configurationAction" method="saveStep">
+			<result name="success" type="json">
+				<param name="root">stepOperating</param>
+			</result>
+		</action>
+		<action name="getAllSteps" class="configurationAction" method="getAllSteps">
+			<result name="success" type="json">
+				<param name="root">steps</param>
+			</result>
+		</action>
+
+	</package>
+
+	<include file="data-struts.xml" />
+	<include file="grab-struts.xml" />
+</struts>
