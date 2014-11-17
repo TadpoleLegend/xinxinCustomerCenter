@@ -29,6 +29,11 @@
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id="container">
+		
+<div style="color:red">
+    <s:fielderror />
+</div>
+		
 			<div class="row">
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
@@ -195,61 +200,66 @@
 							<br>
 							<h4>补充客户信息</h4>
 							<br>
+							<div id="addtionalCompanyInformation" data-bind="with : $root.addtion">
 							<div class="row">
 								<div class="three columns">
 									<label>院长姓名</label>
-									<input type="text"/>
+									<input type="text" data-bind="value : bossName"/>
 								</div>
 								<div class="three columns">
 									<label>院长手机</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : bossMobile"/>
 								</div>
 								<div class="three columns">
 									<label>院长电话</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : bossTelephone"/>
 								</div>
 								<div class="three columns">
 									<label>院长QQ或者微信号</label>
-									<input type="text"/>
+									<input type="text" data-bind="value : bossQQorWechat"/>
 								</div>
 							</div>
 							<div class="row">
 								<div class="three columns">
 									<label>店个数</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : branchCount"/>
 								</div>
 								<div class="three columns">
 									<label>店长人数</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : branchManagerCount"/>
 								</div>
 								<div class="three columns">
 									<label>顾问人数</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : branchConsultantCount"/>
 								</div>
 								<div class="three columns">
 									<label>床位数</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : bedCount"/>
 								</div>
 							</div>
 							<div class="row">
 								<div class="three columns">
 									<label>规模（平方）</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : acreage"/>
 								</div>
 								<div class="three columns">
 									<label>去年业绩（万）</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : lastYearIncome"/>
 								</div>
 								<div class="three columns">
 									<label>现平均多少万</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : thisYearMonthlyIncome"/>
 								</div>
 								<div class="three columns">
 									<label>院长年龄大概多少岁？</label>
-									<input type="text"/>
+									<input class="number" type="text" data-bind="value : bossAge"/>
 								</div>
 							</div>
-								
+							<div class="row">
+								<a class="small blue button" data-bind="click : $root.saveAddition">保存</a>
+							
+							</div>
+							</div>	
 								</div>
 
 								<h4>
@@ -412,6 +422,7 @@
 	<script src="/ls/js/jquery.raty.js"></script>
 	<script>
 		$(document).ready( function() {
+					//$('#addtionalCompanyInformation').validate({});
 					
 					var Problem = function(id, name) {
 						var self = this;
@@ -440,7 +451,24 @@
 						self.detailUrl = detailUrl;
 						self.selectedProblem = ko.observable('');
 					};
-
+					
+					var CompanyAddtion = function() {
+						 var self = this;
+						 self.id='';
+						 self.bossName='';
+						 self.bossMobile='';
+						 self.bossTelephone='';
+						 self.bossQQorWechat='';
+						 self.branchCount='';
+						 self.branchManagerCount='';
+						 self.branchConsultantCount='';
+						 self.bedCount='';
+						 self.acreage='';
+						 self.lastYearIncome='';
+						 self.thisYearMonthlyIncome='';
+						 self.bossAge='';
+					};
+					
 					var Province = function(id, name, cities) {
 						this.id = id;
 						this.name = name;
@@ -470,7 +498,22 @@
 						self.provinces = ko.observableArray([]);
 						self.selectedProvince =  ko.observable('');
 						self.selectedCompany = ko.observable(new Company());
+						self.addtion =  ko.observable(new CompanyAddtion());
 						
+						self.saveAddition = function(item, event) {
+							$.ajax({
+								url : '/ls/user/saveAddtionalCompanyInformation.ls',
+								method : 'POST',
+								data : {additionalCompanyInformation : JSON.stringify(item), company_id: self.selectedCompany().id},
+								success : function(data) {
+									
+									if (data && data.id) {
+										self.addtion(data);		
+									}
+									//self.addtion(data);									
+								}
+							});
+						};
 						self.trackCustomer = function(item, event) {
 							self.selectedCompany(item);
 							

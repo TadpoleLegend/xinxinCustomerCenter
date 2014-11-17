@@ -54,15 +54,9 @@ public class UserAction extends BaseAction {
 			return INPUT;
 
 		} else {
-			user.getFunctions();
-			user.getLocations();
-			addActionMessage("锟斤拷陆锟缴癸拷");
-			System.out.println(user.toString());
 
-			setName(user.getName());
-			setUsername(user.getUsername());
-
-			User storedUserInSession = (User)getSession().get(XinXinConstants.CURRENT_USER);
+			User storedUserInSession = (User) getSession().get(
+					XinXinConstants.CURRENT_USER);
 			if (storedUserInSession == null) {
 				getSession().put(XinXinConstants.CURRENT_USER, user);
 			}

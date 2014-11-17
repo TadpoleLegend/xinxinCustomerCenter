@@ -4,13 +4,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.ls.entity.Company;
+import com.ls.entity.CompanyAdditional;
 import com.ls.repository.CompanyRepository;
 import com.ls.service.CompanyService;
+import com.ls.util.XinXinUtils;
 import com.ls.vo.CompanySearchVo;
 import com.ls.vo.PagedElement;
 
@@ -24,6 +27,8 @@ public class CompanyAction extends BaseAction {
 	private PagedElement<Company> company;
 	
 	private Company c;
+	
+	private CompanyAdditional companyAdditional;
 
 	@Resource(name = "companyService")
 	private CompanyService companyService;
@@ -85,6 +90,23 @@ public class CompanyAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	public String saveAddtionalCompanyInformation() {
+		
+		String companyId = getParameter("company_id");
+//		if (StringUtils.isEmpty(companyId)) {
+//			return ERROR;
+//		}
+		
+		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		
+		CompanyAdditional addition = XinXinUtils.getJavaObjectFromJsonString(getParameter("additionalCompanyInformation"), CompanyAdditional.class);
+		
+		addition.setCompany(company);
+		
+		companyAdditional = companyService.saveAdditionalCompanyInformation(addition);
+		
+		return SUCCESS;
+	}
 	public List<Company> getCompanies() {
 		return companies;
 	}
@@ -108,5 +130,15 @@ public class CompanyAction extends BaseAction {
 	public void setC(Company c) {
 		this.c = c;
 	}
+
+	public CompanyAdditional getCompanyAdditional() {
+		return companyAdditional;
+	}
+
+	public void setCompanyAdditional(CompanyAdditional companyAdditional) {
+		this.companyAdditional = companyAdditional;
+	}
+
+	
 	
 }

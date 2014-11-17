@@ -15,8 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ls.entity.Company;
+import com.ls.entity.CompanyAdditional;
 import com.ls.entity.Problem;
 import com.ls.entity.Step;
+import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.StepRepository;
@@ -34,6 +36,9 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private StepRepository stepRepository;
+	
+	@Autowired
+	private CompanyAdditionalRepository companyAdditionalRepository;
 
 	public List<Company> findCompany(String name) {
 		// TODO Auto-generated method stub
@@ -144,6 +149,9 @@ public class CompanyServiceImpl implements CompanyService {
 		};
 
 	}
-	
+
+	public CompanyAdditional saveAdditionalCompanyInformation(CompanyAdditional addtion) {
+		return companyAdditionalRepository.saveAndFlush(addtion);
+	}
 	
 }
