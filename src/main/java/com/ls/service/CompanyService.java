@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.ls.entity.Company;
+import com.ls.entity.CompanyAdditional;
 import com.ls.entity.Problem;
 import com.ls.entity.Step;
 import com.ls.vo.CompanySearchVo;
@@ -23,4 +24,6 @@ public interface CompanyService {
 	Problem saveProblem(Problem problem);
 
 	Step saveStep(Step step);
+	
+	CompanyAdditional saveAdditionalCompanyInformation(CompanyAdditional addtion);
 }

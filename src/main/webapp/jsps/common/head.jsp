@@ -13,3 +13,4 @@
 <script src="/ls/js/common.js"></script>
 <script src="/ls/js/messenger.min.js"></script>
 <script src="/ls/js/messenger-theme-future.js"></script>
+<script src="/ls/js/jquery.validate.js"></script>

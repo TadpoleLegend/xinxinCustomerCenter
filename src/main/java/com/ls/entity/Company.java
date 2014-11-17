@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -57,6 +58,8 @@ public class Company implements Serializable {
 	@Transient
 	protected String publishDate;
 	
+	@OneToOne(mappedBy="company")
+	protected CompanyAdditional addtion;
 	
 	public String getResouceType() {
 		return resouceType;
@@ -264,6 +267,22 @@ public class Company implements Serializable {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	public CompanyAdditional getAddtion() {
+		return addtion;
+	}
+
+	public void setAddtion(CompanyAdditional addtion) {
+		this.addtion = addtion;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 }
