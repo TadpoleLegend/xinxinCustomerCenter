@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.ls.constants.XinXinConstants;
 import com.ls.entity.User;
 import com.ls.repository.UserRepository;
 import com.ls.service.UserService;
@@ -24,12 +25,12 @@ public class UserAction extends BaseAction {
 	private List<User> users;
 
 	private Set<String> usersList;
-	
+
 	private User user;
-	
+
 	@Resource(name = "userService")
 	private UserService userService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -39,55 +40,55 @@ public class UserAction extends BaseAction {
 	}
 
 	public String doLogin() {
+
 		setupSession();
-		
+
 		String username = getParameter("username");
 		String password = getParameter("password");
-		
+
 		User user = userService.findUser(username, password);
-		
+
 		if (null == user) {
-			addActionMessage("锟斤拷没锟斤拷通锟斤拷锟斤拷证锟斤拷");
+			addActionMessage("User not found.");
 			System.out.println("user not found : " + username + " " + password);
 			return INPUT;
-			
+
 		} else {
 			user.getFunctions();
 			user.getLocations();
-			addActionMessage("锟斤拷陆锟缴癸拷");System.out.println(user.toString());
-			
+			addActionMessage("锟斤拷陆锟缴癸拷");
+			System.out.println(user.toString());
+
 			setName(user.getName());
 			setUsername(user.getUsername());
-			
-			User storedUserInSession = (User) getSession().get(user.getUsername().toString());
+
+			User storedUserInSession = (User)getSession().get(XinXinConstants.CURRENT_USER);
 			if (storedUserInSession == null) {
-				getSession().put(user.getUsername().toString(), user);
+				getSession().put(XinXinConstants.CURRENT_USER, user);
 			}
-			
+
 			return SUCCESS;
 		}
-		
+
 	}
-	
+
 	public String doLogoff() {
+
 		setupSession();
-		
-		String username = getParameter("username");
-		
-		Object user = getSession().get(username);
-		if (null == user) {
-			getSession().remove(username);
-		}
-		
+
+		session.clear();
+
 		return SUCCESS;
-		
+
 	}
 
 	public String getName() {
+
 		return name;
 	}
 
 	public void setName(String name) {
+
 		this.name = name;
 	}
 
@@ -106,11 +107,10 @@ public class UserAction extends BaseAction {
 		String name = getParameter("userName");
 
 		if (StringUtils.isEmpty(name)) {
-			users = userRepository.findAll(new Sort(Sort.Direction.ASC,"id"));
+			users = userRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
 		} else {
 			users = userService.findUserByName(name);
 		}
-		
 
 		return SUCCESS;
 	}
@@ -133,19 +133,20 @@ public class UserAction extends BaseAction {
 
 		return SUCCESS;
 	}
-	
+
 	public String createUser() {
+
 		String userName = getParameter("username");
 		String name = getParameter("name");
 		String password = getParameter("password");
-		
+
 		User userEntity = new User(name, userName, password);
-		
+
 		user = userRepository.save(userEntity);
-		
+
 		return SUCCESS;
 	}
-	
+
 	public String getUsername() {
 
 		return username;
@@ -172,11 +173,13 @@ public class UserAction extends BaseAction {
 	}
 
 	public User getUser() {
+
 		return user;
 	}
 
 	public void setUser(User user) {
+
 		this.user = user;
 	}
-	
+
 }

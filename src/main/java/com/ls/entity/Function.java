@@ -1,14 +1,13 @@
 package com.ls.entity;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,10 +28,13 @@ public class Function implements Serializable {
 	protected Integer url;
 
 	protected Integer description;
+	
+	protected String actionName;
 
-	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "functions", fetch = FetchType.LAZY)
-	protected List<User> users;
-
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="role_id")
+	protected Role role;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -64,13 +66,25 @@ public class Function implements Serializable {
 	public void setDescription(Integer description) {
 		this.description = description;
 	}
-
-	public List<User> getUsers() {
-		return users;
+	
+	public Role getRole() {
+	
+		return role;
+	}
+	
+	public void setRole(Role role) {
+	
+		this.role = role;
 	}
 
-	public void setUsers(List<User> users) {
-		this.users = users;
+	public String getActionName() {
+	
+		return actionName;
+	}
+	
+	public void setActionName(String actionName) {
+	
+		this.actionName = actionName;
 	}
 
 }
