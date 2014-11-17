@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
@@ -19,26 +15,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.io.Files;
-import com.ls.entity.City;
 import com.ls.entity.Company;
-import com.ls.entity.Problem;
 import com.ls.entity.CompanyResource;
+import com.ls.entity.Problem;
 import com.ls.entity.Province;
 import com.ls.grab.GrapImgUtil;
 import com.ls.grab.HtmlParserUtilPlanB;
 import com.ls.grab.HttpClientGrabUtil;
 import com.ls.repository.CompanyRepository;
-import com.ls.repository.ProblemRepository;
 import com.ls.repository.CompanyResourceRepository;
+import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.service.GrabService;
-import com.ls.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
-public class TestGrabCompany {
+public class TestGrab58 {
 
 	private File file = new File("D:\\Jerry\\58.txt");
 
@@ -138,7 +131,7 @@ public class TestGrabCompany {
 		String contactor = HtmlParserUtilPlanB.findCompanyEmployeeCount(html);
 		
 		System.out.println(contactor);
-		Assert.assertEquals("1-49ÈË", contactor);
+		Assert.assertEquals("1-49ï¿½ï¿½", contactor);
 	}
 	
 	@Test
@@ -289,8 +282,8 @@ public class TestGrabCompany {
 	@Test
 	public void testSaveCompany() throws Exception {
 		Company testCompany = new Company();
-		testCompany.setAddress("³¤ÄþÇøÓñÆÁÄÏÂ·");
-		testCompany.setContactor("½­ÀîÃ÷");
+		testCompany.setAddress("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·");
+		testCompany.setContactor("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		testCompany.setEmail("sdfasdfasdf");
 		testCompany.setPhone("1123345564");
 		
@@ -306,7 +299,7 @@ public class TestGrabCompany {
 	public void testSaveCompanyURLone() throws Exception {
 		
 		CompanyResource companyResource = new CompanyResource();
-		companyResource.setName("¹ÃËÕÇøÅ·ÈªÒÁÄÝÃÀÈÝÃÀÌå¹Ý ");
+		companyResource.setName("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·Èªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ");
 		companyResource.setUrl("http://qy.58.com/24230403986438/?PGTID=14047374119020.5358016782187727&ClickID=1");
 		companyResource.setType("58");
 		
@@ -375,7 +368,7 @@ public class TestGrabCompany {
 	
 	@Test
 	public void testFindCompanyWithNameContactorArea() {
-		List<Company> companies = companyRepository.findByNameAndContactorAndArea("¹ÃËÕÇøÅ·ÈªÒÁÄÝÃÀÈÝÃÀÌå¹Ý", "ÌÆÏÈÉú", "ËÕÖÝ");
+		List<Company> companies = companyRepository.findByNameAndContactorAndArea("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·Èªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½");
 		Assert.assertTrue(companies.size() > 0);
 		
 		System.out.println(companies);

@@ -2,6 +2,7 @@ package com.ls.jobs;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.junit.Test;
@@ -13,9 +14,26 @@ import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.ls.entity.Company;
+import com.ls.grab.HtmlParserUtilFor138;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 public class TestGrab138 {
+	
+	
+	public static void main(String []args){
+		try {
+			for(int i=1;i<2;i++){
+			System.out.println("************************************************** page "+i+"***************************************begin");
+			String testURL = "http://s.138job.com/hire/{0}?keyword=&workadd=1273&keywordtype=1&position=0";
+			List<Company> companiesInThisPage = HtmlParserUtilFor138.getInstance().findPagedCompanyList(MessageFormat.format(testURL, i));
+			System.out.println("************************************************** page "+i+"***************************************end");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	@Test
 	public void testGrab138CompanyList() {
