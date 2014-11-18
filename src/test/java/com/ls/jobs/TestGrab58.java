@@ -47,7 +47,7 @@ public class TestGrab58 {
 	@Autowired
 	private ProvinceRepository provinceRepository;
 	
-	@Resource(name = "grabService")
+//	@Resource(name = "grabService")
 	private GrabService grabService;
 
 	@Test

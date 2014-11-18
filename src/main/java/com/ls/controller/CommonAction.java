@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.ls.entity.City;
@@ -17,6 +18,7 @@ import com.ls.repository.StepRepository;
 import com.ls.service.CompanyService;
 
 @Component("commonAction")
+@Scope("prototype")
 public class CommonAction extends BaseAction {
 	
 	private static final long serialVersionUID = 7274858323873739463L;
@@ -43,7 +45,10 @@ public class CommonAction extends BaseAction {
 	 */
 	
 	public String findAllProblems() {
-		problems = problemRepository.findAll();
+		
+		String type = getParameter("type");
+		
+		problems = problemRepository.findByProblemCategory(null);
 		
 		return SUCCESS;
 	}

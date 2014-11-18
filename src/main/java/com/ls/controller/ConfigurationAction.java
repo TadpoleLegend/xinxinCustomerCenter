@@ -38,6 +38,7 @@ public class ConfigurationAction extends BaseAction {
 	public String saveProblem() {
 		String id = getParameter("id");
 		String name = getParameter("name");
+		String category = getParameter("category");
 
 		Problem problem = new Problem();
 
@@ -45,6 +46,7 @@ public class ConfigurationAction extends BaseAction {
 		if (null != id) {
 			problem.setId(Integer.valueOf(id));
 			problem.setName(name);
+			//problem.setCategory(category);
 			problemOperating = companyService.saveProblem(problem);
 
 		} else {
@@ -55,6 +57,7 @@ public class ConfigurationAction extends BaseAction {
 
 			} else {
 				problem.setName(name);
+				//problem.setCategory(category);
 				problemOperating = companyService.saveProblem(problem);
 			}
 

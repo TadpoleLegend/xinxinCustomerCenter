@@ -50,7 +50,7 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 		try {
 
 			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(wholeCityPageHTML);
+			htmlParser.setInputHTML("");
 
 			NodeVisitor nodeVisitor = new NodeVisitor() {
 

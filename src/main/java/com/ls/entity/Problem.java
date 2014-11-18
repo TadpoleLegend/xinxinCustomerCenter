@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,7 +24,9 @@ public class Problem implements Serializable {
 
 	protected String name;
 	
-	protected String category;
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="problem_category_id")
+	protected ProblemCategory problemCategory;
 
 	@ManyToMany(mappedBy = "problems", fetch = FetchType.LAZY)
 	protected List<Company> companies;
@@ -51,14 +55,14 @@ public class Problem implements Serializable {
 		this.companies = companies;
 	}
 	
-	public String getCategory() {
-	
-		return category;
+
+
+	public ProblemCategory getProblemCategory() {
+		return problemCategory;
 	}
 
-	public void setCategory(String category) {
-	
-		this.category = category;
+	public void setProblemCategory(ProblemCategory problemCategory) {
+		this.problemCategory = problemCategory;
 	}
 
 	@Override

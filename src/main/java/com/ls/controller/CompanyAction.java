@@ -17,7 +17,6 @@ import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.CompanySearchVo;
 import com.ls.vo.PagedElement;
-import com.sun.tools.internal.ws.processor.model.Request;
 
 @Component("companyAction")
 public class CompanyAction extends BaseAction {

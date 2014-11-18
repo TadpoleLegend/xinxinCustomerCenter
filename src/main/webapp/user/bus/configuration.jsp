@@ -28,8 +28,30 @@
 	<section class="mainbg">
 		<div class="container">
 			<div class="row">
+				<div class="app-wrapper ui-corner-top">
+					<div class="blue module ui-corner-top clearfix">
+						<h2>问题分类管理</h2>
+					</div>
+					<div class="content">
+						<table class="display compact" id="categoryTable">
+									<thead>
+										<tr>
+											<th class="text-center">分类名称</th>
+										</tr>
+									</thead>
+									<tbody data-bind="foreach: categoryList">
+										<tr>
+											<td class="text-center"><span data-bind="text: name"></span></td>
+										</tr>
 
-				<div class="six columns">
+									</tbody>
+								</table>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+
 					<div class="app-wrapper ui-corner-top">
 						<div class="blue module ui-corner-top clearfix">
 							<h2>公司问题配置</h2>
@@ -39,7 +61,7 @@
 								<div class="row">
 									<div class="two columns"><b  data-bind="text : id"></b>, </div>
 									<div class="three columns"><input type="text" data-bind="value : name"></div>
-									<div class="three columns"><input type="text" data-bind="value : type"></div>
+									<div class="three columns"><input type="text" data-bind="value : category"></div>
 									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.editProblem" title="">保存修改</a></div>
 									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.deleteProblem" title="">删除</a></div>
 								</div>
@@ -58,7 +80,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				<!--  
 				<div class="six columns">
 					<div class="app-wrapper ui-corner-top" id="createUserDiv">
 						<div class="blue module ui-corner-top clearfix">
@@ -85,7 +107,7 @@
 						</div>
 					</div>
 
-				</div>
+				</div>-->
 			</div>
 		</div>
 	</section>
@@ -95,12 +117,12 @@
 	<script>
 		$(document).ready(function() {
 
-			var Problem = function(id, name, type) {
+			var Problem = function(id, name, category) {
 				var self = this;
 				
 				self.id = id;
 				self.name = name;
-				self.type = type;
+				self.category = category;
 			};
 
 			var Step = function(id, name) {
@@ -169,7 +191,7 @@
 
 							self.problems.removeAll();
 							$.each(data, function(index, value) {
-								var p = new Problem(value.id, value.name);
+								var p = new Problem(value.id, value.name, value.category);
 								self.problems.push(p);
 							});
 						}
@@ -186,10 +208,11 @@
 						$.ajax({
 							url : '/ls/saveProblem.ls',
 							data : {
-								name : self.newProblenName()
+								name : self.newProblenName(),
+								category : self.newType()
 							},
 							success : function(data) {
-								var p = new Problem(data.id, data.name);
+								var p = new Problem(data.id, data.name, data.category);
 								self.problems.push(p);
 							}
 						});

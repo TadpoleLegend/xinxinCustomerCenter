@@ -268,28 +268,51 @@
 								<div>
 									<div class="row">
 										<div class="four columns">
-											<div data-bind="foreach : $root.allProblemsConstantA">
-												<label class="input-checkbox" for="ex-chx-a"> <input
-													type="checkbox" name="ex-checkbox" /> <span
-													data-bind="text : name, value : id"></span>
-												</label>
+											<div class="app-wrapper ui-corner-top">
+												<div class="blue module ui-corner-top clearfix">
+													<h2>员工问题</h2>
+												</div>
+												<div class="content">
+													<div data-bind="foreach : $root.allProblemsConstantA">
+														<label class="input-checkbox"> 
+															<input type="checkbox" name="ex-checkbox" /> <span data-bind="text : name, value : id"></span>
+														</label>
+													</div>
+												</div>
 											</div>
+											
 										</div>
 										<div class="four columns">
-											<div data-bind="foreach : $root.allProblemsConstantB">
-												<label class="input-checkbox" for="ex-chx-a"> <input
-													type="checkbox" name="ex-checkbox" /> <span
-													data-bind="text : name, value : id"></span>
+											<div class="app-wrapper ui-corner-top">
+												<div class="blue module ui-corner-top clearfix">
+													<h2>顾客问题</h2>
+												</div>
+												<div class="content">
+													<div data-bind="foreach : $root.allProblemsConstantB">
+												<label class="input-checkbox" for="ex-chx-a"> 
+													<input type="checkbox" name="ex-checkbox" /> 
+													<span data-bind="text : name, value : id"></span>
 												</label>
 											</div>
+												</div>
+											</div>	
+											
 										</div>
 										<div class="four columns">
-											<div data-bind="foreach : $root.allProblemsConstantC">
+										<div class="app-wrapper ui-corner-top">
+												<div class="blue module ui-corner-top clearfix">
+													<h2>其他问题</h2>
+												</div>
+												<div class="content">
+													<div data-bind="foreach : $root.allProblemsConstantC">
 												<label class="input-checkbox" for="ex-chx-a"> <input
 													type="checkbox" name="ex-checkbox" /> <span
 													data-bind="text : name, value : id"></span>
 												</label>
 											</div>
+												</div>
+											</div>
+											
 										</div>
 									</div>
 
@@ -494,9 +517,9 @@
 						self.searchContactor =  ko.observable('');
 						self.searchDistinct =  ko.observable('');
 						self.allStar = ko.observable(true);
-						self.allProblemsConstantA = ko.observableArray([]);
-						self.allProblemsConstantB = ko.observableArray([]);
-						self.allProblemsConstantC = ko.observableArray([]);
+						self.allProblemsConstantA = [];
+						self.allProblemsConstantB = [];
+						self.allProblemsConstantC = [];
 						self.provinces = ko.observableArray([]);
 						self.selectedProvince =  ko.observable('');
 						self.selectedCompany = ko.observable(new Company());
@@ -563,9 +586,9 @@
 							
 							self.searchCompany();
 							
-							self.loadProblemConstants('employee');
-							self.loadProblemConstants('company');
-							self.loadProblemConstants('other');
+							self.loadProblemConstants('员工问题');
+							self.loadProblemConstants('顾客问题');
+							self.loadProblemConstants('其他问题');
 							
 							$.ajax({
 								url : '/ls/findAllProvinces.ls',
@@ -592,16 +615,15 @@
 								url : '/ls/findAllProblems.ls',
 								data : {type : type},
 								success : function(data) {
-									
-									$.each(data, function(index, value) {
-										if (type == 'employee') {
-											self.allProblemsConstantA.push(value);
-										} else if ( type == 'company'){
-											self.allProblemsConstantB.push(value);
+									if (data) {
+										if (type == '员工问题') {
+											self.allProblemsConstantA = data;
+										} else if ( type == '顾客问题'){
+											self.allProblemsConstantB = data;
 										} else {
-											self.allProblemsConstantC.push(value);
+											self.allProblemsConstantC = data;
 										}
-									});
+									}
 								}
 							});
 							
