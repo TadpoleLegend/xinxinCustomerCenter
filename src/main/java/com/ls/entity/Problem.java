@@ -21,6 +21,8 @@ public class Problem implements Serializable {
 	protected Integer id;
 
 	protected String name;
+	
+	protected String category;
 
 	@ManyToMany(mappedBy = "problems", fetch = FetchType.LAZY)
 	protected List<Company> companies;
@@ -47,6 +49,16 @@ public class Problem implements Serializable {
 
 	public void setCompanies(List<Company> companies) {
 		this.companies = companies;
+	}
+	
+	public String getCategory() {
+	
+		return category;
+	}
+
+	public void setCategory(String category) {
+	
+		this.category = category;
 	}
 
 	@Override

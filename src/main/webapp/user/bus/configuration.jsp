@@ -38,17 +38,21 @@
 							<div data-bind="foreach : problems">
 								<div class="row">
 									<div class="two columns"><b  data-bind="text : id"></b>, </div>
-									<div class="six columns"><input type="text" data-bind="value : name"></div>
+									<div class="three columns"><input type="text" data-bind="value : name"></div>
+									<div class="three columns"><input type="text" data-bind="value : type"></div>
 									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.editProblem" title="">保存修改</a></div>
 									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.deleteProblem" title="">删除</a></div>
 								</div>
 							</div>
 							<hr>
 							<div class="row">
-								<div class="eight columns">
+								<div class="four columns">
 									<input type="text" data-bind="value : newProblenName">
 								</div>
-								<div class="three columns">
+								<div class="four columns">
+									<input type="text" data-bind="value : newType">
+								</div>
+								<div class="four columns">
 									<a href="#" class="tiny blue button" data-bind="click : saveProblem" title="">存入新的问题</a>
 								</div>
 							</div>
@@ -71,7 +75,7 @@
 							</div>
 							<hr>
 							<div class="row">
-								<div class="eight columns">
+								<div class="four columns">
 									<input type="text" data-bind="value : newStepName">
 								</div>
 								<div class="three columns">
@@ -91,11 +95,12 @@
 	<script>
 		$(document).ready(function() {
 
-			var Problem = function(id, name) {
+			var Problem = function(id, name, type) {
 				var self = this;
 				
 				self.id = id;
 				self.name = name;
+				self.type = type;
 			};
 
 			var Step = function(id, name) {
@@ -111,6 +116,7 @@
 				self.newProblenName = ko.observable();
 				self.problems = ko.observableArray([]);
 				self.newStepName = ko.observable();
+				self.newType =  ko.observable();
 				self.steps = ko.observableArray([]);
 				
 				self.findAllSteps = function() {

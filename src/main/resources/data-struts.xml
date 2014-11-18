@@ -33,7 +33,14 @@
 				<param name="root">companyAdditional</param>
 			</result>
 		</action>
-		
+		<action name="loadAddtionalCompanyInformation" method="loadAddtionalCompanyInformation" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">companyAdditional</param>
+			</result>
+		</action>
 	</package>
 	
 </struts>

@@ -11,11 +11,13 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
+import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.CompanySearchVo;
 import com.ls.vo.PagedElement;
+import com.sun.tools.internal.ws.processor.model.Request;
 
 @Component("companyAction")
 public class CompanyAction extends BaseAction {
@@ -35,6 +37,9 @@ public class CompanyAction extends BaseAction {
 	
 	@Autowired
 	private CompanyRepository companyRepository;
+	
+	@Autowired
+	private CompanyAdditionalRepository companyAdditionalRepository;
 
 	public String loadAllCompany() {
 		String pageNumbersString = getParameter("pageNumber");
@@ -87,6 +92,23 @@ public class CompanyAction extends BaseAction {
 		
 		c = companyRepository.findOne(Integer.valueOf(companyId));
 		
+		return SUCCESS;
+	}
+	
+	public String loadAddtionalCompanyInformation() {
+		
+		String companyId = getParameter("companyId");
+		
+		if (StringUtils.isBlank(companyId)) {
+			return ERROR;
+			
+		} else {
+			
+			Company company = companyRepository.findOne(Integer.valueOf(companyId));
+			
+			companyAdditional = companyAdditionalRepository.findByCompany(company);
+			
+		}
 		return SUCCESS;
 	}
 	

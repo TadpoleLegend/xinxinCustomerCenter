@@ -268,7 +268,7 @@
 								<div>
 									<div class="row">
 										<div class="four columns">
-											<div data-bind="foreach : $root.allProblemsConstant">
+											<div data-bind="foreach : $root.allProblemsConstantA">
 												<label class="input-checkbox" for="ex-chx-a"> <input
 													type="checkbox" name="ex-checkbox" /> <span
 													data-bind="text : name, value : id"></span>
@@ -276,7 +276,7 @@
 											</div>
 										</div>
 										<div class="four columns">
-											<div data-bind="foreach : $root.allProblemsConstant">
+											<div data-bind="foreach : $root.allProblemsConstantB">
 												<label class="input-checkbox" for="ex-chx-a"> <input
 													type="checkbox" name="ex-checkbox" /> <span
 													data-bind="text : name, value : id"></span>
@@ -284,7 +284,7 @@
 											</div>
 										</div>
 										<div class="four columns">
-											<div data-bind="foreach : $root.allProblemsConstant">
+											<div data-bind="foreach : $root.allProblemsConstantC">
 												<label class="input-checkbox" for="ex-chx-a"> <input
 													type="checkbox" name="ex-checkbox" /> <span
 													data-bind="text : name, value : id"></span>
@@ -494,7 +494,9 @@
 						self.searchContactor =  ko.observable('');
 						self.searchDistinct =  ko.observable('');
 						self.allStar = ko.observable(true);
-						self.allProblemsConstant = ko.observableArray([]);
+						self.allProblemsConstantA = ko.observableArray([]);
+						self.allProblemsConstantB = ko.observableArray([]);
+						self.allProblemsConstantC = ko.observableArray([]);
 						self.provinces = ko.observableArray([]);
 						self.selectedProvince =  ko.observable('');
 						self.selectedCompany = ko.observable(new Company());
@@ -516,6 +518,7 @@
 						};
 						self.trackCustomer = function(item, event) {
 							self.selectedCompany(item);
+							self.addtion(new CompanyAddtion());
 							
 							$( "#selectedCompany" ).slideToggle();
 							$( "#companyList" ).slideToggle();
@@ -528,6 +531,17 @@
 							$('#accordion').accordion({ heightStyle: "content"});
 							
 							$('#nextScheduleDate').datepicker();
+							
+							$.ajax({
+								url : '/ls/loadAddtionalCompanyInformation.ls',
+								data : {companyId : self.selectedCompany().id},
+								success : function(data) {
+									
+									if (data) {
+										self.addtion(data);
+									}
+								}
+							});
 						};
 						self.cities = ko.computed(function() {
 							var cityOptions;
@@ -549,17 +563,9 @@
 							
 							self.searchCompany();
 							
-							$.ajax({
-								url : '/ls/findAllProblems.ls',
-								success : function(data) {
-									
-									$.each(data, function(index, value) {
-
-										self.allProblemsConstant.push(value);
-
-									});
-								}
-							});
+							self.loadProblemConstants('employee');
+							self.loadProblemConstants('company');
+							self.loadProblemConstants('other');
 							
 							$.ajax({
 								url : '/ls/findAllProvinces.ls',
@@ -580,6 +586,26 @@
 							});
 						};
 						
+						self.loadProblemConstants = function(type) {
+							
+							$.ajax({
+								url : '/ls/findAllProblems.ls',
+								data : {type : type},
+								success : function(data) {
+									
+									$.each(data, function(index, value) {
+										if (type == 'employee') {
+											self.allProblemsConstantA.push(value);
+										} else if ( type == 'company'){
+											self.allProblemsConstantB.push(value);
+										} else {
+											self.allProblemsConstantC.push(value);
+										}
+									});
+								}
+							});
+							
+						};
 						self.lastPage = function() {
 							
 							self.currentIndex(self.currentIndex() - 1);
