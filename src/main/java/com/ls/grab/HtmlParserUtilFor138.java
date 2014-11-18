@@ -18,7 +18,10 @@ import org.htmlparser.tags.Div;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ParagraphTag;
+import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.Span;
+import org.htmlparser.tags.TableColumn;
+import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
@@ -26,7 +29,11 @@ import org.htmlparser.visitors.NodeVisitor;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.ls.entity.Company;
 
 public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
@@ -34,6 +41,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	
 	private static  HtmlParserUtilFor138 htmlParserUtilFor138;
 	private HtmlParserUtilFor138(){}
+	private static String address = "http://www.138job.com/AjaxMethods/AjaxLoadContacts.aspx?action=companycontacts&hideEmailTxt=1&comId=";
 	
 	private static final WebClient webClient;
 	static{
@@ -48,6 +56,40 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			return htmlParserUtilFor138;
 		}
 	}
+	
+	private static void login138(){
+		try {
+			String url = "http://cas.138mr.com/login";
+
+			webClient.getOptions().setJavaScriptEnabled(false);
+			// Get the first page
+			final HtmlPage loginPage = webClient.getPage(url);
+
+			// Get the form that we are dealing with and within that form,
+			// find the submit button and the field that we want to change.
+			final List<HtmlForm> forms = loginPage.getForms();
+
+			HtmlForm form = null;
+			for (HtmlForm singleForm : forms) {
+				if (singleForm.getAttribute("id").equals("formlogin")) {
+					form = singleForm;
+				}
+			}
+
+			final HtmlSubmitInput loginButton = form.getInputByName("btnLogin");
+			final HtmlTextInput textField = form.getInputByName("txbUserName");
+			final HtmlPasswordInput passwordField = form.getInputByName("txbUserPwd");
+
+			// Change the value of the text field
+			textField.setValueAttribute("liu_online@163.com");
+			passwordField.setValueAttribute("789321");
+			
+			// click login button
+			loginButton.click();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public static SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 	public static String todayStr = sf.format(Calendar.getInstance().getTime());
 	
@@ -55,6 +97,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	public List<Company> findPagedCompanyList(String url) {
 
 		final List<Company> companyList = new ArrayList<Company>();
+		//login138();
 		try {
 			HtmlPage mainPage = webClient.getPage(url);
 			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
@@ -154,28 +197,33 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 								company.setPhoneImgSrc(phoneImgSrc);
 							}
 						}
-						company.setContactor(findContactorName(htmlForPage));
-						company.setAddress(findCompanyAddress(htmlForPage));
 						company.setDescription(findCompanyDescription(htmlForPage));
 						company.setEmployeeCount(findCompanyEmployeeCount(htmlForPage));
 						String testURL = company.getfEurl();
+						System.err.println(testURL);
 						//findCompanyDetail(HttpClientGrabUtil.fetchHTMLwithURL(testURL),company);
 						try {
-							findCompanyDetail(webClient.getPage(testURL).getWebResponse().getContentAsString(),company);
+							//findCompanyDetail(webClient.getPage(testURL).getWebResponse().getContentAsString(),company);
+							String id = getCompanyResourceId(webClient.getPage(testURL).getWebResponse().getContentAsString());
+							String contactDiv =  getContactDiv(id);
+							parseContactDivForTelAndMobile(contactDiv,company);
+							parseContactDivForContactPerson(contactDiv,company);
+							parseContactDivForAddress(contactDiv,company);
 						} catch (FailingHttpStatusCodeException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (MalformedURLException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						/*System.err.println(company.getName());
+						System.err.println(company.getName());
 						System.err.println(company.getArea());
 						System.err.println(company.getPublishDate());
-						System.err.println(company.getfEurl());*/
+						System.err.println(company.getfEurl());
+						System.err.println(company.getContactor());
+						System.err.println(company.getAddress());
+						System.err.println(company.getMobilePhoneSrc());
+						System.err.println(company.getPhoneImgSrc());
 						companyList.add(company);
 						return;
 					}
@@ -191,11 +239,184 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 		return companyList;
 	}
+	
+	private String parseContactDivForAddress(String detailPageHtml,final Company company){
+
+
+		final StringBuffer id = new StringBuffer();
+		try {
+			Parser htmlParser = new Parser();
+			htmlParser.setInputHTML(detailPageHtml);
+
+			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
+
+				private static final long serialVersionUID = -93037936232004146L;
+
+				public boolean accept(Node node) {
+					if (node instanceof TableTag) {
+						TableTag tableTag = (TableTag)node;
+						Node [] nodes = tableTag.getChildrenAsNodeArray();
+						if(nodes!=null){
+							for(int i=0;i<nodes.length;i++){
+								if(nodes[i] instanceof TableRow){
+									TableRow tr = (TableRow)nodes[i];
+									Node [] trNodes = tr.getChildrenAsNodeArray();
+									if(trNodes!=null){
+											if(trNodes[0] instanceof TableColumn){
+												TableColumn td = (TableColumn)trNodes[0];
+												if(td.getStringText()!=null && td.getStringText().contains("联系地址")){
+													TableColumn tdDiv = (TableColumn)trNodes[1];
+													Node tdnodes [] = tdDiv.getChildrenAsNodeArray();
+													if(tdnodes!=null){
+														if(tdnodes.length==1){
+															company.setAddress(tdDiv.getStringText().replace("&nbsp;", ""));
+														}else if(tdnodes.length>1){
+															if(tdnodes[0] instanceof TextNode){
+																TextNode tn = (TextNode)tdnodes[0];
+																company.setAddress(tn.getText().replace("&nbsp;", ""));
+															}
+														}
+													}
+													return true;
+													
+												}
+											}
+									}
+								}
+							}
+							
+						}
+					}
+					return false;
+				}
+			});
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+		return id.toString();
+	
+	
+	}
+	
+	private String parseContactDivForContactPerson(String detailPageHtml,final Company company){
+
+
+		final StringBuffer id = new StringBuffer();
+		try {
+			Parser htmlParser = new Parser();
+			htmlParser.setInputHTML(detailPageHtml);
+
+			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
+
+				private static final long serialVersionUID = -93037936232004146L;
+
+				public boolean accept(Node node) {
+					if (node instanceof TableTag) {
+						TableTag tableTag = (TableTag)node;
+						Node [] nodes = tableTag.getChildrenAsNodeArray();
+						if(nodes!=null){
+							for(int i=0;i<nodes.length;i++){
+								if(nodes[i] instanceof TableRow){
+									TableRow tr = (TableRow)nodes[i];
+									Node [] trNodes = tr.getChildrenAsNodeArray();
+									if(trNodes!=null){
+											if(trNodes[0] instanceof TableColumn){
+												TableColumn td = (TableColumn)trNodes[0];
+												if(td.getStringText()!=null && td.getStringText().contains("面试联系人")){
+													TableColumn tdDiv = (TableColumn)trNodes[1];
+													String text = tdDiv.getStringText();
+													if(text!=null && text.contains("(联系我时请说明")){
+														company.setContactor(text.substring(0,text.trim().indexOf("(联系我时请说明")));
+														return true;
+													}
+													return true;
+													
+												}
+											}
+									}
+								}
+							}
+							
+						}
+					}
+					return false;
+				}
+			});
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+		return id.toString();
+	
+	
+	}
+	
+	private String parseContactDivForTelAndMobile(String detailPageHtml,final Company company){
+
+		final StringBuffer id = new StringBuffer();
+		try {
+			Parser htmlParser = new Parser();
+			htmlParser.setInputHTML(detailPageHtml);
+
+			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
+
+				private static final long serialVersionUID = -93037936232004146L;
+
+				public boolean accept(Node node) {
+					if (node instanceof TableTag) {
+						TableTag tableTag = (TableTag)node;
+						Node [] nodes = tableTag.getChildrenAsNodeArray();
+						if(nodes!=null){
+							for(int i=0;i<nodes.length;i++){
+								if(nodes[i] instanceof TableRow){
+									//TableRow tr = (TableRow)nodes[0];
+									TableRow tr = (TableRow)nodes[i];
+									Node [] trNodes = tr.getChildrenAsNodeArray();
+									if(trNodes!=null){
+											if(trNodes[0] instanceof TableColumn){
+												TableColumn td = (TableColumn)trNodes[0];
+												if(td.getStringText()!=null && td.getStringText().contains("预约面试电话")){
+													TableColumn tdDiv = (TableColumn)trNodes[1];
+													Node spanNode = findNodeById(tdDiv.getStringText(),"tel_2");
+													if(spanNode instanceof Span){
+														Span span = (Span) spanNode;
+														Node [] spanNodes = span.getChildrenAsNodeArray();
+														if(spanNodes!=null){
+															if(spanNodes[0] instanceof ImageTag){
+																ImageTag mobile = (ImageTag)spanNodes[0];
+																company.setMobilePhoneSrc(mobile.getAttribute("src"));
+															}
+															if(spanNodes.length>2){
+															for(int n=1;n<spanNodes.length;n++){
+															if(spanNodes[n] instanceof ImageTag){
+																ImageTag tel = (ImageTag)spanNodes[n];
+																company.setPhoneImgSrc(tel.getAttribute("src"));
+															}
+															}
+															}
+															return true;
+															
+														}
+													}
+													return true;
+												}
+											}
+									}
+								}
+							}
+							
+						}
+					}
+					return false;
+				}
+			});
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+		return id.toString();
+	
+	}
+	
 	public static void findCompanyDetail(String detailPageHtml,final Company company) {
-
-
-		final StringBuilder returnBuilder = new StringBuilder();
-
 		try {
 			System.out.println(detailPageHtml);
 			Node contactInfo = findNodeById(detailPageHtml,"contact");
@@ -228,6 +449,54 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 
 	
+	}
+	
+	private String getContactDiv(String resourceId){
+		try {
+			StringBuilder sb = new StringBuilder(address);
+			sb.append(resourceId).append("&t=").append(Calendar.getInstance().getTimeInMillis());
+			System.out.println(sb.toString());
+			return webClient.getPage(sb.toString()).getWebResponse().getContentAsString();
+		} catch (FailingHttpStatusCodeException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
+	private String getCompanyResourceId(String detailPageHtml){
+		final StringBuffer id = new StringBuffer();
+		try {
+			Parser htmlParser = new Parser();
+			htmlParser.setInputHTML(detailPageHtml);
+
+			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
+
+				private static final long serialVersionUID = -93037936232004146L;
+
+				public boolean accept(Node node) {
+					if (node instanceof ScriptTag) {
+						ScriptTag scriptTag = (ScriptTag)node;
+						if(scriptTag.getStringText()!=null&&scriptTag.getStringText().trim().contains("var cid=")){
+							String text = scriptTag.getStringText();
+							int beginIndex = text.indexOf("=")+1;
+							int endIndex = text.indexOf(";");
+							id.append(text.substring(beginIndex,endIndex));
+							return true;
+						}
+					}
+					return false;
+				}
+			});
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+		return id.toString();
 	}
 	
 	
