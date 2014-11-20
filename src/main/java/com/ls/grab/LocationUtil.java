@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -22,7 +20,6 @@ import org.htmlparser.tags.Span;
 import org.htmlparser.util.ParserException;
 
 public class LocationUtil {
-	private static String str138 = null;
 	private static LocationUtil locationUtil;
 	private static String place_138_str = "http://s.138job.com/hire/1?keyword=&workadd={0}&keywordtype=1&position=0";
 	private LocationUtil() {}
@@ -35,39 +32,15 @@ public class LocationUtil {
 		}
 	}
 
-	static {
-		InputStream is = LocationUtil.class.getClassLoader().getResourceAsStream("138_city.jsp");
-		StringBuffer out = new StringBuffer();
-		try {
-			byte[] b = new byte[4096];
-			for (int n; (n = is.read(b)) != -1;) {
-				out.append(new String(b, 0, n));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			str138 = new String(out.toString().getBytes("UTF-8"));  
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public static void main(String[] args) {
-		find138Cities();
-//		Map<String,Map<String,String>> list = find58Cities();
+//		find138Cities();
+		Map<String,Map<String,String>> list = find58Cities();
 //		findGanjiCities(list);
 	}
-	private static String getHTML(){
+	private static String getHTML(String file){
 		String detailPageHtml = null;
-		InputStream is = LocationUtil.class.getClassLoader().getResourceAsStream("ganji_city.jsp");
+		InputStream is = LocationUtil.class.getClassLoader().getResourceAsStream(file);
 		StringBuffer out = new StringBuffer();
 		try {
 			byte[] b = new byte[4096];
@@ -92,9 +65,9 @@ public class LocationUtil {
 		return detailPageHtml;
 	}
 	
-	private static Map<String,Map<String,String>> findGanjiCities(Map<String,Map<String,String>> cities) {
+	public static Map<String,Map<String,String>> findGanjiCities(Map<String,Map<String,String>> cities) {
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
-		String detailPageHtml = getHTML();
+		String detailPageHtml = getHTML("ganji_city.jsp");
 		if(!cities.isEmpty()){
 			for(Entry<String, Map<String, String>>  et:cities.entrySet()){
 				final String provinceName = et.getKey();
@@ -202,13 +175,12 @@ public class LocationUtil {
 	}
 	
 	
-	private static List<Map> find138Cities() {
-		List<Map> rsList = new ArrayList<Map>();
+	public static Map<String,Map<String,String>> find138Cities() {
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
 		try {
-
+			String detailPageHtml = getHTML("138_city.jsp");
 			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(str138);
+			htmlParser.setInputHTML(detailPageHtml);
 			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
 				private static final long serialVersionUID = -9308374232004146L;
 
@@ -243,8 +215,7 @@ public class LocationUtil {
 																	String onclick = linkTag.getAttribute("onclick");
 																	String rp = onclick.replace("SelectType(", "").replace(")", "");
 																	String [] arr = rp.split(",");
-																	city.put(arr[1].replace("'", "").replace("'", ""), arr[0]);
-//																	System.err.println(provinceName + " -- " + arr[1].replace("'", "").replace("'", "") + "--" + arr[0] );
+																	city.put(arr[1].replace("'", "").replace("'", ""), MessageFormat.format(place_138_str, arr[0]));
 																}
 																province.put(provinceName, city);
 															}
@@ -266,43 +237,14 @@ public class LocationUtil {
 
 			e.printStackTrace();
 		}
-		
-		if(!province.isEmpty()){
-			for(Entry<String, Map<String, String>>  et:province.entrySet()){
-				System.out.println(et.getKey());
-				Map<String,String> map = et.getValue();
-				for(Entry<String,String> city:map.entrySet()){
-					System.err.println(city.getKey()+" -- " + city.getValue());
-					System.err.println("url is " +MessageFormat.format(place_138_str, city.getValue()));
-				}
-			}
-		}
-
-		return rsList;
+		return province;
 	}
 	
 	public static Map<String,Map<String,String>> find58Cities() {
 		String detailPageHtml = null;
-		InputStream is = LocationUtil.class.getClassLoader().getResourceAsStream("58_city.jsp");
-		StringBuffer out = new StringBuffer();
 		try {
-			byte[] b = new byte[4096];
-			for (int n; (n = is.read(b)) != -1;) {
-				out.append(new String(b, 0, n));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			detailPageHtml = new String(out.toString().getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
+			detailPageHtml = getHTML("58_city.jsp");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
@@ -411,16 +353,6 @@ public class LocationUtil {
 		province.put("北京", bjcity);
 		province.put("天津", tjcity);
 		province.put("重庆", cqcity);
-		
-		/*if(!province.isEmpty()){
-			for(Entry<String, Map<String, String>>  et:province.entrySet()){
-				System.out.println(et.getKey());
-				Map<String,String> map = et.getValue();
-				for(Entry<String,String> city:map.entrySet()){
-					System.err.println(city.getKey()+" -- " + city.getValue());
-				}
-			}
-		}*/
 		return province;
 
 	}

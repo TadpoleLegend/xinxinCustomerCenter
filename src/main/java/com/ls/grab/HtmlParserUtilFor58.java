@@ -22,28 +22,30 @@ import org.htmlparser.tags.TableRow;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.Province;
 
-public class HtmlParserUtilPlanB {
+public class HtmlParserUtilFor58 {
 
-	public static void main(String[] args) {
 
-		File file = new File("D:\\Jerry\\58.txt");
-
-		//
-		// try {
-		// String string = Files.toString(file, Charset.defaultCharset());
-		//
-		// System.out.println(findContactorName(string));
-		//
-		// System.out.println(findContactorPhoneNumberImgSrc(string));
-		//
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+	private static  HtmlParserUtilFor58 htmlParserUtilFor58;
+	private HtmlParserUtilFor58(){}
+	private static final WebClient webClient;
+	static{
+		webClient = new WebClient(BrowserVersion.CHROME);
+		webClient.getOptions().setJavaScriptEnabled(false);
+	}
+	
+	public static HtmlParserUtilFor58 getInstance(){
+		if(htmlParserUtilFor58 == null){
+			return new HtmlParserUtilFor58();
+		}else{
+			return htmlParserUtilFor58;
+		}
 	}
 	
 	public static Div findFirstOneWithClassName(String html, final String className) {
@@ -73,12 +75,13 @@ public class HtmlParserUtilPlanB {
 		return null;
 	}
 	
-	public static List<Company> findPagedCompanyList(String wholeCityPageHTML) {
+	public static List<Company> findPagedCompanyList(String url) {
 
 		final List<Company> companyList = new ArrayList<Company>();
 
 		try {
-
+			HtmlPage mainPage = webClient.getPage(url);
+			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
 			Parser htmlParser = new Parser();
 			htmlParser.setInputHTML(wholeCityPageHTML);
 
@@ -115,10 +118,7 @@ public class HtmlParserUtilPlanB {
 							}
 							
 						}
-						System.err.println(company.getArea());
-						System.err.println(company.getPublishDate());
 						System.err.println(company.getName());
-						System.err.println(company.getfEurl());
 						companyList.add(company);
 					}
 				}
@@ -126,7 +126,7 @@ public class HtmlParserUtilPlanB {
 
 			htmlParser.visitAllNodesWith(nodeVisitor);
 
-		} catch (ParserException e) {
+		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
@@ -615,4 +615,5 @@ public class HtmlParserUtilPlanB {
 		
 		return descriptionDiv == null ? "" : descriptionDiv.getStringText();
 	}
+
 }

@@ -21,6 +21,7 @@ import org.htmlparser.visitors.NodeVisitor;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.entity.Company;
 
 public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
@@ -48,9 +49,10 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 		final List<Company> companyList = new ArrayList<Company>();
 
 		try {
-
+			HtmlPage mainPage = webClient.getPage(url);
+			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
 			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML("");
+			htmlParser.setInputHTML(wholeCityPageHTML);
 
 			NodeVisitor nodeVisitor = new NodeVisitor() {
 
@@ -108,7 +110,7 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 
 			htmlParser.visitAllNodesWith(nodeVisitor);
 
-		} catch (ParserException e) {
+		} catch (Exception e) {
 
 			e.printStackTrace();
 		}

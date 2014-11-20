@@ -3,8 +3,8 @@ package com.ls.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class CompanyDao extends JdbcTemplate{
-	public boolean  checkCompanyExistByResourceId(String resourceId){
-	String sql = "select count(*) from ls_company_resource where type='"+ resourceId+"'";
+	public boolean  checkCompanyExistByResourceId(String resourceId,String fetchDate){
+	String sql = "select count(*) from ls_company_resource where type='"+ resourceId+"' and " ;
     try {
     	Integer rs = this.queryForInt(sql);
     	if(rs==null){

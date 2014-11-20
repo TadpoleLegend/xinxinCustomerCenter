@@ -47,6 +47,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	static{
 		webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
+		login138();
 	}
 	
 	public static HtmlParserUtilFor138 getInstance(){
@@ -200,10 +201,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 						company.setDescription(findCompanyDescription(htmlForPage));
 						company.setEmployeeCount(findCompanyEmployeeCount(htmlForPage));
 						String testURL = company.getfEurl();
-						System.err.println(testURL);
-						//findCompanyDetail(HttpClientGrabUtil.fetchHTMLwithURL(testURL),company);
 						try {
-							//findCompanyDetail(webClient.getPage(testURL).getWebResponse().getContentAsString(),company);
 							String id = getCompanyResourceId(webClient.getPage(testURL).getWebResponse().getContentAsString());
 							String contactDiv =  getContactDiv(id);
 							parseContactDivForTelAndMobile(contactDiv,company);
@@ -216,12 +214,9 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						System.err.println(company.getName());
-						System.err.println(company.getArea());
-						System.err.println(company.getPublishDate());
-						System.err.println(company.getfEurl());
-						System.err.println(company.getContactor());
-						System.err.println(company.getAddress());
+						StringBuilder sb = new StringBuilder();
+						sb.append(company.getName()).append("--").append(company.getArea()).append("---").append(company.getAddress()).append("---").append(company.getPublishDate()).append("----").append(company.getContactor());
+						System.err.println(sb.toString());
 						System.err.println(company.getMobilePhoneSrc());
 						System.err.println(company.getPhoneImgSrc());
 						companyList.add(company);
@@ -416,46 +411,11 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	
 	}
 	
-	public static void findCompanyDetail(String detailPageHtml,final Company company) {
-		try {
-			System.out.println(detailPageHtml);
-			Node contactInfo = findNodeById(detailPageHtml,"contact");
-			Node companyInfo = findNodeByClassId(detailPageHtml,"companyinfo com_intr");
-			if(companyInfo instanceof Div){
-				Div info = (Div)companyInfo;
-				company.setDescription(info.getStringText());
-			}
-			if(contactInfo instanceof Span){
-				Span contact =(Span)contactInfo;
-				System.err.println(contact.getStringText());
-				Node nodes []= contact.getChildrenAsNodeArray();
-				for(Node node:nodes){
-					if(node instanceof TableTag){
-						TableTag tableTag = (TableTag)node;
-						Node tbody = tableTag.getChild(0);
-						System.err.println(tbody.getClass().getName());
-					}
-				}
-				
-			}
-		if(companyInfo instanceof Div){
-			Div companyDiv = (Div)companyInfo;
-			System.err.println(companyDiv.getStringText());
-		}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-
-	
-	}
 	
 	private String getContactDiv(String resourceId){
 		try {
 			StringBuilder sb = new StringBuilder(address);
 			sb.append(resourceId).append("&t=").append(Calendar.getInstance().getTimeInMillis());
-			System.out.println(sb.toString());
 			return webClient.getPage(sb.toString()).getWebResponse().getContentAsString();
 		} catch (FailingHttpStatusCodeException e) {
 			e.printStackTrace();
