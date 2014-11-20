@@ -13,4 +13,6 @@ public interface ProblemRepository extends JpaRepository<Problem, Integer> , Jpa
 	Problem findByName(String name);
 	
 	List<Problem> findByProblemCategory(ProblemCategory problemCategory);
+	
+	List<Problem> findByCategory(String problemCategory);
 }

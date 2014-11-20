@@ -141,6 +141,8 @@
 				self.newType =  ko.observable();
 				self.steps = ko.observableArray([]);
 				
+				self.categoryList = [];
+				
 				self.findAllSteps = function() {
 					$.ajax({
 						url : '/ls/getAllSteps.ls',

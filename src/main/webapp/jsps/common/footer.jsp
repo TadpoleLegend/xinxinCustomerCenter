@@ -9,3 +9,14 @@
 		</div>
 	</div>
 </footer>
+<!-- 
+<script>
+
+	$(document).ajaxStart(function() {
+		Common.prototype.loadAjaxLoader("LOADING....");
+	}).ajaxStop(function() {
+		Common.prototype.closeAjaxLoader();
+	});
+</script>
+
+ -->

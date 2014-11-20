@@ -48,7 +48,7 @@ public class CommonAction extends BaseAction {
 		
 		String type = getParameter("type");
 		
-		problems = problemRepository.findByProblemCategory(null);
+		problems = problemRepository.findByCategory(type);
 		
 		return SUCCESS;
 	}

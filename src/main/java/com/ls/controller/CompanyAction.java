@@ -17,6 +17,7 @@ import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.CompanySearchVo;
 import com.ls.vo.PagedElement;
+import com.ls.vo.ResponseVo;
 
 @Component("companyAction")
 public class CompanyAction extends BaseAction {
@@ -125,6 +126,21 @@ public class CompanyAction extends BaseAction {
 		addition.setCompany(company);
 		
 		companyAdditional = companyService.saveAdditionalCompanyInformation(addition);
+		
+		return SUCCESS;
+	}
+	
+	public String changeStarLevel() {
+		
+		String companyId = getParameter("company_id");
+		String star = getParameter("star");
+		
+		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		company.setStar(Integer.valueOf(star));
+		
+		companyRepository.saveAndFlush(company);
+		
+		setResponse(ResponseVo.newSuccessMessage("200"));
 		
 		return SUCCESS;
 	}

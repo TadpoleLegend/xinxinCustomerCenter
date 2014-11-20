@@ -24,6 +24,8 @@ public class Problem implements Serializable {
 
 	protected String name;
 	
+	protected String category;
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="problem_category_id")
 	protected ProblemCategory problemCategory;
@@ -54,7 +56,6 @@ public class Problem implements Serializable {
 	public void setCompanies(List<Company> companies) {
 		this.companies = companies;
 	}
-	
 
 
 	public ProblemCategory getProblemCategory() {
@@ -63,6 +64,18 @@ public class Problem implements Serializable {
 
 	public void setProblemCategory(ProblemCategory problemCategory) {
 		this.problemCategory = problemCategory;
+	}
+
+	
+	public String getCategory() {
+	
+		return category;
+	}
+
+	
+	public void setCategory(String category) {
+	
+		this.category = category;
 	}
 
 	@Override

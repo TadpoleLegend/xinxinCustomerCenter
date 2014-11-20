@@ -110,7 +110,7 @@
 												<label class="input-checkbox"> <img style="margin-left:45px" alt="电话号码" data-bind="attr: { 'src' : phone_src }"></label>
 											</div>
 											<div class="two columns">
-												<div class="star" data-bind="attr: { 'star' : star }"></div>
+												<div class="star listStar" data-bind="attr : {'star' : star, 'id': id}"></div>
 											</div>
 											<div class="two columns">
 												<div class="row">
@@ -143,15 +143,16 @@
 								详细信息<span class="subheader line" data-bind="text : name"></span>
 							</h2>
 							<h2 class="right">
-								<a class="small blue button" data-bind="click : $root.trackCustomer" href="#">返回客户列表</a>
+								<a class="small blue button" data-bind="click : $root.backToCustomerList" href="#">返回客户列表</a>
 							</h2>
 						</div>
 						<div class="content">
 							<div class="row">
-								<div class="four columns">
+								<div class="four columns text-center">
+									<i class="icon-user xlarge"></i><b data-bind="text : status"></b>
 								</div>
 								<div class="two columns">
-									<div id="detailStar" class="star" data-bind="attr: { 'star' : star }"></div>
+									<div id="detailStar" class="star" data-bind="attr : {'star' : star, 'companyId' : id}"></div>
 								</div>
 								<div class="four columns">
 									<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><span data-bind="text : detailUrl"></span></a>
@@ -274,13 +275,12 @@
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantA">
-														<label class="input-checkbox"> 
-															<input type="checkbox" name="ex-checkbox" /> <span data-bind="text : name, value : id"></span>
+														<label class="input-checkbox" for="employeeProblem"> 
+															<input class="icheckbox" type="checkbox" name="employeeProblem" /> <span data-bind="text : name, value : id"></span>
 														</label>
 													</div>
 												</div>
 											</div>
-											
 										</div>
 										<div class="four columns">
 											<div class="app-wrapper ui-corner-top">
@@ -289,8 +289,8 @@
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantB">
-												<label class="input-checkbox" for="ex-chx-a"> 
-													<input type="checkbox" name="ex-checkbox" /> 
+												<label class="input-checkbox" for="consumerProblem"> 
+													<input type="checkbox" name="consumerProblem" class="icheckbox"/> 
 													<span data-bind="text : name, value : id"></span>
 												</label>
 											</div>
@@ -305,8 +305,8 @@
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantC">
-												<label class="input-checkbox" for="ex-chx-a"> <input
-													type="checkbox" name="ex-checkbox" /> <span
+												<label class="input-checkbox" for="otherProblems"> <input class="icheckbox"
+													type="checkbox" name="otherProblems" /> <span
 													data-bind="text : name, value : id"></span>
 												</label>
 											</div>
@@ -366,8 +366,7 @@
 																disabled="disabled" value="2013年4月25日" />
 														</div>
 														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text"
-																disabled="disabled" value="2013年4月26日" />
+															<label>约定下次电话时间</label> <input type="text" disabled="disabled" value="2013年4月26日" />
 														</div>
 														<div class="six columns">
 															<textarea name="ex-textarea-5"></textarea>
@@ -429,7 +428,6 @@
 											</label>
 										</ul>
 									</div>
-
 								</div>
 
 							</div>
@@ -444,6 +442,7 @@
 	<script src="/ls/js/list.js"></script>
 	<script src="/ls/js/jquery.raty.js"></script>
 	<script>
+		
 		$(document).ready( function() {
 					//$('#addtionalCompanyInformation').validate({});
 					
@@ -457,7 +456,7 @@
 						
 					};
 					
-					var Company = function(id, name, contractor, email, email_src, phone, phone_src, star, address, distinct, problems, detailUrl) {
+					var Company = function(id, name, contractor, email, email_src, phone, phone_src, star, address, distinct, problems, detailUrl, status) {
 						var self = this;
 						
 						self.id = id;
@@ -473,6 +472,7 @@
 						self.problems = ko.observableArray(problems);
 						self.detailUrl = detailUrl;
 						self.selectedProblem = ko.observable('');
+						self.status = status;
 					};
 					
 					var CompanyAddtion = function() {
@@ -525,6 +525,25 @@
 						self.selectedCompany = ko.observable(new Company());
 						self.addtion =  ko.observable(new CompanyAddtion());
 						
+						self.changeStarLevel = function(companyId, score) {
+							$.ajax({
+								url : '/ls/user/changeStarLevel.ls',
+								method : 'POST',
+								data : {star : score, company_id: companyId},
+								success : function(data) {
+									
+									if (data && data.message) {
+										var showToUser = "<label class=\"label green\">" + self.selectedCompany().name + "</label>" + "已被评为 <b>" + score + "</b>星。";
+										success(showToUser);
+										
+									} else {
+										fail();
+									}
+								}
+							});
+						};
+						
+						
 						self.saveAddition = function(item, event) {
 							$.ajax({
 								url : '/ls/user/saveAddtionalCompanyInformation.ls',
@@ -533,27 +552,58 @@
 								success : function(data) {
 									
 									if (data && data.id) {
-										self.addtion(data);		
+										self.addtion(data);	
+										success("保存成功。");
 									}
-									//self.addtion(data);									
 								}
 							});
 						};
-						self.trackCustomer = function(item, event) {
-							self.selectedCompany(item);
-							self.addtion(new CompanyAddtion());
-							
+						
+						self.toggleListAndDetail = function() {
 							$( "#selectedCompany" ).slideToggle();
 							$( "#companyList" ).slideToggle();
+						};
+						
+						self.backToCustomerList = function() {
+							self.toggleListAndDetail();
 							
-							$('#detailStar').raty({
-								  click: function(score, evt) {
-									  	self.starInput(score);
-									  }
-								});
+							self.searchCompany();
+						};
+						
+						self.trackCustomer = function(item, event) {
+							
+							self.selectedCompany(item);
+							
+							self.addtion(new CompanyAddtion());
+							
+							self.toggleListAndDetail();
+							
 							$('#accordion').accordion({ heightStyle: "content"});
 							
 							$('#nextScheduleDate').datepicker();
+							
+							self.loadCompanyAdditionalInformation();
+							
+							$('.icheckbox').iCheck({
+							    checkboxClass: 'icheckbox_flat-pink',
+							    radioClass: 'iradio_flat-pink'
+							  });
+							
+							$('#detailStar').raty({
+									score : function() {
+										return $(this).attr('star');
+									},
+								  	click: function(score, evt) {
+									    var companyId = $(this).attr('companyId');
+									    self.changeStarLevel(companyId, score);
+									    
+									},
+									number : 5
+							});
+							success('<label class="green label">' + item.name + "</label> 已成功加载");
+						};
+						
+						self.loadCompanyAdditionalInformation = function() {
 							
 							$.ajax({
 								url : '/ls/loadAddtionalCompanyInformation.ls',
@@ -566,6 +616,7 @@
 								}
 							});
 						};
+						
 						self.cities = ko.computed(function() {
 							var cityOptions;
 							$.each(self.provinces(), function(i, n){
@@ -578,12 +629,11 @@
 						self.selectedCity = ko.observable('');
 						
 						self.init = function() {
-							$('#starInput').raty({
-								  click: function(score, evt) {
-									  	self.starInput(score);
-									  }
-								});
-							
+							 $('#starInput').raty({
+						           click: function(score, evt) {
+						                         self.starInput(score);
+						                   }
+						         });
 							self.searchCompany();
 							
 							self.loadProblemConstants('员工问题');
@@ -596,7 +646,6 @@
 									
 									$.each(data, function(index, value) {
 
-										//self.provinces.push(value.name);
 										var cities = new Array();
 										$.each(value.citys, function(i, n){
 											var city = new City(n.id, n.name);
@@ -639,12 +688,6 @@
 							self.searchCompany();
 						};
 						
-						self.detail = function(item, event) {
-							$('.'+item.id).toggle('blind', {}, 200);
-							//var $this = $(event.target);
-							//$this.parent().parent().find('.companydetail').toggle('blind', {}, 200);
-						};
-
 						self.showDetail = function(item, event) {
 							window.open(item.detailUrl, '_blank');
 						};
@@ -664,6 +707,8 @@
 										},
 								success : function(data) {
 									self.fillCompany(data);
+									success("客户列表已加载。");
+									
 								}
 							});
 						};
@@ -682,15 +727,18 @@
 									problems.push(n.name);
 								});
 								
-								var company = new Company(value.id, value.name, value.contactor, value.email, new_email_src, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.fEurl);
+								var company = new Company(value.id, value.name, value.contactor, value.email, new_email_src, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.fEurl, value.status);
 
 								self.companyList.push(company);
-
+								
 								$('.star').raty({
-									score : function() {
-										return $(this).attr('star');
-									}
-								});
+							        score : function() {
+							                return $(this).attr('star');
+							        },
+							        number : 5,
+							        readOnly   : true
+							});
+
 							});
 							
 							self.totalCompanyCount(data.total);
@@ -715,17 +763,6 @@
 						
 						self.updateProblem = function(item, event) {
 							
-						//	self.companyList()[0].problems().push(item);
-							
-						//	if (event.stopPropagation) {event.stopPropagation();}
-							
-						//	if ($(event.target).is(':selected')) {
-						//		$(event.target).removeAttr('checked');
-						//		
-						//	} else {
-						//		$(event.target).attr('checked', 'checked');
-						//	}
-							
 							return true;
 						};
 						
@@ -735,7 +772,7 @@
 					model.init();
 					var $container = $("#container")[0];
 					ko.applyBindings(model, $container);
-
+					
 				});
 	</script>
 </body>

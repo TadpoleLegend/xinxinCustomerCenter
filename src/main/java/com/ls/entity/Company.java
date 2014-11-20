@@ -45,7 +45,7 @@ public class Company implements Serializable {
 	protected String description;
 	protected String grabDate;
 	protected Boolean active;
-	protected Integer status;
+	protected String status;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ls_company_problem", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "problem_id") )
@@ -252,14 +252,7 @@ public class Company implements Serializable {
 	public void setGrabDate(String grabDate) {
 		this.grabDate = grabDate;
 	}
-//
-//	public SourceType getSourceType() {
-//		return sourceType;
-//	}
-//
-//	public void setSourceType(SourceType sourceType) {
-//		this.sourceType = sourceType;
-//	}
+
 
 	public Boolean getActive() {
 		return active;
@@ -277,11 +270,11 @@ public class Company implements Serializable {
 		this.addtion = addtion;
 	}
 
-	public Integer getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	
