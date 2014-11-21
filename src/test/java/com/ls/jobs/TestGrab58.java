@@ -51,6 +51,7 @@ public class TestGrab58 {
 					String url = city.getValue()+"meirongshi/pn0";
 					System.err.println(url);
 					List<Company> companiesInThisPage = HtmlParserUtilFor58.getInstance().findPagedCompanyList(url);
+					Thread.currentThread().sleep(1000*10);
 				}
 			}
 		}

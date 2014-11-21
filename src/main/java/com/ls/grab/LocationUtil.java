@@ -35,8 +35,8 @@ public class LocationUtil {
 
 	public static void main(String[] args) {
 //		find138Cities();
-		Map<String,Map<String,String>> list = find58Cities();
-//		findGanjiCities(list);
+//		Map<String,Map<String,String>> list = find58Cities();
+		findGanjiCities();
 	}
 	private static String getHTML(String file){
 		String detailPageHtml = null;
@@ -65,7 +65,8 @@ public class LocationUtil {
 		return detailPageHtml;
 	}
 	
-	public static Map<String,Map<String,String>> findGanjiCities(Map<String,Map<String,String>> cities) {
+	public static Map<String,Map<String,String>> findGanjiCities() {
+		Map<String,Map<String,String>> cities = find58Cities();
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
 		String detailPageHtml = getHTML("ganji_city.jsp");
 		if(!cities.isEmpty()){
@@ -160,16 +161,6 @@ public class LocationUtil {
 		province.put("北京", bjcity);
 		province.put("天津", tjcity);
 		province.put("重庆", cqcity);*/
-		
-		if(!province.isEmpty()){
-			for(Entry<String, Map<String, String>>  et:province.entrySet()){
-				System.out.println(et.getKey());
-				Map<String,String> map = et.getValue();
-				for(Entry<String,String> city:map.entrySet()){
-					System.err.println(city.getKey()+" --4444---- " + city.getValue());
-				}
-			}
-		}
 		return province;
 
 	}

@@ -47,7 +47,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	static{
 		webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
-		login138();
+//		login138();
 	}
 	
 	public static HtmlParserUtilFor138 getInstance(){
@@ -58,7 +58,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 		}
 	}
 	
-	private static void login138(){
+	public static void login138(){
 		try {
 			String url = "http://cas.138mr.com/login";
 
@@ -74,6 +74,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			for (HtmlForm singleForm : forms) {
 				if (singleForm.getAttribute("id").equals("formlogin")) {
 					form = singleForm;
+					break;
 				}
 			}
 
@@ -98,7 +99,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	public List<Company> findPagedCompanyList(String url) {
 
 		final List<Company> companyList = new ArrayList<Company>();
-		//login138();
+//		login138();
 		try {
 			HtmlPage mainPage = webClient.getPage(url);
 			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
@@ -116,7 +117,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 						LinkTag lt = (LinkTag)span.getChild(0);
 						Company company = new Company();
 						company.setName(StringUtils.trimToEmpty(lt.getStringText()));
-						company.setfEurl(lt.getAttribute("href"));
+						company.setOteUrl(lt.getAttribute("href"));
 						Node nodeLink = span.getParent();
 						Node[] nodes = nodeLink.getChildren().toNodeArray();
 						for (int i = 0; i < nodes.length; i++) {
@@ -189,20 +190,22 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 							}
 							
 						}
-						String htmlForPage = HttpClientGrabUtil.fetchHTMLwithURL(company.getfEurl());
-						String phoneImgSrc = findContactorPhoneNumberImgSrc(htmlForPage);
-						if(phoneImgSrc!=null&&phoneImgSrc.trim().length()>0){
-							if(phoneImgSrc.startsWith("/")&&!phoneImgSrc.contains("www.ganji.com")){
-								company.setPhoneSrc("http://www.ganji.com"+phoneImgSrc);
-							}else{
-								company.setPhoneSrc(phoneImgSrc);
-							}
+						String htmlForPage = null;
+						try {
+							htmlForPage = webClient.getPage(company.getOteUrl()).getWebResponse().getContentAsString();
+						} catch (FailingHttpStatusCodeException e1) {
+							e1.printStackTrace();
+						} catch (MalformedURLException e1) {
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							e1.printStackTrace();
 						}
 						company.setDescription(findCompanyDescription(htmlForPage));
 						company.setEmployeeCount(findCompanyEmployeeCount(htmlForPage));
-						String testURL = company.getfEurl();
+						String testURL = company.getOteUrl();
 						try {
 							String id = getCompanyResourceId(webClient.getPage(testURL).getWebResponse().getContentAsString());
+//							company.setResourceId(id);
 							String contactDiv =  getContactDiv(id);
 							parseContactDivForTelAndMobile(contactDiv,company);
 							parseContactDivForContactPerson(contactDiv,company);

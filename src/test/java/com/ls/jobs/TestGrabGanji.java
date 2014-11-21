@@ -2,18 +2,36 @@ package com.ls.jobs;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.ls.entity.Company;
 import com.ls.grab.HtmlParserUtilForGanJi;
+import com.ls.grab.LocationUtil;
 
 public class TestGrabGanji {
-	public static void main(String []args){
+	public static void main(String[] args) {
 		try {
-			for(int i=1;i<2;i++){
-			System.out.println("************************************************** page "+i+"***************************************begin");
-			String testURL = "http://s.138job.com/hire/{0}?keyword=&workadd=1273&keywordtype=1&position=0";
-			List<Company> companiesInThisPage = HtmlParserUtilForGanJi.getInstance().findPagedCompanyList(MessageFormat.format(testURL, i));
-			System.out.println("************************************************** page "+i+"***************************************end");
+			Map<String, Map<String, String>> provinces = LocationUtil.getInstance().findGanjiCities();
+			if (!provinces.isEmpty()) {
+				for (Entry<String, Map<String, String>> et : provinces
+						.entrySet()) {
+					Map<String, String> map = et.getValue();
+					for (Entry<String, String> city : map.entrySet()) {
+						String url = city.getValue() + "meirongshi/o1/";
+						System.out.println(url);
+						List<Company> companiesInThisPage = HtmlParserUtilForGanJi.getInstance().findPagedCompanyList(url);
+						for (Company c : companiesInThisPage) {
+							System.err.println(c.getName());
+							System.err.println(c.getArea());
+							System.err.println(c.getAddress());
+							System.err.println(c.getContactor());
+							System.err.println(c.getEmployeeCount());
+							System.err.println(c.getfEurl());
+							System.err.println(c.getDescription());
+						}
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
