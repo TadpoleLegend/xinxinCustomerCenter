@@ -3,7 +3,7 @@ package com.ls.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,11 +24,12 @@ public class Company implements Serializable {
 	@Id
 	@GeneratedValue
 	protected Integer id;
+	protected String resourceId;
+	protected String resouceType;
 	protected String name;
 	protected String contactor;
 	protected String email;
 	protected String emailSrc;
-	protected String resouceType;
 	protected String phone;
 	protected String phoneSrc;
 	protected String mobilePhone;
@@ -37,8 +38,9 @@ public class Company implements Serializable {
 	protected String address;
 	protected Integer star;
 	protected String area;
-	protected String fEurl;
-	protected String phoneImgSrc;
+	protected String fEurl; //five eight(fe) 58 URL 
+	protected String oteUrl; // one three eight( ote) 138 URL 
+	protected String ganjiUrl;
 	protected Integer cityId;
 	protected Integer provinceId;
 	protected String employeeCount;
@@ -51,10 +53,6 @@ public class Company implements Serializable {
     @JoinTable(name = "ls_company_problem", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "problem_id") )
 	protected List<Problem> problems;
 	
-	@ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JoinTable(name = "ls_company_step", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "step_id") )
-	protected List<Step> steps;
-
 	@Transient
 	protected String publishDate;
 	
@@ -67,14 +65,6 @@ public class Company implements Serializable {
 
 	public void setResouceType(String resouceType) {
 		this.resouceType = resouceType;
-	}
-
-	public String getPhoneImgSrc() {
-		return phoneImgSrc;
-	}
-
-	public void setPhoneImgSrc(String phoneImgSrc) {
-		this.phoneImgSrc = phoneImgSrc;
 	}
 
 	public String getfEurl() {
@@ -173,14 +163,7 @@ public class Company implements Serializable {
 		this.publishDate = publishDate;
 	}
 
-	public List<Step> getSteps() {
-		return steps;
-	}
-
-	public void setSteps(List<Step> steps) {
-		this.steps = steps;
-	}
-
+	
 	public Integer getStar() {
 		return star;
 	}
@@ -276,6 +259,30 @@ public class Company implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(String resourceId) {
+		this.resourceId = resourceId;
+	}
+
+	public String getOteUrl() {
+		return oteUrl;
+	}
+
+	public void setOteUrl(String oteUrl) {
+		this.oteUrl = oteUrl;
+	}
+
+	public String getGanjiUrl() {
+		return ganjiUrl;
+	}
+
+	public void setGanjiUrl(String ganjiUrl) {
+		this.ganjiUrl = ganjiUrl;
 	}
 	
 }

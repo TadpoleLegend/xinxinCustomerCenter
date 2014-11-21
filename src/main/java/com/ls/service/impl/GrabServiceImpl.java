@@ -159,7 +159,7 @@ public class GrabServiceImpl implements GrabService {
 						company.setContactor(contactor);
 
 						String phoneImgSrc = HtmlParserUtilPlanB.findContactorPhoneNumberImgSrc(detailPageHtml);
-						company.setPhoneImgSrc(phoneImgSrc);
+						company.setPhoneSrc(phoneImgSrc);
 						
 						String address = HtmlParserUtilPlanB.findCompanyAddress(detailPageHtml);
 						company.setAddress(address);

@@ -94,9 +94,9 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 						String phoneImgSrc = findContactorPhoneNumberImgSrc(htmlForPage);
 						if(phoneImgSrc!=null&&phoneImgSrc.trim().length()>0){
 							if(phoneImgSrc.startsWith("/")&&!phoneImgSrc.contains("www.ganji.com")){
-								company.setPhoneImgSrc("http://www.ganji.com"+phoneImgSrc);
+								company.setPhoneSrc("http://www.ganji.com"+phoneImgSrc);
 							}else{
-								company.setPhoneImgSrc(phoneImgSrc);
+								company.setPhoneSrc(phoneImgSrc);
 							}
 						}
 						company.setContactor(findContactorName(htmlForPage));

@@ -193,9 +193,9 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 						String phoneImgSrc = findContactorPhoneNumberImgSrc(htmlForPage);
 						if(phoneImgSrc!=null&&phoneImgSrc.trim().length()>0){
 							if(phoneImgSrc.startsWith("/")&&!phoneImgSrc.contains("www.ganji.com")){
-								company.setPhoneImgSrc("http://www.ganji.com"+phoneImgSrc);
+								company.setPhoneSrc("http://www.ganji.com"+phoneImgSrc);
 							}else{
-								company.setPhoneImgSrc(phoneImgSrc);
+								company.setPhoneSrc(phoneImgSrc);
 							}
 						}
 						company.setDescription(findCompanyDescription(htmlForPage));
@@ -218,7 +218,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 						sb.append(company.getName()).append("--").append(company.getArea()).append("---").append(company.getAddress()).append("---").append(company.getPublishDate()).append("----").append(company.getContactor());
 						System.err.println(sb.toString());
 						System.err.println(company.getMobilePhoneSrc());
-						System.err.println(company.getPhoneImgSrc());
+						System.err.println(company.getPhoneSrc());
 						companyList.add(company);
 						return;
 					}
@@ -384,7 +384,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 															for(int n=1;n<spanNodes.length;n++){
 															if(spanNodes[n] instanceof ImageTag){
 																ImageTag tel = (ImageTag)spanNodes[n];
-																company.setPhoneImgSrc(tel.getAttribute("src"));
+																company.setPhoneSrc(tel.getAttribute("src"));
 															}
 															}
 															}
