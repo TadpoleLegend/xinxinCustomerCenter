@@ -35,7 +35,7 @@
 </div>
 		
 			<div class="row">
-				<div class="app-wrapper ui-corner-top">
+				<div id="searchWrapper" class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
 						<h2>ËÑË÷</h2>
 					</div>
@@ -445,7 +445,14 @@
 		
 		$(document).ready( function() {
 					//$('#addtionalCompanyInformation').validate({});
-					
+					$("#searchWrapper").accordion({
+						collapsible: true
+					});
+	
+					$(".expand").click(function() {
+						$("#searchWrapper").accordion('option', 'ative', 0);
+					});
+	
 					var Problem = function(id, name) {
 						var self = this;
 						
@@ -693,7 +700,9 @@
 						};
 						
 						self.searchCompany = function() {
-							
+							$("#searchWrapper").accordion({
+								active: false
+							});
 							$.ajax({
 								url : '/ls/user/loadCompanyInPage.ls',
 								data : {pageNumber : self.currentIndex(), 
