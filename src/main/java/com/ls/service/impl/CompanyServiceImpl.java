@@ -17,11 +17,9 @@ import org.springframework.stereotype.Service;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
 import com.ls.entity.Problem;
-import com.ls.entity.Step;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.ProblemRepository;
-import com.ls.repository.StepRepository;
 import com.ls.service.CompanyService;
 import com.ls.vo.CompanySearchVo;
 
@@ -34,8 +32,6 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private ProblemRepository problemRepository;
 
-	@Autowired
-	private StepRepository stepRepository;
 	
 	@Autowired
 	private CompanyAdditionalRepository companyAdditionalRepository;
@@ -59,11 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
 		return problemRepository.save(problem);
 	}
 
-	public Step saveStep(Step step) {
-
-		return stepRepository.save(step);
-	}
-
+	
 	public Page<Company> getCompanyInPage(String companyNameParam, String contactorParam, String starParam, String allStarCheckboxParam, String distinctParam, Integer pageNumber) {
 		Page<Company> companyPage = companyRepository.findAll(generateSpecification(companyNameParam, contactorParam, starParam, allStarCheckboxParam, distinctParam), new PageRequest(pageNumber, 5));
 		

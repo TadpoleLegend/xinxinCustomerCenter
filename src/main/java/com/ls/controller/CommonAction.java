@@ -11,10 +11,8 @@ import org.springframework.stereotype.Component;
 import com.ls.entity.City;
 import com.ls.entity.Problem;
 import com.ls.entity.Province;
-import com.ls.entity.Step;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
-import com.ls.repository.StepRepository;
 import com.ls.service.CompanyService;
 
 @Component("commonAction")
@@ -29,14 +27,11 @@ public class CommonAction extends BaseAction {
 	@Autowired
 	private ProblemRepository problemRepository;
 	
-	@Autowired
-	private StepRepository stepRepository;
 	
 	@Autowired
 	private ProvinceRepository provinceRepository;
 	
 	private List<Problem> problems;
-	private List<Step> steps;
 	private List<Province> provinces;
 	private List<City> cities;
 	
@@ -55,7 +50,6 @@ public class CommonAction extends BaseAction {
 	
 	public String findAllSteps() {
 		
-		steps = stepRepository.findAll();
 		
 		return SUCCESS;
 	}
@@ -87,13 +81,6 @@ public class CommonAction extends BaseAction {
 		this.problems = problems;
 	}
 
-	public List<Step> getSteps() {
-		return steps;
-	}
-
-	public void setSteps(List<Step> steps) {
-		this.steps = steps;
-	}
 
 	public List<City> getCities() {
 		return cities;
