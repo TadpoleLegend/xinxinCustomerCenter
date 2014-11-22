@@ -28,59 +28,60 @@
 
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
-		<div class="container" id="container">
-		
-<div style="color:red">
-    <s:fielderror />
-</div>
-		
+		<div id="container">
+
+			<div style="color: red">
+				<s:fielderror />
+			</div>
+			
 			<div class="row">
 				<div id="searchWrapper" class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
 						<h2>搜索</h2>
 					</div>
 					<div class="content">
-					
+
 						<div class="row">
 							<div class="three columns">
-								<label>省/直辖市</label>
-								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
+								<label>省/直辖市</label> <select
+									data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
 							<div class="three columns">
-								<label>市</label>
-								<select data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
+								<label>市</label> <select
+									data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
 							</div>
-							
-							<div class="three columns">
-							</div>
-							<div class="three columns">
-							</div>
+
+							<div class="three columns"></div>
+							<div class="three columns"></div>
 						</div>
 						<hr>
 						<div class="row">
 							<div class="three columns">
-								<label>公司名称</label>
-								<input type="text" class="addon-postfix" data-bind = "value : seachCompany"/>
+								<label>公司名称</label> <input type="text" class="addon-postfix"
+									data-bind="value : seachCompany" />
 							</div>
 							<div class="three columns">
-								<label>联系人</label>
-								<input type="text" class="addon-postfix" data-bind = "value : searchContactor"/>
+								<label>联系人</label> <input type="text" class="addon-postfix"
+									data-bind="value : searchContactor" />
 							</div>
-							
+
 							<div class="three columns">
-								<label>所在区</label>
-								<input type="text" class="addon-postfix" data-bind = "value : searchDistinct"/>
+								<label>所在区</label> <input type="text" class="addon-postfix"
+									data-bind="value : searchDistinct" />
 							</div>
 							<div class="three columns">
 								<label>星级</label>
-								<div id="starInput" data-bind="attr: { 'starInput' : starInput }"></div>
-								<input type="checkbox" data-bind="checked : allStar"> 包含所有星级
+								<div id="starInput"
+									data-bind="attr: { 'starInput' : starInput }"></div>
+								<input type="checkbox" data-bind="checked : allStar">
+								包含所有星级
 							</div>
 						</div>
 						<hr>
 						<div class="row">
 							<div class="six columns centered">
-								<a class="small blue button" href="#" data-bind="click : searchCompany" > 搜索符合条件的客户 </a>
+								<a class="small blue button" href="#"
+									data-bind="click : searchCompany"> 搜索符合条件的客户 </a>
 							</div>
 						</div>
 					</div>
@@ -92,7 +93,9 @@
 					</div>
 					<div class="content">
 						<div class="row">
-							共找到<label class="green label" data-bind="text: totalPagesCount"></label> 波 ， <label class="yellow label" data-bind="text: totalCompanyCount"></label>个客户
+							共找到<label class="green label" data-bind="text: totalPagesCount"></label>
+							波 ， <label class="yellow label"
+								data-bind="text: totalCompanyCount"></label>个客户
 						</div>
 						<br>
 						<ul class="smartlist nice" data-bind="foreach: companyList">
@@ -101,20 +104,27 @@
 									<label class="input-checkbox">
 										<div class="row">
 											<div class="four columns text-center">
-												<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><h5><b data-bind="text : name"></b></h5></a>
+												<a style="margin-left: 20px;"
+													data-bind="click:$root.showDetail"><h5>
+														<b data-bind="text : name"></b>
+													</h5></a>
 											</div>
 											<div class="one columns">
 												<b data-bind="text : contractor"></b>
 											</div>
 											<div class="three columns">
-												<label class="input-checkbox"> <img style="margin-left:45px" alt="电话号码" data-bind="attr: { 'src' : phone_src }"></label>
+												<label class="input-checkbox"> <img
+													style="margin-left: 45px" alt="电话号码"
+													data-bind="attr: { 'src' : phone_src }"></label>
 											</div>
 											<div class="two columns">
-												<div class="star listStar" data-bind="attr : {'star' : star, 'id': id}"></div>
+												<div class="star listStar"
+													data-bind="attr : {'star' : star, 'id': id}"></div>
 											</div>
 											<div class="two columns">
 												<div class="row">
-													<a class="small blue button" data-bind="click : $root.trackCustomer" href="#">查看</a>
+													<a class="small blue button"
+														data-bind="click : $root.trackCustomer" href="#">查看</a>
 												</div>
 											</div>
 										</div>
@@ -123,27 +133,28 @@
 							</li>
 						</ul>
 						<div class="row">
-							<div class="three columns">
-								
-							</div>
+							<div class="three columns"></div>
 							<div class="six columns">
-								<a href="#" class="small blue button"  data-bind="click : lastPage, disable : currentIndex() > 1" >上一波客户</a>
+								<a href="#" class="small blue button"
+									data-bind="click : lastPage, disable : currentIndex() > 1">上一波客户</a>
 								<label class="label yellow" data-bind="text : currentIndex"></label>
-								<a href="#" class="small blue button" data-bind="click : nextPage">下一波客户</a>
+								<a href="#" class="small blue button"
+									data-bind="click : nextPage">下一波客户</a>
 							</div>
-							<div class="three columns">
-							</div>
+							<div class="three columns"></div>
 						</div>
 					</div>
 				</div>
-				<div id="selectedCompany" class="row" data-bind="with : selectedCompany" style="display: none;">
+				<div id="selectedCompany" class="row"
+					data-bind="with : selectedCompany" style="display: none;">
 					<div class="app-wrapper ui-corner-top">
 						<div class="gray module ui-corner-top clearfix">
 							<h2>
 								详细信息<span class="subheader line" data-bind="text : name"></span>
 							</h2>
 							<h2 class="right">
-								<a class="small blue button" data-bind="click : $root.backToCustomerList" href="#">返回客户列表</a>
+								<a class="small blue button"
+									data-bind="click : $root.backToCustomerList" href="#">返回客户列表</a>
 							</h2>
 						</div>
 						<div class="content">
@@ -152,10 +163,13 @@
 									<i class="icon-user xlarge"></i><b data-bind="text : status"></b>
 								</div>
 								<div class="two columns">
-									<div id="detailStar" class="star" data-bind="attr : {'star' : star, 'companyId' : id}"></div>
+									<div id="detailStar" class="star"
+										data-bind="attr : {'star' : star, 'companyId' : id}"></div>
 								</div>
 								<div class="four columns">
-									<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><span data-bind="text : detailUrl"></span></a>
+									<a style="margin-left: 20px;"
+										data-bind="click:$root.showDetail"><span
+										data-bind="text : detailUrl"></span></a>
 								</div>
 								<div class="two columns">
 									<a class="small green button" href="#">成为意向客户</a>
@@ -167,100 +181,109 @@
 									<a href="#">客户基本信息</a>
 								</h4>
 								<div>
-								<div class="row">
-								<div class="row">
-									<div class='three columns'>
-										<label>名称 </label><input type="text" data-bind="value : name" disabled="disabled">
-									</div>
-									<div class='one columns'>
-										<label>区域 </label><input type="text" data-bind="value : distinct">
-									</div>
-									<div class='eight columns'>
-										<label>地址 </label> <input type="text" data-bind="value : address">
-									</div>
-								</div>
+									<div class="row">
+										<div class="row">
+											<div class='three columns'>
+												<label>名称 </label><input type="text"
+													data-bind="value : name" disabled="disabled">
+											</div>
+											<div class='one columns'>
+												<label>区域 </label><input type="text"
+													data-bind="value : distinct">
+											</div>
+											<div class='eight columns'>
+												<label>地址 </label> <input type="text"
+													data-bind="value : address">
+											</div>
+										</div>
 
-								<div class="row">
-									<div class='four columns'>
-										<label>联系人 </label><input type="text" data-bind="value : contractor">
+										<div class="row">
+											<div class='four columns'>
+												<label>联系人 </label><input type="text"
+													data-bind="value : contractor">
+											</div>
+											<div class='four columns'>
+												<label>联系电话</label><label class="input-checkbox"> <img
+													alt="电话号码" data-bind="attr: { 'src' : phone_src }">
+												</label>
+											</div>
+											<div class='four columns'>
+												<label>Email</label> <label>电子邮件</label><label
+													class="input-checkbox"> <img alt="电子邮箱"
+													data-bind="attr: { 'src' : email_src }">
+												</label>
+											</div>
+										</div>
 									</div>
-									<div class='four columns'>
-										<label>联系电话</label><label class="input-checkbox"> <img alt="电话号码" data-bind="attr: { 'src' : phone_src }">
-										</label>
+									<div class="row">
+										<label>公司简介</label>
+										<textarea name="ex-textarea-4"></textarea>
 									</div>
-									<div class='four columns'>
-										<label>Email</label> <label>电子邮件</label><label class="input-checkbox"> <img alt="电子邮箱" data-bind="attr: { 'src' : email_src }">
-										</label>
+									<br>
+									<h4>补充客户信息</h4>
+									<br>
+									<div id="addtionalCompanyInformation"
+										data-bind="with : $root.addtion">
+										<div class="row">
+											<div class="three columns">
+												<label>院长姓名</label> <input type="text"
+													data-bind="value : bossName" />
+											</div>
+											<div class="three columns">
+												<label>院长手机</label> <input class="number" type="text"
+													data-bind="value : bossMobile" />
+											</div>
+											<div class="three columns">
+												<label>院长电话</label> <input class="number" type="text"
+													data-bind="value : bossTelephone" />
+											</div>
+											<div class="three columns">
+												<label>院长QQ或者微信号</label> <input type="text"
+													data-bind="value : bossQQorWechat" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="three columns">
+												<label>店个数</label> <input class="number" type="text"
+													data-bind="value : branchCount" />
+											</div>
+											<div class="three columns">
+												<label>店长人数</label> <input class="number" type="text"
+													data-bind="value : branchManagerCount" />
+											</div>
+											<div class="three columns">
+												<label>顾问人数</label> <input class="number" type="text"
+													data-bind="value : branchConsultantCount" />
+											</div>
+											<div class="three columns">
+												<label>床位数</label> <input class="number" type="text"
+													data-bind="value : bedCount" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="three columns">
+												<label>规模（平方）</label> <input class="number" type="text"
+													data-bind="value : acreage" />
+											</div>
+											<div class="three columns">
+												<label>去年业绩（万）</label> <input class="number" type="text"
+													data-bind="value : lastYearIncome" />
+											</div>
+											<div class="three columns">
+												<label>现平均多少万</label> <input class="number" type="text"
+													data-bind="value : thisYearMonthlyIncome" />
+											</div>
+											<div class="three columns">
+												<label>院长年龄大概多少岁？</label> <input class="number" type="text"
+													data-bind="value : bossAge" />
+											</div>
+										</div>
+										<div class="row">
+											<a class="small blue button"
+												data-bind="click : $root.saveAddition">保存</a>
+
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="row">
-								<label>公司简介</label>
-								<textarea name="ex-textarea-4"></textarea>
-							</div>
-							<br>
-							<h4>补充客户信息</h4>
-							<br>
-							<div id="addtionalCompanyInformation" data-bind="with : $root.addtion">
-							<div class="row">
-								<div class="three columns">
-									<label>院长姓名</label>
-									<input type="text" data-bind="value : bossName"/>
-								</div>
-								<div class="three columns">
-									<label>院长手机</label>
-									<input class="number" type="text" data-bind="value : bossMobile"/>
-								</div>
-								<div class="three columns">
-									<label>院长电话</label>
-									<input class="number" type="text" data-bind="value : bossTelephone"/>
-								</div>
-								<div class="three columns">
-									<label>院长QQ或者微信号</label>
-									<input type="text" data-bind="value : bossQQorWechat"/>
-								</div>
-							</div>
-							<div class="row">
-								<div class="three columns">
-									<label>店个数</label>
-									<input class="number" type="text" data-bind="value : branchCount"/>
-								</div>
-								<div class="three columns">
-									<label>店长人数</label>
-									<input class="number" type="text" data-bind="value : branchManagerCount"/>
-								</div>
-								<div class="three columns">
-									<label>顾问人数</label>
-									<input class="number" type="text" data-bind="value : branchConsultantCount"/>
-								</div>
-								<div class="three columns">
-									<label>床位数</label>
-									<input class="number" type="text" data-bind="value : bedCount"/>
-								</div>
-							</div>
-							<div class="row">
-								<div class="three columns">
-									<label>规模（平方）</label>
-									<input class="number" type="text" data-bind="value : acreage"/>
-								</div>
-								<div class="three columns">
-									<label>去年业绩（万）</label>
-									<input class="number" type="text" data-bind="value : lastYearIncome"/>
-								</div>
-								<div class="three columns">
-									<label>现平均多少万</label>
-									<input class="number" type="text" data-bind="value : thisYearMonthlyIncome"/>
-								</div>
-								<div class="three columns">
-									<label>院长年龄大概多少岁？</label>
-									<input class="number" type="text" data-bind="value : bossAge"/>
-								</div>
-							</div>
-							<div class="row">
-								<a class="small blue button" data-bind="click : $root.saveAddition">保存</a>
-							
-							</div>
-							</div>	
 								</div>
 
 								<h4>
@@ -275,8 +298,9 @@
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantA">
-														<label class="input-checkbox" for="employeeProblem"> 
-															<input class="icheckbox" type="checkbox" name="employeeProblem" /> <span data-bind="text : name, value : id"></span>
+														<label class="input-checkbox" for="employeeProblem">
+															<input class="icheckbox" type="checkbox" name="employeeProblem" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
+															data-bind="text : name"></span>
 														</label>
 													</div>
 												</div>
@@ -289,30 +313,30 @@
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantB">
-												<label class="input-checkbox" for="consumerProblem"> 
-													<input type="checkbox" name="consumerProblem" class="icheckbox"/> 
-													<span data-bind="text : name, value : id"></span>
-												</label>
-											</div>
+														<label class="input-checkbox" for="consumerProblem">
+															<input type="checkbox" name="consumerProblem" class="icheckbox" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
+															data-bind="text : name"></span>
+														</label>
+													</div>
 												</div>
-											</div>	
-											
+											</div>
+
 										</div>
 										<div class="four columns">
-										<div class="app-wrapper ui-corner-top">
+											<div class="app-wrapper ui-corner-top">
 												<div class="blue module ui-corner-top clearfix">
 													<h2>其他问题</h2>
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantC">
-												<label class="input-checkbox" for="otherProblems"> <input class="icheckbox"
-													type="checkbox" name="otherProblems" /> <span
-													data-bind="text : name, value : id"></span>
-												</label>
-											</div>
+														<label class="input-checkbox" for="otherProblems">
+															<input class="icheckbox" type="checkbox"
+															name="otherProblems" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
+															data-bind="text : name"></span>
+														</label>
+													</div>
 												</div>
 											</div>
-											
 										</div>
 									</div>
 
@@ -366,7 +390,8 @@
 																disabled="disabled" value="2013年4月25日" />
 														</div>
 														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text" disabled="disabled" value="2013年4月26日" />
+															<label>约定下次电话时间</label> <input type="text"
+																disabled="disabled" value="2013年4月26日" />
 														</div>
 														<div class="six columns">
 															<textarea name="ex-textarea-5"></textarea>
@@ -415,7 +440,8 @@
 															<label>跟踪日期</label> <input type="text" value="" />
 														</div>
 														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text" id="nextScheduleDate"/>
+															<label>约定下次电话时间</label> <input type="text"
+																id="nextScheduleDate" />
 														</div>
 														<div class="six columns">
 															<textarea name="ex-textarea-5"></textarea>
@@ -531,6 +557,39 @@
 						self.selectedProvince =  ko.observable('');
 						self.selectedCompany = ko.observable(new Company());
 						self.addtion =  ko.observable(new CompanyAddtion());
+						self.problemsTheCompanyHas = ko.observableArray([]);
+						self.updateProblemItem = function(item, event) {
+							
+							var checkedFlag = $(event.target).is(':checked');
+							$.ajax({
+								url : '/ls/user/checkOrUncheckProblem.ls',
+								method : 'POST',
+								data : {
+										companyJson : JSON.stringify(self.selectedCompany()), 
+										problemJson : JSON.stringify(item),
+										checkFlag : checkedFlag},
+								success : function(data) {
+									
+									if (data && data.message) {
+										
+										var showToUser = '';
+										
+										if (checkedFlag) {
+											showToUser = ( "为 <label class=\"label green\">" + self.selectedCompany().name + "</label>" + " 增加了问题项: <b>" + item.name + "</b>。");
+										} else {
+											showToUser = "为 <label class=\"label green\">" + self.selectedCompany().name + "</label>" + " 去除了问题项:<b>" + item.name + "</b>。";
+										}
+										
+										success(showToUser);
+										
+									} else {
+										fail();
+									}
+								}
+							});
+							
+							return true;
+						};
 						
 						self.changeStarLevel = function(companyId, score) {
 							$.ajax({
@@ -577,9 +636,21 @@
 							self.searchCompany();
 						};
 						
+						
+						
 						self.trackCustomer = function(item, event) {
 							
+							console.debug(ko.toJS(item));
+							
 							self.selectedCompany(item);
+							
+							var problems = ko.toJS(item.problems);
+							var selectedIds = [];
+							$.each(problems, function(i, n) {
+								selectedIds.push(n);
+							});
+							
+							self.problemsTheCompanyHas(selectedIds);
 							
 							self.addtion(new CompanyAddtion());
 							
@@ -591,11 +662,7 @@
 							
 							self.loadCompanyAdditionalInformation();
 							
-							$('.icheckbox').iCheck({
-							    checkboxClass: 'icheckbox_flat-pink',
-							    radioClass: 'iradio_flat-pink'
-							  });
-							
+						
 							$('#detailStar').raty({
 									score : function() {
 										return $(this).attr('star');
