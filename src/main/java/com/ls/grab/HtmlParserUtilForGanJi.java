@@ -66,7 +66,7 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 						LinkTag lt = (LinkTag)definitionListBullet.getChild(0);
 						Company company = new Company();
 						company.setName(StringUtils.trimToEmpty(lt.getStringText()));
-						company.setfEurl(lt.getAttribute("href"));
+						company.setGanjiUrl(lt.getAttribute("href"));
 						Node nodeLink = definitionListBullet.getParent();
 						Node[] nodes = nodeLink.getChildren().toNodeArray();
 						
@@ -90,7 +90,7 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 							}
 							
 						}
-						String htmlForPage = HttpClientGrabUtil.fetchHTMLwithURL(company.getfEurl());
+						String htmlForPage = HttpClientGrabUtil.fetchHTMLwithURL(company.getGanjiUrl());
 						String phoneImgSrc = findContactorPhoneNumberImgSrc(htmlForPage);
 						if(phoneImgSrc!=null&&phoneImgSrc.trim().length()>0){
 							if(phoneImgSrc.startsWith("/")&&!phoneImgSrc.contains("www.ganji.com")){
