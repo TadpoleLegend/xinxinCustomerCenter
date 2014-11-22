@@ -24,7 +24,7 @@ public class CityURL implements Serializable {
 	protected String resourceType;
 	protected Date updateDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="city_id")
 	protected City city;
 

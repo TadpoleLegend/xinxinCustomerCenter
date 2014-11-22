@@ -21,7 +21,7 @@ import org.htmlparser.util.ParserException;
 
 public class LocationUtil {
 	private static LocationUtil locationUtil;
-	private static String place_138_str = "http://s.138job.com/hire/1?keyword=&workadd={0}&keywordtype=1&position=0";
+	private static String place_138_str = "http://s.138job.com/hire/{1}?keyword=&workadd={0}&keywordtype=1&position=0&&releasedate={2}";
 	private LocationUtil() {}
 
 	public static LocationUtil getInstance() {

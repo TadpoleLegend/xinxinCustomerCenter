@@ -28,8 +28,11 @@ public class TestGrabProvince {
 	private CityRepository cityRepository;
 	@Autowired
 	private CityURLRepository cityURLRepository;
+	
+	
+	
 	@Test
-	public void testGrabCompanyList() throws Exception{
+	public void testInitProvinceAndCity() throws Exception{
 		try {
 			Map<String,Map<String,String>> provinces_138 = LocationUtil.getInstance().find138Cities();
 			Map<String,Map<String,String>> provinces_58 = LocationUtil.getInstance().find58Cities();
