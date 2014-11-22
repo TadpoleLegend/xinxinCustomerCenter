@@ -24,11 +24,6 @@
 				<param name="root">problems</param>
 			</result>
 		</action>
-		<action name="findAllSteps" class="commonAction" method="findAllSteps">
-			<result name="success" type="json">
-				<param name="root">steps</param>
-			</result>
-		</action>
 		<action name="findAllProvinces" class="commonAction" method="findAllProvinces">
 			<result name="success" type="json">
 				<param name="root">provinces</param>
@@ -116,17 +111,13 @@
 				<param name="root">problems</param>
 			</result>
 		</action>
-		<action name="saveStep" class="configurationAction" method="saveStep">
+		<action name="deleteProblem" class="configurationAction"
+			method="deleteProblem">
 			<result name="success" type="json">
-				<param name="root">stepOperating</param>
+				<param name="root">response</param>
 			</result>
 		</action>
-		<action name="getAllSteps" class="configurationAction" method="getAllSteps">
-			<result name="success" type="json">
-				<param name="root">steps</param>
-			</result>
-		</action>
-
+		
 	</package>
 
 	<include file="data-struts.xml" />

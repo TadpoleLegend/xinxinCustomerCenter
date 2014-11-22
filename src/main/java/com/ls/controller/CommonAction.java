@@ -47,12 +47,7 @@ public class CommonAction extends BaseAction {
 		
 		return SUCCESS;
 	}
-	
-	public String findAllSteps() {
-		
-		
-		return SUCCESS;
-	}
+
 	
 	public String findAllProvinces() {
 		provinces = provinceRepository.findAll();

@@ -5,11 +5,17 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.ImmutableList;
 import com.ls.entity.Problem;
 import com.ls.repository.ProblemRepository;
 import com.ls.service.CompanyService;
+import com.ls.util.XinXinUtils;
+import com.ls.vo.ResponseVo;
 
 @Component("configurationAction")
 public class ConfigurationAction extends BaseAction {
@@ -28,51 +34,39 @@ public class ConfigurationAction extends BaseAction {
 	private List<Problem> problems;
 
 	public String saveProblem() {
-		String id = getParameter("id");
-		String name = getParameter("name");
-		String category = getParameter("category");
+		
+		String problemJson = getParameter("problem");
+		
+		Problem problem = XinXinUtils.getJavaObjectFromJsonString(problemJson, Problem.class);
+		
+		problemOperating = problemRepository.saveAndFlush(problem);
+		
+		return SUCCESS;
+	}
 
-		Problem problem = new Problem();
-
-		// update
-		if (null != id) {
-			problem.setId(Integer.valueOf(id));
-			problem.setName(name);
-			//problem.setCategory(category);
-			problemOperating = companyService.saveProblem(problem);
-
-		} else {
-
-			Problem checkDB = problemRepository.findByName(name);
-			if (null != checkDB) {
-				// throw exception
-
-			} else {
-				problem.setName(name);
-				//problem.setCategory(category);
-				problemOperating = companyService.saveProblem(problem);
-			}
-
+	public String deleteProblem() {
+		
+		try {
+			
+			String problemJson = getParameter("problem");
+			
+			Problem problem = XinXinUtils.getJavaObjectFromJsonString(problemJson, Problem.class);
+			
+			problemRepository.delete(problem);
+			
+		} catch (Exception e) {
+			setResponse(ResponseVo.newSuccessMessage("200"));
 		}
-
+		
+		setResponse(ResponseVo.newSuccessMessage(null));
+		
 		return SUCCESS;
 	}
-
-	public String saveStep() {
-	
-		return SUCCESS;
-	}
-
-	public String getAllSteps() {
-
-	
-
-		return SUCCESS;
-	}
-
 	public String getAllProblems() {
-
-		problems = problemRepository.findAll();
+		
+		Order order = new Order(Direction.ASC, "category");
+		
+		problems = problemRepository.findAll(new Sort(ImmutableList.of(order)));
 
 		return SUCCESS;
 	}
