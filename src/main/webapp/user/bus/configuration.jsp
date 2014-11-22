@@ -13,7 +13,6 @@
 <title>Configuration</title>
 
 <s:include value="/jsps/common/head.jsp" />
-
 </head>
 <body>
 	<header id="brand">
@@ -23,217 +22,185 @@
 			</div>
 		</div>
 	</header>
-
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container">
-			<div class="row">
-				<div class="app-wrapper ui-corner-top">
-					<div class="blue module ui-corner-top clearfix">
-						<h2>问题分类管理</h2>
-					</div>
-					<div class="content">
-						<table class="display compact" id="categoryTable">
-									<thead>
-										<tr>
-											<th class="text-center">分类名称</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: categoryList">
-										<tr>
-											<td class="text-center"><span data-bind="text: name"></span></td>
-										</tr>
+			<div id="problemDialog" style="display: none;" title="问题标签" data-bind="with : selectedProblem">
 
-									</tbody>
-								</table>
+				<form id="problemForm">
+					<div class="row">
+						<label class="label"> 问题编号 ：</label> <span data-bind="text : id"></span>
 					</div>
+					<br>
+					<hr>
+					<div class="row">
+						<label> 问题类别</label> <input id="categoryInput" type="text" data-bind="value : category" class="required">
+					</div>
+					<div class="row">
+						<label> 问题描述</label> <input type="text" data-bind="value : name" class="required">
+					</div>
+				</form>
+				<div class="row">
+					<a href="#" class="tiny blue button"
+							data-bind="click : $root.saveProblem" title="">保存</a>
+					<a href="#" class="tiny blue button"
+							data-bind="click : $root.closeDialog" title="">关闭窗口</a>		
 				</div>
-
 			</div>
 			<div class="row">
 
-					<div class="app-wrapper ui-corner-top">
-						<div class="blue module ui-corner-top clearfix">
-							<h2>公司问题配置</h2>
-						</div>
-						<div class="content">
-							<div data-bind="foreach : problems">
-								<div class="row">
-									<div class="two columns"><b  data-bind="text : id"></b>, </div>
-									<div class="three columns"><input type="text" data-bind="value : name"></div>
-									<div class="three columns"><input type="text" data-bind="value : category"></div>
-									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.editProblem" title="">保存修改</a></div>
-									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.deleteProblem" title="">删除</a></div>
-								</div>
-							</div>
-							<hr>
-							<div class="row">
-								<div class="four columns">
-									<input type="text" data-bind="value : newProblenName">
-								</div>
-								<div class="four columns">
-									<input type="text" data-bind="value : newType">
-								</div>
-								<div class="four columns">
-									<a href="#" class="tiny blue button" data-bind="click : saveProblem" title="">存入新的问题</a>
-								</div>
-							</div>
-						</div>
+				<div class="app-wrapper ui-corner-top">
+					<div class="blue module ui-corner-top clearfix">
+						<h2>公司问题配置</h2>
+						<h2 class="right"> <a class=" tiny green button" href="#" data-bind="click : $root.openProblemDialog">创建新问题标签</a></h2>
 					</div>
-				<!--  
-				<div class="six columns">
-					<div class="app-wrapper ui-corner-top" id="createUserDiv">
-						<div class="blue module ui-corner-top clearfix">
-							<h2>跟踪进度配置</h2>
-						</div>
-						<div class="content">
-							<div data-bind="foreach : steps">
-								<div class="row">
-									<div class="two columns"><b  data-bind="text : id"></b>, </div>
-									<div class="six columns"><input type="text" data-bind="value : name"></div>
-									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.editStep" title="">保存修改</a></div>
-									<div  class="two columns"><a href="#" class="tiny blue button" data-bind="click : $root.deleteStep" title="">删除</a></div>
-								</div>
-							</div>
-							<hr>
-							<div class="row">
-								<div class="four columns">
-									<input type="text" data-bind="value : newStepName">
-								</div>
-								<div class="three columns">
-									<a href="#" class="tiny blue button" data-bind="click : saveStep" title="">存入新的问题</a>
-								</div>
-							</div>
-						</div>
+					<div class="content">
+						<table class="display compact" id="problemListTable">
+							<thead>
+								<tr>
+									<th class="text-center">编号</th>
+									<th class="text-center">类别</th>
+									<th class="text-center">内容</th>
+									<th class="text-center">修改/删除</th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: problems">
+								<tr>
+									<td class="text-center"><span data-bind="text: id"></span></td>
+									<td class="text-center"><span data-bind="text: category"></span></td>
+									<td class="text-center"><span data-bind="text: name"></span></td>
+									<td class="text-center"><a class=" tiny green button"
+										href="#" data-bind="click : $root.openProblemDialogToEdit">编辑</a> <a
+										class=" tiny red button" href="#"
+										data-bind="click : $root.deleteProblem">删除</a></td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
 					</div>
-
-				</div>-->
+				</div>
 			</div>
 		</div>
 	</section>
-
 	<s:include value="/jsps/common/footer.jsp" />
 	<script src="/ls/js/User.js"></script>
 	<script>
-		$(document).ready(function() {
-
-			var Problem = function(id, name, category) {
-				var self = this;
-				
-				self.id = id;
-				self.name = name;
-				self.category = category;
-			};
-
-			var Step = function(id, name) {
-				var self = this;
-				
-				self.id = id;
-				self.name = name;
-			};
-			
-			var ConfigurationModel = function() {
-				var self = this;
-
-				self.newProblenName = ko.observable();
-				self.problems = ko.observableArray([]);
-				self.newStepName = ko.observable();
-				self.newType =  ko.observable();
-				self.steps = ko.observableArray([]);
-				
-				self.categoryList = [];
-				
-				self.findAllSteps = function() {
-					$.ajax({
-						url : '/ls/getAllSteps.ls',
-						success : function(data) {
-
-							self.steps.removeAll();
-							$.each(data, function(index, value) {
-								var p = new Step(value.id, value.name);
-								self.steps.push(p);
-							});
-						}
+		$(document).ready( function() {
+					var problemCategoryList = ['员工问题', '顾客问题', '其他问题'];
+					
+					$('#problemListTable').dataTable({
+						"paging" : false,
+						"ordering" : false,
+						"info" : false,
+						"searching" : false
 					});
-				};
-				
-				self.deleteStep = function() {
-					alert("这个功能还在开发中");
-				};
-				
-				self.saveStep = function() {
 
-					if (self.newStepName()) {
-						$.ajax({
-							url : '/ls/saveStep.ls',
-							data : {
-								name : self.newStepName()
-							},
-							success : function(data) {
-								var p = new Step(data.id, data.name);
-								self.steps.push(p);
-							}
-						});
-					} else {
+					var Problem = function(id, name, category) {
+						var self = this;
 
-						alert('请输入一点东西吧');
-					}
-				};
+						self.id = id;
+						self.name = name;
+						self.category = category;
+					};
 
-				self.editStep = function() {
-					alert("这个功能还在开发中");
-				};
-				
-				
+					var ConfigurationModel = function() {
 
-				self.findAllProblems = function() {
-					$.ajax({
-						url : '/ls/getAllProblems.ls',
-						success : function(data) {
+						var self = this;
 
-							self.problems.removeAll();
-							$.each(data, function(index, value) {
-								var p = new Problem(value.id, value.name, value.category);
-								self.problems.push(p);
+						self.newProblenName = ko.observable();
+						self.problems = ko.observableArray([]);
+						self.newType = ko.observable();
+
+						self.selectedProblem = ko.observable(new Problem());
+
+						self.categoryList = [];
+						
+						self.findAllProblems = function() {
+							$.ajax({
+								url : '/ls/getAllProblems.ls',
+								success : function(data) {
+									self.problems(data);
+								}
 							});
-						}
-					});
-				};
-				
-				self.deleteProblem = function() {
-					alert("这个功能还在开发中");
-				};
-				
-				self.saveProblem = function() {
+						};
 
-					if (self.newProblenName()) {
-						$.ajax({
-							url : '/ls/saveProblem.ls',
-							data : {
-								name : self.newProblenName(),
-								category : self.newType()
-							},
-							success : function(data) {
-								var p = new Problem(data.id, data.name, data.category);
-								self.problems.push(p);
+						self.deleteProblem = function(item, event) {
+							
+							if (window.confirm('你确定要删除这个问题选项吗？')) {
+								$.ajax({
+									url : '/ls/deleteProblem.ls',
+									data : {
+										problem : JSON.stringify(item)
+									},
+									success : function(data) {
+										if (data && data.type =='SUCCESS') {
+											self.findAllProblems();
+											success();
+										} else {
+											fail();
+										}
+									}
+								});
 							}
-						});
-					} else {
+						};
 
-						alert('请输入一点东西吧');
-					}
-				};
+						self.saveProblem = function() {
+							
+							if ($('#problemForm').valid()) {
+								
+								$.ajax({
+									url : '/ls/saveProblem.ls',
+									data : {
+										problem : JSON.stringify(self.selectedProblem())
+									},
+									success : function(data) {
+										
+										if (data) {
+											self.findAllProblems();
+											
+											success('已成功存储');
+											
+											self.closeDialog();
+											
+										} else {
+											fail('存储失败');
+										}
+									}
+								});
+							}
+						};
 
-				self.editProblem = function() {
-					alert("这个功能还在开发中");
-				};
-			};
+						self.openProblemDialog = function() {
+							$('#problemDialog').dialog({
+								modal : true,
+								width : 640,
+								height : 580
+							});
+							
+							$('#categoryInput').autocomplete({source : problemCategoryList, minLength: 0, 
+								select: function( event, ui ) {
+										self.selectedProblem().category = (ui.item.label);	
+							}});
+							
+							$('#categoryInput').autocomplete("search", "");
+						};
+						
+						self.closeDialog = function() {
+							$('#problemDialog').dialog("close");
+							self.selectedProblem(new Problem());
+						};
+						
+						self.openProblemDialogToEdit = function(item, event) {
+							self.selectedProblem(item);
+							self.openProblemDialog();
+						}
+					};
 
-			var model = new ConfigurationModel();
-			model.findAllProblems();
-			model.findAllSteps();
-			ko.applyBindings(model);
-		});
+					var configurationModel = new ConfigurationModel();
+					configurationModel.findAllProblems();
+					ko.applyBindings(configurationModel);
+					
+				});
 	</script>
 </body>
 </html>
