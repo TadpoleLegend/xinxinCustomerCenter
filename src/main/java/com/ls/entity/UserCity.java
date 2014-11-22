@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
@@ -16,11 +19,13 @@ public class UserCity implements Serializable{
 	@GeneratedValue
 	protected Integer id;
 	
-	@OneToMany(mappedBy="userCity")
-	protected List<City> cities;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="city_id")
+	protected City city;
 	
-	@OneToMany(mappedBy="userCity")
-	protected List<User> users;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id")
+	protected User user;
 
 	public Integer getId() {
 		return id;
@@ -30,19 +35,20 @@ public class UserCity implements Serializable{
 		this.id = id;
 	}
 
-	public List<City> getCities() {
-		return cities;
+	public City getCity() {
+		return city;
 	}
 
-	public void setCities(List<City> cities) {
-		this.cities = cities;
+	public void setCity(City city) {
+		this.city = city;
 	}
 
-	public List<User> getUsers() {
-		return users;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUsers(List<User> users) {
-		this.users = users;
+	public void setUser(User user) {
+		this.user = user;
 	}
+
 }

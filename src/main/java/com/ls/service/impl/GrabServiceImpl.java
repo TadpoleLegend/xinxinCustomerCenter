@@ -142,7 +142,8 @@ public class GrabServiceImpl implements GrabService {
 			String html = HttpClientGrabUtil.fetchHTMLwithURL(pageURL);
 			
 			List<Company> basicCompany = HtmlParserUtilPlanB.findPagedCompanyList(html);
-			List<City> citys = cityRepository.findByUrl(url);
+			//List<City> citys = cityRepository.findByUrl(url);
+			List<City> citys = null;
 			City myCity = citys.get(0);
 			for (Company company : basicCompany) {
 					if (isDulpicate(company)) {
