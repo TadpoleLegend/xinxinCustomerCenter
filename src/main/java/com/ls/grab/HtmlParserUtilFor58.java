@@ -75,7 +75,7 @@ public class HtmlParserUtilFor58 {
 		return null;
 	}
 	
-	public static List<Company> findPagedCompanyList(String url) {
+	public List<Company> findPagedCompanyList(String url) {
 
 		final List<Company> companyList = new ArrayList<Company>();
 
