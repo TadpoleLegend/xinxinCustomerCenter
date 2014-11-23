@@ -347,6 +347,11 @@
 								</h3>
 								<div>
 									<div class="row">
+										<div class="right">
+											<a class="small blue button" data-bind="click : $root.openPhoneCallDialog">创建新的通话记录</a>
+										</div>
+									</div>
+									<div class="row">
 										<ul class="smartlist nice">
 											<label class="input-checkbox">
 												<li>
@@ -433,29 +438,30 @@
 													</div>
 											</li>
 											</label>
-											<label class="input-checkbox">
-												<li>
-													<div class="row">
-														<div class="three columns text-center">
-															<label>跟踪日期</label> <input type="text" value="" />
-														</div>
-														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text"
-																id="nextScheduleDate" />
-														</div>
-														<div class="six columns">
-															<textarea name="ex-textarea-5"></textarea>
-														</div>
-													</div>
-													<div>
-														<a class="small blue button">保存电话记录</a>
-													</div>
-											</li>
-											</label>
-										</ul>
+											</ul>
 									</div>
 								</div>
 
+							</div>
+							<div id="phoneCallDialog" title="电话记录管理" style="display:none;" data-bind="with : $root.phoneCall">
+									<form id="problemForm">
+										<div class="row">
+											<label class="label"> 电话记录编号 ：</label> <span
+												data-bind="text : id"></span>
+										</div>
+										<br>
+										<hr>
+										<div class="row">
+											<label class="required">电话内容</label>
+											<textarea name="descriptionArea" data-bind="value : description" class="required" style="width: 598px; height: 287px;"></textarea>
+										</div>
+										<div class="row">
+											<label>下次沟通日期及时间</label>
+											 <input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1, onClose : $root.nextDateOnClose}, value : nextDate" class="required">
+										</div>
+									</form>
+									<div class="row">
+									</div>
 							</div>
 						</div>
 					</div>
@@ -536,6 +542,12 @@
 						this.name = name;
 					};
 					
+					var PhoneCallHistory = function() {
+							this.id = null;
+							this.nextDate = '';
+							this.description = '';
+					}
+					
 					var CompanyModel = function() {
 						var self = this;
 
@@ -558,6 +570,18 @@
 						self.selectedCompany = ko.observable(new Company());
 						self.addtion =  ko.observable(new CompanyAddtion());
 						self.problemsTheCompanyHas = ko.observableArray([]);
+						self.phoneCall = ko.observable(new PhoneCallHistory());
+						
+						self.nextDateOnClose = function(item, event) {
+							
+						};
+						self.openPhoneCallDialog = function(item, event) {
+							$('#phoneCallDialog').dialog({
+								modal : true,
+								width : 640,
+								height : 580
+							})
+						};
 						self.updateProblemItem = function(item, event) {
 							
 							var checkedFlag = $(event.target).is(':checked');

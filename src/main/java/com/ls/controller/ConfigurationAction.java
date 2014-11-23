@@ -62,11 +62,16 @@ public class ConfigurationAction extends BaseAction {
 		
 		return SUCCESS;
 	}
+	
 	public String getAllProblems() {
 		
 		Order order = new Order(Direction.ASC, "category");
 		
 		problems = problemRepository.findAll(new Sort(ImmutableList.of(order)));
+		
+		for (Problem problem : problems) {
+			problem.setCompanies(null);
+		}
 
 		return SUCCESS;
 	}

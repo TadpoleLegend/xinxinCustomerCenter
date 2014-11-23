@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -58,6 +59,9 @@ public class Company implements Serializable {
 	
 	@OneToOne(mappedBy="company")
 	protected CompanyAdditional addtion;
+	
+	@OneToMany(mappedBy="company")
+	protected List<PhoneCallHistory> phoneCallHistories;
 	
 	public String getResouceType() {
 		return resouceType;
@@ -283,6 +287,14 @@ public class Company implements Serializable {
 
 	public void setGanjiUrl(String ganjiUrl) {
 		this.ganjiUrl = ganjiUrl;
+	}
+
+	public List<PhoneCallHistory> getPhoneCallHistories() {
+		return phoneCallHistories;
+	}
+
+	public void setPhoneCallHistories(List<PhoneCallHistory> phoneCallHistories) {
+		this.phoneCallHistories = phoneCallHistories;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.ls.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import com.ls.constants.XinXinConstants;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
+import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
+import com.ls.repository.PhoneCallHistoryRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
@@ -34,6 +38,7 @@ public class CompanyAction extends BaseAction {
 	
 	private CompanyAdditional companyAdditional;
 	private List<Problem> problems;
+	private PhoneCallHistory phoneCall;
 
 	@Resource(name = "companyService")
 	private CompanyService companyService;
@@ -46,6 +51,9 @@ public class CompanyAction extends BaseAction {
 	
 	@Autowired
 	private ProblemRepository problemRepository;
+	
+	@Autowired
+	private PhoneCallHistoryRepository phoneCallHistoryRepository;
 	
 	public String checkOrUncheckProblem() {
 		
@@ -177,6 +185,25 @@ public class CompanyAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	public String addPhoneCallHistory() {
+		
+		String newPhoneCall = getParameter("phoneCall");
+		String companyId = getParameter("companyId");
+		
+		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		
+		PhoneCallHistory phoneCallHistory = XinXinUtils.getJavaObjectFromJsonString(newPhoneCall, PhoneCallHistory.class);
+		phoneCallHistory.setCreateDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
+		
+		phoneCallHistory.setCompany(company);
+		
+		this.phoneCall = phoneCallHistoryRepository.saveAndFlush(phoneCallHistory);
+		
+		phoneCall.setCompany(null);
+		phoneCall.setUser(null);
+		
+		return SUCCESS;
+	}
 	public List<Company> getCompanies() {
 		return companies;
 	}
@@ -216,4 +243,16 @@ public class CompanyAction extends BaseAction {
 	public void setProblems(List<Problem> problems) {
 		this.problems = problems;
 	}
+
+
+	public PhoneCallHistory getPhoneCall() {
+		return phoneCall;
+	}
+
+
+	public void setPhoneCall(PhoneCallHistory phoneCall) {
+		this.phoneCall = phoneCall;
+	}
+	
+	
 }

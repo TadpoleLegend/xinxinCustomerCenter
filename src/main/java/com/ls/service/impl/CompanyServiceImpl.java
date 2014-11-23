@@ -75,6 +75,7 @@ public class CompanyServiceImpl implements CompanyService {
 		 for (Company company : companies) {
 			company.setProblems(new ArrayList<Problem>());
 			company.setAddtion(null);
+			company.setPhoneCallHistories(null);
 		 }
 		 
 		 return companyPage;

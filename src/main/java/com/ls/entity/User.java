@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +37,9 @@ public class User implements Serializable {
 	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinTable(name = "ls_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	protected List<Role> roles;
+	
+	@OneToOne(mappedBy="user")
+	protected PhoneCallHistory phoneCallHistory;
 
 	public User() {
 		super();
@@ -107,4 +110,11 @@ public class User implements Serializable {
 		this.userCitys = userCitys;
 	}
 
+	public PhoneCallHistory getPhoneCallHistory() {
+		return phoneCallHistory;
+	}
+
+	public void setPhoneCallHistory(PhoneCallHistory phoneCallHistory) {
+		this.phoneCallHistory = phoneCallHistory;
+	}
 }
