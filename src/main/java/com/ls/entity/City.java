@@ -3,7 +3,6 @@ package com.ls.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,7 +22,6 @@ public class City implements Serializable {
 	@GeneratedValue
 	protected Integer id;
 	protected String name;
-	protected String url;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="province_id")
@@ -32,9 +30,8 @@ public class City implements Serializable {
 	@OneToMany(mappedBy="city")
 	protected List<CityURL> cityURLs;
 	
-	@ManyToOne
-	@JoinColumn(name="city_id")
-	protected UserCity userCity;
+	@OneToMany
+	protected List<UserCity> userCitys;
 	
 	public Integer getId() {
 		return id;
@@ -62,17 +59,11 @@ public class City implements Serializable {
 	public void setCityURLs(List<CityURL> cityURLs) {
 		this.cityURLs = cityURLs;
 	}
-	public UserCity getUserCity() {
-		return userCity;
+	public List<UserCity> getUserCitys() {
+		return userCitys;
 	}
-	public void setUserCity(UserCity userCity) {
-		this.userCity = userCity;
-	}
-	public String getUrl() {
-		return url;
-	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setUserCitys(List<UserCity> userCitys) {
+		this.userCitys = userCitys;
 	}
 	
 }

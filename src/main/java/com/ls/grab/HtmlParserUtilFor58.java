@@ -358,7 +358,6 @@ public class HtmlParserUtilFor58 {
 												
 												City city = new City();
 												city.setName(cityLink.getStringText());
-												city.setUrl(cityLink.getAttribute("href"));
 												city.setProvince(province);
 												
 												cities.add(city);

@@ -1,6 +1,7 @@
 package com.ls.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,14 +21,13 @@ public class CityURL implements Serializable {
 	@GeneratedValue
 	protected Integer id;
 	protected String url;
+	protected String resourceType;
+	protected Date updateDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="city_id")
 	protected City city;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "source_type_id")
-	protected SourceType sourceType;
 
 	public Integer getId() {
 		return id;
@@ -54,12 +53,21 @@ public class CityURL implements Serializable {
 		this.city = city;
 	}
 
-	public SourceType getSourceType() {
-		return sourceType;
+
+	public String getResourceType() {
+		return resourceType;
 	}
 
-	public void setSourceType(SourceType sourceType) {
-		this.sourceType = sourceType;
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 }

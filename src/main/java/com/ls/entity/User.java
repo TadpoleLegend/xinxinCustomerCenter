@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,9 +27,8 @@ public class User implements Serializable {
 	protected String username;
 	protected String password;
 
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	protected UserCity userCity;
+	@OneToMany(mappedBy="city")
+	protected List<UserCity> userCitys;
 
 	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinTable(name = "ls_user_location", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "city_id"))
@@ -99,11 +99,12 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	public UserCity getUserCity() {
-		return userCity;
+	public List<UserCity> getUserCitys() {
+		return userCitys;
 	}
 
-	public void setUserCity(UserCity userCity) {
-		this.userCity = userCity;
+	public void setUserCitys(List<UserCity> userCitys) {
+		this.userCitys = userCitys;
 	}
+
 }
