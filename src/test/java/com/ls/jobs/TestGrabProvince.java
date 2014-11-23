@@ -39,7 +39,6 @@ public class TestGrabProvince {
 			if(!provinces_138.isEmpty()){
 				for(Entry<String, Map<String, String>> entry_138 :provinces_138.entrySet()){
 					Province province138 = new Province();
-					System.err.println(entry_138.getKey());
 					province138.setName(entry_138.getKey());
 					province138 =  provinceRepository.save(province138);
 					Map<String,String> map = entry_138.getValue();
@@ -66,12 +65,11 @@ public class TestGrabProvince {
 								if(entry_58.getKey().equals(entry_138.getKey())){
 								Map<String,String> map58 = entry_58.getValue();
 								for(Entry<String,String> city58:map58.entrySet()){
-									if(city58.getKey().equals(c.getValue())){
-									String url = city58.getValue()+"meirongshi/pn0";
-									System.err.println(url);
+									if(city58.getKey().equals(c.getKey())){
+									String url = city58.getValue()+"meirongshi/pn{0}/?postdate={1}_{2}";
 									CityURL city58URL = new CityURL();
 									city58URL.setCity(city);
-									city58URL.setUrl(city58.getValue());
+									city58URL.setUrl(url);
 									city58URL.setResourceType(ResourceTypeEnum.FiveEight.getId());
 									cityURLRepository.save(city58URL);
 									find58flag = true;
@@ -89,12 +87,11 @@ public class TestGrabProvince {
 								if(entry_ganji.getKey().equals(entry_138.getKey())){
 								Map<String,String> mapganji = entry_ganji.getValue();
 								for(Entry<String,String> cityganji:mapganji.entrySet()){
-									if(cityganji.getKey().equals(c.getValue())){
-									String url = cityganji.getValue()+"meirongshi/pn0";
-									System.err.println(url);
+									if(cityganji.getKey().equals(c.getKey())){
+									String url = cityganji.getValue()+"meirongshi/u{0}o{1}";
 									CityURL cityGanjiURL = new CityURL();
 									cityGanjiURL.setCity(city);
-									cityGanjiURL.setUrl(cityganji.getValue());
+									cityGanjiURL.setUrl(url);
 									cityGanjiURL.setResourceType(ResourceTypeEnum.Ganji.getId());
 									cityURLRepository.save(cityGanjiURL);
 									findgajiflag = true;
