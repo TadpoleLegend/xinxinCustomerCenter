@@ -21,7 +21,10 @@ public interface CompanyService {
 	Page<Company> getCompanyInPage(CompanySearchVo companySearchVo);
 
 	Problem saveProblem(Problem problem);
-
 	
 	CompanyAdditional saveAdditionalCompanyInformation(CompanyAdditional addtion);
+	
+	CompanyAdditional findCompanyAddtionalInformationByCompanyId(Integer companyId);
+	
+	void checkOrUncheckProblem(String companyJson, String problemJson, String checkFlag);
 }

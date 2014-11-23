@@ -57,6 +57,14 @@
 				<param name="root">response</param>
 			</result>
 		</action>
+		<action name="loadCompanyProblems" method="loadCompanyProblems" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">problems</param>
+			</result>
+		</action>
 		
 	</package>
 	

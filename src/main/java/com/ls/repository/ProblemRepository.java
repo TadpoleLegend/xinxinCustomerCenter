@@ -18,4 +18,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Integer> , Jpa
 	
 	@Query("SELECT p FROM Problem p WHERE p.category = :category")
 	List<Problem> findByCategory(@Param("category") String category);
+	
+	@Query(value="SELECT p.* FROM ls_problem p, ls_company_problem cp where p.id = cp.problem_id and cp.company_id = :companyId", nativeQuery=true)
+	List<Problem> findByCompanyId(@Param("companyId") Integer companyId);
 }

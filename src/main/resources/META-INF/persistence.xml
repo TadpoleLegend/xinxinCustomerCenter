@@ -7,15 +7,12 @@
 	<persistence-unit name="lsJPA" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
-
-			<!--设置外连接抓取树的最大深度 -->
 			<property name="hibernate.max_fetch_depth" value="3" />
-			<!--自动输出schema创建DDL语句 -->
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="javax.persistence.validation.mode" value="none" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
 		</properties>
 	</persistence-unit>
 

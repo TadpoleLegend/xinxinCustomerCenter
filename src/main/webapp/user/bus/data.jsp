@@ -644,13 +644,7 @@
 							
 							self.selectedCompany(item);
 							
-							var problems = ko.toJS(item.problems);
-							var selectedIds = [];
-							$.each(problems, function(i, n) {
-								selectedIds.push(n);
-							});
-							
-							self.problemsTheCompanyHas(selectedIds);
+							//var problems = ko.toJS(item.problems);
 							
 							self.addtion(new CompanyAddtion());
 							
@@ -661,7 +655,7 @@
 							$('#nextScheduleDate').datepicker();
 							
 							self.loadCompanyAdditionalInformation();
-							
+							self.loadCompanyProblems();
 						
 							$('#detailStar').raty({
 									score : function() {
@@ -675,6 +669,26 @@
 									number : 5
 							});
 							success('<label class="green label">' + item.name + "</label> 已成功加载");
+						};
+						
+						self.loadCompanyProblems = function() {
+							$.ajax({
+								url : '/ls/loadCompanyProblems.ls',
+								data : {companyId : self.selectedCompany().id},
+								success : function(data) {
+									if (data) {
+										var selectedIds = [];
+										$.each(data, function(i, n) {
+											selectedIds.push(n.name);
+										});
+										
+										self.problemsTheCompanyHas(selectedIds);
+									} else {
+										fail('加载客户问题选项失败');
+									}
+								}
+							});
+							
 						};
 						
 						self.loadCompanyAdditionalInformation = function() {
@@ -844,10 +858,11 @@
 						
 					};
 					
-					var model = new CompanyModel();
-					model.init();
+					var companyModel = new CompanyModel();
+					companyModel.init();
+					
 					var $container = $("#container")[0];
-					ko.applyBindings(model, $container);
+					ko.applyBindings(companyModel, $container);
 					
 				});
 	</script>

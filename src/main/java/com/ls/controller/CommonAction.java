@@ -1,5 +1,6 @@
 package com.ls.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
 import com.ls.entity.City;
 import com.ls.entity.Problem;
 import com.ls.entity.Province;
@@ -44,6 +46,10 @@ public class CommonAction extends BaseAction {
 		String type = getParameter("type");
 		
 		problems = problemRepository.findByCategory(type);
+		
+		for(Problem problem : problems) {
+			problem.setCompanies(null);
+		}
 		
 		return SUCCESS;
 	}

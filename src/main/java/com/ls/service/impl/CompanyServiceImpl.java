@@ -1,5 +1,6 @@
 package com.ls.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
@@ -21,6 +23,7 @@ import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.service.CompanyService;
+import com.ls.util.XinXinUtils;
 import com.ls.vo.CompanySearchVo;
 
 @Service("companyService")
@@ -65,6 +68,14 @@ public class CompanyServiceImpl implements CompanyService {
 	public Page<Company> getCompanyInPage(final CompanySearchVo companySearchVo) {
 		
 		 Page<Company> companyPage = companyRepository.findAll(generateSpecification(companySearchVo), new PageRequest(Integer.valueOf(companySearchVo.getPageNumber()), 5));
+		 
+		 // fuck lazy loading
+		 List<Company> companies = companyPage.getContent();
+		 
+		 for (Company company : companies) {
+			company.setProblems(new ArrayList<Problem>());
+			company.setAddtion(null);
+		 }
 		 
 		 return companyPage;
 	}
@@ -144,6 +155,77 @@ public class CompanyServiceImpl implements CompanyService {
 
 	public CompanyAdditional saveAdditionalCompanyInformation(CompanyAdditional addtion) {
 		return companyAdditionalRepository.saveAndFlush(addtion);
+	}
+
+	public CompanyAdditional findCompanyAddtionalInformationByCompanyId(Integer companyId) {
+		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		
+		CompanyAdditional companyAdditional = companyAdditionalRepository.findByCompany(company);
+		// fuck lazy
+		companyAdditional.setCompany(null);
+		
+		return companyAdditional;
+	}
+
+	@Transactional
+	public void checkOrUncheckProblem(String companyJson, String problemJson,
+			String checkFlag) {
+		
+		Company company = XinXinUtils.getJavaObjectFromJsonString(companyJson, Company.class);
+		Problem problem = XinXinUtils.getJavaObjectFromJsonString(problemJson, Problem.class);
+
+		Company freshCompanyFromDb = companyRepository.findOne(company.getId());
+		Problem freshProblemFromDb = problemRepository.findOne(problem.getId());
+
+		List<Problem> companyProblemList = freshCompanyFromDb.getProblems();
+		List<Company> problemCompanyList = freshProblemFromDb.getCompanies();
+
+		if (companyProblemList == null) {
+		        companyProblemList = new ArrayList<Problem>();
+		}
+
+		if (problemCompanyList == null) {
+		        problemCompanyList = new ArrayList<Company>();
+		}
+		Boolean checked = Boolean.valueOf(checkFlag);
+		//add a problem
+		if (checked) {
+
+		        if (findProblemId(companyProblemList, freshProblemFromDb) == null) {
+		                companyProblemList.add(freshProblemFromDb);
+		        }
+
+		        companyRepository.saveAndFlush(freshCompanyFromDb);
+
+		// remove a problem
+		} else {
+
+		        //problem.setCompanies(new ArrayList<Company>());
+
+		        Integer problemIdToRemove = findProblemId(companyProblemList, freshProblemFromDb);
+		        if (problemIdToRemove != null) {
+
+		                companyProblemList.remove(freshProblemFromDb);
+		        }
+
+		        companyRepository.saveAndFlush(freshCompanyFromDb);
+		}
+		
+	}
+	
+	private Integer findProblemId(List<Problem> problems, Problem problem) {
+		
+		if (null == problems || problems.size() == 0) {
+			return null;
+		}
+		
+		for (Problem element : problems) {
+			
+			if (element.getId() == problem.getId()) {
+				return problem.getId();
+			}
+		}
+		return null;
 	}
 	
 }

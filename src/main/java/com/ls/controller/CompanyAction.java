@@ -1,6 +1,5 @@
 package com.ls.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -34,6 +33,7 @@ public class CompanyAction extends BaseAction {
 	private Company c;
 	
 	private CompanyAdditional companyAdditional;
+	private List<Problem> problems;
 
 	@Resource(name = "companyService")
 	private CompanyService companyService;
@@ -53,65 +53,13 @@ public class CompanyAction extends BaseAction {
 		String problemJson = getParameter("problemJson");
 		String checkFlag = getParameter("checkFlag");
 		
-		Company company = XinXinUtils.getJavaObjectFromJsonString(companyJson, Company.class);
-		Problem problem = XinXinUtils.getJavaObjectFromJsonString(problemJson, Problem.class);
-		
-		Company freshCompanyFromDb = companyRepository.findOne(company.getId());
-		Problem freshProblemFromDb = problemRepository.findOne(problem.getId());
-		
-		List<Problem> companyProblemList = freshCompanyFromDb.getProblems();
-		List<Company> problemCompanyList = freshProblemFromDb.getCompanies();
-		
-		if (companyProblemList == null) {
-			companyProblemList = new ArrayList<Problem>();
-		}
-		
-		if (problemCompanyList == null) {
-			problemCompanyList = new ArrayList<Company>();
-		}
-		Boolean checked = Boolean.valueOf(checkFlag);
-		//add a problem
-		if (checked) {
-			
-			if (findProblemId(companyProblemList, freshProblemFromDb) == null) {
-				companyProblemList.add(freshProblemFromDb);
-			}
-			
-			companyRepository.saveAndFlush(freshCompanyFromDb);
-		
-		// remove a problem
-		} else {
-			
-			//problem.setCompanies(new ArrayList<Company>());
-			
-			Integer problemIdToRemove = findProblemId(companyProblemList, freshProblemFromDb);
-			if (problemIdToRemove != null) {
-				
-				companyProblemList.remove(freshProblemFromDb);
-			}
-			
-			companyRepository.saveAndFlush(freshCompanyFromDb);
-		}
+		companyService.checkOrUncheckProblem(companyJson, problemJson, checkFlag);
 		
 		setResponse(ResponseVo.newSuccessMessage(null));
 		
 		return SUCCESS;
 	}
 	
-	private Integer findProblemId(List<Problem> problems, Problem problem) {
-		
-		if (null == problems || problems.size() == 0) {
-			return null;
-		}
-		
-		for (Problem element : problems) {
-			
-			if (element.getId() == problem.getId()) {
-				return problem.getId();
-			}
-		}
-		return null;
-	}
 	
 	public String loadAllCompany() {
 		String pageNumbersString = getParameter("pageNumber");
@@ -154,6 +102,7 @@ public class CompanyAction extends BaseAction {
 		
 		Page<Company> result = companyService.getCompanyInPage(companySearchVo);
 		
+		
 		company = new PagedElement<Company>(result);
 		
 		return SUCCESS;
@@ -175,12 +124,9 @@ public class CompanyAction extends BaseAction {
 			return ERROR;
 			
 		} else {
-			
-			Company company = companyRepository.findOne(Integer.valueOf(companyId));
-			
-			companyAdditional = companyAdditionalRepository.findByCompany(company);
-			
+			companyAdditional = companyService.findCompanyAddtionalInformationByCompanyId(Integer.valueOf(companyId));
 		}
+		
 		return SUCCESS;
 	}
 	
@@ -216,6 +162,21 @@ public class CompanyAction extends BaseAction {
 		
 		return SUCCESS;
 	}
+	
+	public String loadCompanyProblems() {
+		
+		String companyId = getParameter("companyId");
+		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		
+		problems = company.getProblems();
+		
+		for (Problem problem : problems) {
+			problem.setCompanies(null);
+		}
+		
+		return SUCCESS;
+	}
+	
 	public List<Company> getCompanies() {
 		return companies;
 	}
@@ -248,6 +209,11 @@ public class CompanyAction extends BaseAction {
 		this.companyAdditional = companyAdditional;
 	}
 
-	
-	
+	public List<Problem> getProblems() {
+		return problems;
+	}
+
+	public void setProblems(List<Problem> problems) {
+		this.problems = problems;
+	}
 }
