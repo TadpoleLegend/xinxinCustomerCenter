@@ -1,17 +1,19 @@
-package ls.com.enums;
+package com.ls.enums;
 
-public enum ResourceTypeEnum {
-	OneThreeEight("1","138美容网"),
-	FiveEight("2","58同城"),
-	Ganji("3","赶集网");
+public enum StatusEnum {
+
+	Yixiang("1","意向客户"),
+	Neixun("2","内训"),
+	Jipinban("3","精品班"),
+	Yuanzhangban("4","院长班");
 	private String name;
     private String id;
-	private ResourceTypeEnum(String id,String name){
+	private StatusEnum(String id,String name){
 		this.id = id;
 		this.name=name;
 	}
 	public static String getName(String id) {
-        for (ResourceTypeEnum c : ResourceTypeEnum.values()) {
+        for (StatusEnum c : StatusEnum.values()) {
             if (c.getId().equals(id)) {
                 return c.name;
             }
@@ -29,4 +31,5 @@ public enum ResourceTypeEnum {
 	}
 	 
      
+
 }

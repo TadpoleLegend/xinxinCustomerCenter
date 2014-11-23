@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import ls.com.enums.ResourceTypeEnum;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ls.entity.CityURL;
 import com.ls.entity.Company;
+import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilFor138;
 import com.ls.grab.LocationUtil;
 import com.ls.repository.CityURLRepository;
