@@ -56,6 +56,7 @@ public class TestGrabGanji {
 				}
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
+					company.setResouceType(ResourceTypeEnum.Ganji.getId());
 					companyRepository.save(company);
 				}
 				

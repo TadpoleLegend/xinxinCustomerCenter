@@ -1,20 +1,47 @@
 package com.ls.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CompanyDao extends JdbcTemplate{
-	public boolean  checkCompanyExistByResourceId(String resourceId,String fetchDate){
-	String sql = "select count(*) from ls_company_resource where type='"+ resourceId+"' and " ;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.stereotype.Component;
+
+import com.ls.entity.Company;
+@Component
+public class CompanyDao extends BaseDao{
+	
+	
+	
+	public Company  checkCompanyExistByResourceId(Company company){
+	/*String sql = "select * from ls_company where cityId='"+company.getCityId()+
+			"' and name ='"+company.getName().trim()+"'" ;*/
+		String sql = "select * from ls_company where id="+company.getId();
     try {
-    	Integer rs = this.queryForInt(sql);
-    	if(rs==null){
-    		return false;
-    	}else{
-    		return rs.intValue()==0?false:true;
-    	}
+//    	company = this.jdbcTemplate.queryForObject(sql, Company.class);
+    	List<Company> list = this.jdbcTemplate.query(sql,compayMapper);
+    	return list.get(0);
+//    	return company;
     } catch (RuntimeException re) {
-        logger.error("find company resource failed with resourceId "+resourceId, re);
-        throw re;
+    	re.printStackTrace();
     }
+    return null;
 	}
+	
+	private static ResultSetExtractor compayMapper = new ResultSetExtractor(){
+		public List<Company> extractData(ResultSet rs) throws SQLException,DataAccessException 
+		{
+			List<Company> companys= new ArrayList<Company>();
+			while(rs.next())
+			{
+				Company company = new Company();
+				company.setName(rs.getString("name"));
+				companys.add(company);
+			}
+			return companys;
+		}
+	};
+	
 }

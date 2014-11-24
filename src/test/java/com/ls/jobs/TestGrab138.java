@@ -3,8 +3,6 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ls.dao.CompanyDao;
 import com.ls.entity.CityURL;
 import com.ls.entity.Company;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilFor138;
-import com.ls.grab.LocationUtil;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.util.DateUtils;
@@ -28,9 +26,18 @@ public class TestGrab138 {
 	private CityURLRepository cityURLRepository;
 	@Autowired
 	private CompanyRepository companyRepository;
-	
+	@Autowired
+	private CompanyDao companyDao;
 	
 	@Test
+	public void testGetCompany(){
+		Company company = new Company();
+		company.setId(180);
+		company = companyDao.checkCompanyExistByResourceId(company);
+		System.out.println(company.getName());
+	}
+	
+	/*@Test
 	public void testGrabCompanyList() throws Exception{
 		try {
 			Date date  = Calendar.getInstance().getTime();
@@ -57,6 +64,7 @@ public class TestGrab138 {
 				}
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
+					company.setResouceType(ResourceTypeEnum.OneThreeEight.getId());
 					companyRepository.save(company);
 				}
 				
@@ -66,6 +74,6 @@ public class TestGrab138 {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 }

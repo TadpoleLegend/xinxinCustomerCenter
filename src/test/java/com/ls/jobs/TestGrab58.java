@@ -69,6 +69,7 @@ public class TestGrab58 {
 				}
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
+					company.setResouceType(ResourceTypeEnum.FiveEight.getId());
 					companyRepository.save(company);
 				}
 				
