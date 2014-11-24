@@ -413,7 +413,6 @@
 	<script>
 		
 		$(document).ready( function() {
-			
 
 					$("#searchWrapper").accordion({
 						collapsible: true
@@ -590,9 +589,12 @@
 						
 						self.closeDialog = function() {
 							$('#phoneCallDialog').dialog("close");
+							$('#wizard').show();
 						};
 						
 						self.openPhoneCallDialog = function(item, event) {
+							
+							$('#wizard').hide();
 							$('#phoneCallDialog').dialog({
 								modal : true,
 								width : 640,

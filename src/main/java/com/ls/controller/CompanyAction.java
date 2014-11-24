@@ -240,12 +240,11 @@ public class CompanyAction extends BaseAction {
 					history.setCompany(null);
 					
 					User user = history.getUser();
-					XinXinUtils.cleanUser(user);
-					
+					if (user != null) {
+						XinXinUtils.cleanUser(user);
+					}
 				}
 			} 
-			
-			
 
 		} catch (NumberFormatException e) {
 			setResponse(XinXinUtils.makeGeneralErrorResponse(e));

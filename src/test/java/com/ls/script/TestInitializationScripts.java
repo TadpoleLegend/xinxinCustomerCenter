@@ -25,13 +25,13 @@ public class TestInitializationScripts {
 	@Test
 	public void testInitialCompanySteps() throws Exception {
 
-		Step stepOne = new Step(10, "éæ„å‘å®¢æˆ·", 1);
-		Step stepTwo = new Step(20, "ç”³è¯·æˆä¸ºæ„å‘å®¢æˆ·", 2);
-		Step stepThree = new Step(30, "å…¬å¼€è¯¾", 3);
-		Step stepFour = new Step(40, "å†…è®­ç­", 4);
-		Step stepFive = new Step(50, "ç²¾å“ç­", 5);
-		Step stepSix = new Step(60, "é™¢é•¿ç­", 6);
-		Step stepSeven = new Step(70, "è¿é”ç­", 7);
+		Step stepOne = new Step(10, "·ÇÒâÏò¿Í»§", 1);
+		Step stepTwo = new Step(20, "ÉêÇë³ÉÎªÒâÏò¿Í»§", 2);
+		Step stepThree = new Step(30, "¹«¿ª¿Î", 4);
+		Step stepFour = new Step(40, "ÄÚÑµ°à", 3);
+		Step stepFive = new Step(50, "¾«Æ·°à", 5);
+		Step stepSix = new Step(60, "Ôº³¤°à", 6);
+		Step stepSeven = new Step(70, "Á¬Ëø°à", 7);
 		
 		stepRepository.save(stepOne);
 		stepRepository.save(stepTwo);
