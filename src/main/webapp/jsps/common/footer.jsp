@@ -9,7 +9,7 @@
 		</div>
 	</div>
 </footer>
-<!-- 
+
 <script>
 
 	$(document).ajaxStart(function() {
@@ -17,6 +17,6 @@
 	}).ajaxStop(function() {
 		Common.prototype.closeAjaxLoader();
 	});
+	
 </script>
 
- -->

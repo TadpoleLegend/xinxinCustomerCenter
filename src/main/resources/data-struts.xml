@@ -21,6 +21,9 @@
 			</result>
 		</action>
 		<action name="loadCompanyInPage" method="loadCompanyInPage" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
 			<result name="success" type="json">
 				<param name="root">company</param>
 			</result>
@@ -65,7 +68,22 @@
 				<param name="root">problems</param>
 			</result>
 		</action>
-		
+		<action name="savePhoneCallHistory" method="savePhoneCallHistory" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
+		<action name="loadPhoneCallHistory" method="loadPhoneCallHistory" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">historyRecords</param>
+			</result>
+		</action>
 	</package>
 	
 </struts>

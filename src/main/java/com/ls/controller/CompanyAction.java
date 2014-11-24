@@ -15,6 +15,7 @@ import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
 import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
+import com.ls.entity.User;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.PhoneCallHistoryRepository;
@@ -39,6 +40,7 @@ public class CompanyAction extends BaseAction {
 	private CompanyAdditional companyAdditional;
 	private List<Problem> problems;
 	private PhoneCallHistory phoneCall;
+	private List<PhoneCallHistory> historyRecords;
 
 	@Resource(name = "companyService")
 	private CompanyService companyService;
@@ -185,25 +187,81 @@ public class CompanyAction extends BaseAction {
 		return SUCCESS;
 	}
 	
-	public String addPhoneCallHistory() {
+	public String savePhoneCallHistory() {
 		
-		String newPhoneCall = getParameter("phoneCall");
-		String companyId = getParameter("companyId");
-		
-		Company company = companyRepository.findOne(Integer.valueOf(companyId));
-		
-		PhoneCallHistory phoneCallHistory = XinXinUtils.getJavaObjectFromJsonString(newPhoneCall, PhoneCallHistory.class);
-		phoneCallHistory.setCreateDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
-		
-		phoneCallHistory.setCompany(company);
-		
-		this.phoneCall = phoneCallHistoryRepository.saveAndFlush(phoneCallHistory);
+		try {
+			
+			String newPhoneCall = getParameter("phoneCallJson");
+			String companyId = getParameter("companyId");
+			
+			Company company = companyRepository.findOne(Integer.valueOf(companyId));
+			
+			PhoneCallHistory phoneCallHistory = XinXinUtils.getJavaObjectFromJsonString(newPhoneCall, PhoneCallHistory.class);
+			phoneCallHistory.setCreateDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
+			
+			phoneCallHistory.setCompany(company);
+			
+			//TODO
+			//phoneCallHistory.setUser(XinXinUtils.getDevelopmentUser());
+			
+			this.phoneCall = phoneCallHistoryRepository.saveAndFlush(phoneCallHistory);
+			
+		} catch (NumberFormatException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		}
 		
 		phoneCall.setCompany(null);
 		phoneCall.setUser(null);
 		
+		setResponse(ResponseVo.newSuccessMessage("200"));
+		
 		return SUCCESS;
 	}
+	
+	public String loadPhoneCallHistory() {
+		
+		try {
+
+			String companyId = getParameter("companyId");
+
+			Company company = companyRepository.findOne(Integer.valueOf(companyId));
+
+			historyRecords = phoneCallHistoryRepository.findByCompany(company);
+			
+			if (historyRecords != null) {
+				
+				for (PhoneCallHistory history : historyRecords) {
+					history.setCompany(null);
+					
+					User user = history.getUser();
+					XinXinUtils.cleanUser(user);
+					
+				}
+			} 
+			
+			
+
+		} catch (NumberFormatException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+
+			return SUCCESS;
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+
+			return SUCCESS;
+		}
+
+		setResponse(ResponseVo.newSuccessMessage("200"));
+
+		return SUCCESS;
+	}
+	
 	public List<Company> getCompanies() {
 		return companies;
 	}
@@ -253,6 +311,15 @@ public class CompanyAction extends BaseAction {
 	public void setPhoneCall(PhoneCallHistory phoneCall) {
 		this.phoneCall = phoneCall;
 	}
+
+	public List<PhoneCallHistory> getHistoryRecords() {
 	
+		return historyRecords;
+	}
+	
+	public void setHistoryRecords(List<PhoneCallHistory> historyRecords) {
+	
+		this.historyRecords = historyRecords;
+	}
 	
 }

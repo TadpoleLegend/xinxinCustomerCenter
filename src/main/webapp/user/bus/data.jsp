@@ -12,8 +12,9 @@
 <meta name="viewport" content="width=device-width" />
 <title>Data Management</title>
 <link rel="stylesheet" href="/ls/css/jquery.raty.css">
-<link rel="stylesheet" href="/ls/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="/ls/css/flat-ui.css">
+<link rel="stylesheet" href="/ls/css/bwizard.css">
+
 <s:include value="/jsps/common/head.jsp" />
 
 </head>
@@ -113,8 +114,7 @@
 												<b data-bind="text : contractor"></b>
 											</div>
 											<div class="three columns">
-												<label class="input-checkbox"> <img
-													style="margin-left: 45px" alt="电话号码"
+												<label class="input-checkbox"> <img style="margin-left: 45px" alt="电话号码"
 													data-bind="attr: { 'src' : phone_src }"></label>
 											</div>
 											<div class="two columns">
@@ -152,27 +152,22 @@
 							<h2>
 								详细信息<span class="subheader line" data-bind="text : name"></span>
 							</h2>
+							<h2 style="margin-left : 200px">
+								<div id="detailStar" class="star" data-bind="attr : {'star' : star, 'companyId' : id}"></div>
+							</h2>
 							<h2 class="right">
-								<a class="small blue button"
-									data-bind="click : $root.backToCustomerList" href="#">返回客户列表</a>
+								<a class="small blue button" data-bind="click : $root.backToCustomerList" href="#">返回客户列表</a>
 							</h2>
 						</div>
 						<div class="content">
 							<div class="row">
-								<div class="four columns text-center">
-									<i class="icon-user xlarge"></i><b data-bind="text : status"></b>
-								</div>
-								<div class="two columns">
-									<div id="detailStar" class="star"
-										data-bind="attr : {'star' : star, 'companyId' : id}"></div>
-								</div>
-								<div class="four columns">
-									<a style="margin-left: 20px;"
-										data-bind="click:$root.showDetail"><span
-										data-bind="text : detailUrl"></span></a>
-								</div>
-								<div class="two columns">
-									<a class="small green button" href="#">成为意向客户</a>
+								<div id="wizard">
+									<ol class="bwizard-steps clearfix clickable" role="tablist" data-bind="foreach : $root.allSteps">
+										<li role="tab"  aria-selected="false" data-bind="css : {active : name == $root.selectedCompany().status}">
+											<span class="label green" data-bind="text:orderNumber"></span>
+											<a class="hidden-phone" data-bind="click : $root.changeCompanyStatus"><span data-bind="text : name"></span></a>
+										</li>
+									</ol>
 								</div>
 							</div>
 							<br>
@@ -191,9 +186,13 @@
 												<label>区域 </label><input type="text"
 													data-bind="value : distinct">
 											</div>
-											<div class='eight columns'>
+											<div class='four columns'>
 												<label>地址 </label> <input type="text"
 													data-bind="value : address">
+											</div>
+											<div class="four columns">
+												<br>
+												<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><span data-bind="text : detailUrl"></span></a>
 											</div>
 										</div>
 
@@ -348,103 +347,38 @@
 								<div>
 									<div class="row">
 										<div class="right">
-											<a class="small blue button" data-bind="click : $root.openPhoneCallDialog">创建新的通话记录</a>
+											<a class="small blue button" data-bind="click : $root.addHistory">创建新的通话记录</a>
 										</div>
 									</div>
 									<div class="row">
-										<ul class="smartlist nice">
-											<label class="input-checkbox">
-												<li>
-													<div class="row">
-														<div class="three columns text-center">
-															<label>跟踪日期</label> <input type="text"
-																disabled="disabled" value="2013年4月25日" />
-														</div>
-														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text"
-																disabled="disabled" value="2013年4月26日" />
-														</div>
-														<div class="six columns">
-															<textarea name="ex-textarea-5"></textarea>
-														</div>
-													</div>
-											</li>
-											</label>
-											<label class="input-checkbox">
-												<li>
-													<div class="row">
-														<div class="three columns text-center">
-															<label>跟踪日期</label> <input type="text"
-																disabled="disabled" value="2013年4月25日" />
-														</div>
-														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text"
-																disabled="disabled" value="2013年4月26日" />
-														</div>
-														<div class="six columns">
-															<textarea name="ex-textarea-5"></textarea>
-														</div>
-													</div>
-											</li>
-											</label>
-											<label class="input-checkbox">
-												<li>
-													<div class="row">
-														<div class="three columns text-center">
-															<label>跟踪日期</label> <input type="text"
-																disabled="disabled" value="2013年4月25日" />
-														</div>
-														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text"
-																disabled="disabled" value="2013年4月26日" />
-														</div>
-														<div class="six columns">
-															<textarea name="ex-textarea-5"></textarea>
-														</div>
-													</div>
-											</li>
-											</label>
-											<label class="input-checkbox">
-												<li>
-													<div class="row">
-														<div class="three columns text-center">
-															<label>跟踪日期</label> <input type="text"
-																disabled="disabled" value="2013年4月25日" />
-														</div>
-														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text"
-																disabled="disabled" value="2013年4月26日" />
-														</div>
-														<div class="six columns">
-															<textarea name="ex-textarea-5"></textarea>
-														</div>
-													</div>
-											</li>
-											</label>
-											<label class="input-checkbox">
-												<li>
-													<div class="row">
-														<div class="three columns text-center">
-															<label>跟踪日期</label> <input type="text"
-																disabled="disabled" value="2013年4月25日" />
-														</div>
-														<div class="three columns">
-															<label>约定下次电话时间</label> <input type="text"
-																disabled="disabled" value="2013年4月26日" />
-														</div>
-														<div class="six columns">
-															<textarea name="ex-textarea-5"></textarea>
-														</div>
-													</div>
-											</li>
-											</label>
-											</ul>
+										<table class="display compact" id="phoneCallHistoryListTable">
+											<thead>
+												<tr>
+													<th class="text-center">记录编号</th>
+													<th class="text-center">跟踪时间</th>
+													<th class="text-center">下次跟踪时间</th>
+													<th class="text-center">沟通内容</th>
+													<th class="text-center"></th>
+												</tr>
+											</thead>
+											<tbody data-bind="foreach: $root.historyRecords">
+												<tr>
+													<td class="text-center"><span data-bind="text: id"></span></td>
+													<td class="text-center"><span data-bind="text: createDate"></span></td>
+													<td class="text-center"><span data-bind="text: nextDate"></span></td>
+													<td class="text-center"><span data-bind="text: description"></span></td>
+													<td class="text-center">
+														<a class=" tiny green button" href="#" data-bind="click : $root.editHistory">查看或修改</a> 
+													</td>	
+												</tr>
+											</tbody>
+										</table>
+										<br>
 									</div>
 								</div>
-
 							</div>
 							<div id="phoneCallDialog" title="电话记录管理" style="display:none;" data-bind="with : $root.phoneCall">
-									<form id="problemForm">
+									<form id="historyForm">
 										<div class="row">
 											<label class="label"> 电话记录编号 ：</label> <span
 												data-bind="text : id"></span>
@@ -461,6 +395,8 @@
 										</div>
 									</form>
 									<div class="row">
+										<a href="#" class="small blue button" data-bind="click : $root.savePhoneCallHistory" title="">保存记录</a>
+										<a href="#" class="small blue button" data-bind="click : $root.closeDialog" title="">关闭窗口</a>	
 									</div>
 							</div>
 						</div>
@@ -473,10 +409,12 @@
 	<s:include value="/jsps/common/footer.jsp" />
 	<script src="/ls/js/list.js"></script>
 	<script src="/ls/js/jquery.raty.js"></script>
+	<script src="/ls/js/User.js"></script>
 	<script>
 		
 		$(document).ready( function() {
-					//$('#addtionalCompanyInformation').validate({});
+			
+
 					$("#searchWrapper").accordion({
 						collapsible: true
 					});
@@ -485,6 +423,13 @@
 						$("#searchWrapper").accordion('option', 'ative', 0);
 					});
 	
+					$('#phoneCallHistoryListTable').dataTable({
+						"paging" : false,
+						"ordering" : false,
+						"info" : false,
+						"searching" : false
+					});
+					
 					var Problem = function(id, name) {
 						var self = this;
 						
@@ -545,8 +490,9 @@
 					var PhoneCallHistory = function() {
 							this.id = null;
 							this.nextDate = '';
+							this.createDate = '';
 							this.description = '';
-					}
+					};
 					
 					var CompanyModel = function() {
 						var self = this;
@@ -571,17 +517,102 @@
 						self.addtion =  ko.observable(new CompanyAddtion());
 						self.problemsTheCompanyHas = ko.observableArray([]);
 						self.phoneCall = ko.observable(new PhoneCallHistory());
+						self.historyRecords = ko.observableArray([]);
+						self.allSteps = ko.observableArray([]);
 						
+						self.buildRatingAndSections = function() {
+							$('#accordion').accordion({ heightStyle: "content"});
+							$('#detailStar').raty({
+								score : function() {
+									return $(this).attr('star');
+								},
+							  	click: function(score, evt) {
+								    var companyId = $(this).attr('companyId');
+								    self.changeStarLevel(companyId, score);
+								    
+								},
+								number : 5
+							});
+						};
+						
+						self.changeCompanyStatus = function(item, event) {
+							
+							self.selectedCompany().status = item.name;
+							
+							self.selectedCompany.valueHasMutated();
+							self.buildRatingAndSections();
+							
+						};
 						self.nextDateOnClose = function(item, event) {
 							
 						};
+						
+						self.loadPhoneCallHistory = function() {
+							$.ajax({
+								url : '/ls/loadPhoneCallHistory.ls',
+								data : {companyId : self.selectedCompany().id},
+								success : function(data) {
+									if (data) {
+										self.historyRecords(data);
+									} else {
+										fail('加载电话记录项失败.');
+									}
+								}
+							});
+						};
+						
+						self.savePhoneCallHistory = function(item, event) {
+							
+							if ($('#historyForm').valid()) {
+								
+								$.ajax({
+									url : '/ls/user/savePhoneCallHistory.ls',
+									method : 'POST',
+									data : {
+											companyId : JSON.stringify(self.selectedCompany().id), 
+											phoneCallJson : JSON.stringify(ko.toJS(self.phoneCall()))
+									},
+									success : function(data) {
+										
+										if (isOK(data)) {
+											
+											success();
+											self.closeDialog();
+											self.loadPhoneCallHistory();
+											
+										} else {
+											fail();
+										}
+									}
+								});
+							}
+						};
+						
+						self.closeDialog = function() {
+							$('#phoneCallDialog').dialog("close");
+						};
+						
 						self.openPhoneCallDialog = function(item, event) {
 							$('#phoneCallDialog').dialog({
 								modal : true,
 								width : 640,
-								height : 580
-							})
+								height : 580,
+								open : function(e) {
+									changeButtonStyleForPopup(e);
+								}
+							});
 						};
+						
+						self.addHistory = function() {
+							self.phoneCall(new PhoneCallHistory());
+							self.openPhoneCallDialog();
+						};
+						
+						self.editHistory = function(item, event) {
+							self.phoneCall(item);
+							self.openPhoneCallDialog();
+						};
+						
 						self.updateProblemItem = function(item, event) {
 							
 							var checkedFlag = $(event.target).is(':checked');
@@ -626,6 +657,10 @@
 										var showToUser = "<label class=\"label green\">" + self.selectedCompany().name + "</label>" + "已被评为 <b>" + score + "</b>星。";
 										success(showToUser);
 										
+										self.selectedCompany().star = score;
+										self.selectedCompany.valueHasMutated();
+										self.buildRatingAndSections();
+										
 									} else {
 										fail();
 									}
@@ -664,35 +699,21 @@
 						
 						self.trackCustomer = function(item, event) {
 							
-							console.debug(ko.toJS(item));
-							
 							self.selectedCompany(item);
-							
-							//var problems = ko.toJS(item.problems);
 							
 							self.addtion(new CompanyAddtion());
 							
 							self.toggleListAndDetail();
 							
-							$('#accordion').accordion({ heightStyle: "content"});
-							
-							$('#nextScheduleDate').datepicker();
-							
 							self.loadCompanyAdditionalInformation();
+							
 							self.loadCompanyProblems();
 						
-							$('#detailStar').raty({
-									score : function() {
-										return $(this).attr('star');
-									},
-								  	click: function(score, evt) {
-									    var companyId = $(this).attr('companyId');
-									    self.changeStarLevel(companyId, score);
-									    
-									},
-									number : 5
-							});
-							success('<label class="green label">' + item.name + "</label> 已成功加载");
+							self.buildRatingAndSections();
+							
+							self.loadPhoneCallHistory();
+							
+							success('<label class="green label">' + item.name + "</label> 信息已加载!");
 						};
 						
 						self.loadCompanyProblems = function() {
@@ -768,6 +789,15 @@
 									});
 								}
 							});
+							
+							$.ajax({
+								url : '/ls/findAllSteps.ls',
+								success : function(data) {
+									
+									self.allSteps(data);
+								}
+							});
+							
 						};
 						
 						self.loadProblemConstants = function(type) {

@@ -13,8 +13,10 @@ import com.google.common.collect.Lists;
 import com.ls.entity.City;
 import com.ls.entity.Problem;
 import com.ls.entity.Province;
+import com.ls.entity.Step;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
+import com.ls.repository.StepRepository;
 import com.ls.service.CompanyService;
 
 @Component("commonAction")
@@ -33,9 +35,13 @@ public class CommonAction extends BaseAction {
 	@Autowired
 	private ProvinceRepository provinceRepository;
 	
+	@Autowired
+	private StepRepository stepRepository;
+	
 	private List<Problem> problems;
 	private List<Province> provinces;
 	private List<City> cities;
+	private List<Step> steps;
 	
 	/**
 	 * static resources
@@ -65,6 +71,11 @@ public class CommonAction extends BaseAction {
 		return SUCCESS;
 	}
 
+	public String findAllSteps() {
+		steps = stepRepository.findAll();
+		
+		return SUCCESS;
+	}
 	public List<Province> getProvinces() {
 		return provinces;
 	}
@@ -91,4 +102,13 @@ public class CommonAction extends BaseAction {
 		this.cities = cities;
 	}
 	
+	public List<Step> getSteps() {
+	
+		return steps;
+	}
+	
+	public void setSteps(List<Step> steps) {
+	
+		this.steps = steps;
+	}
 }

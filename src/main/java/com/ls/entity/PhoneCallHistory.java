@@ -19,8 +19,11 @@ public class PhoneCallHistory {
 	@Id
 	@GeneratedValue
 	protected Integer id;
+	
 	protected String description;
+	
 	protected String createDate;
+	
 	protected String nextDate;
 	
 	@OneToOne(fetch = FetchType.EAGER)

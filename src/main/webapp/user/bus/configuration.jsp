@@ -41,9 +41,9 @@
 					</div>
 				</form>
 				<div class="row">
-					<a href="#" class="tiny blue button"
-							data-bind="click : $root.saveProblem" title="">保存</a>
-					<a href="#" class="tiny blue button"
+					<a href="#" class="small blue button"
+							data-bind="click : $root.saveProblem" title="">保存记录</a>
+					<a href="#" class="small blue button"
 							data-bind="click : $root.closeDialog" title="">关闭窗口</a>		
 				</div>
 			</div>
@@ -174,7 +174,10 @@
 							$('#problemDialog').dialog({
 								modal : true,
 								width : 640,
-								height : 580
+								height : 580,
+								open : function(e) {
+									changeButtonStyleForPopup(e);
+								}
 							});
 							
 							$('#categoryInput').autocomplete({source : problemCategoryList, minLength: 0, 

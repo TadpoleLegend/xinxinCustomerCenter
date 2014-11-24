@@ -50,3 +50,22 @@ function fail(message) {
 	}
 	
 }
+
+function changeButtonStyleForPopup(event) {
+	
+	var popupWidget = $(event.target).parents(".ui-dialog.ui-widget");
+	var buttonsOnWidget = popupWidget.find(".ui-dialog-buttonpane button");
+	var firstButton = buttonsOnWidget[0];
+	var secondButton = buttonsOnWidget[1];
+	$(firstButton).addClass("primary");
+	$(secondButton).addClass("secondary");
+	$(".ui-widget-overlay").hide().fadeTo(800, 0.8);
+}
+
+function isOK (response) {
+	if (response && response.type =='SUCCESS') {
+		return true;
+	} else {
+		return false;
+	}
+}

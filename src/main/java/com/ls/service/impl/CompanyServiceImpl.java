@@ -163,7 +163,9 @@ public class CompanyServiceImpl implements CompanyService {
 		
 		CompanyAdditional companyAdditional = companyAdditionalRepository.findByCompany(company);
 		// fuck lazy
-		companyAdditional.setCompany(null);
+		if (companyAdditional != null) {
+			companyAdditional.setCompany(null);
+		}
 		
 		return companyAdditional;
 	}
