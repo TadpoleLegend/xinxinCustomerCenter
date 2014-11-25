@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.ls.entity.Company;
+import com.ls.entity.Phase;
 import com.ls.entity.Step;
 import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CompanyRepository;
+import com.ls.repository.PhaseRepository;
 import com.ls.repository.StepRepository;
 
 /**
@@ -29,6 +33,9 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private CompanyRepository companyRepository;
+	
+	@Autowired
+	private PhaseRepository phaseRepository;
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {
@@ -72,5 +79,18 @@ public class TestInitializationScripts {
 			companyRepository.save(company);
 		}
 		
+	}
+	
+	@Test
+	public void testInitialPhase() throws Exception {
+		
+		Phase firstPhase = new Phase(10, "一期");
+		Phase secondPhase = new Phase(10, "二期");
+		Phase thirdPhase = new Phase(10, "三期");
+		Phase fourthPhase = new Phase(10, "四期");
+		
+		List<Phase> phases = ImmutableList.of(firstPhase, secondPhase, thirdPhase, fourthPhase);
+		
+		phaseRepository.save(phases);
 	}
 }

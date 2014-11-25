@@ -63,6 +63,19 @@ public class Company implements Serializable {
 	@OneToMany(mappedBy="company")
 	protected List<PhoneCallHistory> phoneCallHistories;
 	
+	@OneToMany(mappedBy="company")
+	protected List<LearningHistory> learningHistories;
+	
+	public List<LearningHistory> getLearningHistories() {
+	
+		return learningHistories;
+	}
+	
+	public void setLearningHistories(List<LearningHistory> learningHistories) {
+	
+		this.learningHistories = learningHistories;
+	}
+
 	public String getResouceType() {
 		return resouceType;
 	}

@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.ls.entity.City;
+import com.ls.entity.Phase;
 import com.ls.entity.Problem;
 import com.ls.entity.Province;
 import com.ls.entity.Step;
+import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.repository.StepRepository;
@@ -37,11 +39,28 @@ public class CommonAction extends BaseAction {
 	
 	@Autowired
 	private StepRepository stepRepository;
+	@Autowired
+	private PhaseRepository phaseRepository;
 	
 	private List<Problem> problems;
 	private List<Province> provinces;
 	private List<City> cities;
 	private List<Step> steps;
+	private List<Phase> phases;
+	
+	public String findAllPhases() {
+		
+		
+		phases = phaseRepository.findAll();
+		
+		if (phases != null) {
+			for(Phase phase : phases) {
+				phase.setLearningHistories(null);
+			}
+		}
+		
+		return SUCCESS;
+	}
 	
 	/**
 	 * static resources
@@ -111,4 +130,18 @@ public class CommonAction extends BaseAction {
 	
 		this.steps = steps;
 	}
+
+	
+	public List<Phase> getPhases() {
+	
+		return phases;
+	}
+
+	
+	public void setPhases(List<Phase> phases) {
+	
+		this.phases = phases;
+	}
+	
+	
 }

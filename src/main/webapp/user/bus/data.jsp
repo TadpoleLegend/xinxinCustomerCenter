@@ -299,7 +299,7 @@
 													<div data-bind="foreach : $root.allProblemsConstantA">
 														<label class="input-checkbox" for="employeeProblem">
 															<input class="icheckbox" type="checkbox" name="employeeProblem" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
-															data-bind="text : name"></span>
+															data-bind="text : name" class="text-info"></span>
 														</label>
 													</div>
 												</div>
@@ -314,7 +314,7 @@
 													<div data-bind="foreach : $root.allProblemsConstantB">
 														<label class="input-checkbox" for="consumerProblem">
 															<input type="checkbox" name="consumerProblem" class="icheckbox" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
-															data-bind="text : name"></span>
+															data-bind="text : name" class="text-info"></span>
 														</label>
 													</div>
 												</div>
@@ -331,7 +331,7 @@
 														<label class="input-checkbox" for="otherProblems">
 															<input class="icheckbox" type="checkbox"
 															name="otherProblems" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
-															data-bind="text : name"></span>
+															data-bind="text : name" class="text-info"></span>
 														</label>
 													</div>
 												</div>
@@ -363,18 +363,60 @@
 											</thead>
 											<tbody data-bind="foreach: $root.historyRecords">
 												<tr>
-													<td class="text-center"><span data-bind="text: id"></span></td>
+													<td class="text-center"><span class="text-success" data-bind="text: id"></span></td>
 													<td class="text-center"><span data-bind="text: createDate"></span></td>
 													<td class="text-center"><span data-bind="text: nextDate"></span></td>
 													<td class="text-center"><span data-bind="text: description"></span></td>
 													<td class="text-center">
-														<a class=" tiny green button" href="#" data-bind="click : $root.editHistory">查看或修改</a> 
+														<a class=" tiny green button" href="#" data-bind="click : $root.editPhoneCallHistory">查看或修改</a> 
 													</td>	
 												</tr>
 											</tbody>
 										</table>
 										<br>
 									</div>
+								</div>
+								<h3>
+									<a href="#">培训记录</a>
+								</h3>
+								<div>
+									<div class="row">
+										<div class="right">
+											<a class="small blue button" data-bind="click : $root.addLearningHistory">创建新的培训记录</a>
+										</div>
+									</div>
+									<div>
+										<table class="display compact" id="learningHistoryListTable">
+											<thead>
+												<tr>
+													<th class="text-center">记录编号</th>
+													<th class="text-center">期数</th>
+													<th class="text-center">开始时间</th>
+													<th class="text-center">结束时间</th>
+													<th class="text-center">中层人数</th>
+													<th class="text-center">高层人数</th>
+													<th class="text-center"></th>
+												</tr>
+											</thead>
+											<tbody data-bind="foreach: $root.learningHistoryRecords">
+												<tr>
+													<td class="text-center"><span class="text-success" data-bind="text: id"></span></td>
+													<td class="text-center"><span data-bind="text: phase.name"></span></td>
+													<td class="text-center"><span data-bind="text: startDate"></span></td>
+													<td class="text-center"><span data-bind="text: endDate"></span></td>
+													<td class="text-center"><span data-bind="text: middleLevelManagerCount"></span></td>
+													<td class="text-center"><span data-bind="text: highLevelManagerCount"></span></td>
+													<td class="text-center"><a class=" tiny green button" href="#" data-bind="click : $root.editLearningHistory">查看或修改</a></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<h3>
+									<a href="#">感动顾客</a>
+								</h3>
+								<div>
 								</div>
 							</div>
 							<div id="phoneCallDialog" title="电话记录管理" style="display:none;" data-bind="with : $root.phoneCall">
@@ -392,6 +434,50 @@
 										<div class="row">
 											<label>下次沟通日期及时间</label>
 											 <input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1, onClose : $root.nextDateOnClose}, value : nextDate" class="required">
+										</div>
+									</form>
+							</div>
+							<div id="learningHistoryDialog" title="培训记录管理" style="display:none;" data-bind="with : $root.learningHistory">
+									<form id="learningHistoryForm">
+										<div class="row">
+											<label class="label"> 培训记录编号 ：</label> <span data-bind="text : id"></span>
+										</div>
+										<br>
+										<hr>
+										<div class="row">
+											<div class="four columns">
+												<label>期数</label>
+												<select data-bind="options: $root.phases,
+                      											   optionsText: 'name',
+                       											   value: phase.id,
+                       											   optionsValue : 'id',
+                       											   selectedOption : phase.id,
+                       											   optionsCaption: '选择期数'"
+                       									class="required">
+                       							</select>
+											</div>
+											<div class="four columns">
+												<label>中层人数</label>
+												<input class="number" type="text" data-bind="value : middleLevelManagerCount" />
+											</div>
+											<div class="four columns">
+												<label>高层人数</label>
+												<input class="number" type="text" data-bind="value : highLevelManagerCount" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="six columns">
+												<label>开始日期</label>
+												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : startDate">
+											</div>
+											<div class="six columns">
+												<label>结束日期</label>
+												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : endDate">
+											</div>
+										</div>
+										<div class="row">
+											<label>备注</label>
+											<textarea name="descriptionArea" data-bind="value : comments" style="width: 628px; height: 198px;"></textarea>
 										</div>
 									</form>
 							</div>
@@ -425,7 +511,12 @@
 						"info" : false,
 						"searching" : false
 					});
-					
+					$('#learningHistoryListTable').dataTable({
+						"paging" : false,
+						"ordering" : false,
+						"info" : false,
+						"searching" : false
+					});
 					var Problem = function(id, name) {
 						var self = this;
 						
@@ -489,6 +580,21 @@
 							this.createDate = '';
 							this.description = '';
 					};
+					var Phase = function() {
+						
+						this.id = null;
+						this.name = '';
+					};
+					var LearningHistory = function() {
+						
+						this.id = null;
+						this.phase = new Phase();
+						this.startDate = '';
+						this.endDate = '';
+						this.middleLevelManagerCount = '';
+						this.highLevelManagerCount = '';
+						this.comments = '';
+					};
 					
 					var CompanyModel = function() {
 						var self = this;
@@ -515,6 +621,49 @@
 						self.phoneCall = ko.observable(new PhoneCallHistory());
 						self.historyRecords = ko.observableArray([]);
 						self.allSteps = ko.observableArray([]);
+						self.learningHistoryRecords = ko.observableArray([]);
+						self.learningHistory = ko.observable(new LearningHistory());
+						self.phases = ko.observableArray([]);
+						
+						self.loadLearningHistory = function() {
+							$.ajax({
+								url : '/ls/loadLearningHistory.ls',
+								data : {companyId : self.selectedCompany().id},
+								success : function(data) {
+									if (data) {
+										self.learningHistoryRecords(data);
+									} else {
+										fail('加载学习记录项失败.');
+									}
+								}
+							});
+						};
+						
+						self.saveLearningHistory = function(item, event) {
+							
+							if ($('#learningHistoryForm').valid()) {
+								$.ajax({
+									url : '/ls/user/saveLearningHistory.ls',
+									method : 'POST',
+									data : {
+											companyId : JSON.stringify(self.selectedCompany().id), 
+											learningJson : JSON.stringify(ko.toJS(self.learningHistory()))
+									},
+									success : function(data) {
+										
+										if (isOK(data)) {
+											
+											success(data.message);
+											self.closeDialog('learningHistoryDialog');
+											self.loadLearningHistory();
+											
+										} else {
+											fail(data.message);
+										}
+									}
+								});
+							}
+						};
 						
 						self.buildRatingAndSections = function() {
 							$('#accordion').accordion({ heightStyle: "content"});
@@ -559,11 +708,6 @@
 								}
 							});
 							
-							
-							
-					//		self.selectedCompany.valueHasMutated();
-					//		self.buildRatingAndSections();
-							
 						};
 						self.nextDateOnClose = function(item, event) {
 							
@@ -599,7 +743,7 @@
 										if (isOK(data)) {
 											
 											success();
-											self.closeDialog();
+											self.closeDialog('phoneCallDialog');
 											self.loadPhoneCallHistory();
 											
 										} else {
@@ -610,8 +754,8 @@
 							}
 						};
 						
-						self.closeDialog = function() {
-							$('#phoneCallDialog').dialog("close");
+						self.closeDialog = function(id) {
+							$('#' + id).dialog("close");
 							$('#wizard').show();
 						};
 						
@@ -620,15 +764,28 @@
 							$('#wizard').hide();
 							$('#phoneCallDialog').dialog('open');
 						};
+						self.openLearningHistoryDialog = function(item, event) {
+							
+							$('#wizard').hide();
+							$('#learningHistoryDialog').dialog('open');
+						};
 						
 						self.addHistory = function() {
 							self.phoneCall(new PhoneCallHistory());
 							self.openPhoneCallDialog();
 						};
-						
-						self.editHistory = function(item, event) {
+						self.editPhoneCallHistory = function(item, event) {
 							self.phoneCall(item);
 							self.openPhoneCallDialog();
+						};
+						
+						self.addLearningHistory = function() {
+							self.learningHistory(new LearningHistory());
+							self.openLearningHistoryDialog();
+						};
+						self.editLearningHistory = function(item, event) {
+							self.learningHistory(item);
+							self.openLearningHistoryDialog();
 						};
 						
 						self.updateProblemItem = function(item, event) {
@@ -730,6 +887,7 @@
 							self.buildRatingAndSections();
 							
 							self.loadPhoneCallHistory();
+							self.loadLearningHistory();
 							
 							$('#phoneCallDialog').dialog({
 								autoOpen : false,
@@ -745,10 +903,30 @@
 										self.savePhoneCallHistory();
 									},
 									'关闭窗口' : function() {
-										self.closeDialog();
+										self.closeDialog('phoneCallDialog');
 									}
 								}
 							});
+							
+							$('#learningHistoryDialog').dialog({
+								autoOpen : false,
+								modal : true,
+								width : 643,
+								height : 640,
+								open : function(e) {
+									changeButtonStyleForPopup(e);
+								},
+								
+								buttons : {
+									'保存记录' : function() {
+										self.saveLearningHistory();
+									},
+									'关闭窗口' : function() {
+										self.closeDialog('learningHistoryDialog');
+									}
+								}
+							});
+							
 							success( labelIt(item.name) + " 信息已加载!" );
 						};
 						
@@ -833,7 +1011,12 @@
 									self.allSteps(data);
 								}
 							});
-							
+							$.ajax({
+								url : '/ls/findAllPhases.ls',
+								success : function(data) {
+									self.phases(data);
+								}
+							});
 						};
 						
 						self.loadProblemConstants = function(type) {

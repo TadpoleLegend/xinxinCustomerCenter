@@ -20,13 +20,14 @@ Common.prototype.closeAjaxLoader = function() {
 function success(message) {
 	
 	if (message) {
+		message = "<label class=\"text-success\">" + message + "</label>";
 		Messenger().post({
 			message : message,
 			showCloseButton : true
 		});
 	} else {
 		Messenger().post({
-			message : '你的操作已经<b>成功</b>执行！',
+			message : '<label class=\"text-success\"> 你的操作已经<b>成功</b>执行！</label>',
 			showCloseButton : true
 		});
 	}
@@ -36,6 +37,9 @@ function success(message) {
 function fail(message) {
 	
 	if (message) {
+		
+		message = "<label class=\"text-error\">" + message + "</label>";
+		
 		Messenger().post({
 			message : message,
 			showCloseButton : true,
@@ -43,7 +47,7 @@ function fail(message) {
 		});
 	} else {
 		Messenger().post({
-			message : '你的操作已经<b>成功</b>执行！',
+			message : '<label class=\"text-error\"> 你的操作已经<b>成功</b>执行！</label>',
 			showCloseButton : true,
 			type : 'error'
 		});
