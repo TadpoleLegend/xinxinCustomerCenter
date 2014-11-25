@@ -1,8 +1,8 @@
 package com.ls.grab;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
@@ -10,7 +10,6 @@ import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.Tag;
 import org.htmlparser.nodes.TagNode;
-import org.htmlparser.tags.DefinitionList;
 import org.htmlparser.tags.DefinitionListBullet;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.ImageTag;
@@ -23,11 +22,12 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.ls.entity.City;
 import com.ls.entity.Company;
-import com.ls.entity.Province;
+import com.ls.enums.ResourceTypeEnum;
+import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilFor58 {
 
@@ -75,6 +75,10 @@ public class HtmlParserUtilFor58 {
 		return null;
 	}
 	
+	
+	
+	
+	
 	public List<Company> findPagedCompanyList(String url) {
 
 		final List<Company> companyList = new ArrayList<Company>();
@@ -118,7 +122,15 @@ public class HtmlParserUtilFor58 {
 							}
 							
 						}
-						System.err.println(company.getName());
+						String testURL = company.getfEurl();
+						int index = testURL.indexOf("58.com");
+						if(index!=-1){
+							String sub = testURL.substring(index+7);
+							int sIndex = sub.indexOf("/");
+							if(sIndex!=-1){
+									company.setfEresourceId(sub.substring(0,sIndex));
+								}
+							}
 						companyList.add(company);
 					}
 				}
@@ -130,8 +142,31 @@ public class HtmlParserUtilFor58 {
 
 			e.printStackTrace();
 		}
+		
+		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companyList,ResourceTypeEnum.FiveEight.getId());
+		List<Company> returnCompanyList = new ArrayList<Company>();
+		for(Company company:companyList){
+			if(map.containsKey(company.getoTEresourceId())){
+				try {
+					String testURL = company.getfEurl();
+					HtmlPage mainPage = webClient.getPage(testURL);
+					String htmlDetail = mainPage.getWebResponse().getContentAsString();
+					company.setPhoneSrc(findContactorPhoneNumberImgSrc(htmlDetail));
+					company.setEmailSrc(findContactorEmailImgSrc(htmlDetail));
+					company.setContactor(findContactorName(htmlDetail));
+					company.setAddress(findCompanyAddress(htmlDetail));
+					company.setEmployeeCount(findCompanyEmployeeCount(htmlDetail));
+					company.setDescription(findCompanyDescription(htmlDetail));
+					returnCompanyList.add(company);
+				} catch (FailingHttpStatusCodeException e) {
+					e.printStackTrace();
+				}  catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
-		return companyList;
+		return returnCompanyList;
 	}
 
 	public static String findCompanyName(String detailPageHtml) {
@@ -180,7 +215,6 @@ public class HtmlParserUtilFor58 {
 		final StringBuilder contactorsPhoneImgSrcBuilder = new StringBuilder();
 
 		try {
-
 			Parser htmlParser = new Parser();
 			htmlParser.setInputHTML(detailPageHtml);
 
@@ -238,7 +272,7 @@ public class HtmlParserUtilFor58 {
 				}
 			});
 
-		} catch (ParserException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -251,7 +285,6 @@ public class HtmlParserUtilFor58 {
 		final StringBuilder contactorsEmailSrcBuilder = new StringBuilder();
 
 		try {
-
 			Parser htmlParser = new Parser();
 			htmlParser.setInputHTML(detailPageHtml);
 
@@ -306,91 +339,19 @@ public class HtmlParserUtilFor58 {
 				}
 			});
 
-		} catch (ParserException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(contactorsEmailSrcBuilder.toString());
 		
 		return contactorsEmailSrcBuilder.toString();
 
 	}
 	
-	public static List<Province> findCities(final String detailPageHtml) {
-		final List<Province> provinces = new ArrayList<Province>();
-
-		try {
-
-			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(detailPageHtml);
-
-			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
-
-				private static final long serialVersionUID = 7680728721047912165L;
-
-				public boolean accept(Node node) {
-					
-					if (node instanceof DefinitionList ) {
-						
-						DefinitionList cityList = ((DefinitionList) node);
-						if (StringUtils.isNotBlank(cityList.getAttribute("id") ) && cityList.getAttribute("id") .equals("clist")) {
-							Node[] nodelist = cityList.getChildren().toNodeArray();
-							
-							for (int i = 0; i < nodelist.length; i++) {
-								if (nodelist[i] instanceof DefinitionListBullet) {
-									
-									DefinitionListBullet definitionListBullet = (DefinitionListBullet) nodelist[i];
-									
-									if (definitionListBullet.getStringText().equals("安徽") || 
-										definitionListBullet.getStringText().equals("江苏") ||
-										definitionListBullet.getStringText().equals("浙江") ) 
-									{
-										Province province = new Province();
-										province.setName(definitionListBullet.getStringText());
-										
-										DefinitionListBullet subCities = (DefinitionListBullet) nodelist[i + 1];
-										
-										Node[] cityLinks = subCities.getChildren().toNodeArray();
-										List<City> cities = new ArrayList<City>();
-										for (int j = 0; j < cityLinks.length; j++) {
-											if (cityLinks[j] instanceof LinkTag) {
-												
-												LinkTag cityLink = (LinkTag) cityLinks[j];
-												
-												City city = new City();
-												city.setName(cityLink.getStringText());
-												city.setProvince(province);
-												
-												cities.add(city);
-											}
-											
-										}
-										
-										province.setCitys(cities);
-										
-										provinces.add(province);
-									}
-								}
-							}
-						}
-					
-					}
-					return false;
-				}
-			});
-
-		} catch (ParserException e) {
-			e.printStackTrace();
-		}
-		
-		return provinces;
-
-	}
 
 	public static String findContactorName(String detailPageHtml) {
 		final StringBuilder contactorsBuilder = new StringBuilder();
 
 		try {
-
 			Parser htmlParser = new Parser();
 			htmlParser.setInputHTML(detailPageHtml);
 
@@ -436,8 +397,8 @@ public class HtmlParserUtilFor58 {
 				}
 			});
 
-		} catch (ParserException e) {
-
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return contactorsBuilder.toString();
@@ -485,7 +446,6 @@ public class HtmlParserUtilFor58 {
 		final StringBuilder address = new StringBuilder();
 
 		try {
-
 			Parser htmlParser = new Parser();
 			htmlParser.setInputHTML(detailPageHtml);
 
@@ -543,7 +503,7 @@ public class HtmlParserUtilFor58 {
 				}
 			});
 
-		} catch (ParserException e) {
+		} catch (Exception e) {
 
 		}
 
@@ -556,7 +516,6 @@ public class HtmlParserUtilFor58 {
 		final StringBuilder description = new StringBuilder();
 		
 		try {
-
 			Parser htmlParser = new Parser();
 			htmlParser.setInputHTML(detailPageHtml);
 
@@ -602,17 +561,23 @@ public class HtmlParserUtilFor58 {
 				}
 			});
 
-		} catch (ParserException e) {
-
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return description.toString();
 	}
 	
-	public static String findCompanyDescription(String html) {
-		Div descriptionDiv = findFirstOneWithClassName(html, "compIntro");
-		
-		return descriptionDiv == null ? "" : descriptionDiv.getStringText();
+	public static String findCompanyDescription(String detailPageHtml) {
+		try {
+			Div descriptionDiv = findFirstOneWithClassName(detailPageHtml, "compIntro");
+			return descriptionDiv == null ? "" : descriptionDiv.getStringText();
+		} catch (FailingHttpStatusCodeException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

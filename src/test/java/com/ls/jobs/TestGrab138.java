@@ -49,18 +49,16 @@ public class TestGrab138 {
 				String url =  MessageFormat.format(cityUrl, arr);
 				System.err.println("url is : " + url);
 				List<Company> companiesInThisPage = HtmlParserUtilFor138.getInstance().findPagedCompanyList(url);
-				Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companiesInThisPage,ResourceTypeEnum.OneThreeEight.getId());
+				
 				if(companiesInThisPage.isEmpty()){
 					cityURL.setUpdateDate(date);
 					cityURLRepository.save(cityURL);
 					break;
 				}
 				for(Company company:companiesInThisPage){
-					if(map.containsKey(company.getoTEresourceId())){
 					company.setCityId(cityURL.getCity().getId());
 					company.setResouceType(ResourceTypeEnum.OneThreeEight.getId());
 					companyRepository.save(company);
-				}
 				}
 				
 				}

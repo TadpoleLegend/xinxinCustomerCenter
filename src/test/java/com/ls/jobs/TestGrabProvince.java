@@ -40,6 +40,7 @@ public class TestGrabProvince {
 				for(Entry<String, Map<String, String>> entry_138 :provinces_138.entrySet()){
 					Province province138 = new Province();
 					province138.setName(entry_138.getKey());
+					System.err.println(entry_138.getKey());
 					province138 =  provinceRepository.save(province138);
 					Map<String,String> map = entry_138.getValue();
 					

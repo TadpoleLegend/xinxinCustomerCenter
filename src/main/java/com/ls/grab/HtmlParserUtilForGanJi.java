@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
@@ -20,9 +21,12 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.entity.Company;
+import com.ls.enums.ResourceTypeEnum;
+import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 	
@@ -90,19 +94,16 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 							}
 							
 						}
-						String htmlForPage = HttpClientGrabUtil.fetchHTMLwithURL(company.getGanjiUrl());
-						String phoneImgSrc = findContactorPhoneNumberImgSrc(htmlForPage);
-						if(phoneImgSrc!=null&&phoneImgSrc.trim().length()>0){
-							if(phoneImgSrc.startsWith("/")&&!phoneImgSrc.contains("www.ganji.com")){
-								company.setPhoneSrc("http://www.ganji.com"+phoneImgSrc);
-							}else{
-								company.setPhoneSrc(phoneImgSrc);
+						
+						String testURL = company.getfEurl();
+						int index = testURL.indexOf("gongsi");
+						if(index!=-1){
+							String sub = testURL.substring(index+7);
+							int sIndex = sub.indexOf("/");
+							if(sIndex!=-1){
+									company.setGanjiresourceId(sub.substring(0,sIndex));
+								}
 							}
-						}
-						company.setContactor(findContactorName(htmlForPage));
-						company.setAddress(findCompanyAddress(htmlForPage));
-						company.setDescription(findCompanyDescription(htmlForPage));
-						company.setEmployeeCount(findCompanyEmployeeCount(htmlForPage));
 						companyList.add(company);
 					}
 				}
@@ -113,6 +114,35 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 		} catch (Exception e) {
 
 			e.printStackTrace();
+		}
+		
+		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companyList,ResourceTypeEnum.Ganji.getId());
+		List<Company> returnCompanyList = new ArrayList<Company>();
+		for(Company company:companyList){
+			if(map.containsKey(company.getGanjiresourceId())){
+				try {
+					String testURL = company.getGanjiUrl();
+					HtmlPage mainPage = webClient.getPage(testURL);
+					String htmlDetail = mainPage.getWebResponse().getContentAsString();
+					String phoneImgSrc = findContactorPhoneNumberImgSrc(htmlDetail);
+					if(phoneImgSrc!=null&&phoneImgSrc.trim().length()>0){
+						if(phoneImgSrc.startsWith("/")&&!phoneImgSrc.contains("www.ganji.com")){
+							company.setPhoneSrc("http://www.ganji.com"+phoneImgSrc);
+						}else{
+							company.setPhoneSrc(phoneImgSrc);
+						}
+					}
+					company.setContactor(findContactorName(htmlDetail));
+					company.setAddress(findCompanyAddress(htmlDetail));
+					company.setEmployeeCount(findCompanyEmployeeCount(htmlDetail));
+					company.setDescription(findCompanyDescription(htmlDetail));
+					returnCompanyList.add(company);
+				} catch (FailingHttpStatusCodeException e) {
+					e.printStackTrace();
+				}  catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return companyList;

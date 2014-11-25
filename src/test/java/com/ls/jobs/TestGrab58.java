@@ -31,6 +31,23 @@ public class TestGrab58 {
 	@Autowired
 	private CityURLRepository cityURLRepository;
 	
+	public static void main(String []args){
+		
+		String testURL = "http://www.ganji.com/gongsi/22725929/";
+		int index = testURL.indexOf("gongsi");
+		
+		if(index!=-1){
+			String sub = testURL.substring(index+7);
+			int sIndex = sub.indexOf("/");
+			if(sIndex!=-1){
+				String ssub = sub.substring(0,sIndex);
+				System.err.println(ssub);
+				}
+			}
+			
+	}
+	
+	
 	
 	@Test
 	public void testGrabCompanyList() throws Exception{

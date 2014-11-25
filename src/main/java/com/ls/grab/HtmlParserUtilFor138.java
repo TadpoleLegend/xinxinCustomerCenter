@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
@@ -35,6 +36,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.ls.entity.Company;
+import com.ls.enums.ResourceTypeEnum;
+import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
@@ -190,7 +193,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 							}
 							
 						}
-						String htmlForPage = null;
+					/*	String htmlForPage = null;
 						try {
 							htmlForPage = webClient.getPage(company.getOteUrl()).getWebResponse().getContentAsString();
 						} catch (FailingHttpStatusCodeException e1) {
@@ -201,27 +204,22 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 							e1.printStackTrace();
 						}
 						company.setDescription(findCompanyDescription(htmlForPage));
-						company.setEmployeeCount(findCompanyEmployeeCount(htmlForPage));
-						String testURL = company.getOteUrl();
-						try {
-							String id = getCompanyResourceId(webClient.getPage(testURL).getWebResponse().getContentAsString());
-							company.setoTEresourceId(id);
-							String contactDiv =  getContactDiv(id);
-							parseContactDivForTelAndMobile(contactDiv,company);
-							parseContactDivForContactPerson(contactDiv,company);
-							parseContactDivForAddress(contactDiv,company);
-						} catch (FailingHttpStatusCodeException e) {
-							e.printStackTrace();
-						} catch (MalformedURLException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						company.setEmployeeCount(findCompanyEmployeeCount(htmlForPage));*/
 						StringBuilder sb = new StringBuilder();
-						sb.append(company.getName()).append("--").append(company.getArea()).append("---").append(company.getAddress()).append("---").append(company.getPublishDate()).append("----").append(company.getContactor());
-						System.err.println(sb.toString());
-						System.err.println(company.getMobilePhoneSrc());
-						System.err.println(company.getPhoneSrc());
+						String testURL = company.getOteUrl();
+						int index = testURL.lastIndexOf("/");
+						if(index!=-1){
+							String sub = testURL.substring(index+1);
+							int sIndex = sub.indexOf("shtml");
+							if(sIndex!=-1){
+								String ssub = sub.substring(0,sIndex-1);
+								String []crr = ssub.split("_");
+								if(crr!=null && crr.length==2){
+									company.setoTEresourceId(crr[1]);
+								}
+							}
+							
+						}
 						companyList.add(company);
 						return;
 					}
@@ -234,8 +232,24 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 			e.printStackTrace();
 		}
-
-		return companyList;
+		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companyList,ResourceTypeEnum.OneThreeEight.getId());
+		List<Company> returnCompanyList = new ArrayList<Company>();
+		for(Company company:companyList){
+			if(map.containsKey(company.getoTEresourceId())){
+				try {
+					String contactDiv =  getContactDiv(company.getoTEresourceId());
+					parseContactDivForTelAndMobile(contactDiv,company);
+					parseContactDivForContactPerson(contactDiv,company);
+					parseContactDivForAddress(contactDiv,company);
+					returnCompanyList.add(company);
+				} catch (FailingHttpStatusCodeException e) {
+					e.printStackTrace();
+				}  catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return returnCompanyList;
 	}
 	
 	private String parseContactDivForAddress(String detailPageHtml,final Company company){
