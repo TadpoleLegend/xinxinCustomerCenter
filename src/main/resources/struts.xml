@@ -34,6 +34,11 @@
 				<param name="root">steps</param>
 			</result>
 		</action>
+		<action name="findAllPhases" class="commonAction" method="findAllPhases">
+			<result name="success" type="json">
+				<param name="root">phases</param>
+			</result>
+		</action>
 	</package>
 	
 	<package name="user" namespace="/user" extends="struts-default">

@@ -76,6 +76,14 @@
 				<param name="root">response</param>
 			</result>
 		</action>
+		<action name="saveLearningHistory" method="saveLearningHistory" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
 		<action name="changeCompanyStatus" method="changeCompanyStatus" class="companyAction">
 			<result name="input">
 				bus/data.jsp
@@ -90,6 +98,14 @@
 			</result>
 			<result name="success" type="json">
 				<param name="root">historyRecords</param>
+			</result>
+		</action>
+		<action name="loadLearningHistory" method="loadLearningHistory" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">learningHistories</param>
 			</result>
 		</action>
 	</package>

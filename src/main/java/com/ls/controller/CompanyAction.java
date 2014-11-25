@@ -13,11 +13,14 @@ import org.springframework.stereotype.Component;
 import com.ls.constants.XinXinConstants;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
+import com.ls.entity.LearningHistory;
+import com.ls.entity.Phase;
 import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
 import com.ls.entity.User;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
+import com.ls.repository.LearningHistoryRepository;
 import com.ls.repository.PhoneCallHistoryRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.service.CompanyService;
@@ -41,6 +44,7 @@ public class CompanyAction extends BaseAction {
 	private List<Problem> problems;
 	private PhoneCallHistory phoneCall;
 	private List<PhoneCallHistory> historyRecords;
+	private List<LearningHistory> learningHistories;
 
 	@Resource(name = "companyService")
 	private CompanyService companyService;
@@ -56,6 +60,9 @@ public class CompanyAction extends BaseAction {
 	
 	@Autowired
 	private PhoneCallHistoryRepository phoneCallHistoryRepository;
+	
+	@Autowired
+	private LearningHistoryRepository learningHistoryRepository;
 	
 	public String checkOrUncheckProblem() {
 		
@@ -135,6 +142,10 @@ public class CompanyAction extends BaseAction {
 			
 		} else {
 			companyAdditional = companyService.findCompanyAddtionalInformationByCompanyId(Integer.valueOf(companyId));
+			
+			if (companyAdditional != null) {
+				companyAdditional.setCompany(null);
+			}
 		}
 		
 		return SUCCESS;
@@ -261,6 +272,74 @@ public class CompanyAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	public String loadLearningHistory() {
+		
+		try {
+
+			String companyId = getParameter("companyId");
+
+			Company company = companyRepository.findOne(Integer.valueOf(companyId));
+
+			learningHistories = learningHistoryRepository.findByCompany(company);
+			
+			if (learningHistories != null) {
+				
+				for (LearningHistory history : learningHistories) {
+					history.setCompany(null);
+					
+					Phase phase = history.getPhase();
+					phase.setLearningHistories(null);
+				}
+			} 
+
+		} catch (NumberFormatException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+
+			return SUCCESS;
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+
+			return SUCCESS;
+		}
+
+		setResponse(ResponseVo.newSuccessMessage("200"));
+
+		return SUCCESS;
+	}
+	
+	public String saveLearningHistory() {
+		
+		try {
+			
+			String learningHistoryJson = getParameter("learningJson");
+			String companyId = getParameter("companyId");
+			
+			Company company = companyRepository.findOne(Integer.valueOf(companyId));
+			
+			LearningHistory learningHistory = XinXinUtils.getJavaObjectFromJsonString(learningHistoryJson, LearningHistory.class);
+			
+			if (learningHistory.getPhase() == null) {
+				setResponse(ResponseVo.newFailMessage("你没有选择期数"));
+				return SUCCESS;
+			}
+			learningHistory.setCompany(company);
+			learningHistoryRepository.saveAndFlush(learningHistory);
+			
+		} catch (NumberFormatException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		}
+		
+		setResponse(ResponseVo.newSuccessMessage("培训记录保存成功！"));
+		
+		return SUCCESS;
+	}
+
 	public String changeCompanyStatus() {
 		
 		try {
@@ -344,6 +423,16 @@ public class CompanyAction extends BaseAction {
 	public void setHistoryRecords(List<PhoneCallHistory> historyRecords) {
 	
 		this.historyRecords = historyRecords;
+	}
+	
+	public List<LearningHistory> getLearningHistories() {
+	
+		return learningHistories;
+	}
+	
+	public void setLearningHistories(List<LearningHistory> learningHistories) {
+	
+		this.learningHistories = learningHistories;
 	}
 	
 }
