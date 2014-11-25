@@ -19,4 +19,5 @@ public interface GrabService {
 	Company grabCompanyDetail(String detailPageUrl);
 
 	GrabStatistic grabCompanyInformationByUrl(String url, Date publishDateEnd);
+	void mergeCompanyData(Company company,String recourceType);
 }

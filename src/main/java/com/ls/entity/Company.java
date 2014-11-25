@@ -25,7 +25,9 @@ public class Company implements Serializable {
 	@Id
 	@GeneratedValue
 	protected Integer id;
-	protected String resourceId;
+	protected String oTEresourceId;
+	protected String fEresourceId;
+	protected String ganjiresourceId;
 	protected String resouceType;
 	protected String name;
 	protected String contactor;
@@ -265,12 +267,30 @@ public class Company implements Serializable {
 		this.status = status;
 	}
 
-	public String getResourceId() {
-		return resourceId;
+
+	public String getoTEresourceId() {
+		return oTEresourceId;
 	}
 
-	public void setResourceId(String resourceId) {
-		this.resourceId = resourceId;
+	public void setoTEresourceId(String oTEresourceId) {
+		this.oTEresourceId = oTEresourceId;
+	}
+
+	public String getfEresourceId() {
+		return fEresourceId;
+	}
+
+	public void setfEresourceId(String fEresourceId) {
+		this.fEresourceId = fEresourceId;
+	}
+
+
+	public String getGanjiresourceId() {
+		return ganjiresourceId;
+	}
+
+	public void setGanjiresourceId(String ganjiresourceId) {
+		this.ganjiresourceId = ganjiresourceId;
 	}
 
 	public String getOteUrl() {

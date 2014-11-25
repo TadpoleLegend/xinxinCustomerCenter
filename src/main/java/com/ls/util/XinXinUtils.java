@@ -1,9 +1,15 @@
 package com.ls.util;
 
-import com.ls.entity.User;
-import com.ls.vo.ResponseVo;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
+
+import com.ls.entity.Company;
+import com.ls.entity.User;
+import com.ls.enums.ResourceTypeEnum;
+import com.ls.vo.ResponseVo;
 
 
 public class XinXinUtils {
@@ -42,5 +48,19 @@ public class XinXinUtils {
 		user.setPhoneCallHistory(null);
 		user.setRoles(null);
 		user.setUserCitys(null);
+	}
+	
+	public static Map<String,String> mergeDuplicateCompanyInOnePage(List<Company> companyList,String resourceType){
+		Map<String,String> map = new HashMap<String,String>();
+		for(Company company:companyList){
+			if(ResourceTypeEnum.OneThreeEight.getId().equals(resourceType)){
+				map.put(company.getoTEresourceId(), company.getoTEresourceId());
+			}else if(ResourceTypeEnum.Ganji.getId().equals(resourceType)){
+				map.put(company.getGanjiresourceId(), company.getGanjiresourceId());
+			}else if(ResourceTypeEnum.FiveEight.getId().equals(resourceType)){
+				map.put(company.getfEresourceId(), company.getfEresourceId());
+			}
+		}
+		return map;
 	}
 }

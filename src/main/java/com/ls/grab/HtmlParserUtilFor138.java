@@ -205,7 +205,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 						String testURL = company.getOteUrl();
 						try {
 							String id = getCompanyResourceId(webClient.getPage(testURL).getWebResponse().getContentAsString());
-							company.setResourceId(id);
+							company.setoTEresourceId(id);
 							String contactDiv =  getContactDiv(id);
 							parseContactDivForTelAndMobile(contactDiv,company);
 							parseContactDivForContactPerson(contactDiv,company);

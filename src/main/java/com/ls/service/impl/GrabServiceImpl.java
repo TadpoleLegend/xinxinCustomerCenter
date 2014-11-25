@@ -2,6 +2,7 @@ package com.ls.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,7 @@ import com.ls.entity.City;
 import com.ls.entity.CityURL;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyResource;
+import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.GrapImgUtil;
 import com.ls.grab.HtmlParserUtilPlanB;
 import com.ls.grab.HttpClientGrabUtil;
@@ -23,6 +25,7 @@ import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.CompanyResourceRepository;
 import com.ls.service.GrabService;
+import com.ls.util.DateUtils;
 import com.ls.vo.GrabStatistic;
 
 @Service("grabService")
@@ -267,4 +270,76 @@ public class GrabServiceImpl implements GrabService {
 		
 		return true;
 	}
+	
+	public void mergeCompanyData(Company company,String recourceType){
+		Company dataBaseCompany = null;
+		if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
+			dataBaseCompany = this.companyRepository.findCompanyFor138GrabJob(company.getCityId(), company.getoTEresourceId(),company.getName());
+		}else if(ResourceTypeEnum.Ganji.getId().equals(recourceType)){
+			dataBaseCompany = this.companyRepository.findCompanyForGanjiGrabJob(company.getCityId(), company.getGanjiresourceId(),company.getName());
+		}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
+			dataBaseCompany = this.companyRepository.findCompanyFor58GrabJob(company.getCityId(), company.getfEresourceId(),company.getName());
+		}
+		if(company == null){
+			this.companyRepository.save(company);
+		}else{
+			ruleSaveForCompany(dataBaseCompany,company,recourceType);
+			this.companyRepository.save(dataBaseCompany);
+		}
+	}
+	/**
+	 * 138 is the basic inforamtion website
+	 * if 138 not have the company, then set ganji website as the second choice
+	 * the last choice is 58 website
+	 * @param dbcompany
+	 * @param websiteCompany
+	 * @param recourceType
+	 */
+	
+	private void ruleSaveForCompany(Company dbCompany,Company websiteCompany,String recourceType){
+		if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
+			generateDBCompany(dbCompany,websiteCompany);
+		}else if(ResourceTypeEnum.Ganji.getId().equals(recourceType)){
+			if(dbCompany.getoTEresourceId()!=null){
+				dbCompany.setfEresourceId(websiteCompany.getfEresourceId()==null?dbCompany.getfEresourceId():websiteCompany.getfEresourceId());
+				dbCompany.setfEurl(websiteCompany.getfEurl()==null?dbCompany.getfEurl():websiteCompany.getfEurl());
+			}else{
+				generateDBCompany(dbCompany,websiteCompany);
+			}
+		}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
+			if(dbCompany.getoTEresourceId()!=null || dbCompany.getGanjiresourceId()!=null){
+				dbCompany.setGanjiresourceId(websiteCompany.getGanjiresourceId()==null?dbCompany.getGanjiresourceId():websiteCompany.getGanjiresourceId());
+				dbCompany.setGanjiUrl(websiteCompany.getGanjiUrl()==null?dbCompany.getGanjiUrl():websiteCompany.getGanjiUrl());
+			}else{
+				generateDBCompany(dbCompany,websiteCompany);
+			}
+		}
+		dbCompany.setGrabDate(DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss"));
+		
+	}
+	
+	private void generateDBCompany(Company dbCompany,Company websiteCompany){
+		
+		dbCompany.setoTEresourceId(websiteCompany.getoTEresourceId()==null?dbCompany.getoTEresourceId():websiteCompany.getoTEresourceId());
+		dbCompany.setfEresourceId(websiteCompany.getfEresourceId()==null?dbCompany.getfEresourceId():websiteCompany.getfEresourceId());
+		dbCompany.setGanjiresourceId(websiteCompany.getGanjiresourceId()==null?dbCompany.getGanjiresourceId():websiteCompany.getGanjiresourceId());
+		
+		dbCompany.setName(websiteCompany.getName()==null?dbCompany.getName():websiteCompany.getName());
+		dbCompany.setContactor(websiteCompany.getContactor()==null?dbCompany.getContactor():websiteCompany.getContactor());
+		dbCompany.setEmail(websiteCompany.getEmail()==null?dbCompany.getEmail():websiteCompany.getEmail());
+		dbCompany.setEmailSrc(websiteCompany.getEmailSrc()==null?dbCompany.getEmailSrc():websiteCompany.getEmailSrc());
+		dbCompany.setPhone(websiteCompany.getPhone()==null?dbCompany.getPhone():websiteCompany.getPhone());
+		dbCompany.setPhoneSrc(websiteCompany.getPhoneSrc()==null?dbCompany.getPhoneSrc():websiteCompany.getPhoneSrc());
+		dbCompany.setMobilePhone(websiteCompany.getMobilePhone()==null?dbCompany.getMobilePhone():websiteCompany.getMobilePhone());
+		dbCompany.setMobilePhoneSrc(websiteCompany.getMobilePhoneSrc()==null?dbCompany.getMobilePhoneSrc():websiteCompany.getMobilePhoneSrc());
+		dbCompany.setAddress(websiteCompany.getAddress()==null?dbCompany.getAddress():websiteCompany.getAddress());
+		dbCompany.setArea(websiteCompany.getArea()==null?dbCompany.getArea():websiteCompany.getArea());
+		dbCompany.setfEurl(websiteCompany.getfEurl()==null?dbCompany.getfEurl():websiteCompany.getfEurl());
+		dbCompany.setOteUrl(websiteCompany.getOteUrl()==null?dbCompany.getOteUrl():websiteCompany.getOteUrl());
+		dbCompany.setGanjiUrl(websiteCompany.getGanjiUrl()==null?dbCompany.getGanjiUrl():websiteCompany.getGanjiUrl());
+		dbCompany.setEmployeeCount(websiteCompany.getEmployeeCount()==null?dbCompany.getEmployeeCount():websiteCompany.getEmployeeCount());
+		dbCompany.setDescription(websiteCompany.getDescription()==null?dbCompany.getDescription():websiteCompany.getDescription());
+		
+	}
+	
 }

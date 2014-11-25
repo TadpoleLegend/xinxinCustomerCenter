@@ -3,6 +3,7 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ls.dao.CompanyDao;
 import com.ls.entity.CityURL;
 import com.ls.entity.Company;
 import com.ls.enums.ResourceTypeEnum;
@@ -18,6 +18,7 @@ import com.ls.grab.HtmlParserUtilFor138;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.util.DateUtils;
+import com.ls.util.XinXinUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
@@ -26,18 +27,9 @@ public class TestGrab138 {
 	private CityURLRepository cityURLRepository;
 	@Autowired
 	private CompanyRepository companyRepository;
-	@Autowired
-	private CompanyDao companyDao;
+	
 	
 	@Test
-	public void testGetCompany(){
-		Company company = new Company();
-		company.setId(180);
-		company = companyDao.checkCompanyExistByResourceId(company);
-		System.out.println(company.getName());
-	}
-	
-	/*@Test
 	public void testGrabCompanyList() throws Exception{
 		try {
 			Date date  = Calendar.getInstance().getTime();
@@ -57,15 +49,18 @@ public class TestGrab138 {
 				String url =  MessageFormat.format(cityUrl, arr);
 				System.err.println("url is : " + url);
 				List<Company> companiesInThisPage = HtmlParserUtilFor138.getInstance().findPagedCompanyList(url);
+				Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companiesInThisPage,ResourceTypeEnum.OneThreeEight.getId());
 				if(companiesInThisPage.isEmpty()){
 					cityURL.setUpdateDate(date);
 					cityURLRepository.save(cityURL);
 					break;
 				}
 				for(Company company:companiesInThisPage){
+					if(map.containsKey(company.getoTEresourceId())){
 					company.setCityId(cityURL.getCity().getId());
 					company.setResouceType(ResourceTypeEnum.OneThreeEight.getId());
 					companyRepository.save(company);
+				}
 				}
 				
 				}
@@ -74,6 +69,6 @@ public class TestGrab138 {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 }
