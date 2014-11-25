@@ -76,6 +76,14 @@
 				<param name="root">response</param>
 			</result>
 		</action>
+		<action name="changeCompanyStatus" method="changeCompanyStatus" class="companyAction">
+			<result name="input">
+				bus/data.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
 		<action name="loadPhoneCallHistory" method="loadPhoneCallHistory" class="companyAction">
 			<result name="input">
 				bus/data.jsp

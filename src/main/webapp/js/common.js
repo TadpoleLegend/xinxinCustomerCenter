@@ -69,3 +69,11 @@ function isOK (response) {
 		return false;
 	}
 }
+
+function labelIt(message) {
+	return '<label class="label green">' + message + '</label>';
+}
+
+function bIt(message) {
+	return '<b>' + message + '</b>';
+}

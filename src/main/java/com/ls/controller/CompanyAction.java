@@ -261,6 +261,31 @@ public class CompanyAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	public String changeCompanyStatus() {
+		
+		try {
+			String companyId =  getParameter("companyId");
+			String statusId = getParameter("statusId");
+			
+			Company company = companyRepository.findOne(Integer.valueOf(companyId));
+			company.setStatus(statusId);
+			
+			companyRepository.save(company);
+			
+			setResponse(XinXinUtils.makeGeneralSuccessResponse());
+			
+		} catch (NumberFormatException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			return SUCCESS;
+			
+		} catch (Exception e) {
+			
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			return SUCCESS;
+		}
+		
+		return SUCCESS;
+	}
 	public List<Company> getCompanies() {
 		return companies;
 	}

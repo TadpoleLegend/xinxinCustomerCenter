@@ -22,6 +22,12 @@ public class XinXinUtils {
 		return errorResponseVo;
 	}
 	
+	public static ResponseVo makeGeneralSuccessResponse() {
+		ResponseVo errorResponseVo = ResponseVo.newSuccessMessage("<b>操作成功!</b>");
+		
+		return errorResponseVo;
+	}
+	
 	public static User getDevelopmentUser() {
 		User user = new User();
 		user.setId(1);

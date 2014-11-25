@@ -163,7 +163,7 @@
 							<div class="row">
 								<div id="wizard">
 									<ol class="bwizard-steps clearfix clickable" role="tablist" data-bind="foreach : $root.allSteps">
-										<li role="tab"  aria-selected="false" data-bind="css : {active : name == $root.selectedCompany().status}">
+										<li role="tab"  aria-selected="false" data-bind="css : {active : id == $root.selectedCompany().status}, attr : {id :  'stepLink' + id }">
 											<span class="label green" data-bind="text:orderNumber"></span>
 											<a class="hidden-phone" data-bind="click : $root.changeCompanyStatus"><span data-bind="text : name"></span></a>
 										</li>
@@ -175,7 +175,7 @@
 								<h4>
 									<a href="#">客户基本信息</a>
 								</h4>
-								<div>
+								<div class="content">
 									<div class="row">
 										<div class="row">
 											<div class='three columns'>
@@ -394,10 +394,6 @@
 											 <input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1, onClose : $root.nextDateOnClose}, value : nextDate" class="required">
 										</div>
 									</form>
-									<div class="row">
-										<a href="#" class="small blue button" data-bind="click : $root.savePhoneCallHistory" title="">保存记录</a>
-										<a href="#" class="small blue button" data-bind="click : $root.closeDialog" title="">关闭窗口</a>	
-									</div>
 							</div>
 						</div>
 					</div>
@@ -415,7 +411,8 @@
 		$(document).ready( function() {
 
 					$("#searchWrapper").accordion({
-						collapsible: true
+						collapsible: true,
+						border: true
 					});
 	
 					$(".expand").click(function() {
@@ -536,10 +533,36 @@
 						
 						self.changeCompanyStatus = function(item, event) {
 							
-							self.selectedCompany().status = item.name;
+							$.ajax({
+								url : '/ls/changeCompanyStatus.ls',
+								type : 'POST',
+								data : {companyId : self.selectedCompany().id,
+										statusId : item.id	
+								},
+								success : function(data) {
+									
+									if(isOK(data)) {
+										
+										self.selectedCompany().status = item.name;
+										
+										$('#wizard .active').removeClass('active');
+										
+										$('#stepLink' + item.id).attr('class', 'active');
+										
+										var message = labelIt(self.selectedCompany().name) + '已更改为 ' + bIt(item.name);
+										success(message);
+										
+									} else {
+										
+										fail();
+									}
+								}
+							});
 							
-							self.selectedCompany.valueHasMutated();
-							self.buildRatingAndSections();
+							
+							
+					//		self.selectedCompany.valueHasMutated();
+					//		self.buildRatingAndSections();
 							
 						};
 						self.nextDateOnClose = function(item, event) {
@@ -595,14 +618,7 @@
 						self.openPhoneCallDialog = function(item, event) {
 							
 							$('#wizard').hide();
-							$('#phoneCallDialog').dialog({
-								modal : true,
-								width : 640,
-								height : 580,
-								open : function(e) {
-									changeButtonStyleForPopup(e);
-								}
-							});
+							$('#phoneCallDialog').dialog('open');
 						};
 						
 						self.addHistory = function() {
@@ -659,9 +675,9 @@
 										var showToUser = "<label class=\"label green\">" + self.selectedCompany().name + "</label>" + "已被评为 <b>" + score + "</b>星。";
 										success(showToUser);
 										
-										self.selectedCompany().star = score;
-										self.selectedCompany.valueHasMutated();
-										self.buildRatingAndSections();
+										//self.selectedCompany().star = score;
+										//self.selectedCompany.valueHasMutated();
+										//self.buildRatingAndSections();
 										
 									} else {
 										fail();
@@ -715,7 +731,25 @@
 							
 							self.loadPhoneCallHistory();
 							
-							success('<label class="green label">' + item.name + "</label> 信息已加载!");
+							$('#phoneCallDialog').dialog({
+								autoOpen : false,
+								modal : true,
+								width : 640,
+								height : 580,
+								open : function(e) {
+									changeButtonStyleForPopup(e);
+								},
+								
+								buttons : {
+									'保存记录' : function() {
+										self.savePhoneCallHistory();
+									},
+									'关闭窗口' : function() {
+										self.closeDialog();
+									}
+								}
+							});
+							success( labelIt(item.name) + " 信息已加载!" );
 						};
 						
 						self.loadCompanyProblems = function() {
