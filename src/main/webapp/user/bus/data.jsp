@@ -192,7 +192,7 @@
 											</div>
 											<div class="four columns">
 												<br>
-												<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><span data-bind="text : detailUrl"></span></a>
+												<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><span data-bind="text : oteUrl"></span></a>
 											</div>
 										</div>
 
@@ -527,7 +527,7 @@
 						
 					};
 					
-					var Company = function(id, name, contractor, email, email_src, phone, phone_src, star, address, distinct, problems, detailUrl, status) {
+					var Company = function(id, name, contractor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status) {
 						var self = this;
 						
 						self.id = id;
@@ -541,7 +541,7 @@
 						self.address = address;
 						self.distinct = distinct;
 						self.problems = ko.observableArray(problems);
-						self.detailUrl = detailUrl;
+						self.oteUrl = oteUrl;
 						self.selectedProblem = ko.observable('');
 						self.status = status;
 					};
@@ -1050,7 +1050,7 @@
 						};
 						
 						self.showDetail = function(item, event) {
-							window.open(item.detailUrl, '_blank');
+							window.open(item.oteUrl, '_blank');
 						};
 						
 						self.searchCompany = function() {

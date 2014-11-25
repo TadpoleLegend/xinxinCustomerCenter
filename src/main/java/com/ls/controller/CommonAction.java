@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -91,7 +92,8 @@ public class CommonAction extends BaseAction {
 	}
 
 	public String findAllSteps() {
-		steps = stepRepository.findAll();
+
+		steps = stepRepository.findAll(new Sort(Sort.Direction.ASC, "orderNumber"));
 		
 		return SUCCESS;
 	}
