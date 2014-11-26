@@ -10,12 +10,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.ls.constants.XinXinConstants;
 import com.ls.entity.Company;
+import com.ls.entity.Dictionary;
 import com.ls.entity.Phase;
 import com.ls.entity.Step;
 import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CompanyRepository;
+import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
+import com.ls.repository.ProblemRepository;
 import com.ls.repository.StepRepository;
 
 /**
@@ -36,6 +40,12 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private PhaseRepository phaseRepository;
+	
+	@Autowired
+	private DropDownRepository dropDownRepository;
+	
+	@Autowired
+	private ProblemRepository problemRepository;
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {
@@ -92,5 +102,22 @@ public class TestInitializationScripts {
 		List<Phase> phases = ImmutableList.of(firstPhase, secondPhase, thirdPhase, fourthPhase);
 		
 		phaseRepository.save(phases);
+	}
+	
+	@Test
+	public void testInitialCompanyType() throws Exception {
+		
+		Dictionary firstDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "A", "A类顾客", "");
+		Dictionary secondDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "B", "B类顾客", "");
+		Dictionary threeDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "C", "C类顾客", "");
+		
+		List<Dictionary> dictionaries = ImmutableList.of(firstDictionary, secondDictionary, threeDictionary);
+		
+		dropDownRepository.save(dictionaries);
+	}
+	
+	@Test
+	public void removeProblems() {
+		problemRepository.deleteAll();
 	}
 }

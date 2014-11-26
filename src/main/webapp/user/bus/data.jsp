@@ -173,7 +173,7 @@
 							<br>
 							<div id="accordion">
 								<h4>
-									<a href="#">客户基本信息</a>
+									<a href="#">客户基本信息</a> 
 								</h4>
 								<div class="content">
 									<div class="row">
@@ -197,19 +197,24 @@
 										</div>
 
 										<div class="row">
-											<div class='four columns'>
+											<div class='three columns'>
 												<label>联系人 </label><input type="text"
 													data-bind="value : contractor">
 											</div>
-											<div class='four columns'>
-												<label>联系电话</label><label class="input-checkbox"> <img
-													alt="电话号码" data-bind="attr: { 'src' : phone_src }">
+											<div class='three columns'>
+												<label>手机</label><label class="input-checkbox"> 
+													<img alt="电话号码" data-bind="attr: { 'src' : phone_src }">
 												</label>
 											</div>
-											<div class='four columns'>
-												<label>Email</label> <label>电子邮件</label><label
-													class="input-checkbox"> <img alt="电子邮箱"
-													data-bind="attr: { 'src' : email_src }">
+											<div class='three columns'>
+												<label>固定电话</label><label class="input-checkbox"> 
+													<img alt="电话号码" data-bind="attr: { 'src' : phone_src }">
+												</label>
+											</div>
+											<div class='three columns'>
+												<label>电子邮件</label>
+													<label class="input-checkbox"> 
+													<img alt="电子邮箱" data-bind="attr: { 'src' : email_src }">
 												</label>
 											</div>
 										</div>
@@ -219,10 +224,23 @@
 										<textarea name="ex-textarea-4"></textarea>
 									</div>
 									<br>
-									<h4>补充客户信息</h4>
-									<br>
+									<h4 class="text-success">补充客户信息</h4>
+									<hr>
 									<div id="addtionalCompanyInformation"
 										data-bind="with : $root.addtion">
+										<div class="row">
+											<div class="three columns">
+												<label>客户评级</label>
+												<select data-bind="options: $root.companyTypes,
+                      											   optionsText: 'optionText',
+                       											   value: companyLevel,
+                       											   optionsValue : 'optionValue',
+                       											   selectedOption : companyLevel,
+                       											   optionsCaption: '选择客户级别'"
+                       									class="required">
+                       							</select>
+											</div>
+										</div>
 										<div class="row">
 											<div class="three columns">
 												<label>院长姓名</label> <input type="text"
@@ -277,10 +295,42 @@
 													data-bind="value : bossAge" />
 											</div>
 										</div>
+										<br>
+										<h4 class="text-success">感动顾客</h4>
+										<hr>
 										<div class="row">
-											<a class="small blue button"
-												data-bind="click : $root.saveAddition">保存</a>
-
+											<div class="three columns">
+												<label>老大生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : firstKidBirthday" />
+											</div>
+											<div class="three columns">
+												<label>老二生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : secondKidBirthday" />
+											</div>
+											<div class="three columns">
+												<label>老三生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : thirdKidBirthday" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="three columns">
+												<label>院长生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : bossBirthday" />
+											</div>
+											<div class="three columns">
+												<label>公司年庆</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : companyAnniversary" />
+											</div>
+											<div class="three columns">
+												<label>结婚纪念日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : merryAnniversary" />
+											</div>
+											<div class="three columns">
+												<label>老公生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : loverBirthday" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="six columns">
+												<label>备注</label> 
+												<textarea rows="2" data-bind=" value : comments"></textarea>
+											</div>
+										</div>
+										<div class="row">
+											<a class="small blue button" data-bind="click : $root.saveAddition">保存客户信息</a>
 										</div>
 									</div>
 								</div>
@@ -299,7 +349,7 @@
 													<div data-bind="foreach : $root.allProblemsConstantA">
 														<label class="input-checkbox" for="employeeProblem">
 															<input class="icheckbox" type="checkbox" name="employeeProblem" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
-															data-bind="text : name" class="text-info"></span>
+															data-bind="text : name"></span>
 														</label>
 													</div>
 												</div>
@@ -314,7 +364,7 @@
 													<div data-bind="foreach : $root.allProblemsConstantB">
 														<label class="input-checkbox" for="consumerProblem">
 															<input type="checkbox" name="consumerProblem" class="icheckbox" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
-															data-bind="text : name" class="text-info"></span>
+															data-bind="text : name" ></span>
 														</label>
 													</div>
 												</div>
@@ -331,7 +381,7 @@
 														<label class="input-checkbox" for="otherProblems">
 															<input class="icheckbox" type="checkbox"
 															name="otherProblems" data-bind="value : name, click : $root.updateProblemItem, checked : $root.problemsTheCompanyHas"/> <span
-															data-bind="text : name" class="text-info"></span>
+															data-bind="text : name" ></span>
 														</label>
 													</div>
 												</div>
@@ -368,7 +418,8 @@
 													<td class="text-center"><span data-bind="text: nextDate"></span></td>
 													<td class="text-center"><span data-bind="text: description"></span></td>
 													<td class="text-center">
-														<a class=" tiny green button" href="#" data-bind="click : $root.editPhoneCallHistory">查看或修改</a> 
+														<a href="#" data-bind="click : $root.editPhoneCallHistory"><i class="icon-pencil small icon-blue"></i></a> 
+														<a href="#" style="margin-left : 10px;" data-bind="click : $root.removePhoneCallHistory"><i class="icon-trash small icon-red"></i></a>
 													</td>	
 												</tr>
 											</tbody>
@@ -406,16 +457,14 @@
 													<td class="text-center"><span data-bind="text: endDate"></span></td>
 													<td class="text-center"><span data-bind="text: middleLevelManagerCount"></span></td>
 													<td class="text-center"><span data-bind="text: highLevelManagerCount"></span></td>
-													<td class="text-center"><a class=" tiny green button" href="#" data-bind="click : $root.editLearningHistory">查看或修改</a></td>
+													<td class="text-center"><a href="#" data-bind="click : $root.editLearningHistory"><i class="icon-pencil small icon-blue"></i></a>
+																			<a href="#" style="margin-left : 10px;" data-bind="click : $root.removeLearningHistory"><i class="icon-trash small icon-red"></i></a>
+													</td>
 												</tr>
 											</tbody>
 										</table>
 									</div>
 								</div>
-
-								<h3>
-									<a href="#">感动顾客</a>
-								</h3>
 								<div>
 								</div>
 							</div>
@@ -547,8 +596,11 @@
 					};
 					
 					var CompanyAddtion = function() {
+						
 						 var self = this;
+						 
 						 self.id='';
+						 self.companyLevel = '';
 						 self.bossName='';
 						 self.bossMobile='';
 						 self.bossTelephone='';
@@ -561,6 +613,16 @@
 						 self.lastYearIncome='';
 						 self.thisYearMonthlyIncome='';
 						 self.bossAge='';
+						 self.firstKidBirthday='';
+						 self.secondKidBirthday='';
+						 self.thirdKidBirthday='';
+						 self.lunarOrSolar='';
+						 self.bossBirthday='';
+						 self.companyAnniversary='';
+						 self.merryAnniversary='';
+						 self.loverBirthday='';
+						 self.comments = '';
+							
 					};
 					
 					var Province = function(id, name, cities) {
@@ -599,6 +661,8 @@
 					var CompanyModel = function() {
 						var self = this;
 
+						self.companyTypes = ko.observableArray([]);
+						
 						self.companyList = ko.observableArray([]);
 						self.currentIndex = ko.observable(1);
 						self.pageIndexToGo = ko.observable('');
@@ -698,7 +762,7 @@
 										
 										$('#stepLink' + item.id).attr('class', 'active');
 										
-										var message = labelIt(self.selectedCompany().name) + '已更改为 ' + bIt(item.name);
+										var message = self.selectedCompany().name + '已更改为 ' + bIt(item.name);
 										success(message);
 										
 									} else {
@@ -788,6 +852,56 @@
 							self.openLearningHistoryDialog();
 						};
 						
+						
+						self.removePhoneCallHistory = function(item, event) {
+							if(window.confirm('你真的要删除这条记录吗？')) {
+								$.ajax({
+									url : '/ls/user/removePhoneCallHistory.ls',
+									method : 'POST',
+									data : {
+										phoneCallId : item.id
+									},
+									
+									success : function(data) {
+										
+										if (isOK(data)) {
+											
+											success();
+											self.loadPhoneCallHistory();
+											
+										} else {
+											fail();
+										}
+									}
+								});
+							}
+							
+						};
+						self.removeLearningHistory = function(item, event) {
+							if(window.confirm('你真的要删除这条记录吗？')) {
+								$.ajax({
+									url : '/ls/user/removeLearningHistory.ls',
+									method : 'POST',
+									data : {
+											learningHistoryId : item.id
+									},
+									
+									success : function(data) {
+										
+										if (isOK(data)) {
+											
+											success();
+											self.loadLearningHistory();
+											
+										} else {
+											fail();
+										}
+									}
+								});
+							}
+							
+						};
+						
 						self.updateProblemItem = function(item, event) {
 							
 							var checkedFlag = $(event.target).is(':checked');
@@ -805,9 +919,9 @@
 										var showToUser = '';
 										
 										if (checkedFlag) {
-											showToUser = ( "为 <label class=\"label green\">" + self.selectedCompany().name + "</label>" + " 增加了问题项: <b>" + item.name + "</b>。");
+											showToUser = (  self.selectedCompany().name + " 增加了问题项: <b>" + item.name + "</b>。");
 										} else {
-											showToUser = "为 <label class=\"label green\">" + self.selectedCompany().name + "</label>" + " 去除了问题项:<b>" + item.name + "</b>。";
+											showToUser =  self.selectedCompany().name + " 去除了问题项:<b>" + item.name + "</b>。";
 										}
 										
 										success(showToUser);
@@ -829,12 +943,8 @@
 								success : function(data) {
 									
 									if (data && data.message) {
-										var showToUser = "<label class=\"label green\">" + self.selectedCompany().name + "</label>" + "已被评为 <b>" + score + "</b>星。";
+										var showToUser =  self.selectedCompany().name + "已被评为 <b>" + score + "</b>星。";
 										success(showToUser);
-										
-										//self.selectedCompany().star = score;
-										//self.selectedCompany.valueHasMutated();
-										//self.buildRatingAndSections();
 										
 									} else {
 										fail();
@@ -927,7 +1037,7 @@
 								}
 							});
 							
-							success( labelIt(item.name) + " 信息已加载!" );
+							success( item.name + " 信息已加载!" );
 						};
 						
 						self.loadCompanyProblems = function() {
@@ -1017,6 +1127,13 @@
 									self.phases(data);
 								}
 							});
+							$.ajax({
+								url : '/ls/findAllCompanyTypes.ls',
+								success : function(data) {
+									self.companyTypes(data);
+								}
+							});
+							
 						};
 						
 						self.loadProblemConstants = function(type) {

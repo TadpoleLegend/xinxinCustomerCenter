@@ -39,6 +39,12 @@
 				<param name="root">phases</param>
 			</result>
 		</action>
+		<action name="findAllCompanyTypes" class="commonAction" method="findAllCompanyTypes">
+			<result name="success" type="json">
+				<param name="root">companyTypes</param>
+			</result>
+		</action>
+		
 	</package>
 	
 	<package name="user" namespace="/user" extends="struts-default">

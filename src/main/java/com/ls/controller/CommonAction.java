@@ -1,6 +1,5 @@
 package com.ls.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,12 +9,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.Lists;
+import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
+import com.ls.entity.Dictionary;
 import com.ls.entity.Phase;
 import com.ls.entity.Problem;
 import com.ls.entity.Province;
 import com.ls.entity.Step;
+import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
@@ -34,7 +35,6 @@ public class CommonAction extends BaseAction {
 	@Autowired
 	private ProblemRepository problemRepository;
 	
-	
 	@Autowired
 	private ProvinceRepository provinceRepository;
 	
@@ -42,6 +42,11 @@ public class CommonAction extends BaseAction {
 	private StepRepository stepRepository;
 	@Autowired
 	private PhaseRepository phaseRepository;
+	
+	@Autowired
+	private DropDownRepository dropDownRepository;
+	
+	private List<Dictionary> companyTypes;
 	
 	private List<Problem> problems;
 	private List<Province> provinces;
@@ -82,7 +87,18 @@ public class CommonAction extends BaseAction {
 
 	
 	public String findAllProvinces() {
+		
 		provinces = provinceRepository.findAll();
+		
+		for (Province province : provinces) {
+			
+			List<City> cities = province.getCitys();
+			
+			for (City city : cities) {
+				city.setCityURLs(null);
+				city.setUserCitys(null);
+			}
+		}
 		
 		return SUCCESS;
 	}
@@ -94,6 +110,13 @@ public class CommonAction extends BaseAction {
 	public String findAllSteps() {
 
 		steps = stepRepository.findAll(new Sort(Sort.Direction.ASC, "orderNumber"));
+		
+		return SUCCESS;
+	}
+	
+	public String findAllCompanyTypes() {
+		
+		companyTypes = dropDownRepository.findByIdentity(XinXinConstants.COMPANY_TYPE);
 		
 		return SUCCESS;
 	}
@@ -144,6 +167,17 @@ public class CommonAction extends BaseAction {
 	
 		this.phases = phases;
 	}
+
 	
+	public List<Dictionary> getCompanyTypes() {
+	
+		return companyTypes;
+	}
+
+	
+	public void setCompanyTypes(List<Dictionary> companyTypes) {
+	
+		this.companyTypes = companyTypes;
+	}
 	
 }

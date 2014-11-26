@@ -165,6 +165,7 @@ public class CompanyAction extends BaseAction {
 		addition.setCompany(company);
 		
 		companyAdditional = companyService.saveAdditionalCompanyInformation(addition);
+		companyAdditional.setCompany(null);
 		
 		return SUCCESS;
 	}
@@ -229,6 +230,52 @@ public class CompanyAction extends BaseAction {
 		
 		phoneCall.setCompany(null);
 		phoneCall.setUser(null);
+		
+		setResponse(ResponseVo.newSuccessMessage("200"));
+		
+		return SUCCESS;
+	}
+	
+	public String removeLearningHistory() {
+		
+		try {
+			
+			String learningHistoryId = getParameter("learningHistoryId");
+			
+			learningHistoryRepository.delete(Integer.valueOf(learningHistoryId));
+			
+		} catch (NumberFormatException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		}
+		
+		setResponse(ResponseVo.newSuccessMessage("200"));
+		
+		return SUCCESS;
+	}
+	
+	public String removePhoneCallHistory() {
+		
+		try {
+			
+			String phoneCallId = getParameter("phoneCallId");
+			
+			phoneCallHistoryRepository.delete(Integer.valueOf(phoneCallId));
+			
+		} catch (NumberFormatException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return SUCCESS;
+		}
 		
 		setResponse(ResponseVo.newSuccessMessage("200"));
 		

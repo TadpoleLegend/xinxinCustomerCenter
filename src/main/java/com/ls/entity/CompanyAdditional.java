@@ -32,7 +32,16 @@ public class CompanyAdditional {
 	protected Float lastYearIncome;
 	protected Float thisYearMonthlyIncome;
 	protected Integer bossAge;
-
+	protected String companyLevel;
+	protected String firstKidBirthday;
+	protected String secondKidBirthday;
+	protected String thirdKidBirthday;
+	protected String bossBirthday;
+	protected String companyAnniversary;
+	protected String merryAnniversary;
+	protected String loverBirthday;
+	protected String comments;
+	
 	public Integer getId() {
 
 		return id;
@@ -51,6 +60,16 @@ public class CompanyAdditional {
 	public void setCompany(Company company) {
 
 		this.company = company;
+	}
+	
+	public String getComments() {
+	
+		return comments;
+	}
+	
+	public void setComments(String comments) {
+	
+		this.comments = comments;
 	}
 
 	public String getBossName() {
@@ -149,6 +168,100 @@ public class CompanyAdditional {
 	public void setBossAge(Integer bossAge) {
 		this.bossAge = bossAge;
 	}
+	
+	public String getCompanyLevel() {
+	
+		return companyLevel;
+	}
+	
+	public void setCompanyLevel(String companyLevel) {
+	
+		this.companyLevel = companyLevel;
+	}
 
+	
+	public String getFirstKidBirthday() {
+	
+		return firstKidBirthday;
+	}
+
+	
+	public void setFirstKidBirthday(String firstKidBirthday) {
+	
+		this.firstKidBirthday = firstKidBirthday;
+	}
+
+	
+	public String getSecondKidBirthday() {
+	
+		return secondKidBirthday;
+	}
+
+	
+	public void setSecondKidBirthday(String secondKidBirthday) {
+	
+		this.secondKidBirthday = secondKidBirthday;
+	}
+
+	
+	public String getThirdKidBirthday() {
+	
+		return thirdKidBirthday;
+	}
+
+	
+	public void setThirdKidBirthday(String thirdKidBirthday) {
+	
+		this.thirdKidBirthday = thirdKidBirthday;
+	}
+
+	
+	
+	public String getBossBirthday() {
+	
+		return bossBirthday;
+	}
+
+	
+	public void setBossBirthday(String bossBirthday) {
+	
+		this.bossBirthday = bossBirthday;
+	}
+
+	
+	public String getCompanyAnniversary() {
+	
+		return companyAnniversary;
+	}
+
+	
+	public void setCompanyAnniversary(String companyAnniversary) {
+	
+		this.companyAnniversary = companyAnniversary;
+	}
+
+	
+	public String getMerryAnniversary() {
+	
+		return merryAnniversary;
+	}
+
+	
+	public void setMerryAnniversary(String merryAnniversary) {
+	
+		this.merryAnniversary = merryAnniversary;
+	}
+
+	
+	public String getLoverBirthday() {
+	
+		return loverBirthday;
+	}
+
+	
+	public void setLoverBirthday(String loverBirthday) {
+	
+		this.loverBirthday = loverBirthday;
+	}
 	
 }

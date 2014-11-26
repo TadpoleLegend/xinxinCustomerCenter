@@ -51,6 +51,7 @@ public class Company implements Serializable {
 	protected String grabDate;
 	protected Boolean active;
 	protected String status;
+	protected String type;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ls_company_problem", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
@@ -329,5 +330,14 @@ public class Company implements Serializable {
 	public void setPhoneCallHistories(List<PhoneCallHistory> phoneCallHistories) {
 		this.phoneCallHistories = phoneCallHistories;
 	}
+
+	public String getType() {
 	
+		return type;
+	}
+	
+	public void setType(String type) {
+	
+		this.type = type;
+	}
 }
