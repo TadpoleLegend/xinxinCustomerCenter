@@ -47,7 +47,7 @@ public class TestGrab138 {
 					days = DateUtils.minusDate(cityURL.getUpdateDate(),date);
 					arr[2]=days;
 				}
-				for(int i=1;i<1000;i++){
+				for(int i=1;i<1300;i++){
 				arr[1]=i;
 				String cityUrl = cityURL.getUrl();
 				String url =  MessageFormat.format(cityUrl, arr);

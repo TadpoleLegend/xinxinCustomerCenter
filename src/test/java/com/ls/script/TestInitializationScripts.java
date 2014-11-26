@@ -120,4 +120,9 @@ public class TestInitializationScripts {
 	public void removeProblems() {
 		problemRepository.deleteAll();
 	}
+	
+	@Test
+	public void removeCompany() {
+		companyRepository.deleteAll();
+	}
 }
