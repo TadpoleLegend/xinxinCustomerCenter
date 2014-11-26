@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilForGanJi;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
+import com.ls.service.GrabService;
 import com.ls.util.DateUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
@@ -26,7 +29,8 @@ public class TestGrabGanji {
 	private CityURLRepository cityURLRepository;
 	@Autowired
 	private CompanyRepository companyRepository;
-	
+	@Resource(name = "grabService")
+	private GrabService grabService;
 	
 	@Test
 	public void testGrabCompanyList() throws Exception{
@@ -57,7 +61,13 @@ public class TestGrabGanji {
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
 					company.setResouceType(ResourceTypeEnum.Ganji.getId());
-					companyRepository.save(company);
+					grabService.mergeCompanyData(company, ResourceTypeEnum.Ganji.getId());
+					System.out.println(company.getPhoneSrc());
+					System.out.println(company.getEmailSrc());
+					System.out.println(company.getContactor());
+					System.out.println(company.getAddress());
+					System.out.println(company.getEmployeeCount());
+//					companyRepository.save(company);
 				}
 				
 				}

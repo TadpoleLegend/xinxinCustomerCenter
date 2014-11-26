@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilFor58;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
+import com.ls.service.GrabService;
 import com.ls.util.DateUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,23 +34,8 @@ public class TestGrab58 {
 	@Autowired
 	private CityURLRepository cityURLRepository;
 	
-	public static void main(String []args){
-		
-		String testURL = "http://www.ganji.com/gongsi/22725929/";
-		int index = testURL.indexOf("gongsi");
-		
-		if(index!=-1){
-			String sub = testURL.substring(index+7);
-			int sIndex = sub.indexOf("/");
-			if(sIndex!=-1){
-				String ssub = sub.substring(0,sIndex);
-				System.err.println(ssub);
-				}
-			}
-			
-	}
-	
-	
+	@Resource(name = "grabService")
+	private GrabService grabService;
 	
 	@Test
 	public void testGrabCompanyList() throws Exception{
@@ -59,18 +47,19 @@ public class TestGrab58 {
 				int days= 0;
 				Object [] arr = new Object[3];
 				StringBuffer sb1=new StringBuffer();
-				sb1.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)).append(cal.get(Calendar.DAY_OF_MONTH));
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+				sb1.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)+1).append(cal.get(Calendar.DAY_OF_MONTH));
 				arr[2] = sb1.toString();
 				if(cityURL.getUpdateDate()==null){
 					cal.add(Calendar.DAY_OF_YEAR, -45);
 					StringBuffer sb2=new StringBuffer();
-					sb2.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)).append(cal.get(Calendar.DAY_OF_MONTH));
+					sb2.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)+1).append(cal.get(Calendar.DAY_OF_MONTH));
 					arr[1]=sb2.toString();
 				}else{
 					days = DateUtils.minusDate(cityURL.getUpdateDate(),date);
-					cal.add(Calendar.DAY_OF_YEAR, -days);
+					cal.add(Calendar.DAY_OF_YEAR, -(days+1));
 					StringBuffer sb2=new StringBuffer();
-					sb2.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)).append(cal.get(Calendar.DAY_OF_MONTH));
+					sb2.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)+1).append(cal.get(Calendar.DAY_OF_MONTH));
 					arr[1]=sb2.toString();
 				}
 				for(int i=1;i<1000;i++){
@@ -87,8 +76,15 @@ public class TestGrab58 {
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
 					company.setResouceType(ResourceTypeEnum.FiveEight.getId());
-					companyRepository.save(company);
+					System.out.println(company.getPhoneSrc());
+					System.out.println(company.getEmailSrc());
+					System.out.println(company.getContactor());
+					System.out.println(company.getAddress());
+					System.out.println(company.getEmployeeCount());
+//					grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
+//					companyRepository.save(company);
 				}
+				Thread.currentThread().sleep(1000*10);
 				
 				}
 			}
