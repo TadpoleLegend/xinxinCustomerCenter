@@ -280,7 +280,7 @@ public class GrabServiceImpl implements GrabService {
 		}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
 			dataBaseCompany = this.companyRepository.findCompanyFor58GrabJob(company.getCityId(), company.getfEresourceId(),company.getName());
 		}
-		if(company == null){
+		if(dataBaseCompany == null){
 			this.companyRepository.save(company);
 		}else{
 			ruleSaveForCompany(dataBaseCompany,company,recourceType);

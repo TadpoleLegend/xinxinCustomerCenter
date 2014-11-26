@@ -233,6 +233,12 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			e.printStackTrace();
 		}
 		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companyList,ResourceTypeEnum.OneThreeEight.getId());
+		List<Company> returnCompanyList = reduceDuplicateCompany(companyList,map);
+		return returnCompanyList;
+	}
+	
+	
+	private List<Company> reduceDuplicateCompany( List<Company> companyList,Map<String,String> map){
 		List<Company> returnCompanyList = new ArrayList<Company>();
 		for(Company company:companyList){
 			if(map.containsKey(company.getoTEresourceId())){
@@ -241,6 +247,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 					parseContactDivForTelAndMobile(contactDiv,company);
 					parseContactDivForContactPerson(contactDiv,company);
 					parseContactDivForAddress(contactDiv,company);
+					map.remove(company.getoTEresourceId());
 					returnCompanyList.add(company);
 				} catch (FailingHttpStatusCodeException e) {
 					e.printStackTrace();
@@ -253,8 +260,6 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	}
 	
 	private String parseContactDivForAddress(String detailPageHtml,final Company company){
-
-
 		final StringBuffer id = new StringBuffer();
 		try {
 			Parser htmlParser = new Parser();

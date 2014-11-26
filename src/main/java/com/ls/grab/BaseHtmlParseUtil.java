@@ -1,7 +1,5 @@
 package com.ls.grab;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
@@ -10,11 +8,9 @@ import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.Div;
 import org.htmlparser.util.ParserException;
 
-import com.ls.entity.Company;
-
-public abstract class BaseHtmlParseUtil {
+public class BaseHtmlParseUtil {
 	
-	public static Div findFirstOneWithClassName(String html, final String className) {
+	public Div findFirstOneWithClassName(String html, final String className) {
 		Node[] nodes = null;
 		try {
 			Parser htmlParser = new Parser();
@@ -41,7 +37,7 @@ public abstract class BaseHtmlParseUtil {
 		return null;
 	}
 	
-	public static Node findNodeById(String html, final String divId) {
+	public Node findNodeById(String html, final String divId) {
 
 		try {
 
@@ -77,7 +73,7 @@ public abstract class BaseHtmlParseUtil {
 
 		return null;
 	}
-	public static Node findNodeByClassId(String html, final String divId) {
+	public  Node findNodeByClassId(String html, final String divId) {
 
 		try {
 
@@ -114,10 +110,4 @@ public abstract class BaseHtmlParseUtil {
 		return null;
 	}
 	
-	public abstract List<Company> findPagedCompanyList(String url);
-	public abstract String findCompanyAddress(String wholeCityPageHTML);
-	public abstract String findContactorPhoneNumberImgSrc(String detailPageHtml);
-	public abstract String findContactorName(String detailPageHtml);
-	public abstract String findCompanyEmployeeCount(String detailPageHtml);
-	public abstract String findCompanyDescription(String html);
 }
