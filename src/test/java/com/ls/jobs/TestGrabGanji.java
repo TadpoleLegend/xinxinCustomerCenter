@@ -61,12 +61,14 @@ public class TestGrabGanji {
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
 					company.setResouceType(ResourceTypeEnum.Ganji.getId());
+					System.out.println(company.getDescription());
 					grabService.mergeCompanyData(company, ResourceTypeEnum.Ganji.getId());
 					System.out.println(company.getPhoneSrc());
 					System.out.println(company.getEmailSrc());
 					System.out.println(company.getContactor());
 					System.out.println(company.getAddress());
 					System.out.println(company.getEmployeeCount());
+					
 //					companyRepository.save(company);
 				}
 				

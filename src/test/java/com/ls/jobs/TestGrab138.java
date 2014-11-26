@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilFor138;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
+import com.ls.service.GrabService;
 import com.ls.util.DateUtils;
 import com.ls.util.XinXinUtils;
 
@@ -27,7 +30,8 @@ public class TestGrab138 {
 	private CityURLRepository cityURLRepository;
 	@Autowired
 	private CompanyRepository companyRepository;
-	
+	@Resource(name = "grabService")
+	private GrabService grabService;
 	
 	@Test
 	public void testGrabCompanyList() throws Exception{
@@ -58,7 +62,8 @@ public class TestGrab138 {
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
 					company.setResouceType(ResourceTypeEnum.OneThreeEight.getId());
-					companyRepository.save(company);
+//					companyRepository.save(company);
+					grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
 				}
 				
 				}

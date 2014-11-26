@@ -50,7 +50,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	static{
 		webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
-//		login138();
+		login138();
 	}
 	
 	public static HtmlParserUtilFor138 getInstance(){

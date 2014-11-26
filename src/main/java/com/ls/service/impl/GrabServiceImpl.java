@@ -272,19 +272,32 @@ public class GrabServiceImpl implements GrabService {
 	}
 	
 	public void mergeCompanyData(Company company,String recourceType){
-		Company dataBaseCompany = null;
-		if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
-			dataBaseCompany = this.companyRepository.findCompanyFor138GrabJob(company.getCityId(), company.getoTEresourceId(),company.getName());
-		}else if(ResourceTypeEnum.Ganji.getId().equals(recourceType)){
-			dataBaseCompany = this.companyRepository.findCompanyForGanjiGrabJob(company.getCityId(), company.getGanjiresourceId(),company.getName());
-		}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
-			dataBaseCompany = this.companyRepository.findCompanyFor58GrabJob(company.getCityId(), company.getfEresourceId(),company.getName());
-		}
-		if(dataBaseCompany == null){
-			this.companyRepository.save(company);
-		}else{
-			ruleSaveForCompany(dataBaseCompany,company,recourceType);
-			this.companyRepository.save(dataBaseCompany);
+		try {
+			Company dataBaseCompany = null;
+			if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
+				dataBaseCompany = this.companyRepository.findCompanyFor138GrabJob(company.getCityId(), company.getoTEresourceId(),company.getName());
+			}else if(ResourceTypeEnum.Ganji.getId().equals(recourceType)){
+				dataBaseCompany = this.companyRepository.findCompanyForGanjiGrabJob(company.getCityId(), company.getGanjiresourceId(),company.getName());
+			}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
+				dataBaseCompany = this.companyRepository.findCompanyFor58GrabJob(company.getCityId(), company.getfEresourceId(),company.getName());
+			}
+			if(dataBaseCompany == null){
+				try {
+					company.setGrabDate(DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss"));
+					this.companyRepository.save(company);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}else{
+				ruleSaveForCompany(dataBaseCompany,company,recourceType);
+				try {
+					this.companyRepository.save(dataBaseCompany);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	/**

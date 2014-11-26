@@ -81,7 +81,7 @@ public class TestGrab58 {
 					System.out.println(company.getContactor());
 					System.out.println(company.getAddress());
 					System.out.println(company.getEmployeeCount());
-//					grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
+					grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
 //					companyRepository.save(company);
 				}
 				Thread.currentThread().sleep(1000*10);
