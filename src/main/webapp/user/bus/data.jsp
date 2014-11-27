@@ -58,12 +58,11 @@
 						<hr>
 						<div class="row">
 							<div class="three columns">
-								<label>公司名称</label> <input type="text" class="addon-postfix"
-									data-bind="value : seachCompany" />
+								<label>公司名称</label> 
+								<input type="text" class="addon-postfix" data-bind="value : seachCompany" />
 							</div>
 							<div class="three columns">
-								<label>联系人</label> <input type="text" class="addon-postfix"
-									data-bind="value : searchContactor" />
+								<label>联系人</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
 							</div>
 
 							<div class="three columns">
@@ -72,8 +71,7 @@
 							</div>
 							<div class="three columns">
 								<label>星级</label>
-								<div id="starInput"
-									data-bind="attr: { 'starInput' : starInput }"></div>
+								<div id="starInput" data-bind="attr: { 'starInput' : starInput }"></div>
 								<input type="checkbox" data-bind="checked : allStar">
 								包含所有星级
 							</div>
@@ -115,8 +113,12 @@
 												<b data-bind="text : contactor"></b>
 											</div>
 											<div class="three columns">
-												<label class="input-checkbox"> <img style="margin-left: 45px" alt="电话号码"
-													data-bind="attr: { 'src' : phone_src }"></label>
+												<label class="input-checkbox"> 
+													<img style="margin-left: 45px" alt="电话号码" data-bind="attr: { 'src' : phone_src }, visible : mobilePhoneSrc == '' ">
+													<img style="margin-left: 45px" alt="手机号码" data-bind="attr: { 'src' : mobilePhoneSrc }, visible : mobilePhoneSrc != '' ">
+													<span data-bind="text : mobilePhone, visible : mobilePhone != '' "></span>
+													<span data-bind="text : phone, visible : mobilePhone == '' && phone != '' "></span>
+												</label>
 											</div>
 											<div class="two columns">
 												<div class="star listStar" data-bind="attr : {'star' : star, 'id': id}"></div>
@@ -201,7 +203,7 @@
 											</div>
 											<div class='three columns'>
 												<label>手机</label><label class="input-checkbox"> 
-													<img alt="电话号码" data-bind="attr: { 'src' : phone_src }">
+													<img alt="电话号码" data-bind="attr: { 'src' : mobilePhoneSrc }">
 												</label>
 											</div>
 											<div class='three columns'>
@@ -219,7 +221,7 @@
 									</div>
 									<div class="row">
 										<label>公司简介</label>
-										<textarea name="ex-textarea-4"></textarea>
+										<textarea data-bind="value : description"></textarea>
 									</div>
 									<br>
 									<h4 class="text-success">补充客户信息</h4>
@@ -627,7 +629,7 @@
 						
 					};
 					
-					var Company = function(id, name, contactor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status) {
+					var Company = function(id, name, contactor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description) {
 						var self = this;
 						
 						self.id = id;
@@ -637,7 +639,8 @@
 						self.email_src = email_src;
 						self.phone = phone;
 						self.phone_src = phone_src;
-						self.mobilePhone = '';
+						self.mobilePhone = mobilePhone;
+						self.mobilePhoneSrc = mobilePhoneSrc;
 						self.star = star;
 						self.address = address;
 						self.distinct = distinct;
@@ -648,7 +651,7 @@
 						self.provinceId = '';
 						self.cityId = '';
 						self.cityOptions = '';
-						self.description = null;
+						self.description = description;
 					};
 					
 					var CompanyAddtion = function() {
@@ -1330,8 +1333,11 @@
 							self.companyList.removeAll();
 
 							$.each(data.elements, function(index, value) {
-								var new_phone_src = "/ls/img/" + value.phoneSrc;
-								var new_email_src = "/ls/img/" + value.emailSrc;
+								//var new_phone_src = "/ls/img/" + value.phoneSrc;
+								//var new_email_src = "/ls/img/" + value.emailSrc;
+								
+								var new_phone_src =  value.phoneSrc;
+								var new_email_src =  value.emailSrc;
 								
 								var problems = new Array();
 								
@@ -1339,7 +1345,7 @@
 									problems.push(n.name);
 								});
 								
-								var company = new Company(value.id, value.name, value.contactor, value.email, new_email_src, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.fEurl, value.status);
+								var company = new Company(value.id, value.name, value.contactor, value.email, new_email_src, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.fEurl, value.status, value.mobilePhone, value.mobilePhoneSrc, value.description);
 
 								self.companyList.push(company);
 								

@@ -1,5 +1,6 @@
 package com.ls.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,6 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +21,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import com.ls.constants.XinXinConstants;
+import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
 import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
+import com.ls.entity.Province;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.ProblemRepository;
+import com.ls.repository.ProvinceRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.CompanySearchVo;
@@ -41,6 +44,9 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private ProblemRepository problemRepository;
+	
+	@Autowired
+	private ProvinceRepository provinceRepository;
 
 	
 	@Autowired
@@ -64,13 +70,6 @@ public class CompanyServiceImpl implements CompanyService {
 
 		return problemRepository.save(problem);
 	}
-
-	
-	public Page<Company> getCompanyInPage(String companyNameParam, String contactorParam, String starParam, String allStarCheckboxParam, String distinctParam, Integer pageNumber) {
-		Page<Company> companyPage = companyRepository.findAll(generateSpecification(companyNameParam, contactorParam, starParam, allStarCheckboxParam, distinctParam), new PageRequest(pageNumber, 5));
-		
-		return companyPage;
-	}
 	
 	public Page<Company> getCompanyInPage(final CompanySearchVo companySearchVo) {
 		
@@ -88,46 +87,13 @@ public class CompanyServiceImpl implements CompanyService {
 		 
 		 return companyPage;
 	}
-	
-	private Specification<Company> generateSpecification(final String companyNameParam, final String contactorParam, final String starParam, final String allStarCheckboxParam, final String distinctParam) {
-		
-		return new Specification<Company>() {
-
-			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-				Predicate predicate = cb.conjunction();
-				
-				if (StringUtils.isNotBlank(companyNameParam)) {
-					predicate.getExpressions().add(cb.like(root.<String> get("name"), "%" + companyNameParam.trim() + "%"));
-				}
-				
-				if (StringUtils.isNotBlank(contactorParam)) {
-					predicate.getExpressions().add(cb.equal(root.<String> get("contactor"), contactorParam.trim()));
-				}
-				
-				if (StringUtils.isNotBlank(distinctParam)) {
-					predicate.getExpressions().add(cb.equal(root.<String> get("area"), distinctParam.trim()));
-				}
-				
-				if (StringUtils.isNotBlank(allStarCheckboxParam)) {
-					
-					//all star true : ignore star value
-					if (allStarCheckboxParam.trim().equalsIgnoreCase("false")) {
-						predicate.getExpressions().add(cb.equal(root.<String> get("star"), Integer.valueOf(starParam)));
-					}
-				}
-				return predicate;
-			}
-		};
-
-	}
 
 	private Specification<Company> generateSpecification(final CompanySearchVo companySearchVo) {
 		return new Specification<Company>() {
 
 			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
-				root = query.from(Company.class);
+			//	root = query.from(Company.class);
 				
 				Predicate predicate = criteriaBuilder.conjunction();
 				
@@ -155,17 +121,30 @@ public class CompanyServiceImpl implements CompanyService {
 				}
 				
 				if (StringUtils.isNotBlank(companySearchVo.getCityId())) {
+					
 					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("cityId"), companySearchVo.getCityId().trim()));
+					
+				} else if (StringUtils.isNotBlank(companySearchVo.getProvinceId())) {
+					Province province = provinceRepository.findOne(Integer.valueOf(companySearchVo.getProvinceId()));
+					List<City> cities = province.getCitys();
+					
+					List<Integer> cityIds = new ArrayList<Integer>();
+					for (City city : cities) {
+						cityIds.add(city.getId());
+					}
+					
+					predicate.getExpressions().add(root.get("cityId").in(cityIds));
 				}
 				
-				if (StringUtils.isNotBlank(companySearchVo.getProvinceId())) {
-					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("provinceId"), companySearchVo.getProvinceId().trim()));
-				}
-				
-				Join<Company, PhoneCallHistory> phoneCallHistoryJoin = root.join("phoneCallHistories", JoinType.LEFT);
-				
-				predicate.getExpressions().add(criteriaBuilder.equal(phoneCallHistoryJoin.get("nextDate"), "2014-11-28"));
-				
+//				Join<Company, PhoneCallHistory> phoneCallHistoryJoin = root.join("phoneCallHistories", JoinType.LEFT);
+//				
+//				try {
+//					predicate.getExpressions().add(criteriaBuilder.equal(phoneCallHistoryJoin.get("nextDate"), XinXinConstants.SIMPLE_DATE_FORMATTER.parse("2014-11-28")));
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
 				//user private customer shown on the most top.
 				Order ownerUserIdOrder = criteriaBuilder.desc(root.get("ownerUserId"));
 				Order starOrder = criteriaBuilder.desc(root.get("star"));

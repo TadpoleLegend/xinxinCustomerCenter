@@ -16,7 +16,7 @@ public class XinXinConstants {
 
 	public static final SimpleDateFormat FULL_DATE_FORMATTER = new SimpleDateFormat(FULL_DATE_FORMAT_STRING);
 	
-	public static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat(FULL_DATE_FORMAT_STRING);
+	public static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat(SIMPLE_DATE_FORMAT_STRING);
 	
 	public static final String COMPANY_TYPE = "company_type";
 }

@@ -82,7 +82,7 @@ public class TestInitializationScripts {
 
 		List<Company> companies = companyRepository.findAll();
 		for (Company company : companies) {
-			company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId().toString());
+			company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
 			company.setIsTracked(false);
 			company.setStar(0);
 			

@@ -11,25 +11,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.ls.constants.XinXinConstants;
+
 @Entity
-@Table(name="ls_phone_call_history")
+@Table(name = "ls_phone_call_history")
 public class PhoneCallHistory {
-	
+
 	@Id
 	@GeneratedValue
 	protected Integer id;
-	
+
 	protected String description;
-	
-	protected String createDate;
-	
-	protected String nextDate;
-	
+
+	protected Date createDate;
+
+	protected Date nextDate;
+
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	protected User user;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	protected Company company;
@@ -46,24 +46,24 @@ public class PhoneCallHistory {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 
-	public String getNextDate() {
+	public Date getNextDate() {
 		return nextDate;
 	}
 
-	public void setNextDate(String nextDate) {
+	public void setNextDate(Date nextDate) {
 		this.nextDate = nextDate;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public User getUser() {
@@ -81,11 +81,11 @@ public class PhoneCallHistory {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
+
 	public static PhoneCallHistory createNew() {
 		PhoneCallHistory phoneCallHistory = new PhoneCallHistory();
-		phoneCallHistory.setCreateDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
-		
+		phoneCallHistory.setCreateDate(new Date());
+
 		return phoneCallHistory;
 	}
 }

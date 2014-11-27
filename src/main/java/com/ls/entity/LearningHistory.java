@@ -1,5 +1,7 @@
 package com.ls.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,8 +18,8 @@ public class LearningHistory {
 	@GeneratedValue
 	protected Integer id;
 	
-	protected String startDate;
-	protected String endDate;
+	protected Date startDate;
+	protected Date endDate;
 	protected Integer middleLevelManagerCount;
 	protected Integer highLevelManagerCount;
 	protected String comments;
@@ -54,30 +56,24 @@ public class LearningHistory {
 	}
 
 	
-	public String getStartDate() {
 	
+	
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	
-	public void setStartDate(String startDate) {
-	
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	
-	public String getEndDate() {
-	
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	
-	public void setEndDate(String endDate) {
-	
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
-	
 	public Integer getMiddleLevelManagerCount() {
 	
 		return middleLevelManagerCount;

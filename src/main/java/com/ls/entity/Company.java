@@ -16,11 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.apache.bcel.generic.NEW;
-
 import com.ls.constants.XinXinConstants;
 import com.ls.enums.CustomerStatusEnum;
-import com.ls.util.XinXinUtils;
 
 @Entity
 @Table(name = "ls_company")
