@@ -18,6 +18,7 @@ import com.ls.entity.Phase;
 import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
 import com.ls.entity.User;
+import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.LearningHistoryRepository;
@@ -126,9 +127,28 @@ public class CompanyAction extends BaseAction {
 	}
 	
 	public String saveCompany() {
-		String companyId = getParameter("cid");
 		
-		c = companyRepository.findOne(Integer.valueOf(companyId));
+		String newCompanyJson = getParameter("newCompanyJson");
+		String mannually = getParameter("mannually");
+		Company company = XinXinUtils.getJavaObjectFromJsonString(newCompanyJson, Company.class);
+		
+		if (StringUtils.isNotBlank(mannually) && Boolean.valueOf(mannually)) {
+			//TODO
+			company.setOwnerUserId(1);
+		}
+		
+		//set defaults for new company 
+		if (company.getId() == null) {
+			
+			company.setGrabDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
+			company.setActive(true);
+			company.setIsTracked(false);
+			company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
+		}
+		
+		companyRepository.saveAndFlush(company);
+		
+		setResponse(XinXinUtils.makeGeneralSuccessResponse());
 		
 		return SUCCESS;
 	}
@@ -394,7 +414,7 @@ public class CompanyAction extends BaseAction {
 			String statusId = getParameter("statusId");
 			
 			Company company = companyRepository.findOne(Integer.valueOf(companyId));
-			company.setStatus(statusId);
+			company.setStatus(Integer.valueOf(statusId));
 			
 			companyRepository.save(company);
 			

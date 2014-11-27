@@ -44,12 +44,12 @@
 
 						<div class="row">
 							<div class="three columns">
-								<label>省/直辖市</label> <select
-									data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
+								<label>省/直辖市</label> 
+								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
 							<div class="three columns">
-								<label>市</label> <select
-									data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
+								<label>市</label> 
+								<select data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
 							</div>
 
 							<div class="three columns"></div>
@@ -91,6 +91,7 @@
 				<div class="app-wrapper ui-corner-top" id="companyList">
 					<div class="blue module ui-corner-top clearfix">
 						<h2>客户列表</h2>
+						<h2 class="right"><a class="small white button" data-bind="click : $root.openManageCompanyDialog">录入新的顾客资料</a></h2>
 					</div>
 					<div class="content">
 						<div class="row">
@@ -111,20 +112,18 @@
 													</h5></a>
 											</div>
 											<div class="one columns">
-												<b data-bind="text : contractor"></b>
+												<b data-bind="text : contactor"></b>
 											</div>
 											<div class="three columns">
 												<label class="input-checkbox"> <img style="margin-left: 45px" alt="电话号码"
 													data-bind="attr: { 'src' : phone_src }"></label>
 											</div>
 											<div class="two columns">
-												<div class="star listStar"
-													data-bind="attr : {'star' : star, 'id': id}"></div>
+												<div class="star listStar" data-bind="attr : {'star' : star, 'id': id}"></div>
 											</div>
 											<div class="two columns">
 												<div class="row">
-													<a class="small blue button"
-														data-bind="click : $root.trackCustomer" href="#">查看</a>
+													<a class="small blue button" data-bind="click : $root.trackCustomer" href="#">查看</a>
 												</div>
 											</div>
 										</div>
@@ -145,8 +144,7 @@
 						</div>
 					</div>
 				</div>
-				<div id="selectedCompany" class="row"
-					data-bind="with : selectedCompany" style="display: none;">
+				<div id="selectedCompany" class="row" data-bind="with : selectedCompany" style="display: none;">
 					<div class="app-wrapper ui-corner-top">
 						<div class="gray module ui-corner-top clearfix">
 							<h2>
@@ -199,7 +197,7 @@
 										<div class="row">
 											<div class='three columns'>
 												<label>联系人 </label><input type="text"
-													data-bind="value : contractor">
+													data-bind="value : contactor">
 											</div>
 											<div class='three columns'>
 												<label>手机</label><label class="input-checkbox"> 
@@ -486,6 +484,59 @@
 										</div>
 									</form>
 							</div>
+							<div id="selectedCompanyDialog" title="公司管理" style="display:none;" data-bind="with : $root.newCompany">
+							
+									<form id="companyManageForm">
+										<div class="row">
+											<label class="label"> 公司编号 ：</label> <br> <span data-bind="text : id"></span>
+											</div>
+										<br>
+										<hr>
+										<div class="row">
+											<div class="four columns">
+												<label>省/直辖市</label> 
+												<select class="required" data-bind="options: $root.provinces, optionsCaption: '请选择...', optionsText: 'name', optionsValue: 'id', value: $root.selectedProvinceInDialog, valueAllowUnset: true"></select>
+											</div>
+											<div class="four columns">
+												<label>市/区</label> 
+												<select data-bind="options: $root.citiesForDialog, optionsCaption: '请选择...', optionsText: 'name', optionsValue: 'id', value: cityId, valueAllowUnset: true"></select>
+											</div>
+											<div class='four columns'>
+												<label>名称 </label><input type="text" data-bind="value : name">
+											</div>
+											
+										</div>
+										
+										<div class="row">
+											<div class='four columns'>
+												<label>联系人 </label>
+												<input type="text" data-bind="value : contactor">
+											</div>
+											<div class='four columns'>
+												<label>手机</label>
+												<input type="text" data-bind="value : mobilePhone">
+											</div>
+											<div class='four columns'>
+												<label>固定电话</label>
+												<input type="text" data-bind="value : phone">
+											</div>
+										</div>
+										<div class="row">
+											<div class='six columns'>
+												<label>电子邮件</label>
+												<input type="text" data-bind="value : email">
+											</div>
+										</div>
+										<div class="row">
+											<label>地址 </label> 
+											<input type="text" data-bind="value : address">
+										</div>
+										<div class="row">
+											<label>公司简介</label> 
+											<textarea data-bind="value : description"></textarea>
+										</div>
+									</form>
+							</div>
 							<div id="learningHistoryDialog" title="培训记录管理" style="display:none;" data-bind="with : $root.learningHistory">
 									<form id="learningHistoryForm">
 										<div class="row">
@@ -576,16 +627,17 @@
 						
 					};
 					
-					var Company = function(id, name, contractor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status) {
+					var Company = function(id, name, contactor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status) {
 						var self = this;
 						
 						self.id = id;
 						self.name = name;
-						self.contractor = contractor;
+						self.contactor = contactor;
 						self.email = email;
 						self.email_src = email_src;
 						self.phone = phone;
 						self.phone_src = phone_src;
+						self.mobilePhone = '';
 						self.star = star;
 						self.address = address;
 						self.distinct = distinct;
@@ -593,6 +645,10 @@
 						self.oteUrl = oteUrl;
 						self.selectedProblem = ko.observable('');
 						self.status = status;
+						self.provinceId = '';
+						self.cityId = '';
+						self.cityOptions = '';
+						self.description = null;
 					};
 					
 					var CompanyAddtion = function() {
@@ -678,8 +734,9 @@
 						self.allProblemsConstantB = [];
 						self.allProblemsConstantC = [];
 						self.provinces = ko.observableArray([]);
-						self.selectedProvince =  ko.observable('');
+						self.selectedProvince =  ko.observable(new Province());
 						self.selectedCompany = ko.observable(new Company());
+						self.newCompany = ko.observable(new Company());
 						self.addtion =  ko.observable(new CompanyAddtion());
 						self.problemsTheCompanyHas = ko.observableArray([]);
 						self.phoneCall = ko.observable(new PhoneCallHistory());
@@ -688,6 +745,86 @@
 						self.learningHistoryRecords = ko.observableArray([]);
 						self.learningHistory = ko.observable(new LearningHistory());
 						self.phases = ko.observableArray([]);
+						
+						self.selectedProvinceInDialog = ko.observable(new Province());
+						
+						self.cities = ko.computed(function() {
+							var cityOptions;
+							$.each(self.provinces(), function(i, n){
+								if ( n.id == self.selectedProvince()) {
+									cityOptions = n.cities;
+									console.debug(cityOptions);
+								}
+							});
+							return cityOptions;
+						});
+						
+						self.citiesForDialog = ko.computed(function() {
+							var cityOptions;
+							$.each(self.provinces(), function(i, n){
+								if ( n.id == self.selectedProvinceInDialog()) {
+									cityOptions = n.cities;
+									console.debug(cityOptions);
+								}
+							});
+							return cityOptions;
+						});
+						
+						//self.newCompany.subscribe(function() {
+						//	console.debug(self.selectedProvinceInDialog());
+						//});
+						
+						self.openManageCompanyDialog = function() {
+							$('#wizard').hide();
+							$('#selectedCompanyDialog').dialog({
+								modal : true,
+								width : 909,
+								height : 730,
+								open : function(e) {
+									changeButtonStyleForPopup(e);
+								},
+								
+								buttons : {
+									'保存记录' : function() {
+										self.saveCompany();
+									},
+									'关闭窗口' : function() {
+										self.closeDialog('selectedCompanyDialog');
+									}
+								}
+							});
+						};
+						
+						self.saveCompany = function(item, event) {
+							
+							if ($('#companyManageForm').valid()) {
+								
+								self.newCompany().provinceId = self.selectedProvinceInDialog();
+								
+								$.ajax({
+									url : '/ls/saveCompany.ls',
+									type : 'POST',
+									data : {
+											newCompanyJson : JSON.stringify(self.newCompany()),
+											mannually : true,
+											cityId :  self.newCompany().cityId
+									},
+									success : function(data) {
+										
+										if(isOK(data)) {
+											
+											success(data.message);
+											
+											self.closeDialog('selectedCompanyDialog');
+										} else {
+											
+											fail();
+										}
+									}
+								});
+							}
+							
+						};
 						
 						self.loadLearningHistory = function() {
 							$.ajax({
@@ -1074,23 +1211,18 @@
 							});
 						};
 						
-						self.cities = ko.computed(function() {
-							var cityOptions;
-							$.each(self.provinces(), function(i, n){
-								if (n.id == self.selectedProvince()) {
-									cityOptions =  n.cities;
-								}
-							});
-							return cityOptions;
-						});
 						self.selectedCity = ko.observable('');
 						
 						self.init = function() {
+							
 							 $('#starInput').raty({
+								 
 						           click: function(score, evt) {
-						                         self.starInput(score);
-						                   }
-						         });
+						                self.starInput(score);
+						           }
+							 
+						     });
+							 
 							self.searchCompany();
 							
 							self.loadProblemConstants('员工问题');
@@ -1235,17 +1367,6 @@
 							
 							return found;
 						};
-						
-						self.addProblem = function(item, event) {
-							console.debug(item);
-							console.debug(item.selectedProblem());
-						};
-						
-						self.updateProblem = function(item, event) {
-							
-							return true;
-						};
-						
 					};
 					
 					var companyModel = new CompanyModel();

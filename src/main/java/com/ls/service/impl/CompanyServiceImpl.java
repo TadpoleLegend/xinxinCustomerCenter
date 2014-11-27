@@ -5,8 +5,12 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +20,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
+import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
@@ -67,7 +74,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	public Page<Company> getCompanyInPage(final CompanySearchVo companySearchVo) {
 		
-		 Page<Company> companyPage = companyRepository.findAll(generateSpecification(companySearchVo), new PageRequest(Integer.valueOf(companySearchVo.getPageNumber()), 5));
+		 Page<Company> companyPage = companyRepository.findAll(generateSpecification(companySearchVo), new PageRequest(Integer.valueOf(companySearchVo.getPageNumber()) - 1, 5));
 		 
 		 // fuck lazy loading
 		 List<Company> companies = companyPage.getContent();
@@ -118,37 +125,55 @@ public class CompanyServiceImpl implements CompanyService {
 	private Specification<Company> generateSpecification(final CompanySearchVo companySearchVo) {
 		return new Specification<Company>() {
 
-			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
-				Predicate predicate = cb.conjunction();
+				root = query.from(Company.class);
+				
+				Predicate predicate = criteriaBuilder.conjunction();
+				
+				//TODO
+				predicate.getExpressions().add(criteriaBuilder.or(criteriaBuilder.equal(root.get("ownerUserId"), 1), criteriaBuilder.isNull(root. <Integer> get("ownerUserId")))); //nobody owns it
 				
 				if (StringUtils.isNotBlank(companySearchVo.getCompanyNameParam())) {
-					predicate.getExpressions().add(cb.like(root.<String> get("name"), "%" + companySearchVo.getCompanyNameParam().trim() + "%"));
+					predicate.getExpressions().add(criteriaBuilder.like(root.<String> get("name"), "%" + companySearchVo.getCompanyNameParam().trim() + "%"));
 				}
 				
 				if (StringUtils.isNotBlank(companySearchVo.getContactorParam())) {
-					predicate.getExpressions().add(cb.equal(root.<String> get("contactor"), companySearchVo.getContactorParam().trim()));
+					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("contactor"), companySearchVo.getContactorParam().trim()));
 				}
 				
 				if (StringUtils.isNotBlank(companySearchVo.getDistinctParam())) {
-					predicate.getExpressions().add(cb.equal(root.<String> get("area"), companySearchVo.getDistinctParam().trim()));
+					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("area"), companySearchVo.getDistinctParam().trim()));
 				}
 				
 				if (StringUtils.isNotBlank(companySearchVo.getAllStarCheckboxParam())) {
 					
 					//all star true : ignore star value
 					if (companySearchVo.getAllStarCheckboxParam().trim().equalsIgnoreCase("false")) {
-						predicate.getExpressions().add(cb.equal(root.<String> get("star"), Integer.valueOf(companySearchVo.getAllStarCheckboxParam())));
+						predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("star"), Integer.valueOf(companySearchVo.getAllStarCheckboxParam())));
 					}
 				}
 				
 				if (StringUtils.isNotBlank(companySearchVo.getCityId())) {
-					predicate.getExpressions().add(cb.equal(root.<String> get("cityId"), companySearchVo.getCityId().trim()));
+					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("cityId"), companySearchVo.getCityId().trim()));
 				}
 				
 				if (StringUtils.isNotBlank(companySearchVo.getProvinceId())) {
-					predicate.getExpressions().add(cb.equal(root.<String> get("provinceId"), companySearchVo.getProvinceId().trim()));
+					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("provinceId"), companySearchVo.getProvinceId().trim()));
 				}
+				
+				Join<Company, PhoneCallHistory> phoneCallHistoryJoin = root.join("phoneCallHistories", JoinType.LEFT);
+				
+				predicate.getExpressions().add(criteriaBuilder.equal(phoneCallHistoryJoin.get("nextDate"), "2014-11-28"));
+				
+				//user private customer shown on the most top.
+				Order ownerUserIdOrder = criteriaBuilder.desc(root.get("ownerUserId"));
+				Order starOrder = criteriaBuilder.desc(root.get("star"));
+				
+				List<Order> orders = ImmutableList.of(ownerUserIdOrder, starOrder);	
+				
+				query.orderBy(orders);
+				
 				return predicate;
 			}
 		};

@@ -1,9 +1,9 @@
 package com.ls.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.apache.bcel.generic.NEW;
+
+import com.ls.constants.XinXinConstants;
+import com.ls.enums.CustomerStatusEnum;
+import com.ls.util.XinXinUtils;
 
 @Entity
 @Table(name = "ls_company")
@@ -50,8 +56,9 @@ public class Company implements Serializable {
 	protected String description;
 	protected String grabDate;
 	protected Boolean active;
-	protected String status;
+	protected Integer status;
 	protected String type;
+	protected Integer ownerUserId; //manually input company belongs to the user who inputs it to the system.
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ls_company_problem", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
@@ -273,14 +280,25 @@ public class Company implements Serializable {
 		this.addtion = addtion;
 	}
 
-	public String getStatus() {
+	public Integer getStatus() {
+	
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
+	
 		this.status = status;
 	}
 
+	public Integer getOwnerUserId() {
+	
+		return ownerUserId;
+	}
+	
+	public void setOwnerUserId(Integer ownerUserId) {
+	
+		this.ownerUserId = ownerUserId;
+	}
 
 	public String getoTEresourceId() {
 		return oTEresourceId;
@@ -339,5 +357,17 @@ public class Company implements Serializable {
 	public void setType(String type) {
 	
 		this.type = type;
+	}
+	
+	public static Company create() {
+		
+		Company company = new Company();
+		
+		company.setActive(true);
+		company.setIsTracked(false);
+		company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
+		company.setGrabDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
+		
+		return company;
 	}
 }
