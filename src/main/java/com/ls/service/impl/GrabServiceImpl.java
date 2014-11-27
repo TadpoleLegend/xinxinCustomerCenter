@@ -16,6 +16,7 @@ import com.ls.entity.City;
 import com.ls.entity.CityURL;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyResource;
+import com.ls.entity.NegativeCompany;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.GrapImgUtil;
 import com.ls.grab.HtmlParserUtilPlanB;
@@ -24,8 +25,10 @@ import com.ls.repository.CityRepository;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.CompanyResourceRepository;
+import com.ls.repository.NegativeCompanyRepository;
 import com.ls.service.GrabService;
 import com.ls.util.DateUtils;
+import com.ls.util.XinXinUtils;
 import com.ls.vo.GrabStatistic;
 
 @Service("grabService")
@@ -39,6 +42,9 @@ public class GrabServiceImpl implements GrabService {
 	
 	@Autowired
 	private CompanyRepository companyRepository;
+	
+	@Autowired
+	private NegativeCompanyRepository negativeCompanyRepository;
 	
 	@Autowired
 	private CityRepository cityRepository;
@@ -271,6 +277,29 @@ public class GrabServiceImpl implements GrabService {
 		return true;
 	}
 	
+	private NegativeCompany envelopNegativeCompany(Company company,String recourceType){
+		NegativeCompany nc = new NegativeCompany();
+		try {
+			nc.setCityId(company.getCityId());
+			nc.setSourceType(recourceType);
+			if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
+				nc.setResourceId(company.getoTEresourceId());
+				nc.setUrl(company.getOteUrl());
+			}else if(ResourceTypeEnum.Ganji.getId().equals(recourceType)){
+				nc.setResourceId(company.getGanjiresourceId());
+				nc.setUrl(company.getGanjiUrl());
+			}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
+				nc.setResourceId(company.getfEresourceId());
+				nc.setUrl(company.getfEurl());
+			}
+			nc.setSb_count(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nc;
+		
+	}
+	
 	public void mergeCompanyData(Company company,String recourceType){
 		try {
 			Company dataBaseCompany = null;
@@ -283,8 +312,15 @@ public class GrabServiceImpl implements GrabService {
 			}
 			if(dataBaseCompany == null){
 				try {
-					company.setGrabDate(DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss"));
-					this.companyRepository.save(company);
+					String dateTime = DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss");
+					if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
+						NegativeCompany nc = envelopNegativeCompany(company,recourceType);
+						nc.setGrabDate(dateTime);
+						this.negativeCompanyRepository.save(nc);
+					}else{
+						company.setGrabDate(dateTime);
+						this.companyRepository.save(company);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

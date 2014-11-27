@@ -19,7 +19,6 @@ import org.htmlparser.tags.Div;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ParagraphTag;
-import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
@@ -193,19 +192,6 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 							}
 							
 						}
-					/*	String htmlForPage = null;
-						try {
-							htmlForPage = webClient.getPage(company.getOteUrl()).getWebResponse().getContentAsString();
-						} catch (FailingHttpStatusCodeException e1) {
-							e1.printStackTrace();
-						} catch (MalformedURLException e1) {
-							e1.printStackTrace();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						company.setDescription(findCompanyDescription(htmlForPage));
-						company.setEmployeeCount(findCompanyEmployeeCount(htmlForPage));*/
-						StringBuilder sb = new StringBuilder();
 						String testURL = company.getOteUrl();
 						int index = testURL.lastIndexOf("/");
 						if(index!=-1){
@@ -247,6 +233,10 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 					parseContactDivForTelAndMobile(contactDiv,company);
 					parseContactDivForContactPerson(contactDiv,company);
 					parseContactDivForAddress(contactDiv,company);
+					HtmlPage mainPage = webClient.getPage(company.getOteUrl());
+					String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
+					company.setDescription(findCompanyDescription(wholeCityPageHTML));
+					company.setEmployeeCount(findCompanyEmployeeCount(wholeCityPageHTML));
 					map.remove(company.getoTEresourceId());
 					returnCompanyList.add(company);
 				} catch (FailingHttpStatusCodeException e) {
@@ -450,97 +440,6 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	}
 	
 	
-	
-	private String getCompanyResourceId(String detailPageHtml){
-		final StringBuffer id = new StringBuffer();
-		try {
-			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(detailPageHtml);
-
-			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
-
-				private static final long serialVersionUID = -93037936232004146L;
-
-				public boolean accept(Node node) {
-					if (node instanceof ScriptTag) {
-						ScriptTag scriptTag = (ScriptTag)node;
-						if(scriptTag.getStringText()!=null&&scriptTag.getStringText().trim().contains("var cid=")){
-							String text = scriptTag.getStringText();
-							int beginIndex = text.indexOf("=")+1;
-							int endIndex = text.indexOf(";");
-							id.append(text.substring(beginIndex,endIndex));
-							return true;
-						}
-					}
-					return false;
-				}
-			});
-		} catch (ParserException e) {
-			e.printStackTrace();
-		}
-		return id.toString();
-	}
-	
-	
-	public String findCompanyAddress(String detailPageHtml) {
-
-		final StringBuilder returnBuilder = new StringBuilder();
-
-		try {
-			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(detailPageHtml);
-
-			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
-
-				private static final long serialVersionUID = -93037936232004146L;
-
-				public boolean accept(Node node) {
-					if (node instanceof Bullet) {
-						Bullet bullet = (Bullet) node;
-						if(bullet.getChildren()!=null){
-						Node[] nodeList = bullet.getChildren().toNodeArray();
-
-						// find header, find column
-						boolean foundFlag = false;
-						for (int i = 0; i < nodeList.length; i++) {
-							Node current = nodeList[i];
-							if (!foundFlag && current instanceof TextNode) {
-								TextNode definitionListBullet = (TextNode) current;
-								String tdConent = definitionListBullet.getText();
-								// found!!!!!!
-								if (tdConent.trim().contains("公司地址")) {
-									foundFlag = true;
-								}
-							}
-							
-							// find his name after title found!!
-							if (foundFlag) {
-								if(nodeList.length>=i+3){
-									Node addressCurrent = nodeList[i+2];
-									if (addressCurrent instanceof TextNode) {
-										TextNode addreeTag = (TextNode) addressCurrent;
-										returnBuilder.append(addreeTag.getText());
-										return true;
-									}
-								}
-							}
-
-						}
-					}
-					}
-					return false;
-				}
-			});
-
-		} catch (ParserException e) {
-			e.printStackTrace();
-		}
-
-		return returnBuilder.toString();
-
-	}
-	
-	
 	public String findContactorPhoneNumberImgSrc(String detailPageHtml) {
 
 		final StringBuilder contactorsPhoneImgSrcBuilder = new StringBuilder();
@@ -670,76 +569,62 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	
 
 	
+	
 	public String findCompanyEmployeeCount(String detailPageHtml) {
-		final StringBuilder contactorsBuilder = new StringBuilder();
-
 		try {
-
-			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(detailPageHtml);
-			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
-
-				private static final long serialVersionUID = -93037936232004146L;
-
-				public boolean accept(Node node) {
-					if (node instanceof Bullet) {
-						Bullet bullet = (Bullet) node;
-						if(bullet.getChildren()!=null){
-						Node[] nodeList = bullet.getChildren().toNodeArray();
-
-						// find header, find column
-						boolean contactorHeaderFound = false;
-						for (int i = 0; i < nodeList.length; i++) {
-							Node current = nodeList[i];
-							
-							if (!contactorHeaderFound && current instanceof TextNode) {
-								TextNode definitionListBullet = (TextNode) current;
-								String tdConent = definitionListBullet.getText();
-								// found!!!!!!
-								if (tdConent.trim().contains("公司规模")) {
-									contactorHeaderFound = true;
+			Node node = findNodeByClassId(detailPageHtml,"companyinfo_details");
+			if(node == null){
+				return null;
+			}
+			if(node instanceof Div){
+				Div divNode = (Div)node;
+				Node childNodes [] = divNode.getChildrenAsNodeArray();
+				for(Node cNode:childNodes){
+					if(cNode instanceof ParagraphTag){
+						ParagraphTag pp = (ParagraphTag)cNode;
+						if("bg1".equals(pp.getAttribute("class"))){
+							Node pNodes  [] = pp.getChildrenAsNodeArray();
+							if(pNodes !=null){
+								for(int i=0;i<pNodes.length;i++){
+									boolean flag = false;
+									if(pNodes[i] instanceof TextNode){
+										TextNode tn = (TextNode)pNodes[i];
+										if("员工人数：".equals(tn.getText())){
+											flag = true;
+										}
+									}
+									if(flag){
+										if(pNodes[i+2] instanceof TextNode){
+											TextNode tn = (TextNode)pNodes[i+2];
+											return tn.getText();
+										}
+									}
 								}
 							}
-							
-							// find his name after title found!!
-							if (contactorHeaderFound) {
-								if(nodeList.length>=(2+i)){
-									Node contactorCurrent = nodeList[i+1];
-									if (contactorCurrent instanceof TextNode) {
-										TextNode contactorTag = (TextNode) contactorCurrent;
-											contactorsBuilder.append(contactorTag.getText());
-										return true;
-									}
-								}else{
-									String text = current.getText();
-									if(text!=null){
-										String nText = text.trim().replace("公司规模：", "");
-										contactorsBuilder.append(nText);
-									}
-									return true;
-								}
-							}
-
 						}
 					}
-					}
-					return false;
 				}
-			});
-
-		} catch (ParserException e) {
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return contactorsBuilder.toString();
+		return null;
 	}
 	
 	public String findCompanyDescription(String html) {
-		 Node node = findNodeById(html,"company_description");
-		 if(node != null && node instanceof ParagraphTag){
-			 ParagraphTag pt = (ParagraphTag)node;
-			 return pt.getStringText();
-		 }
+		try {
+			Node node = findNodeByClassId(html,"companyinfo com_intr");
+			if(node == null){
+				return null;
+			}
+			if(node instanceof Div){
+				Div divNode = (Div)node;
+				String desc = divNode.getStringText();
+				return desc == null?null:desc.trim();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		 return null;
 	}
 

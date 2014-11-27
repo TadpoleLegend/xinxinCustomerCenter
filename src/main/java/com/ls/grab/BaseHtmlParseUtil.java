@@ -73,7 +73,7 @@ public class BaseHtmlParseUtil {
 
 		return null;
 	}
-	public  Node findNodeByClassId(String html, final String divId) {
+	public static  Node findNodeByClassId(String html, final String classId) {
 
 		try {
 
@@ -87,9 +87,9 @@ public class BaseHtmlParseUtil {
 					if (node instanceof TagNode) {
 						TagNode tag = (TagNode) node;
 
-						String id = StringUtils.trimToEmpty(tag.getAttribute("id"));
+						String id = StringUtils.trimToEmpty(tag.getAttribute("class"));
 
-						if (StringUtils.isNotBlank(id) && divId.equals(id)) {
+						if (StringUtils.isNotBlank(id) && classId.equals(id)) {
 							return true;
 						}
 					}

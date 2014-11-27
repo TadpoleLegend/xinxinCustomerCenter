@@ -44,7 +44,7 @@ public class TestGrab138 {
 				if(cityURL.getUpdateDate()==null){
 					arr[2]=0;
 				}else{
-					days = DateUtils.minusDate(cityURL.getUpdateDate(),date);
+					days = DateUtils.minusDate(date,cityURL.getUpdateDate());
 					arr[2]=days;
 				}
 				for(int i=1;i<1300;i++){
@@ -62,7 +62,6 @@ public class TestGrab138 {
 				for(Company company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
 					company.setResouceType(ResourceTypeEnum.OneThreeEight.getId());
-//					companyRepository.save(company);
 					grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
 				}
 				
