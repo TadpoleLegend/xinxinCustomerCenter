@@ -3,7 +3,6 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -21,7 +20,6 @@ import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.service.GrabService;
 import com.ls.util.DateUtils;
-import com.ls.util.XinXinUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")

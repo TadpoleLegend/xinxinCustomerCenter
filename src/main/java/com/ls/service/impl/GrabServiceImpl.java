@@ -315,8 +315,11 @@ public class GrabServiceImpl implements GrabService {
 					String dateTime = DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss");
 					if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
 						NegativeCompany nc = envelopNegativeCompany(company,recourceType);
-						nc.setGrabDate(dateTime);
-						this.negativeCompanyRepository.save(nc);
+						NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
+						if(dbNC == null){
+							nc.setGrabDate(dateTime);
+							this.negativeCompanyRepository.save(nc);
+						}
 					}else{
 						company.setGrabDate(dateTime);
 						this.companyRepository.save(company);
