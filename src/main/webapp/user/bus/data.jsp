@@ -15,6 +15,88 @@
 <link rel="stylesheet" href="/ls/css/flat-ui.css">
 <link rel="stylesheet" href="/ls/css/bwizard.css">
 
+<style type="text/css">
+.form-wrapper {
+    width: 450px;
+    padding: 8px;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #dedede #bababa #aaa #bababa;
+    box-shadow: 0 3px 3px rgba(255,255,255,.1), 0 3px 0 #bbb, 0 4px 0 #aaa, 0 5px 5px #444;
+    border-radius: 10px;    
+    background-color: #f6f6f6;
+    background-image: linear-gradient(top, #f6f6f6, #eae8e8);
+}
+
+.form-wrapper #search {
+    width: 330px;
+    padding: 10px 5px;
+    float: left;    
+    font: bold 16px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 1px #ddd inset, 0 1px 0 #fff;
+    border-radius: 3px;      
+}
+
+.form-wrapper #search:focus {
+    outline: 0; 
+    border-color: #aaa;
+    box-shadow: 0 1px 1px #bbb inset;  
+}
+
+.form-wrapper #search::-webkit-input-placeholder {
+   color: #999;
+   font-weight: normal;
+}
+
+.form-wrapper #search:-moz-placeholder {
+    color: #999;
+    font-weight: normal;
+}
+
+.form-wrapper #search:-ms-input-placeholder {
+    color: #999;
+    font-weight: normal;
+} 
+
+.form-wrapper #submit {
+    float: right;    
+    border: 1px solid #00748f;
+    height: 42px;
+    width: 100px;
+    padding: 0;
+    cursor: pointer;
+    font: bold 15px Arial, Helvetica;
+    color: #fafafa;
+    text-transform: uppercase;    
+    background-color: #0483a0;
+    background-image: linear-gradient(top, #31b2c3, #0483a0);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;      
+    text-shadow: 0 1px 0 rgba(0, 0 ,0, .3);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 #fff;
+}
+  
+.form-wrapper #submit:hover,
+.form-wrapper #submit:focus {       
+    background-color: #31b2c3;
+    background-image: linear-gradient(top, #0483a0, #31b2c3);
+}   
+  
+.form-wrapper #submit:active {
+    outline: 0;    
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;    
+}
+  
+.form-wrapper #submit::-moz-focus-inner {
+    border: 0;
+}
+
+.noTitle .ui-dialog-titlebar {display : none;}
+</style>
+
 <s:include value="/jsps/common/head.jsp" />
 
 </head>
@@ -34,17 +116,27 @@
 			<div style="color: red">
 				<s:fielderror />
 			</div>
-			
+			<div id="searchboxDialog">
+				<form class="form-wrapper">
+					<input type="text" id="search" placeholder="输入公司编号....." required> <input type="submit" value="走你" id="submit">
+				</form>
+			</div>
 			<div class="row">
 				<div id="searchWrapper" class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
 						<h2>搜索</h2>
 					</div>
 					<div class="content">
+						<div class="row" data-bind="with : $root.searchConditions">
+							<div class="three columns">
+								<label>客户编号</label> 
+								<input type="text" data-bind="value: id">
+							</div>
+						</div>
 
 						<div class="row">
 							<div class="three columns">
-								<label>省/直辖市</label> 
+								<label>省/直辖市</label>
 								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
 							<div class="three columns">
@@ -52,22 +144,27 @@
 								<select data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
 							</div>
 
+							<div class="three columns">
+								<label>所在区</label> 
+								<input type="text" class="addon-postfix" data-bind="value : searchDistinct" />
+							</div>
 							<div class="three columns"></div>
-							<div class="three columns"></div>
+									
 						</div>
-						<hr>
+						<div class="row">
+							
+						</div>
 						<div class="row">
 							<div class="three columns">
 								<label>公司名称</label> 
 								<input type="text" class="addon-postfix" data-bind="value : seachCompany" />
 							</div>
 							<div class="three columns">
-								<label>联系人</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
+								<label>联系人(模糊搜素)</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
 							</div>
 
 							<div class="three columns">
-								<label>所在区</label> <input type="text" class="addon-postfix"
-									data-bind="value : searchDistinct" />
+								
 							</div>
 							<div class="three columns">
 								<label>星级</label>
@@ -597,7 +694,19 @@
 	<script>
 		
 		$(document).ready( function() {
-
+			
+			
+			$('#searchboxDialog').dialog({
+				modal : true,
+				dialogClass : 'noTitle',
+				height : 'auto',
+				width : 'auto',
+				maxHeight: 'auto',
+				maxWidth:'auto',
+				minHeight:'auto',
+				minWidth:'auto',
+				position : ['center', 200]
+			});
 					$("#searchWrapper").accordion({
 						collapsible: true,
 						border: true
@@ -619,6 +728,13 @@
 						"info" : false,
 						"searching" : false
 					});
+					
+					$('#subTabsForSearch').tabs();
+					
+					var SearchConditions = function() {
+						this.id = '';
+					};
+					
 					var Problem = function(id, name) {
 						var self = this;
 						
@@ -750,6 +866,7 @@
 						self.phases = ko.observableArray([]);
 						
 						self.selectedProvinceInDialog = ko.observable(new Province());
+						self.searchConditions = ko.observable(new SearchConditions());
 						
 						self.cities = ko.computed(function() {
 							var cityOptions;

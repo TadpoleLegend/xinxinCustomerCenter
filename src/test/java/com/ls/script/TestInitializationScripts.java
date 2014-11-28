@@ -11,11 +11,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.ls.constants.XinXinConstants;
+import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.Dictionary;
 import com.ls.entity.Phase;
 import com.ls.entity.Step;
 import com.ls.enums.CustomerStatusEnum;
+import com.ls.repository.CityRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
@@ -46,6 +48,9 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private ProblemRepository problemRepository;
+	
+	@Autowired
+	private CityRepository cityRepository;
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {
@@ -114,6 +119,16 @@ public class TestInitializationScripts {
 		List<Dictionary> dictionaries = ImmutableList.of(firstDictionary, secondDictionary, threeDictionary);
 		
 		dropDownRepository.save(dictionaries);
+	}
+	
+	@Test
+	public void removeBuxianCity() {
+		List<City> cities = cityRepository.findAll();
+		for (City city : cities) {
+			if (city.getName().contains("²»ÏÞ")) {
+				cityRepository.delete(city);
+			}
+		}
 	}
 	
 	@Test
