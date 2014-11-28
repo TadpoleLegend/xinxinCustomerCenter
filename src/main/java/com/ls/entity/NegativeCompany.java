@@ -14,15 +14,71 @@ public class NegativeCompany implements Serializable {
 	@Id
 	@GeneratedValue
 	protected Integer id;
-	private String sourceType;
+	private String resourceType;
 	private String url;
 	private Integer cityId;
 	private Integer sb_count;
 	private String resourceId;
 	private String grabDate;
+	private String name;
+	private String description;
+	
+	private String employeeCount;
+	
+	protected String address;
+	
+	protected String area;
+	
+	protected String emailSrc;
+	
+	
+	protected String contactor;
 	
 	
 	
+	
+	public String getContactor() {
+		return contactor;
+	}
+	public void setContactor(String contactor) {
+		this.contactor = contactor;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getArea() {
+		return area;
+	}
+	public void setArea(String area) {
+		this.area = area;
+	}
+	public String getEmailSrc() {
+		return emailSrc;
+	}
+	public void setEmailSrc(String emailSrc) {
+		this.emailSrc = emailSrc;
+	}
+	public String getEmployeeCount() {
+		return employeeCount;
+	}
+	public void setEmployeeCount(String employeeCount) {
+		this.employeeCount = employeeCount;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public String getGrabDate() {
 		return grabDate;
 	}
@@ -34,12 +90,6 @@ public class NegativeCompany implements Serializable {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public String getSourceType() {
-		return sourceType;
-	}
-	public void setSourceType(String sourceType) {
-		this.sourceType = sourceType;
 	}
 	public String getUrl() {
 		return url;
@@ -64,6 +114,12 @@ public class NegativeCompany implements Serializable {
 	}
 	public void setResourceId(String resourceId) {
 		this.resourceId = resourceId;
+	}
+	public String getResourceType() {
+		return resourceType;
+	}
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
 	}
 	
 

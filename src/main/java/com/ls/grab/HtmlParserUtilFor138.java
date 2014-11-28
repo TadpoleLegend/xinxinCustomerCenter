@@ -357,7 +357,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	
 	}
 	
-	private String parseContactDivForTelAndMobile(String detailPageHtml,final Company company){
+	public String parseContactDivForTelAndMobile(String detailPageHtml,final Company company){
 
 		final StringBuffer id = new StringBuffer();
 		try {
@@ -424,7 +424,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	}
 	
 	
-	private String getContactDiv(String resourceId){
+	public String getContactDiv(String resourceId){
 		try {
 			StringBuilder sb = new StringBuilder(address);
 			sb.append(resourceId).append("&t=").append(Calendar.getInstance().getTimeInMillis());
@@ -438,69 +438,6 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 		}
 		return null;
 	}
-	
-	
-	public String findContactorPhoneNumberImgSrc(String detailPageHtml) {
-
-		final StringBuilder contactorsPhoneImgSrcBuilder = new StringBuilder();
-
-		try {
-			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(detailPageHtml);
-
-			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
-
-				private static final long serialVersionUID = -93037936232004146L;
-
-				public boolean accept(Node node) {
-					if (node instanceof Bullet) {
-						Bullet bullet = (Bullet) node;
-						if(bullet.getChildren()!=null){
-						Node[] nodeList = bullet.getChildren().toNodeArray();
-
-						// find header, find column
-						boolean contactorHeaderFound = false;
-						for (int i = 0; i < nodeList.length; i++) {
-							Node current = nodeList[i];
-							if (!contactorHeaderFound && current instanceof TextNode) {
-								TextNode definitionListBullet = (TextNode) current;
-								String tdConent = definitionListBullet.getText();
-								// found!!!!!!
-								if (tdConent.trim().contains("联系电话")) {
-									contactorHeaderFound = true;
-								}
-							}
-							
-							// find his name after title found!!
-							if (contactorHeaderFound) {
-								if(nodeList.length>=i+2){
-									Node imgCurrent = nodeList[i+1];
-									if (imgCurrent instanceof ImageTag) {
-										ImageTag imageTag = (ImageTag) imgCurrent;
-										if("absmiddle".equals(imageTag.getAttribute("align"))){
-											contactorsPhoneImgSrcBuilder.append(imageTag.getImageURL());
-										}
-										return true;
-									}
-								}
-							}
-
-						}
-					}
-					}
-					return false;
-				}
-			});
-
-		} catch (ParserException e) {
-			e.printStackTrace();
-		}
-
-		return contactorsPhoneImgSrcBuilder.toString();
-
-	}
-
-	
 
 	public String findContactorName(String detailPageHtml) {
 		final StringBuilder contactorsBuilder = new StringBuilder();

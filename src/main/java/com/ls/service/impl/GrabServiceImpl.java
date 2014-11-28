@@ -281,7 +281,9 @@ public class GrabServiceImpl implements GrabService {
 		NegativeCompany nc = new NegativeCompany();
 		try {
 			nc.setCityId(company.getCityId());
-			nc.setSourceType(recourceType);
+			nc.setResourceType(recourceType);
+			nc.setName(company.getName());
+			nc.setDescription(company.getDescription());
 			if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
 				nc.setResourceId(company.getoTEresourceId());
 				nc.setUrl(company.getOteUrl());
@@ -292,6 +294,13 @@ public class GrabServiceImpl implements GrabService {
 				nc.setResourceId(company.getfEresourceId());
 				nc.setUrl(company.getfEurl());
 			}
+			nc.setDescription(company.getDescription());
+			nc.setEmployeeCount(company.getEmployeeCount());
+			nc.setName(company.getName());
+			nc.setAddress(company.getAddress());
+			nc.setArea(company.getArea());
+			nc.setContactor(company.getContactor());
+			nc.setEmailSrc(company.getEmailSrc());
 			nc.setSb_count(1);
 		} catch (Exception e) {
 			e.printStackTrace();
