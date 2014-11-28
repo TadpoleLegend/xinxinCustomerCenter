@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>	<html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>	<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]> <html class="no-js ie9" lang="en"> <!--> <html lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	<!-- Set the viewport width to device width for mobile -->
+	<meta name="viewport" content="width=device-width" />
+	<title>Werner Theme</title> 
+	<!-- Required CSS Files -->
+	<link rel="stylesheet" href="https://static.werner.com/werner/2.3/css/styles.css">
+	<link rel="stylesheet" href="https://static.werner.com/werner/2.3/css/foundation/print.css" media="print" />
+	<!--[if lt IE 9]>
+		<link rel="stylesheet" href="https://static.werner.com/werner/2.3/css/foundation/ie.css">
+	<![endif]-->
+	<!-- IE Fix for HTML5 Tags -->
+	<!--[if lt IE 9]>
+		<script src="https://static.werner.com/werner/2.3/js/html5.js"></script>
+	<![endif]-->
+</head>
+<body>	
+	<header id="brand">
+		<div class="container">
+			<div class="row">
+				<h1 class="logo werner">Werner Enterprises</h1>
+				<div class="appname hide-on-phones">Application Name</div>
+				<address>
+ 
+				</address>
+			</div>
+		</div>
+	</header>
+	<!-- .end branding header -->
+	<section class="mainbg">	
+		<div class="container">
+			<div class="row">
+				<div class="content">		
+				</div>
+			</div>
+			<div class="row">
+				<div class="six columns centered">
+					<div class="app-wrapper ui-corner-top">
+						<div class="blue module ui-corner-top clearfix">
+							<h2>Oops!</h2>
+						</div>
+						<div class="content">
+
+							<form class="nice custom">
+
+								<div class="form-field error">
+									<label for="username" class="required">Username</label>					
+									<input type="text" id="username" class="medium input-text" />
+									<div class="inline-validation">That isn't a real user.</div>
+								</div>
+
+								<div class="form-field error">
+									<label for="password" class="required custdrop">Password</label>
+									<div class="row ">
+										<div class="nine columns">
+											<input type="text" id="password" class="medium input-text" autocorrect="off" autocapitalize="off" />
+											<div class="inline-validation">Yikes! Wrong Password.</div>
+										</div>
+										<div class="three columns">
+											<label class="custdrop" style="color:#555 !important;"><input id="showcharacters" name="showcharacters" type="checkbox" /> Mask</label>
+										</div>
+									</div>
+								</div>
+								<p>
+									<input type="submit" class="nice radius medium blue button" value="Log In" />
+									<a href="password.html" class="active tertiary" onclick="">Forgot your password?</a>
+								</p>
+							</form>
+						</div><!-- .end content -->
+					</div><!-- .end wrapper -->	
+				</div><!-- .end six columns -->
+			</div><!-- .end row -->
+		</div><!-- .end container -->
+	</section>
+	<!-- Footer -->	
+	<footer role="footer">
+		<div class="container">
+			<div class="row">
+				<div class="eight columns">
+					<p>Copyright &copy; 2009 - 2013 Werner Enterprises. All rights reserved.</p>
+					<address>
+						<a href="http://www.werner.com/content/about/privacy_policy.cfm" title="View information on our Privacy Policy" class="display-inline" rel="external">Privacy Policy <i class="icon-external-link"></i></a>
+						<a href="http://www.werner.com/content/about/terms_and_conditions.cfm" title="View information on our Terms and Conditions" rel="external">Terms and Conditions <i class="icon-external-link"></i></a>
+						<a href="http://www.werner.com" title="Werner Enterprises consumer website." rel="external">www.werner.com <i class="icon-external-link"></i></a>
+					</address>
+				</div>
+				<div class="four columns"><h6 class="logo smart">Powered by SMART</h6></div>
+			</div>
+		</div>
+	</footer>
+	<!-- Required JS Files -->
+	<script src="https://static.werner.com/werner/2.3/js/jquery-1.8.3.min.js"></script>
+	<script src="https://static.werner.com/werner/2.3/js/jquery-ui-1.8.23.min.js"></script>
+	<script src="https://static.werner.com/werner/2.3/js/werner-theme.js"></script>	
+	<script>
+		$(document).ready(function () {
+
+			$('#showcharacters').click(function () {
+				if ($(this).attr('checked')) {
+					$('#password').replaceWith('<input id="password" name="password" type="password" class="medium input-text" autocorrect="off" autocapitalize="off" value="' + $('#password').attr('value') + '" />');
+				} else {
+					$('#password').replaceWith('<input id="password" name="password" type="text" class="medium input-text" autocorrect="off" autocapitalize="off" value="' + $('#password').attr('value') + '" />');
+				}
+			});
+
+		});
+	</script>
+</body>
+</html>	

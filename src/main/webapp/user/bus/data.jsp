@@ -12,90 +12,9 @@
 <meta name="viewport" content="width=device-width" />
 <title>Data Management</title>
 <link rel="stylesheet" href="/ls/css/jquery.raty.css">
-<link rel="stylesheet" href="/ls/css/flat-ui.css">
+
 <link rel="stylesheet" href="/ls/css/bwizard.css">
-
-<style type="text/css">
-.form-wrapper {
-    width: 450px;
-    padding: 8px;
-    overflow: hidden;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #dedede #bababa #aaa #bababa;
-    box-shadow: 0 3px 3px rgba(255,255,255,.1), 0 3px 0 #bbb, 0 4px 0 #aaa, 0 5px 5px #444;
-    border-radius: 10px;    
-    background-color: #f6f6f6;
-    background-image: linear-gradient(top, #f6f6f6, #eae8e8);
-}
-
-.form-wrapper #search {
-    width: 330px;
-    padding: 10px 5px;
-    float: left;    
-    font: bold 16px 'lucida sans', 'trebuchet MS', 'Tahoma';
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 1px #ddd inset, 0 1px 0 #fff;
-    border-radius: 3px;      
-}
-
-.form-wrapper #search:focus {
-    outline: 0; 
-    border-color: #aaa;
-    box-shadow: 0 1px 1px #bbb inset;  
-}
-
-.form-wrapper #search::-webkit-input-placeholder {
-   color: #999;
-   font-weight: normal;
-}
-
-.form-wrapper #search:-moz-placeholder {
-    color: #999;
-    font-weight: normal;
-}
-
-.form-wrapper #search:-ms-input-placeholder {
-    color: #999;
-    font-weight: normal;
-} 
-
-.form-wrapper #submit {
-    float: right;    
-    border: 1px solid #00748f;
-    height: 42px;
-    width: 100px;
-    padding: 0;
-    cursor: pointer;
-    font: bold 15px Arial, Helvetica;
-    color: #fafafa;
-    text-transform: uppercase;    
-    background-color: #0483a0;
-    background-image: linear-gradient(top, #31b2c3, #0483a0);
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;      
-    text-shadow: 0 1px 0 rgba(0, 0 ,0, .3);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 #fff;
-}
-  
-.form-wrapper #submit:hover,
-.form-wrapper #submit:focus {       
-    background-color: #31b2c3;
-    background-image: linear-gradient(top, #0483a0, #31b2c3);
-}   
-  
-.form-wrapper #submit:active {
-    outline: 0;    
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;    
-}
-  
-.form-wrapper #submit::-moz-focus-inner {
-    border: 0;
-}
-
-.noTitle .ui-dialog-titlebar {display : none;}
-</style>
+<link rel="stylesheet" href="/ls/css/common.css">
 
 <s:include value="/jsps/common/head.jsp" />
 
@@ -191,8 +110,7 @@
 					<div class="content">
 						<div class="row">
 							共找到<label class="green label" data-bind="text: totalPagesCount"></label>
-							波 ， <label class="yellow label"
-								data-bind="text: totalCompanyCount"></label>个客户
+							组 ， 	<label class="yellow label" data-bind="text: totalCompanyCount"></label>个顾客，当前第<label data-bind="text : currentIndex" class="label ">6</label>页
 						</div>
 						<br>
 						<ul class="smartlist nice" data-bind="foreach: companyList">
@@ -201,8 +119,7 @@
 									<label class="input-checkbox">
 										<div class="row">
 											<div class="four columns text-center">
-												<a style="margin-left: 20px;"
-													data-bind="click:$root.showDetail"><h5>
+												<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><h5>
 														<b data-bind="text : name"></b>
 													</h5></a>
 											</div>
@@ -230,17 +147,7 @@
 								</div>
 							</li>
 						</ul>
-						<div class="row">
-							<div class="three columns"></div>
-							<div class="six columns">
-								<a href="#" class="small blue button"
-									data-bind="click : lastPage, disable : currentIndex() > 1">上一波客户</a>
-								<label class="label yellow" data-bind="text : currentIndex"></label>
-								<a href="#" class="small blue button"
-									data-bind="click : nextPage">下一波客户</a>
-							</div>
-							<div class="three columns"></div>
-						</div>
+						<div class="row" id="companyPagenavigation"></div>
 					</div>
 				</div>
 				<div id="selectedCompany" class="row" data-bind="with : selectedCompany" style="display: none;">
@@ -274,45 +181,66 @@
 								</h4>
 								<div class="content">
 									<div class="row">
+										<div class="three columns">
+											<label>客户编号:</label>  <span  data-bind="text : id" ></span>
+										</div>
+										<div class="three columns">
+											<a data-bind="attr : {url : oteUrl}, click : $root.showDetail.bind($data, 'ote') "><span data-bind="text : oteUrl"></span></a>
+										</div>
+										<div class="three columns">
+											<a data-bind="attr : {href : oteUrl}, click : $root.showDetail.bind($data, 'fe') "><span data-bind="text : fEurl"></span></a>
+										</div>
+										<div class="three columns">
+											<a data-bind="attr : {href : oteUrl}, click : $root.showDetail.bind($data, 'ganji') "><span data-bind="text : ganjiUrl"></span></a>
+										</div>
+									</div>
+									<hr>
+									<div class="row">
 										<div class="row">
 											<div class='three columns'>
 												<label>名称 </label><input type="text"
 													data-bind="value : name" disabled="disabled">
 											</div>
-											<div class='one columns'>
+											<div class='two columns'>
 												<label>区域 </label><input type="text"
 													data-bind="value : distinct">
 											</div>
-											<div class='four columns'>
+											<div class='seven columns'>
 												<label>地址 </label> <input type="text"
 													data-bind="value : address">
 											</div>
-											<div class="four columns">
-												<br>
-												<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><span data-bind="text : oteUrl"></span></a>
-											</div>
 										</div>
 
+										<div class="row">
+												
+										
+										</div>
 										<div class="row">
 											<div class='three columns'>
 												<label>联系人 </label><input type="text"
 													data-bind="value : contactor">
 											</div>
 											<div class='three columns'>
-												<label>手机</label><label class="input-checkbox"> 
-													<img alt="电话号码" data-bind="attr: { 'src' : mobilePhoneSrc }">
+												<label>手机</label>
+												<label class="input-checkbox" data-bind="visible : !mobilePhone"> 
+													<img alt="电话号码" data-bind="attr: { 'src' : mobilePhoneSrc }  ">
 												</label>
+												<input type="text" data-bind="value : mobilePhone, visible : mobilePhone " />
 											</div>
 											<div class='three columns'>
-												<label>固定电话</label><label class="input-checkbox"> 
+												<label>固定电话</label>
+												<label class="input-checkbox" data-bind="visible : !phone"> 
 													<img alt="电话号码" data-bind="attr: { 'src' : phone_src }">
 												</label>
+												<input type="text" data-bind="value : phone, visible : phone" />
 											</div>
-											<div class='three columns'>
+											
+											<div class='three columns' >
 												<label>电子邮件</label>
-													<label class="input-checkbox"> 
+												<label class="input-checkbox" data-bind="visible : email == ''"> 
 													<img alt="电子邮箱" data-bind="attr: { 'src' : email_src }">
 												</label>
+												<input type="text" data-bind="value : email, visible : email" />
 											</div>
 										</div>
 									</div>
@@ -691,6 +619,8 @@
 	<script src="/ls/js/list.js"></script>
 	<script src="/ls/js/jquery.raty.js"></script>
 	<script src="/ls/js/User.js"></script>
+	<script src="/ls/js/jquery.pagination.js"></script>
+	
 	<script>
 		
 		$(document).ready( function() {
@@ -745,7 +675,7 @@
 						
 					};
 					
-					var Company = function(id, name, contactor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description) {
+					var Company = function(id, name, contactor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description, ganjiUrl, fEurl) {
 						var self = this;
 						
 						self.id = id;
@@ -768,6 +698,8 @@
 						self.cityId = '';
 						self.cityOptions = '';
 						self.description = description;
+						self.ganjiUrl = ganjiUrl;
+						self.fEurl = fEurl;
 					};
 					
 					var CompanyAddtion = function() {
@@ -1418,10 +1350,32 @@
 							self.searchCompany();
 						};
 						
-						self.showDetail = function(item, event) {
-							window.open(item.oteUrl, '_blank');
+						self.showDetail = function(type, item, event) {
+							
+							if ( type === 'ote') {
+								window.open(item.oteUrl, '_blank');	
+								return;
+							} else if ( type === 'fe') {
+								window.open(item.fEurl, '_blank');	
+								return;
+							} else if ( type === 'ganji') {
+								window.open(item.ganjiUrl, '_blank');	
+								return;
+							} else {
+								
+								if (item.oteUrl) {
+									window.open(item.oteUrl, '_blank');	
+								} else if (item.fEurl) {
+									window.open(item.fEurl, '_blank');	
+								} else if (item.ganjiUrl) {
+									window.open(item.ganjiUrl, '_blank');	
+								} else {
+									fail("这个公司没有任何网络资源可以显示！");
+								}
+							}
 						};
 						
+						self.pageComponentNotCreated = true;
 						self.searchCompany = function() {
 							$("#searchWrapper").accordion({
 								active: false
@@ -1441,10 +1395,31 @@
 									self.fillCompany(data);
 									success("客户列表已加载。");
 									
+									if (self.pageComponentNotCreated) {
+										$('#companyPagenavigation').pagination(
+												companyModel.totalCompanyCount(), {
+												num_edge_entries: 1, //边缘页数
+												num_display_entries: 10, //主体页数
+												callback: self.pageselectCallback,
+												items_per_page: 5, //每页显示1项
+												prev_text: "前一页",
+												next_text: "后一页",
+												current_page : self.currentIndex() - 1
+											});
+										self.pageComponentNotCreated = false;
+									}
+									
 								}
 							});
 						};
 						
+						self.pageselectCallback = function(page_index, jq){
+							console.debug(page_index);
+							console.debug(jq);
+							self.currentIndex(page_index + 1);
+							self.searchCompany();
+							return false;
+						}
 						self.fillCompany = function(data) {
 							
 							self.companyList.removeAll();
@@ -1462,7 +1437,7 @@
 									problems.push(n.name);
 								});
 								
-								var company = new Company(value.id, value.name, value.contactor, value.email, new_email_src, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.fEurl, value.status, value.mobilePhone, value.mobilePhoneSrc, value.description);
+								var company = new Company(value.id, value.name, value.contactor, value.email, new_email_src, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.oteUrl, value.status, value.mobilePhone, value.mobilePhoneSrc, value.description, value.ganjiUrl, value.fEurl);
 
 								self.companyList.push(company);
 								

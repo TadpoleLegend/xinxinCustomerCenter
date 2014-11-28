@@ -1,5 +1,5 @@
 <!-- Required CSS Files -->
-<link rel="stylesheet" href="/ls/css/style.css">
+<link rel="stylesheet" href="/ls/css/styles.css">
 <link rel="stylesheet" href="/ls/css/style-theme.css" media="print" />
 <link rel="stylesheet" href="/ls/css/messenger.css">
 <link rel="stylesheet" href="/ls/css/messenger-theme-future.css">
