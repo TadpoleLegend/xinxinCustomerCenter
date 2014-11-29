@@ -229,7 +229,8 @@ public class CompanyAction extends BaseAction {
 			Company company = companyRepository.findOne(Integer.valueOf(companyId));
 			
 			PhoneCallHistory phoneCallHistory = XinXinUtils.getJavaObjectFromJsonString(newPhoneCall, PhoneCallHistory.class);
-			phoneCallHistory.setCreateDate(new Date());
+			phoneCallHistory.setCreateDate(XinXinUtils.getNow());
+			phoneCallHistory.setNextDate(XinXinUtils.getStandardDate(phoneCallHistory.getNextDate()));
 			
 			phoneCallHistory.setCompany(company);
 			

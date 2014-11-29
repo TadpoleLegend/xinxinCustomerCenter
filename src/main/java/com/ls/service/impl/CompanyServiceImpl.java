@@ -73,7 +73,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	public Page<Company> getCompanyInPage(final CompanySearchVo companySearchVo) {
 		
-		 Page<Company> companyPage = companyRepository.findAll(generateSpecification(companySearchVo), new PageRequest(Integer.valueOf(companySearchVo.getPageNumber()) - 1, 5));
+		 Page<Company> companyPage = companyRepository.findAll(generateSpecification(companySearchVo), new PageRequest(Integer.valueOf(companySearchVo.getPageNumber()) - 1, 10));
 		 
 		 // fuck lazy loading
 		 List<Company> companies = companyPage.getContent();

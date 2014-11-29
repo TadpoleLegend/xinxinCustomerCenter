@@ -25,12 +25,14 @@ function success(message) {
 		
 		Messenger().post({
 			message : message,
-			showCloseButton : true
+			showCloseButton : true,
+			hideAfter: 2
 		});
 	} else {
 		Messenger().post({
 			message : '<label class=\"text-success\"> 你的操作已经<b>成功</b>执行！</label> <i class="icon-smile small icon-green"></i>',
-			showCloseButton : true
+			showCloseButton : true,
+			hideAfter: 2
 		});
 	}
 	

@@ -1,11 +1,14 @@
 package com.ls.util;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
 
+import com.ls.constants.XinXinConstants;
 import com.ls.entity.Company;
 import com.ls.entity.User;
 import com.ls.enums.ResourceTypeEnum;
@@ -70,4 +73,23 @@ public class XinXinUtils {
 		}
 		return true;
 	}
+	
+	public static Date getStandardDate(String dateString) {
+		
+		try {
+			return XinXinConstants.FULL_DATE_FORMATTER.parse(dateString);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+	public static Date getStandardDate(Date date) {
+		String standardDateString = XinXinConstants.FULL_DATE_FORMATTER.format(date);
+		return getStandardDate(standardDateString);
+	}
+	
+	public static Date getNow() {
+		return getStandardDate(new Date());
+	}
+	
+	
 }

@@ -79,7 +79,7 @@ jQuery.fn.pagination = function(maxentries, opts){
 				if(page_id == current_page){
 					var lnk = jQuery("<span class='label green'>"+(appendopts.text)+"</span>");
 				}else{
-					var lnk = jQuery("<a class='tiny blue button'>"+(appendopts.text)+"</a>")
+					var lnk = jQuery("<a class='tiny blue button' style=\"margin-left: 2px; margin-right: 2px\">"+(appendopts.text)+"</a>")
 						.bind("click", getClickHandler(page_id))
 						.attr('href', opts.link_to.replace(/__id__/,page_id));		
 				}
@@ -99,7 +99,7 @@ jQuery.fn.pagination = function(maxentries, opts){
 				}
 				if(opts.num_edge_entries < interval[0] && opts.ellipse_text)
 				{
-					jQuery("<span>"+opts.ellipse_text+"</span>").appendTo(panel);
+					jQuery("<b>"+opts.ellipse_text+"</b>").appendTo(panel);
 				}
 			}
 			// 产生内部的些链接
@@ -111,7 +111,7 @@ jQuery.fn.pagination = function(maxentries, opts){
 			{
 				if(np-opts.num_edge_entries > interval[1]&& opts.ellipse_text)
 				{
-					jQuery("<span>"+opts.ellipse_text+"</span>").appendTo(panel);
+					jQuery("<b>"+opts.ellipse_text+"</b>").appendTo(panel);
 				}
 				var begin = Math.max(np-opts.num_edge_entries, interval[1]);
 				for(var i=begin; i<np; i++) {
@@ -155,7 +155,10 @@ jQuery.fn.pagination = function(maxentries, opts){
 		// 所有初始化完成，绘制链接
 		drawLinks();
         // 回调函数
-        opts.callback(current_page, this);
+		if(opts.load_first_page) {
+			 opts.callback(current_page, this);
+		}
+       
 	});
 }
 

@@ -22,6 +22,7 @@
 <script>
 	Messenger.options = {
 	    extraClasses: 'messenger-fixed messenger-on-top',
-	    theme: 'future'
+	    theme: 'future',
+	    hideAfter: 5
 	};
 </script>

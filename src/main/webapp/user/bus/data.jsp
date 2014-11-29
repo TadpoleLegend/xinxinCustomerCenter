@@ -96,7 +96,7 @@
 						<div class="row">
 							<div class="six columns centered">
 								<a class="small blue button" href="#"
-									data-bind="click : searchCompany"> 搜索符合条件的客户 </a>
+									data-bind="click : searchCompanyForConditions"> 搜索符合条件的客户 </a>
 							</div>
 						</div>
 					</div>
@@ -119,7 +119,7 @@
 									<label class="input-checkbox">
 										<div class="row">
 											<div class="four columns text-center">
-												<a style="margin-left: 20px;" data-bind="click:$root.showDetail"><h5>
+												<a style="margin-left: 20px;" data-bind="click:$root.showDetail.bind($data, 'anything')"><h5>
 														<b data-bind="text : name"></b>
 													</h5></a>
 											</div>
@@ -238,7 +238,7 @@
 											<div class='three columns' >
 												<label>电子邮件</label>
 												<label class="input-checkbox" data-bind="visible : email == ''"> 
-													<img alt="电子邮箱" data-bind="attr: { 'src' : email_src }">
+													<img alt="电子邮箱" data-bind="attr: { 'src' : emailSrc }">
 												</label>
 												<input type="text" data-bind="value : email, visible : email" />
 											</div>
@@ -675,14 +675,14 @@
 						
 					};
 					
-					var Company = function(id, name, contactor, email, email_src, phone, phone_src, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description, ganjiUrl, fEurl) {
+					var Company = function(id, name, contactor, email, emailSrc, phone, phone_src, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description, ganjiUrl, fEurl) {
 						var self = this;
 						
 						self.id = id;
 						self.name = name;
 						self.contactor = contactor;
 						self.email = email;
-						self.email_src = email_src;
+						self.emailSrc = emailSrc;
 						self.phone = phone;
 						self.phone_src = phone_src;
 						self.mobilePhone = mobilePhone;
@@ -1170,7 +1170,10 @@
 						};
 						
 						
-						
+						self.searchCompanyForConditions = function() {
+							self.currentIndex(1);
+							self.searchCompany();
+						};
 						self.trackCustomer = function(item, event) {
 							
 							self.selectedCompany(item);
@@ -1226,7 +1229,6 @@
 								}
 							});
 							
-							success( item.name + " 信息已加载!" );
 						};
 						
 						self.loadCompanyProblems = function() {
@@ -1393,29 +1395,23 @@
 										},
 								success : function(data) {
 									self.fillCompany(data);
-									success("客户列表已加载。");
 									
-									if (self.pageComponentNotCreated) {
 										$('#companyPagenavigation').pagination(
 												companyModel.totalCompanyCount(), {
 												num_edge_entries: 1, //边缘页数
-												num_display_entries: 10, //主体页数
+												num_display_entries: 15, //主体页数
 												callback: self.pageselectCallback,
-												items_per_page: 5, //每页显示1项
+												items_per_page: 10, //每页显示1项
 												prev_text: "前一页",
 												next_text: "后一页",
-												current_page : self.currentIndex() - 1
+												current_page : self.currentIndex() - 1,
+												load_first_page : false
 											});
-										self.pageComponentNotCreated = false;
-									}
-									
 								}
 							});
 						};
 						
 						self.pageselectCallback = function(page_index, jq){
-							console.debug(page_index);
-							console.debug(jq);
 							self.currentIndex(page_index + 1);
 							self.searchCompany();
 							return false;
@@ -1426,10 +1422,10 @@
 
 							$.each(data.elements, function(index, value) {
 								//var new_phone_src = "/ls/img/" + value.phoneSrc;
-								//var new_email_src = "/ls/img/" + value.emailSrc;
+								//var new_emailSrc = "/ls/img/" + value.emailSrc;
 								
 								var new_phone_src =  value.phoneSrc;
-								var new_email_src =  value.emailSrc;
+								var new_emailSrc =  value.emailSrc;
 								
 								var problems = new Array();
 								
@@ -1437,7 +1433,7 @@
 									problems.push(n.name);
 								});
 								
-								var company = new Company(value.id, value.name, value.contactor, value.email, new_email_src, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.oteUrl, value.status, value.mobilePhone, value.mobilePhoneSrc, value.description, value.ganjiUrl, value.fEurl);
+								var company = new Company(value.id, value.name, value.contactor, value.email, new_emailSrc, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.oteUrl, value.status, value.mobilePhone, value.mobilePhoneSrc, value.description, value.ganjiUrl, value.fEurl);
 
 								self.companyList.push(company);
 								
