@@ -60,24 +60,29 @@ public class GradNegativeCompanyJob {
 	}
 	
 	public void execut(){
-		List<NegativeCompany> list = this.negativeCompanyRepository.findAll();
-		if(!list.isEmpty()){
-			for(NegativeCompany negativeCompany:list){
-				Company company = new Company();
-				if(ResourceTypeEnum.OneThreeEight.getId().equals(negativeCompany.getResourceType())){
-					HtmlParserUtilFor138 parser = HtmlParserUtilFor138.getInstance();
-					String detailPageHtml = parser.getContactDiv(negativeCompany.getResourceId());
-					HtmlParserUtilFor138.getInstance().parseContactDivForTelAndMobile(detailPageHtml,company);
-					if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
-						continue;
+		try {
+			List<NegativeCompany> list = this.negativeCompanyRepository.findAll();
+			if(!list.isEmpty()){
+				for(NegativeCompany negativeCompany:list){
+					Company company = new Company();
+					if(ResourceTypeEnum.OneThreeEight.getId().equals(negativeCompany.getResourceType())){
+						HtmlParserUtilFor138 parser = HtmlParserUtilFor138.getInstance();
+						String detailPageHtml = parser.getContactDiv(negativeCompany.getResourceId());
+						HtmlParserUtilFor138.getInstance().parseContactDivForTelAndMobile(detailPageHtml,company);
+						if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
+							continue;
+						}
+						
+					}else if(ResourceTypeEnum.Ganji.getId().equals(negativeCompany.getResourceType())){
+					}else if(ResourceTypeEnum.FiveEight.getId().equals(negativeCompany.getResourceType())){
 					}
-					
-				}else if(ResourceTypeEnum.Ganji.getId().equals(negativeCompany.getResourceType())){
-				}else if(ResourceTypeEnum.FiveEight.getId().equals(negativeCompany.getResourceType())){
+					envelopCompany(company,negativeCompany);
+					mergeCompanyData(company,negativeCompany.getResourceType());
+					this.negativeCompanyRepository.delete(negativeCompany.getId());
 				}
-				envelopCompany(company,negativeCompany);
-				mergeCompanyData(company,negativeCompany.getResourceType());
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 	}
@@ -123,48 +128,58 @@ public class GradNegativeCompanyJob {
 	 */
 	
 	private void ruleSaveForCompany(Company dbCompany,Company websiteCompany,String recourceType){
-		if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
-			generateDBCompany(dbCompany,websiteCompany);
-		}else if(ResourceTypeEnum.Ganji.getId().equals(recourceType)){
-			if(dbCompany.getoTEresourceId()!=null){
-				dbCompany.setfEresourceId(websiteCompany.getfEresourceId()==null?dbCompany.getfEresourceId():websiteCompany.getfEresourceId());
-				dbCompany.setfEurl(websiteCompany.getfEurl()==null?dbCompany.getfEurl():websiteCompany.getfEurl());
-			}else{
+		try {
+			if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
 				generateDBCompany(dbCompany,websiteCompany);
+			}else if(ResourceTypeEnum.Ganji.getId().equals(recourceType)){
+				if(dbCompany.getoTEresourceId()!=null){
+					dbCompany.setfEresourceId(websiteCompany.getfEresourceId()==null?dbCompany.getfEresourceId():websiteCompany.getfEresourceId());
+					dbCompany.setfEurl(websiteCompany.getfEurl()==null?dbCompany.getfEurl():websiteCompany.getfEurl());
+				}else{
+					generateDBCompany(dbCompany,websiteCompany);
+				}
+			}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
+				if(dbCompany.getoTEresourceId()!=null || dbCompany.getGanjiresourceId()!=null){
+					dbCompany.setGanjiresourceId(websiteCompany.getGanjiresourceId()==null?dbCompany.getGanjiresourceId():websiteCompany.getGanjiresourceId());
+					dbCompany.setGanjiUrl(websiteCompany.getGanjiUrl()==null?dbCompany.getGanjiUrl():websiteCompany.getGanjiUrl());
+				}else{
+					generateDBCompany(dbCompany,websiteCompany);
+				}
 			}
-		}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
-			if(dbCompany.getoTEresourceId()!=null || dbCompany.getGanjiresourceId()!=null){
-				dbCompany.setGanjiresourceId(websiteCompany.getGanjiresourceId()==null?dbCompany.getGanjiresourceId():websiteCompany.getGanjiresourceId());
-				dbCompany.setGanjiUrl(websiteCompany.getGanjiUrl()==null?dbCompany.getGanjiUrl():websiteCompany.getGanjiUrl());
-			}else{
-				generateDBCompany(dbCompany,websiteCompany);
-			}
+			dbCompany.setGrabDate(DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		dbCompany.setGrabDate(DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss"));
 		
 	}
 	
 	private void generateDBCompany(Company dbCompany,Company websiteCompany){
 		
-		dbCompany.setoTEresourceId(websiteCompany.getoTEresourceId()==null?dbCompany.getoTEresourceId():websiteCompany.getoTEresourceId());
-		dbCompany.setfEresourceId(websiteCompany.getfEresourceId()==null?dbCompany.getfEresourceId():websiteCompany.getfEresourceId());
-		dbCompany.setGanjiresourceId(websiteCompany.getGanjiresourceId()==null?dbCompany.getGanjiresourceId():websiteCompany.getGanjiresourceId());
-		
-		dbCompany.setName(websiteCompany.getName()==null?dbCompany.getName():websiteCompany.getName());
-		dbCompany.setContactor(websiteCompany.getContactor()==null?dbCompany.getContactor():websiteCompany.getContactor());
-		dbCompany.setEmail(websiteCompany.getEmail()==null?dbCompany.getEmail():websiteCompany.getEmail());
-		dbCompany.setEmailSrc(websiteCompany.getEmailSrc()==null?dbCompany.getEmailSrc():websiteCompany.getEmailSrc());
-		dbCompany.setPhone(websiteCompany.getPhone()==null?dbCompany.getPhone():websiteCompany.getPhone());
-		dbCompany.setPhoneSrc(websiteCompany.getPhoneSrc()==null?dbCompany.getPhoneSrc():websiteCompany.getPhoneSrc());
-		dbCompany.setMobilePhone(websiteCompany.getMobilePhone()==null?dbCompany.getMobilePhone():websiteCompany.getMobilePhone());
-		dbCompany.setMobilePhoneSrc(websiteCompany.getMobilePhoneSrc()==null?dbCompany.getMobilePhoneSrc():websiteCompany.getMobilePhoneSrc());
-		dbCompany.setAddress(websiteCompany.getAddress()==null?dbCompany.getAddress():websiteCompany.getAddress());
-		dbCompany.setArea(websiteCompany.getArea()==null?dbCompany.getArea():websiteCompany.getArea());
-		dbCompany.setfEurl(websiteCompany.getfEurl()==null?dbCompany.getfEurl():websiteCompany.getfEurl());
-		dbCompany.setOteUrl(websiteCompany.getOteUrl()==null?dbCompany.getOteUrl():websiteCompany.getOteUrl());
-		dbCompany.setGanjiUrl(websiteCompany.getGanjiUrl()==null?dbCompany.getGanjiUrl():websiteCompany.getGanjiUrl());
-		dbCompany.setEmployeeCount(websiteCompany.getEmployeeCount()==null?dbCompany.getEmployeeCount():websiteCompany.getEmployeeCount());
-		dbCompany.setDescription(websiteCompany.getDescription()==null?dbCompany.getDescription():websiteCompany.getDescription());
+		try {
+			dbCompany.setoTEresourceId(websiteCompany.getoTEresourceId()==null?dbCompany.getoTEresourceId():websiteCompany.getoTEresourceId());
+			dbCompany.setfEresourceId(websiteCompany.getfEresourceId()==null?dbCompany.getfEresourceId():websiteCompany.getfEresourceId());
+			dbCompany.setGanjiresourceId(websiteCompany.getGanjiresourceId()==null?dbCompany.getGanjiresourceId():websiteCompany.getGanjiresourceId());
+			
+			dbCompany.setName(websiteCompany.getName()==null?dbCompany.getName():websiteCompany.getName());
+			dbCompany.setContactor(websiteCompany.getContactor()==null?dbCompany.getContactor():websiteCompany.getContactor());
+			dbCompany.setEmail(websiteCompany.getEmail()==null?dbCompany.getEmail():websiteCompany.getEmail());
+			dbCompany.setEmailSrc(websiteCompany.getEmailSrc()==null?dbCompany.getEmailSrc():websiteCompany.getEmailSrc());
+			dbCompany.setPhone(websiteCompany.getPhone()==null?dbCompany.getPhone():websiteCompany.getPhone());
+			dbCompany.setPhoneSrc(websiteCompany.getPhoneSrc()==null?dbCompany.getPhoneSrc():websiteCompany.getPhoneSrc());
+			dbCompany.setMobilePhone(websiteCompany.getMobilePhone()==null?dbCompany.getMobilePhone():websiteCompany.getMobilePhone());
+			dbCompany.setMobilePhoneSrc(websiteCompany.getMobilePhoneSrc()==null?dbCompany.getMobilePhoneSrc():websiteCompany.getMobilePhoneSrc());
+			dbCompany.setAddress(websiteCompany.getAddress()==null?dbCompany.getAddress():websiteCompany.getAddress());
+			dbCompany.setArea(websiteCompany.getArea()==null?dbCompany.getArea():websiteCompany.getArea());
+			dbCompany.setfEurl(websiteCompany.getfEurl()==null?dbCompany.getfEurl():websiteCompany.getfEurl());
+			dbCompany.setOteUrl(websiteCompany.getOteUrl()==null?dbCompany.getOteUrl():websiteCompany.getOteUrl());
+			dbCompany.setGanjiUrl(websiteCompany.getGanjiUrl()==null?dbCompany.getGanjiUrl():websiteCompany.getGanjiUrl());
+			dbCompany.setEmployeeCount(websiteCompany.getEmployeeCount()==null?dbCompany.getEmployeeCount():websiteCompany.getEmployeeCount());
+			dbCompany.setDescription(websiteCompany.getDescription()==null?dbCompany.getDescription():websiteCompany.getDescription());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

@@ -22,6 +22,9 @@ import org.htmlparser.util.ParserException;
 public class LocationUtil {
 	private static LocationUtil locationUtil;
 	private static String place_138_str = "http://s.138job.com/hire/{1}?keyword=&workadd={0}&keywordtype=1&position=0&&releasedate={2}";
+	private final static String file138="138cityWithNoAreaForZhiXiaShi.jsp";
+	private final static String file58="58cityWithNoAreaForZhiXiaShi.jsp";
+	private final static String fileganji="GanjicityWithNoAreaForZhiXiaShi.jsp";
 	private LocationUtil() {}
 
 	public static LocationUtil getInstance() {
@@ -68,7 +71,7 @@ public class LocationUtil {
 	public static Map<String,Map<String,String>> findGanjiCities() {
 		Map<String,Map<String,String>> cities = find58Cities();
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
-		String detailPageHtml = getHTML("ganji_city.jsp");
+		String detailPageHtml = getHTML(fileganji);
 		if(!cities.isEmpty()){
 			for(Entry<String, Map<String, String>>  et:cities.entrySet()){
 				final String provinceName = et.getKey();
@@ -169,7 +172,7 @@ public class LocationUtil {
 	public static Map<String,Map<String,String>> find138Cities() {
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
 		try {
-			String detailPageHtml = getHTML("138_city.jsp");
+			String detailPageHtml = getHTML(file138);
 			Parser htmlParser = new Parser();
 			htmlParser.setInputHTML(detailPageHtml);
 			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
@@ -234,7 +237,7 @@ public class LocationUtil {
 	public static Map<String,Map<String,String>> find58Cities() {
 		String detailPageHtml = null;
 		try {
-			detailPageHtml = getHTML("58_city.jsp");
+			detailPageHtml = getHTML(file58);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
