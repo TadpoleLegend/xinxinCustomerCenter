@@ -106,6 +106,9 @@ public class CompanyAction extends BaseAction {
 		String distinctParam = getParameter("searchDistinct");
 		String cityId = getParameter("cityId");
 		String provinceId = getParameter("provinceId");
+		String starLevelOperator = getParameter("starLevelOperator");
+		String searchId = getParameter("searchId");
+		String customerStatus = getParameter("customerStatus");
 		
 		CompanySearchVo companySearchVo = new CompanySearchVo();
 		companySearchVo.setCompanyNameParam(companyNameParam);
@@ -116,7 +119,9 @@ public class CompanyAction extends BaseAction {
 		companySearchVo.setCityId(cityId);
 		companySearchVo.setProvinceId(provinceId);
 		companySearchVo.setPageNumber(pageNumbersString);
-		
+		companySearchVo.setStarLevelOperator(starLevelOperator);
+		companySearchVo.setSearchId(searchId);
+		companySearchVo.setCustomerStatus(customerStatus);
 		
 		Page<Company> result = companyService.getCompanyInPage(companySearchVo);
 		

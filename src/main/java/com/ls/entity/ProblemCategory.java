@@ -20,6 +20,15 @@ public class ProblemCategory {
 	@OneToMany(mappedBy="problemCategory")
 	protected List<Problem> problem;
 
+	public ProblemCategory() {
+		super();
+	}
+
+	public ProblemCategory(String name) {
+		super();
+		this.name = name;
+	}
+
 	public Integer getId() {
 		return id;
 	}

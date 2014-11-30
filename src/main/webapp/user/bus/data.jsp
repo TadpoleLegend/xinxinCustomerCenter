@@ -29,74 +29,98 @@
 	</header>
 
 	<s:include value="/jsps/common/menu.jsp" />
+	
+	<div id="searchboxDialog" style="display : none;">
+				<form class="form-wrapper">
+					<input type="text" id="search" placeholder="输入公司编号....." required> <input type="button" value="搜索" id="submit">
+				</form>
+	</div>
 	<section class="mainbg">
 		<div id="container">
 
 			<div style="color: red">
 				<s:fielderror />
 			</div>
-			<div id="searchboxDialog">
-				<form class="form-wrapper">
-					<input type="text" id="search" placeholder="输入公司编号....." required> <input type="submit" value="走你" id="submit">
-				</form>
-			</div>
+			
 			<div class="row">
 				<div id="searchWrapper" class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>搜索</h2>
+						<h2>查询顾客信息</h2>
 					</div>
 					<div class="content">
-						<div class="row" data-bind="with : $root.searchConditions">
-							<div class="three columns">
-								<label>客户编号</label> 
-								<input type="text" data-bind="value: id">
-							</div>
-						</div>
-
 						<div class="row">
 							<div class="three columns">
+								<label>客户编号</label> 
+								<input type="text" data-bind="value: searchId">
+							</div>
+							<div class="three columns">
+								<label>客户状态</label>
+								<select data-bind="options: $root.allSteps,
+                      										optionsText: 'name',
+                       									    value: $root.customerStatus,
+                       									    optionsValue : 'id',
+                       									    selectedOption : $root.customerStatus,
+                       									    optionsCaption: '选择客户状态'">
+                       			</select>
+							</div>
+							<div class="three columns">
+								<label>星级搜索类型</label>
+								<select data-bind="options: $root.starLevelOperators,
+                      										optionsText: 'optionText',
+                       									    value: $root.starLevelOperator,
+                       									    optionsValue : 'optionValue',
+                       									    selectedOption : $root.starLevelOperator,
+                       									    optionsCaption: '选择星级比较类型'">
+                       			</select>
+							</div>
+							
+							<div class="three columns">
+								<label>星级</label>
+								<div id="starInput" data-bind="attr: { 'starInput' : starInput }"></div>
+								
+							</div>
+						</div>
+						
+						<hr>
+						<div class="row">
+							<div class="two columns">
 								<label>省/直辖市</label>
 								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
-							<div class="three columns">
+							<div class="two columns">
 								<label>市</label> 
 								<select data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
 							</div>
 
-							<div class="three columns">
-								<label>所在区</label> 
+							<div class="two columns">
+								<label>地区</label> 
 								<input type="text" class="addon-postfix" data-bind="value : searchDistinct" />
 							</div>
-							<div class="three columns"></div>
-									
-						</div>
-						<div class="row">
-							
-						</div>
-						<div class="row">
 							<div class="three columns">
 								<label>公司名称</label> 
 								<input type="text" class="addon-postfix" data-bind="value : seachCompany" />
 							</div>
 							<div class="three columns">
-								<label>联系人(模糊搜素)</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
+								<label>联系人</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
 							</div>
-
+									
+						</div>
+						<div class="row">
+							
+							<hr>
 							<div class="three columns">
 								
 							</div>
-							<div class="three columns">
-								<label>星级</label>
-								<div id="starInput" data-bind="attr: { 'starInput' : starInput }"></div>
-								<input type="checkbox" data-bind="checked : allStar">
-								包含所有星级
-							</div>
+							
+						</div>
+						<div class="row">
+							
 						</div>
 						<hr>
 						<div class="row">
 							<div class="six columns centered">
-								<a class="small blue button" href="#"
-									data-bind="click : searchCompanyForConditions"> 搜索符合条件的客户 </a>
+								<a class="small blue button" href="#" data-bind="click : searchCompanyForConditions"> 搜索符合条件的客户 </a>
+								<a class="small blue button" href="#" data-bind="click : clearAllConditions"> 清除所有搜索条件 </a>
 							</div>
 						</div>
 					</div>
@@ -147,6 +171,10 @@
 								</div>
 							</li>
 						</ul>
+						<div data-bind="visible : companyList().length == 0">
+							<h4 class="text-center">没有查询到符合条件的顾客信息。</h4>
+							<hr>
+						</div>
 						<div class="row" id="companyPagenavigation"></div>
 					</div>
 				</div>
@@ -622,9 +650,7 @@
 	<script src="/ls/js/jquery.pagination.js"></script>
 	
 	<script>
-		
-		$(document).ready( function() {
-			
+		$(document).bind('keypress.alt_1', function() {
 			
 			$('#searchboxDialog').dialog({
 				modal : true,
@@ -637,6 +663,10 @@
 				minWidth:'auto',
 				position : ['center', 200]
 			});
+		});
+	
+		$(document).ready( function() {
+			
 					$("#searchWrapper").accordion({
 						collapsible: true,
 						border: true
@@ -658,8 +688,6 @@
 						"info" : false,
 						"searching" : false
 					});
-					
-					$('#subTabsForSearch').tabs();
 					
 					var SearchConditions = function() {
 						this.id = '';
@@ -766,10 +794,12 @@
 					};
 					
 					var CompanyModel = function() {
+						
 						var self = this;
 
 						self.companyTypes = ko.observableArray([]);
-						
+						self.starLevelOperators = ko.observableArray([]);
+						self.starLevelOperator = ko.observable('');
 						self.companyList = ko.observableArray([]);
 						self.currentIndex = ko.observable(1);
 						self.pageIndexToGo = ko.observable('');
@@ -780,7 +810,7 @@
 						self.seachCompany = ko.observable('');
 						self.searchContactor =  ko.observable('');
 						self.searchDistinct =  ko.observable('');
-						self.allStar = ko.observable(true);
+						self.searchId = ko.observable('');
 						self.allProblemsConstantA = [];
 						self.allProblemsConstantB = [];
 						self.allProblemsConstantC = [];
@@ -799,6 +829,16 @@
 						
 						self.selectedProvinceInDialog = ko.observable(new Province());
 						self.searchConditions = ko.observable(new SearchConditions());
+						self.customerStatus = ko.observable('');
+						
+						self.clearAllConditions = function() {
+							self.starInput(0); 
+							self.searchDistinct('');
+							self.seachCompany(''); 
+							self.searchContactor('');
+							self.selectedCity('');
+							self.selectedProvince('');
+						};
 						
 						self.cities = ko.computed(function() {
 							var cityOptions;
@@ -1173,6 +1213,10 @@
 						self.searchCompanyForConditions = function() {
 							self.currentIndex(1);
 							self.searchCompany();
+							
+							if ($('#companyList').is(':hidden')) {
+								self.toggleListAndDetail();
+							}
 						};
 						self.trackCustomer = function(item, event) {
 							
@@ -1314,9 +1358,18 @@
 								}
 							});
 							$.ajax({
-								url : '/ls/findAllCompanyTypes.ls',
+								url : '/ls/findDropDownDataSouce.ls',
+								data : {identityType : 'company_type'},
 								success : function(data) {
 									self.companyTypes(data);
+								}
+							});
+							
+							$.ajax({
+								url : '/ls/findDropDownDataSouce.ls',
+								data : {identityType : 'star_level_condition'},
+								success : function(data) {
+									self.starLevelOperators(data);
 								}
 							});
 							
@@ -1377,7 +1430,6 @@
 							}
 						};
 						
-						self.pageComponentNotCreated = true;
 						self.searchCompany = function() {
 							$("#searchWrapper").accordion({
 								active: false
@@ -1389,9 +1441,11 @@
 										searchDistinct: self.searchDistinct(),
 										seachCompany : self.seachCompany(), 
 										searchContactor : self.searchContactor(),
-										allStar : self.allStar(),
 										cityId : self.selectedCity(),
-										provinceId : self.selectedProvince()
+										provinceId : self.selectedProvince(),
+										starLevelOperator : self.starLevelOperator(),
+										searchId : self.searchId(),
+										customerStatus : self.customerStatus()
 										},
 								success : function(data) {
 									self.fillCompany(data);
@@ -1461,6 +1515,10 @@
 							
 							return found;
 						};
+						
+						self.searchByCompanyId = function() {
+							
+						};
 					};
 					
 					var companyModel = new CompanyModel();
@@ -1468,6 +1526,12 @@
 					
 					var $container = $("#container")[0];
 					ko.applyBindings(companyModel, $container);
+					
+					$('#submit').click(function() {
+						companyModel.searchId($('#search').val());
+						companyModel.searchCompany();
+						$('#searchboxDialog').dialog("close");
+					});
 					
 				});
 	</script>

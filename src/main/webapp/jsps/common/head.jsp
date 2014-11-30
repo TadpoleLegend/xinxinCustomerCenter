@@ -18,6 +18,7 @@
 <script src="/ls/js/icheck.js"></script>
 <script src="/ls/js/common.js"></script>
 <script src="/ls/js/knockout-jqueryui.min.js"></script>
+<script src="/ls/js/jquery.hotkeys.js"></script>
 
 <script>
 	Messenger.options = {

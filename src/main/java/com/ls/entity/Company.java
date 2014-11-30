@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 
 import com.ls.constants.XinXinConstants;
 import com.ls.enums.CustomerStatusEnum;
+import com.ls.util.XinXinUtils;
 
 @Entity
 @Table(name = "ls_company")
@@ -56,6 +57,7 @@ public class Company implements Serializable {
 	protected Integer status;
 	protected String type;
 	protected Integer ownerUserId; //manually input company belongs to the user who inputs it to the system.
+	protected Date updateDate;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ls_company_problem", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
@@ -356,6 +358,14 @@ public class Company implements Serializable {
 		this.type = type;
 	}
 	
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
 	public static Company create() {
 		
 		Company company = new Company();
@@ -364,6 +374,7 @@ public class Company implements Serializable {
 		company.setIsTracked(false);
 		company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
 		company.setGrabDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
+		company.setUpdateDate(XinXinUtils.getNow());
 		
 		return company;
 	}

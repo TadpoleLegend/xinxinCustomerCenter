@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.parsing.Problem;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -15,12 +16,14 @@ import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.Dictionary;
 import com.ls.entity.Phase;
+import com.ls.entity.ProblemCategory;
 import com.ls.entity.Step;
 import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
+import com.ls.repository.ProblemCategoryRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.StepRepository;
 
@@ -51,6 +54,9 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private CityRepository cityRepository;
+	
+	@Autowired
+	private ProblemCategoryRepository problemCategoryRepository;
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {
@@ -122,6 +128,18 @@ public class TestInitializationScripts {
 	}
 	
 	@Test
+	public void testProblemCategory() throws Exception {
+		
+		Dictionary firstDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "A", "A类顾客", "");
+		Dictionary secondDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "B", "B类顾客", "");
+		Dictionary threeDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "C", "C类顾客", "");
+		
+		List<Dictionary> dictionaries = ImmutableList.of(firstDictionary, secondDictionary, threeDictionary);
+		
+		dropDownRepository.save(dictionaries);
+	}
+	
+	@Test
 	public void removeBuxianCity() {
 		List<City> cities = cityRepository.findAll();
 		for (City city : cities) {
@@ -139,5 +157,38 @@ public class TestInitializationScripts {
 	@Test
 	public void removeCompany() {
 		companyRepository.deleteAll();
+	}
+	
+	@Test
+	public void testAddStarLevel() {
+		
+		Dictionary allDictionary = new Dictionary(XinXinConstants.STAR_LEVEL_CONDITION, "ALL", "所有星级", "");
+		Dictionary firstDictionary = new Dictionary(XinXinConstants.STAR_LEVEL_CONDITION, ">", "大于", "");
+		Dictionary secondDictionary = new Dictionary(XinXinConstants.STAR_LEVEL_CONDITION, ">=", "大于或者等于", "");
+		Dictionary threeDictionary = new Dictionary(XinXinConstants.STAR_LEVEL_CONDITION, "=", "等于", "");
+		Dictionary lessThanDictionary = new Dictionary(XinXinConstants.STAR_LEVEL_CONDITION, "<", "小于", "");
+		Dictionary lessOrEqualdDictionary = new Dictionary(XinXinConstants.STAR_LEVEL_CONDITION, "<=", "小于或者等于", "");
+		Dictionary notEqualDictionary = new Dictionary(XinXinConstants.STAR_LEVEL_CONDITION, "<>", "不等于", "");
+		
+		List<Dictionary> dictionaries = ImmutableList.of(allDictionary, firstDictionary, secondDictionary, threeDictionary, lessThanDictionary, lessOrEqualdDictionary, notEqualDictionary);
+		
+		dropDownRepository.save(dictionaries);
+	}
+	
+	@Test
+	public void testAddCustomerProblems () {
+		
+		ProblemCategory customerProblemCategory = new ProblemCategory("客户问题");
+		ProblemCategory employeeProblemCategory = new ProblemCategory("员工问题");
+		ProblemCategory otherCategory = new ProblemCategory("其他问题");
+		
+		List<ProblemCategory> categories = ImmutableList.of(customerProblemCategory, employeeProblemCategory, otherCategory);
+		
+		problemCategoryRepository.save(categories);
+	}
+	
+	@Test
+	public void pureTest() {
+		
 	}
 }

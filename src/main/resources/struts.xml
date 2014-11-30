@@ -39,7 +39,7 @@
 				<param name="root">phases</param>
 			</result>
 		</action>
-		<action name="findAllCompanyTypes" class="commonAction" method="findAllCompanyTypes">
+		<action name="findDropDownDataSouce" class="commonAction" method="findDropDownDataSouce">
 			<result name="success" type="json">
 				<param name="root">companyTypes</param>
 			</result>

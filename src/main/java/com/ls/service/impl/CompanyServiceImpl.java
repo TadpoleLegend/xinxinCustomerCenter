@@ -97,6 +97,16 @@ public class CompanyServiceImpl implements CompanyService {
 				
 				Predicate predicate = criteriaBuilder.conjunction();
 				
+				if (StringUtils.isNotBlank(companySearchVo.getSearchId())) {
+					predicate.getExpressions().add(criteriaBuilder.equal(root.get("id"), Integer.valueOf(companySearchVo.getSearchId()))); 
+					
+					return predicate;
+				}
+				
+				if (StringUtils.isNotBlank(companySearchVo.getCustomerStatus())) {
+					Integer status = Integer.valueOf(companySearchVo.getCustomerStatus());
+					predicate.getExpressions().add(criteriaBuilder.equal(root.<Integer> get("status"), status));
+				}
 				//TODO
 				predicate.getExpressions().add(criteriaBuilder.or(criteriaBuilder.equal(root.get("ownerUserId"), 1), criteriaBuilder.isNull(root. <Integer> get("ownerUserId")))); //nobody owns it
 				
@@ -116,7 +126,7 @@ public class CompanyServiceImpl implements CompanyService {
 					
 					//all star true : ignore star value
 					if (companySearchVo.getAllStarCheckboxParam().trim().equalsIgnoreCase("false")) {
-						predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("star"), Integer.valueOf(companySearchVo.getAllStarCheckboxParam())));
+						predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("star"), Integer.valueOf(companySearchVo.getStarParam())));
 					}
 				}
 				
@@ -136,6 +146,24 @@ public class CompanyServiceImpl implements CompanyService {
 					predicate.getExpressions().add(root.get("cityId").in(cityIds));
 				}
 				
+				String starLevelComparator = companySearchVo.getStarLevelOperator();
+				if (StringUtils.isNotBlank(starLevelComparator) && !starLevelComparator.equals("ALL")) {
+					
+					Integer star = Integer.valueOf(companySearchVo.getStarParam());
+					if (starLevelComparator.equals(">")) {
+						predicate.getExpressions().add(criteriaBuilder.greaterThan(root.<Integer> get("star"), star));
+					} else if (starLevelComparator.equals(">=")) {
+						predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Integer> get("star"), star));
+					} else if (starLevelComparator.equals("=")) {
+						predicate.getExpressions().add(criteriaBuilder.equal(root.<Integer> get("star"), star));
+					} else if (starLevelComparator.equals("<")) {
+						predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Integer> get("star"), star));
+					} else if (starLevelComparator.equals("<=")) {
+						predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(root.<Integer> get("star"), star));
+					} else if (starLevelComparator.equals("<>")) {
+						predicate.getExpressions().add(criteriaBuilder.notEqual(root.<Integer> get("star"), star));
+					}
+				}
 //				Join<Company, PhoneCallHistory> phoneCallHistoryJoin = root.join("phoneCallHistories", JoinType.LEFT);
 //				
 //				try {

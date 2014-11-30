@@ -9,7 +9,16 @@ public class CompanySearchVo {
 	private String pageNumber;
 	private String cityId;
 	private String provinceId;
+	private String starLevelOperator;
+	private String searchId;
+	private String customerStatus;
 	
+	public String getStarLevelOperator() {
+		return starLevelOperator;
+	}
+	public void setStarLevelOperator(String starLevelOperator) {
+		this.starLevelOperator = starLevelOperator;
+	}
 	public String getCompanyNameParam() {
 		return companyNameParam;
 	}
@@ -57,6 +66,18 @@ public class CompanySearchVo {
 	}
 	public void setProvinceId(String provinceId) {
 		this.provinceId = provinceId;
+	}
+	public String getSearchId() {
+		return searchId;
+	}
+	public void setSearchId(String searchId) {
+		this.searchId = searchId;
+	}
+	public String getCustomerStatus() {
+		return customerStatus;
+	}
+	public void setCustomerStatus(String customerStatus) {
+		this.customerStatus = customerStatus;
 	}
 	
 }

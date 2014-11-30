@@ -7,8 +7,11 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.ImmutableList;
 import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
 import com.ls.entity.Dictionary;
@@ -114,9 +117,12 @@ public class CommonAction extends BaseAction {
 		return SUCCESS;
 	}
 	
-	public String findAllCompanyTypes() {
+	public String findDropDownDataSouce() {
+		String identityType = getParameter("identityType");
 		
-		companyTypes = dropDownRepository.findByIdentity(XinXinConstants.COMPANY_TYPE);
+	//	Order order = new Order(Direction.ASC, "id");
+	//	Sort sort = new Sort(order);
+		companyTypes = dropDownRepository.findByIdentity(identityType);
 		
 		return SUCCESS;
 	}

@@ -19,4 +19,10 @@ public class XinXinConstants {
 	public static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat(SIMPLE_DATE_FORMAT_STRING);
 	
 	public static final String COMPANY_TYPE = "company_type";
+	
+	public static final String STAR_LEVEL_CONDITION = "star_level_condition";
+	
+	public static final String COMPANY_PROBLEM = "company_problem";
+	
+	public static final String PROBLEM_CATEGORY = "problem_category";
 }
