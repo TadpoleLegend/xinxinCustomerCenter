@@ -3,10 +3,15 @@ package com.ls.jobs;
 import java.util.Calendar;
 import java.util.List;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.entity.Company;
 import com.ls.entity.NegativeCompany;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilFor138;
+import com.ls.grab.HtmlParserUtilFor58;
+import com.ls.grab.HtmlParserUtilForGanJi;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.NegativeCompanyRepository;
 import com.ls.util.DateUtils;
@@ -61,6 +66,8 @@ public class GradNegativeCompanyJob {
 	
 	public void execut(){
 		try {
+			WebClient webClient= new WebClient(BrowserVersion.CHROME);
+			webClient.getOptions().setJavaScriptEnabled(false);
 			List<NegativeCompany> list = this.negativeCompanyRepository.findAll();
 			if(!list.isEmpty()){
 				for(NegativeCompany negativeCompany:list){
@@ -68,17 +75,26 @@ public class GradNegativeCompanyJob {
 					if(ResourceTypeEnum.OneThreeEight.getId().equals(negativeCompany.getResourceType())){
 						HtmlParserUtilFor138 parser = HtmlParserUtilFor138.getInstance();
 						String detailPageHtml = parser.getContactDiv(negativeCompany.getResourceId());
-						HtmlParserUtilFor138.getInstance().parseContactDivForTelAndMobile(detailPageHtml,company);
-						if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
-							continue;
-						}
-						
+						parser.parseContactDivForTelAndMobile(detailPageHtml,company);
 					}else if(ResourceTypeEnum.Ganji.getId().equals(negativeCompany.getResourceType())){
+						HtmlParserUtilForGanJi parse = HtmlParserUtilForGanJi.getInstance();
+						String testURL = negativeCompany.getUrl();
+						HtmlPage mainPage = webClient.getPage(testURL);
+						String htmlDetail = mainPage.getWebResponse().getContentAsString();
+						parse.findCompanyDetails(company, htmlDetail);
 					}else if(ResourceTypeEnum.FiveEight.getId().equals(negativeCompany.getResourceType())){
+						HtmlParserUtilFor58 parse = HtmlParserUtilFor58.getInstance();
+						String testURL = negativeCompany.getUrl();
+						HtmlPage mainPage = webClient.getPage(testURL);
+						String htmlDetail = mainPage.getWebResponse().getContentAsString();
+						parse.findCompanyDetails(company,htmlDetail);
+					}
+					if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
+						continue;
 					}
 					envelopCompany(company,negativeCompany);
-					mergeCompanyData(company,negativeCompany.getResourceType());
-					this.negativeCompanyRepository.delete(negativeCompany.getId());
+					mergeCompanyData(company,negativeCompany.getResourceType(),negativeCompany.getId());
+					
 				}
 			}
 		} catch (Exception e) {
@@ -87,7 +103,7 @@ public class GradNegativeCompanyJob {
 		
 	}
 	
-	public void mergeCompanyData(Company company,String recourceType){
+	public void mergeCompanyData(Company company,String recourceType,Integer negativeCompanyId){
 		try {
 			Company dataBaseCompany = null;
 			if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
@@ -102,6 +118,7 @@ public class GradNegativeCompanyJob {
 						String dateTime = DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss");
 						company.setGrabDate(dateTime);
 						this.companyRepository.save(company);
+						this.negativeCompanyRepository.delete(negativeCompanyId);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
