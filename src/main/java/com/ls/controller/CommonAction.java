@@ -17,10 +17,12 @@ import com.ls.entity.City;
 import com.ls.entity.Dictionary;
 import com.ls.entity.Phase;
 import com.ls.entity.Problem;
+import com.ls.entity.ProblemCategory;
 import com.ls.entity.Province;
 import com.ls.entity.Step;
 import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
+import com.ls.repository.ProblemCategoryRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.repository.StepRepository;
@@ -49,6 +51,9 @@ public class CommonAction extends BaseAction {
 	@Autowired
 	private DropDownRepository dropDownRepository;
 	
+	@Autowired
+	private ProblemCategoryRepository problemCategoryRepository;
+	
 	private List<Dictionary> companyTypes;
 	
 	private List<Problem> problems;
@@ -56,6 +61,7 @@ public class CommonAction extends BaseAction {
 	private List<City> cities;
 	private List<Step> steps;
 	private List<Phase> phases;
+	private List<ProblemCategory> problemCategories;
 	
 	public String findAllPhases() {
 		
@@ -126,6 +132,13 @@ public class CommonAction extends BaseAction {
 		
 		return SUCCESS;
 	}
+	
+	public String findProblemCategories() {
+		
+		problemCategories = problemCategoryRepository.findAll();
+		
+		return SUCCESS;
+	}
 	public List<Province> getProvinces() {
 		return provinces;
 	}
@@ -163,6 +176,17 @@ public class CommonAction extends BaseAction {
 	}
 
 	
+	public List<ProblemCategory> getProblemCategories() {
+	
+		return problemCategories;
+	}
+
+	
+	public void setProblemCategories(List<ProblemCategory> problemCategories) {
+	
+		this.problemCategories = problemCategories;
+	}
+
 	public List<Phase> getPhases() {
 	
 		return phases;

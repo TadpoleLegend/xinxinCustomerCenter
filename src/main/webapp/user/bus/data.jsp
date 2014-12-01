@@ -18,16 +18,10 @@
 
 <s:include value="/jsps/common/head.jsp" />
 
+
 </head>
 <body>
-	<header id="brand">
-		<div class="container">
-			<div class="row">
-				<div class="appname hide-on-phones"></div>
-			</div>
-		</div>
-	</header>
-
+	<s:include value="/jsps/common/brand.jsp" />
 	<s:include value="/jsps/common/menu.jsp" />
 	
 	<div id="searchboxDialog" style="display : none;">
@@ -50,38 +44,55 @@
 					<div class="content">
 						<div class="row">
 							<div class="three columns">
-								<label>客户编号</label> 
+								<label>编号</label> 
 								<input type="text" data-bind="value: searchId">
 							</div>
-							<div class="three columns">
-								<label>客户状态</label>
+							<div class="two columns">
+								<label>顾客问题</label>
+								<select data-bind="options: $root.problemCategories,
+                      										optionsText: 'name',
+                       									    value: $root.selectedProblemCategory,
+                       									    optionsValue : 'name',
+                       									    selectedOption : $root.selectedProblemCategory,
+                       									    optionsCaption: '请选择...'">
+                       			</select>
+							</div>
+							<div class="two columns">
+								<label>顾客状态</label>
 								<select data-bind="options: $root.allSteps,
                       										optionsText: 'name',
                        									    value: $root.customerStatus,
                        									    optionsValue : 'id',
                        									    selectedOption : $root.customerStatus,
-                       									    optionsCaption: '选择客户状态'">
+                       									    optionsCaption: '请选择...'">
                        			</select>
 							</div>
-							<div class="three columns">
-								<label>星级搜索类型</label>
-								<select data-bind="options: $root.starLevelOperators,
+							
+							
+							<div class="five columns">
+								<label>星级</label>
+								<label class="input-checkbox">
+									<div class="row">
+										<div class="six columns">
+											
+											<select data-bind="options: $root.starLevelOperators,
                       										optionsText: 'optionText',
                        									    value: $root.starLevelOperator,
                        									    optionsValue : 'optionValue',
                        									    selectedOption : $root.starLevelOperator,
-                       									    optionsCaption: '选择星级比较类型'">
-                       			</select>
-							</div>
-							
-							<div class="three columns">
-								<label>星级</label>
-								<div id="starInput" data-bind="attr: { 'starInput' : starInput }"></div>
+                       									    optionsCaption: '请选择...'"
+                       									    style ="margin-left:10px">
+                       						</select>
+										</div>
+										<div class="six columns">
+											<div id="starInput" data-bind="attr: { 'starInput' : starInput }" style ="margin-left:20px"></div>
 								
+										</div>
+									</div>
+                       			</label>
 							</div>
 						</div>
 						
-						<hr>
 						<div class="row">
 							<div class="two columns">
 								<label>省/直辖市</label>
@@ -105,14 +116,39 @@
 							</div>
 									
 						</div>
-						<div class="row">
-							
-							<hr>
-							<div class="three columns">
-								
+
+						<div class="row" data-bind="with : advanceSearch">
+
+							<div class="two columns">
+								<label>约定联系开始日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : appointStartDate" />
 							</div>
-							
+							<div class="two columns">
+								<label>约定联系结束日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : appointEndDate" />
+							</div>
+							<div class="two columns">
+								<label>生日类型</label> <select data-bind="options: $root.birthdayTypes,
+                      										optionsText: 'optionText',
+                       									    value: birthdayType,
+                       									    optionsValue : 'optionValue',
+                       									    selectedOption : birthdayType,
+                       									    optionsCaption: '请选择...'">
+								</select>
+							</div>
+							<div class="two columns">
+								<label>日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
+							</div>
+							<div class="three columns">
+								<label>培训通知</label>
+												<select data-bind="options: $root.phases,
+                      											   optionsText: 'name',
+                       											   value: phase,
+                       											   optionsValue : 'id',
+                       											   selectedOption : phase,
+                       											   optionsCaption: '请选择...'">
+                       							</select>
+							</div>
 						</div>
+
 						<div class="row">
 							
 						</div>
@@ -152,7 +188,7 @@
 											</div>
 											<div class="three columns">
 												<label class="input-checkbox"> 
-													<img style="margin-left: 45px" alt="电话号码" data-bind="attr: { 'src' : phone_src }, visible : mobilePhoneSrc == '' ">
+													<img style="margin-left: 45px" alt="电话号码" data-bind="attr: { 'src' : phoneSrc }, visible : mobilePhoneSrc == '' ">
 													<img style="margin-left: 45px" alt="手机号码" data-bind="attr: { 'src' : mobilePhoneSrc }, visible : mobilePhoneSrc != '' ">
 													<span data-bind="text : mobilePhone, visible : mobilePhone != '' "></span>
 													<span data-bind="text : phone, visible : mobilePhone == '' && phone != '' "></span>
@@ -191,7 +227,7 @@
 								<a class="small blue button" data-bind="click : $root.backToCustomerList" href="#">返回客户列表</a>
 							</h2>
 						</div>
-						<div class="content">
+						<div class="content app-wrapper">
 							<div class="row">
 								<div id="wizard">
 									<ol class="bwizard-steps clearfix clickable" role="tablist" data-bind="foreach : $root.allSteps">
@@ -258,7 +294,7 @@
 											<div class='three columns'>
 												<label>固定电话</label>
 												<label class="input-checkbox" data-bind="visible : !phone"> 
-													<img alt="电话号码" data-bind="attr: { 'src' : phone_src }">
+													<img alt="电话号码" data-bind="attr: { 'src' : phoneSrc }">
 												</label>
 												<input type="text" data-bind="value : phone, visible : phone" />
 											</div>
@@ -391,7 +427,7 @@
 								<h4>
 									<a href="#">问题归类</a>
 								</h4>
-								<div>
+								<div class="app-wrapper content">
 									<div class="row">
 										<div class="four columns">
 											<div class="app-wrapper ui-corner-top">
@@ -447,7 +483,7 @@
 								<h3>
 									<a href="#">电话跟踪</a>
 								</h3>
-								<div>
+								<div class="app-wrapper content">
 									<div class="row">
 										<div class="right">
 											<a class="small blue button" data-bind="click : $root.addHistory">创建新的通话记录</a>
@@ -483,7 +519,7 @@
 								<h3>
 									<a href="#">培训记录</a>
 								</h3>
-								<div>
+								<div class="app-wrapper content">
 									<div class="row">
 										<div class="right">
 											<a class="small blue button" data-bind="click : $root.addLearningHistory">创建新的培训记录</a>
@@ -666,10 +702,10 @@
 		});
 	
 		$(document).ready( function() {
+		
 			
 					$("#searchWrapper").accordion({
-						collapsible: true,
-						border: true
+						collapsible: true
 					});
 	
 					$(".expand").click(function() {
@@ -703,7 +739,7 @@
 						
 					};
 					
-					var Company = function(id, name, contactor, email, emailSrc, phone, phone_src, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description, ganjiUrl, fEurl) {
+					var Company = function(id, name, contactor, email, emailSrc, phone, phoneSrc, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description, ganjiUrl, fEurl) {
 						var self = this;
 						
 						self.id = id;
@@ -712,7 +748,7 @@
 						self.email = email;
 						self.emailSrc = emailSrc;
 						self.phone = phone;
-						self.phone_src = phone_src;
+						self.phoneSrc = phoneSrc;
 						self.mobilePhone = mobilePhone;
 						self.mobilePhoneSrc = mobilePhoneSrc;
 						self.star = star;
@@ -793,16 +829,27 @@
 						this.comments = '';
 					};
 					
+					var AdvanceSearch = function() {
+						this.appointStartDate = '';
+						this.appointEndDate = '';
+						this.birthdayType = '';
+						this.birthDayValue =  '';
+						this.phase ='';
+					};
+					
 					var CompanyModel = function() {
 						
 						var self = this;
-
+						self.advanceSearch = ko.observable(new AdvanceSearch());
+						self.birthdayTypes = ko.observableArray([]);
 						self.companyTypes = ko.observableArray([]);
+						self.problemCategories = ko.observableArray([]);
 						self.starLevelOperators = ko.observableArray([]);
 						self.starLevelOperator = ko.observable('');
 						self.companyList = ko.observableArray([]);
 						self.currentIndex = ko.observable(1);
 						self.pageIndexToGo = ko.observable('');
+						self.selectedProblemCategory = ko.observable('');
 						self.totalPagesCount = ko.observable('1');
 						self.totalCompanyCount = ko.observable('0');
 						self.starInput = ko.observable(0);
@@ -838,6 +885,10 @@
 							self.searchContactor('');
 							self.selectedCity('');
 							self.selectedProvince('');
+							self.searchId('');
+							self.selectedProblemCategory('');
+							self.customerStatus('');
+							self.starLevelOperator('');
 						};
 						
 						self.cities = ko.computed(function() {
@@ -1372,6 +1423,21 @@
 									self.starLevelOperators(data);
 								}
 							});
+							$.ajax({
+								url : '/ls/findDropDownDataSouce.ls',
+								data : {identityType : 'birthday_type'},
+								success : function(data) {
+									self.birthdayTypes(data);
+								}
+							});
+							
+							$.ajax({
+								url : '/ls/findProblemCategories.ls',
+								success : function(data) {
+									self.problemCategories(data);
+								}
+							});
+							
 							
 						};
 						
@@ -1445,7 +1511,9 @@
 										provinceId : self.selectedProvince(),
 										starLevelOperator : self.starLevelOperator(),
 										searchId : self.searchId(),
-										customerStatus : self.customerStatus()
+										customerStatus : self.customerStatus(),
+										selectedProblemCategory : self.selectedProblemCategory(),
+										advanceSearch : JSON.stringify(self.advanceSearch())
 										},
 								success : function(data) {
 									self.fillCompany(data);
@@ -1475,10 +1543,10 @@
 							self.companyList.removeAll();
 
 							$.each(data.elements, function(index, value) {
-								//var new_phone_src = "/ls/img/" + value.phoneSrc;
+								//var new_phoneSrc = "/ls/img/" + value.phoneSrc;
 								//var new_emailSrc = "/ls/img/" + value.emailSrc;
 								
-								var new_phone_src =  value.phoneSrc;
+								var new_phoneSrc =  value.phoneSrc;
 								var new_emailSrc =  value.emailSrc;
 								
 								var problems = new Array();
@@ -1487,7 +1555,7 @@
 									problems.push(n.name);
 								});
 								
-								var company = new Company(value.id, value.name, value.contactor, value.email, new_emailSrc, value.phone, new_phone_src, value.star, value.address, value.area, problems, value.oteUrl, value.status, value.mobilePhone, value.mobilePhoneSrc, value.description, value.ganjiUrl, value.fEurl);
+								var company = new Company(value.id, value.name, value.contactor, value.email, new_emailSrc, value.phone, new_phoneSrc, value.star, value.address, value.area, problems, value.oteUrl, value.status, value.mobilePhone, value.mobilePhoneSrc, value.description, value.ganjiUrl, value.fEurl);
 
 								self.companyList.push(company);
 								

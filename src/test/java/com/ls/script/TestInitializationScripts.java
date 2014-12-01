@@ -128,18 +128,6 @@ public class TestInitializationScripts {
 	}
 	
 	@Test
-	public void testProblemCategory() throws Exception {
-		
-		Dictionary firstDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "A", "A类顾客", "");
-		Dictionary secondDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "B", "B类顾客", "");
-		Dictionary threeDictionary = new Dictionary(XinXinConstants.COMPANY_TYPE, "C", "C类顾客", "");
-		
-		List<Dictionary> dictionaries = ImmutableList.of(firstDictionary, secondDictionary, threeDictionary);
-		
-		dropDownRepository.save(dictionaries);
-	}
-	
-	@Test
 	public void removeBuxianCity() {
 		List<City> cities = cityRepository.findAll();
 		for (City city : cities) {
@@ -178,13 +166,32 @@ public class TestInitializationScripts {
 	@Test
 	public void testAddCustomerProblems () {
 		
-		ProblemCategory customerProblemCategory = new ProblemCategory("客户问题");
+		ProblemCategory customerProblemCategory = new ProblemCategory("顾客问题");
 		ProblemCategory employeeProblemCategory = new ProblemCategory("员工问题");
 		ProblemCategory otherCategory = new ProblemCategory("其他问题");
 		
 		List<ProblemCategory> categories = ImmutableList.of(customerProblemCategory, employeeProblemCategory, otherCategory);
 		
 		problemCategoryRepository.save(categories);
+	}
+	
+	@Test
+	public void testAddBirthdayType() {
+		
+		Dictionary bossBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "BOSS", "院长生日", "");
+		Dictionary bigKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "BIG_KID", "大孩子生日", "");
+		
+		Dictionary secondKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "SECOND_KID", "二孩子生日", "");
+		Dictionary thirdKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "THIRD_KID", "小孩子生日", "");
+		Dictionary husbandBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "HUSBAND", "老公生日", "");
+		Dictionary merryAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "MERRY_ANNIVERSARY", "结婚纪念日", "");
+		
+		Dictionary companyAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "COMPANY_ANNIVERSARY", "公司年庆", "");
+		
+		
+		List<Dictionary> dictionaries = ImmutableList.of(bossBirthday, bigKidBirthday, secondKidBirthday, thirdKidBirthday, husbandBirthday, merryAnniversary, companyAnniversary);
+		
+		dropDownRepository.save(dictionaries);
 	}
 	
 	@Test

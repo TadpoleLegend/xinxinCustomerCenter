@@ -12,7 +12,28 @@ public class CompanySearchVo {
 	private String starLevelOperator;
 	private String searchId;
 	private String customerStatus;
+	private String selectedProblemCategory;
+	private AdvanceSearch advanceSearch;
 	
+	public AdvanceSearch getAdvanceSearch() {
+	
+		return advanceSearch;
+	}
+	
+	public void setAdvanceSearch(AdvanceSearch advanceSearch) {
+	
+		this.advanceSearch = advanceSearch;
+	}
+
+	public String getSelectedProblemCategory() {
+	
+		return selectedProblemCategory;
+	}
+	
+	public void setSelectedProblemCategory(String selectedProblemCategory) {
+	
+		this.selectedProblemCategory = selectedProblemCategory;
+	}
 	public String getStarLevelOperator() {
 		return starLevelOperator;
 	}

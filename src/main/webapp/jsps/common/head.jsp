@@ -1,9 +1,6 @@
 <!-- Required CSS Files -->
 <link rel="stylesheet" href="/ls/css/styles.css">
 <link rel="stylesheet" href="/ls/css/style-theme.css" media="print" />
-<link rel="stylesheet" href="/ls/css/messenger.css">
-<link rel="stylesheet" href="/ls/css/messenger-theme-future.css">
-<link rel="stylesheet" href="/ls/css/pink.css">
 
 <!-- Required JS Files -->
 <!--  <script src="/ls/js/jquery-2.1.0.js"></script> -->
@@ -26,4 +23,25 @@
 	    theme: 'future',
 	    hideAfter: 5
 	};
+	
+	function headerDropdown () {
+		$(".js-header-dropdown-trigger").click(function() {
+		    $(".js-header-dropdown-menu")
+		        .show()
+		        .position({
+		            my: "right top",
+		            at: "right bottom",
+		            of: $(".js-header-dropdown-trigger")
+		        });
+		    $(document).one("click", function() {
+		        $(".js-header-dropdown-menu").hide();
+		    });
+		    return false;
+		});
+	}
+	
+	$(document).ready(function() {
+		
+		headerDropdown();
+	});
 </script>

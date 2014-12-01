@@ -25,4 +25,6 @@ public class XinXinConstants {
 	public static final String COMPANY_PROBLEM = "company_problem";
 	
 	public static final String PROBLEM_CATEGORY = "problem_category";
+	
+	public static final String BIRTHDAY_TYPE = "birthday_type";
 }

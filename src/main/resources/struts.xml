@@ -44,6 +44,11 @@
 				<param name="root">companyTypes</param>
 			</result>
 		</action>
+		<action name="findProblemCategories" class="commonAction" method="findProblemCategories">
+			<result name="success" type="json">
+				<param name="root">problemCategories</param>
+			</result>
+		</action>
 		
 	</package>
 	

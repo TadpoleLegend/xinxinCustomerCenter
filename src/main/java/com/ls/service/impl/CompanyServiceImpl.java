@@ -27,6 +27,7 @@ import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
 import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
+import com.ls.entity.ProblemCategory;
 import com.ls.entity.Province;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
@@ -92,8 +93,7 @@ public class CompanyServiceImpl implements CompanyService {
 		return new Specification<Company>() {
 
 			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-
-			//	root = query.from(Company.class);
+				query.distinct(true);
 				
 				Predicate predicate = criteriaBuilder.conjunction();
 				
@@ -103,6 +103,14 @@ public class CompanyServiceImpl implements CompanyService {
 					return predicate;
 				}
 				
+				if (StringUtils.isNotBlank(companySearchVo.getSelectedProblemCategory())) {
+					
+					Join<Company, Problem> problemJoin = root.joinList("problems", JoinType.LEFT);
+					
+					predicate.getExpressions().add(criteriaBuilder.equal(problemJoin.<Integer> get("category"), companySearchVo.getSelectedProblemCategory()));
+				}
+				
+				//status
 				if (StringUtils.isNotBlank(companySearchVo.getCustomerStatus())) {
 					Integer status = Integer.valueOf(companySearchVo.getCustomerStatus());
 					predicate.getExpressions().add(criteriaBuilder.equal(root.<Integer> get("status"), status));
@@ -116,18 +124,6 @@ public class CompanyServiceImpl implements CompanyService {
 				
 				if (StringUtils.isNotBlank(companySearchVo.getContactorParam())) {
 					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("contactor"), companySearchVo.getContactorParam().trim()));
-				}
-				
-				if (StringUtils.isNotBlank(companySearchVo.getDistinctParam())) {
-					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("area"), companySearchVo.getDistinctParam().trim()));
-				}
-				
-				if (StringUtils.isNotBlank(companySearchVo.getAllStarCheckboxParam())) {
-					
-					//all star true : ignore star value
-					if (companySearchVo.getAllStarCheckboxParam().trim().equalsIgnoreCase("false")) {
-						predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("star"), Integer.valueOf(companySearchVo.getStarParam())));
-					}
 				}
 				
 				if (StringUtils.isNotBlank(companySearchVo.getCityId())) {
@@ -164,15 +160,7 @@ public class CompanyServiceImpl implements CompanyService {
 						predicate.getExpressions().add(criteriaBuilder.notEqual(root.<Integer> get("star"), star));
 					}
 				}
-//				Join<Company, PhoneCallHistory> phoneCallHistoryJoin = root.join("phoneCallHistories", JoinType.LEFT);
-//				
-//				try {
-//					predicate.getExpressions().add(criteriaBuilder.equal(phoneCallHistoryJoin.get("nextDate"), XinXinConstants.SIMPLE_DATE_FORMATTER.parse("2014-11-28")));
-//				} catch (ParseException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				
+
 				//user private customer shown on the most top.
 				Order ownerUserIdOrder = criteriaBuilder.desc(root.get("ownerUserId"));
 				Order starOrder = criteriaBuilder.desc(root.get("star"));

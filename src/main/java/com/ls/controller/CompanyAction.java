@@ -26,6 +26,7 @@ import com.ls.repository.PhoneCallHistoryRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
+import com.ls.vo.AdvanceSearch;
 import com.ls.vo.CompanySearchVo;
 import com.ls.vo.PagedElement;
 import com.ls.vo.ResponseVo;
@@ -109,6 +110,9 @@ public class CompanyAction extends BaseAction {
 		String starLevelOperator = getParameter("starLevelOperator");
 		String searchId = getParameter("searchId");
 		String customerStatus = getParameter("customerStatus");
+		String selectedProblemCategory = getParameter("selectedProblemCategory");
+		
+		AdvanceSearch advanceSearch = XinXinUtils.getJavaObjectFromJsonString(getParameter("advanceSearch"), AdvanceSearch.class);
 		
 		CompanySearchVo companySearchVo = new CompanySearchVo();
 		companySearchVo.setCompanyNameParam(companyNameParam);
@@ -122,6 +126,8 @@ public class CompanyAction extends BaseAction {
 		companySearchVo.setStarLevelOperator(starLevelOperator);
 		companySearchVo.setSearchId(searchId);
 		companySearchVo.setCustomerStatus(customerStatus);
+		companySearchVo.setSelectedProblemCategory(selectedProblemCategory);
+		companySearchVo.setAdvanceSearch(advanceSearch);
 		
 		Page<Company> result = companyService.getCompanyInPage(companySearchVo);
 		
