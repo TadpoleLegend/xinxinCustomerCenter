@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.struts2.json.annotations.JSON;
+
 
 @Entity
 @Table(name = "ls_phone_call_history")
@@ -24,6 +26,7 @@ public class PhoneCallHistory {
 
 	protected Date createDate;
 
+	
 	protected Date nextDate;
 
 	@OneToOne(fetch = FetchType.EAGER)
@@ -53,7 +56,8 @@ public class PhoneCallHistory {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
+	
+	@JSON(format="yyyy-MM-dd") 
 	public Date getNextDate() {
 		return nextDate;
 	}

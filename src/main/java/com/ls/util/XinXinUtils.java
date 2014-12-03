@@ -82,14 +82,29 @@ public class XinXinUtils {
 			return null;
 		}
 	}
+	
 	public static Date getStandardDate(Date date) {
 		String standardDateString = XinXinConstants.FULL_DATE_FORMATTER.format(date);
 		return getStandardDate(standardDateString);
 	}
 	
+	public static Date getStandardSimpleDate(Date date) {
+		String standardDateString = XinXinConstants.SIMPLE_DATE_FORMATTER.format(date);
+		try {
+			return XinXinConstants.SIMPLE_DATE_FORMATTER.parse(standardDateString);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 	public static Date getNow() {
 		return getStandardDate(new Date());
 	}
 	
+	
+	public static String getSimpleTodayString() {
+		
+		Date now = new Date();
+		return XinXinConstants.SIMPLE_DATE_FORMATTER.format(now);
+	}
 	
 }

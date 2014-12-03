@@ -178,15 +178,15 @@ public class TestInitializationScripts {
 	@Test
 	public void testAddBirthdayType() {
 		
-		Dictionary bossBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "BOSS", "院长生日", "");
-		Dictionary bigKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "BIG_KID", "大孩子生日", "");
+		Dictionary bossBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "bossBirthday", "院长生日", "");
+		Dictionary bigKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "firstKidBirthday", "大孩子生日", "");
 		
-		Dictionary secondKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "SECOND_KID", "二孩子生日", "");
-		Dictionary thirdKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "THIRD_KID", "小孩子生日", "");
-		Dictionary husbandBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "HUSBAND", "老公生日", "");
-		Dictionary merryAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "MERRY_ANNIVERSARY", "结婚纪念日", "");
+		Dictionary secondKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "secondKidBirthday", "二孩子生日", "");
+		Dictionary thirdKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "thirdKidBirthday", "小孩子生日", "");
+		Dictionary husbandBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "loverBirthday", "老公生日", "");
+		Dictionary merryAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "merryAnniversary", "结婚纪念日", "");
 		
-		Dictionary companyAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "COMPANY_ANNIVERSARY", "公司年庆", "");
+		Dictionary companyAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "companyAnniversary", "公司年庆", "");
 		
 		
 		List<Dictionary> dictionaries = ImmutableList.of(bossBirthday, bigKidBirthday, secondKidBirthday, thirdKidBirthday, husbandBirthday, merryAnniversary, companyAnniversary);

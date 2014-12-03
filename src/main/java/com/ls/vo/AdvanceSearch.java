@@ -1,5 +1,7 @@
 package com.ls.vo;
 
+import org.apache.commons.lang.StringUtils;
+
 
 public class AdvanceSearch {
 
@@ -61,5 +63,14 @@ public class AdvanceSearch {
 		this.phase = phase;
 	}
 	
+	
+	public boolean isEverythingBlank() {
+		
+		if (StringUtils.isEmpty(appointStartDate) && StringUtils.isEmpty(appointEndDate) && StringUtils.isEmpty(birthDayValue) && StringUtils.isEmpty(phase)) {
+			return true;
+		}
+		
+		return false;
+	}
 	
 }

@@ -2,6 +2,7 @@ package com.ls.service.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -35,6 +36,7 @@ import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
+import com.ls.vo.AdvanceSearch;
 import com.ls.vo.CompanySearchVo;
 
 @Service("companyService")
@@ -93,6 +95,7 @@ public class CompanyServiceImpl implements CompanyService {
 		return new Specification<Company>() {
 
 			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				
 				query.distinct(true);
 				
 				Predicate predicate = criteriaBuilder.conjunction();
@@ -161,6 +164,46 @@ public class CompanyServiceImpl implements CompanyService {
 					}
 				}
 
+				AdvanceSearch advanceSearch = companySearchVo.getAdvanceSearch();
+				
+				if (advanceSearch != null && !advanceSearch.isEverythingBlank()) {
+					
+					String birthdayType = advanceSearch.getBirthdayType();
+					String birthdayValue = advanceSearch.getBirthDayValue();
+					
+					if (StringUtils.isNotBlank(birthdayType)  && StringUtils.isNotBlank(birthdayValue)) {
+						
+						Join<Company, CompanyAdditional> companyAddtionalJoin = root.join("addtion", JoinType.LEFT);
+						predicate.getExpressions().add(criteriaBuilder.equal(companyAddtionalJoin.<String> get(birthdayType), birthdayValue));
+					}
+					
+					String contactStartDate = advanceSearch.getAppointStartDate();
+					String contactEndDate = advanceSearch.getAppointEndDate();
+					
+					if (StringUtils.isNotBlank(contactStartDate) || StringUtils.isNotBlank(contactEndDate)) {
+						
+						Join<Company, PhoneCallHistory> phoneCallHistoryJoin = root.joinList("phoneCallHistories", JoinType.LEFT);
+						
+						if (StringUtils.isNotBlank(contactStartDate)) {
+							try {
+								Date startDate = XinXinConstants.SIMPLE_DATE_FORMATTER.parse(contactStartDate);
+								predicate.getExpressions().add(criteriaBuilder.greaterThan(phoneCallHistoryJoin.<Date> get("nextDate"), startDate));
+							} catch (ParseException e) {
+								//TODO
+							}
+						}
+						
+						if ( StringUtils.isNotBlank(contactEndDate)) {
+							try {
+								Date endDate = XinXinConstants.SIMPLE_DATE_FORMATTER.parse(contactEndDate);
+								predicate.getExpressions().add(criteriaBuilder.lessThan(phoneCallHistoryJoin.<Date> get("nextDate"), endDate));
+							} catch (ParseException e) {
+								//TODO
+							}
+						}
+					}
+				}
+				
 				//user private customer shown on the most top.
 				Order ownerUserIdOrder = criteriaBuilder.desc(root.get("ownerUserId"));
 				Order starOrder = criteriaBuilder.desc(root.get("star"));

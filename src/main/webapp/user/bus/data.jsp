@@ -44,10 +44,26 @@
 					<div class="content">
 						<div class="row">
 							<div class="three columns">
-								<label>编号</label> 
+								<label>顾客编号</label> 
 								<input type="text" data-bind="value: searchId">
 							</div>
-							<div class="two columns">
+							<div class="three columns">
+								<label>星星</label>
+								<select data-bind="options: $root.starLevelOperators,
+                      										optionsText: 'optionText',
+                       									    value: $root.starLevelOperator,
+                       									    optionsValue : 'optionValue',
+                       									    selectedOption : $root.starLevelOperator,
+                       									    optionsCaption: '请选择...'">
+                       			</select>
+							</div>
+							<div class="three columns">
+								<br>
+								<div id="starInput" data-bind="attr: { 'starInput' : starInput }"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="three columns">
 								<label>顾客问题</label>
 								<select data-bind="options: $root.problemCategories,
                       										optionsText: 'name',
@@ -57,7 +73,7 @@
                        									    optionsCaption: '请选择...'">
                        			</select>
 							</div>
-							<div class="two columns">
+							<div class="three columns">
 								<label>顾客状态</label>
 								<select data-bind="options: $root.allSteps,
                       										optionsText: 'name',
@@ -68,44 +84,15 @@
                        			</select>
 							</div>
 							
-							
-							<div class="five columns">
-								<label>星级</label>
-								<label class="input-checkbox">
-									<div class="row">
-										<div class="six columns">
-											
-											<select data-bind="options: $root.starLevelOperators,
-                      										optionsText: 'optionText',
-                       									    value: $root.starLevelOperator,
-                       									    optionsValue : 'optionValue',
-                       									    selectedOption : $root.starLevelOperator,
-                       									    optionsCaption: '请选择...'"
-                       									    style ="margin-left:10px">
-                       						</select>
-										</div>
-										<div class="six columns">
-											<div id="starInput" data-bind="attr: { 'starInput' : starInput }" style ="margin-left:20px"></div>
-								
-										</div>
-									</div>
-                       			</label>
-							</div>
 						</div>
-						
 						<div class="row">
-							<div class="two columns">
+							<div class="three columns">
 								<label>省/直辖市</label>
 								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
-							<div class="two columns">
+							<div class="three columns">
 								<label>市</label> 
 								<select data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
-							</div>
-
-							<div class="two columns">
-								<label>地区</label> 
-								<input type="text" class="addon-postfix" data-bind="value : searchDistinct" />
 							</div>
 							<div class="three columns">
 								<label>公司名称</label> 
@@ -114,31 +101,33 @@
 							<div class="three columns">
 								<label>联系人</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
 							</div>
-									
 						</div>
-
 						<div class="row" data-bind="with : advanceSearch">
-
-							<div class="two columns">
-								<label>约定联系开始日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : appointStartDate" />
+							<div class="row">
+								<div class="three columns">
+									<label>约定联系开始日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointStartDate" />
+								</div>
+								<div class="three columns">
+									<label>约定联系结束日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointEndDate" />
+								</div>
 							</div>
-							<div class="two columns">
-								<label>约定联系结束日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : appointEndDate" />
-							</div>
-							<div class="two columns">
-								<label>生日类型</label> <select data-bind="options: $root.birthdayTypes,
+							
+							<div class="row">
+								<div class="three columns">
+													<label>生日类型</label> 
+													<select data-bind="options: $root.birthdayTypes,
                       										optionsText: 'optionText',
                        									    value: birthdayType,
                        									    optionsValue : 'optionValue',
                        									    selectedOption : birthdayType,
                        									    optionsCaption: '请选择...'">
-								</select>
-							</div>
-							<div class="two columns">
-								<label>日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
-							</div>
-							<div class="three columns">
-								<label>培训通知</label>
+													</select>
+								</div>
+								<div class="three columns">
+										<label>日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
+								</div>
+								<div class="three columns">
+										<label>培训通知</label>
 												<select data-bind="options: $root.phases,
                       											   optionsText: 'name',
                        											   value: phase,
@@ -146,11 +135,8 @@
                        											   selectedOption : phase,
                        											   optionsCaption: '请选择...'">
                        							</select>
+								</div>
 							</div>
-						</div>
-
-						<div class="row">
-							
 						</div>
 						<hr>
 						<div class="row">
@@ -176,15 +162,13 @@
 						<ul class="smartlist nice" data-bind="foreach: companyList">
 							<li>
 								<div class="row">
-									<label class="input-checkbox">
-										<div class="row">
 											<div class="four columns text-center">
-												<a style="margin-left: 20px;" data-bind="click:$root.showDetail.bind($data, 'anything')"><h5>
-														<b data-bind="text : name"></b>
-													</h5></a>
+												<a style="margin-left: 20px;" data-bind="click:$root.showDetail.bind($data, 'anything')">
+														<h6><span data-bind="text : name"></span></h6>
+													</a>
 											</div>
-											<div class="one columns">
-												<b data-bind="text : contactor"></b>
+											<div class="one columns" style="top:35%">
+													<h7><span data-bind="text : contactor"></span></h7>
 											</div>
 											<div class="three columns">
 												<label class="input-checkbox"> 
@@ -194,16 +178,14 @@
 													<span data-bind="text : phone, visible : mobilePhone == '' && phone != '' "></span>
 												</label>
 											</div>
-											<div class="two columns">
+											<div class="two columns" style="top:35%">
 												<div class="star listStar" data-bind="attr : {'star' : star, 'id': id}"></div>
 											</div>
-											<div class="two columns">
+											<div class="two columns" style="top:35%">
 												<div class="row">
-													<a class="small blue button" data-bind="click : $root.trackCustomer" href="#">查看</a>
+													<a class="small green button" data-bind="click : $root.trackCustomer, css: { red : id == $root.selectedId()}" href="#">查看详情</a>
 												</div>
 											</div>
-										</div>
-									</label>
 								</div>
 							</li>
 						</ul>
@@ -856,7 +838,6 @@
 						self.distinctInput = ko.observable();
 						self.seachCompany = ko.observable('');
 						self.searchContactor =  ko.observable('');
-						self.searchDistinct =  ko.observable('');
 						self.searchId = ko.observable('');
 						self.allProblemsConstantA = [];
 						self.allProblemsConstantB = [];
@@ -878,9 +859,11 @@
 						self.searchConditions = ko.observable(new SearchConditions());
 						self.customerStatus = ko.observable('');
 						
+						self.selectedId = ko.observable('');
+						
 						self.clearAllConditions = function() {
+							
 							self.starInput(0); 
-							self.searchDistinct('');
 							self.seachCompany(''); 
 							self.searchContactor('');
 							self.selectedCity('');
@@ -889,6 +872,8 @@
 							self.selectedProblemCategory('');
 							self.customerStatus('');
 							self.starLevelOperator('');
+							self.advanceSearch(new AdvanceSearch());
+							
 						};
 						
 						self.cities = ko.computed(function() {
@@ -1324,6 +1309,8 @@
 								}
 							});
 							
+							self.selectedId(item.id);
+							
 						};
 						
 						self.loadCompanyProblems = function() {
@@ -1504,7 +1491,6 @@
 								url : '/ls/user/loadCompanyInPage.ls',
 								data : {pageNumber : self.currentIndex(), 
 										starInput : self.starInput(), 
-										searchDistinct: self.searchDistinct(),
 										seachCompany : self.seachCompany(), 
 										searchContactor : self.searchContactor(),
 										cityId : self.selectedCity(),

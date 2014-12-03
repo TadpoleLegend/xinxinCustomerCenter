@@ -1,6 +1,8 @@
 <!-- Required CSS Files -->
 <link rel="stylesheet" href="/ls/css/styles.css">
 <link rel="stylesheet" href="/ls/css/style-theme.css" media="print" />
+<link rel="stylesheet" href="/ls/css/messenger.css">
+<link rel="stylesheet" href="/ls/css/messenger-theme-future.css">
 
 <!-- Required JS Files -->
 <!--  <script src="/ls/js/jquery-2.1.0.js"></script> -->
@@ -20,8 +22,7 @@
 <script>
 	Messenger.options = {
 	    extraClasses: 'messenger-fixed messenger-on-top',
-	    theme: 'future',
-	    hideAfter: 5
+	    theme: 'future'
 	};
 	
 	function headerDropdown () {

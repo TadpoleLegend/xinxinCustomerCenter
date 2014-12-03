@@ -241,7 +241,7 @@ public class CompanyAction extends BaseAction {
 			
 			PhoneCallHistory phoneCallHistory = XinXinUtils.getJavaObjectFromJsonString(newPhoneCall, PhoneCallHistory.class);
 			phoneCallHistory.setCreateDate(XinXinUtils.getNow());
-			phoneCallHistory.setNextDate(XinXinUtils.getStandardDate(phoneCallHistory.getNextDate()));
+			phoneCallHistory.setNextDate(XinXinUtils.getStandardSimpleDate(phoneCallHistory.getNextDate()));
 			
 			phoneCallHistory.setCompany(company);
 			
