@@ -1,5 +1,7 @@
 package com.ls.mail;
 
+import com.ls.util.PropertiesUtil;
+
 public class MailSenderFactory {
 	 /**
      * 服务邮箱
@@ -15,8 +17,8 @@ public class MailSenderFactory {
     public static SimpleMailSender getSender(String mailType) {
     if (MailSenderType.SMTP.equals(mailType)) {
         if (serviceSms == null) {
-        serviceSms = new SimpleMailSender("xinxin_cms@163.com",
-            "xinxin123");
+        serviceSms = new SimpleMailSender(PropertiesUtil.getProperty("sendMail", "xinxin.properties"),
+        		PropertiesUtil.getProperty("sendPwd", "xinxin.properties"));
         }
         return serviceSms;
     }
