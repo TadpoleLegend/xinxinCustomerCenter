@@ -311,6 +311,12 @@ public class GrabServiceImpl implements GrabService {
 	
 	public void mergeCompanyData(Company company,String recourceType){
 		try {
+			if(!XinXinUtils.stringIsEmpty(company.getDescription())){
+				String desc = company.getDescription();
+				if(desc.length()>2000){
+					company.setDescription(desc.substring(0,desc.length()-10)+".....");
+				}
+			}
 			Company dataBaseCompany = null;
 			if(ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)){
 				dataBaseCompany = this.companyRepository.findCompanyFor138GrabJob(company.getCityId(), company.getoTEresourceId(),company.getName());
@@ -319,9 +325,9 @@ public class GrabServiceImpl implements GrabService {
 			}else if(ResourceTypeEnum.FiveEight.getId().equals(recourceType)){
 				dataBaseCompany = this.companyRepository.findCompanyFor58GrabJob(company.getCityId(), company.getfEresourceId(),company.getName());
 			}
+			String dateTime = DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss");
 			if(dataBaseCompany == null){
 				try {
-					String dateTime = DateUtils.getDateFormate(Calendar.getInstance().getTime(),"yyyy-MM-dd hh:mm:ss");
 					if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
 						NegativeCompany nc = envelopNegativeCompany(company,recourceType);
 						NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
@@ -341,6 +347,12 @@ public class GrabServiceImpl implements GrabService {
 				try {
 					this.companyRepository.save(dataBaseCompany);
 				} catch (Exception e) {
+					NegativeCompany nc = envelopNegativeCompany(company,recourceType);
+					NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
+					if(dbNC == null){
+						nc.setGrabDate(dateTime);
+						this.negativeCompanyRepository.save(nc);
+					}
 					e.printStackTrace();
 				}
 			}

@@ -48,18 +48,18 @@ public class TestGrab58 {
 				Object [] arr = new Object[3];
 				StringBuffer sb1=new StringBuffer();
 				cal.add(Calendar.DAY_OF_MONTH, 1);
-				sb1.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)+1).append(cal.get(Calendar.DAY_OF_MONTH));
+				sb1.append(cal.get(Calendar.YEAR)).append((cal.get(Calendar.MONTH)+1)>9?(cal.get(Calendar.MONTH)+1):"0"+(cal.get(Calendar.MONTH)+1)).append(cal.get(Calendar.DAY_OF_MONTH)>9?cal.get(Calendar.DAY_OF_MONTH):"0"+cal.get(Calendar.DAY_OF_MONTH));
 				arr[2] = sb1.toString();
 				if(cityURL.getUpdateDate()==null){
-					cal.add(Calendar.DAY_OF_YEAR, -45);
+					cal.add(Calendar.DAY_OF_YEAR, -180);
 					StringBuffer sb2=new StringBuffer();
-					sb2.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)+1).append(cal.get(Calendar.DAY_OF_MONTH));
+					sb2.append(cal.get(Calendar.YEAR)).append((cal.get(Calendar.MONTH)+1)>9?(cal.get(Calendar.MONTH)+1):"0"+(cal.get(Calendar.MONTH)+1)).append(cal.get(Calendar.DAY_OF_MONTH)>9?cal.get(Calendar.DAY_OF_MONTH):"0"+cal.get(Calendar.DAY_OF_MONTH));
 					arr[1]=sb2.toString();
 				}else{
 					days = DateUtils.minusDate(cityURL.getUpdateDate(),date);
 					cal.add(Calendar.DAY_OF_YEAR, -(days+1));
 					StringBuffer sb2=new StringBuffer();
-					sb2.append(cal.get(Calendar.YEAR)).append(cal.get(Calendar.MONTH)+1).append(cal.get(Calendar.DAY_OF_MONTH));
+					sb2.append(cal.get(Calendar.YEAR)).append((cal.get(Calendar.MONTH)+1)>9?(cal.get(Calendar.MONTH)+1):"0"+(cal.get(Calendar.MONTH)+1)).append(cal.get(Calendar.DAY_OF_MONTH)>9?cal.get(Calendar.DAY_OF_MONTH):"0"+cal.get(Calendar.DAY_OF_MONTH));
 					arr[1]=sb2.toString();
 				}
 				for(int i=1;i<1000;i++){
@@ -84,7 +84,7 @@ public class TestGrab58 {
 					grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
 //					companyRepository.save(company);
 				}
-				Thread.currentThread().sleep(1000*10);
+				Thread.currentThread().sleep(1000*20);
 				
 				}
 			}
