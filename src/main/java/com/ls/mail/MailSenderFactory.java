@@ -15,8 +15,8 @@ public class MailSenderFactory {
     public static SimpleMailSender getSender(String mailType) {
     if (MailSenderType.SMTP.equals(mailType)) {
         if (serviceSms == null) {
-        serviceSms = new SimpleMailSender("liu_online@163.com",
-            "L12170810");
+        serviceSms = new SimpleMailSender("xinxin_cms@163.com",
+            "xinxin123");
         }
         return serviceSms;
     }
