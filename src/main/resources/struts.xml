@@ -57,6 +57,16 @@
 			 <result-type name="json" class="org.apache.struts2.json.JSONResult" />
 			 <result-type name="redirect" class="org.apache.struts2.dispatcher.ServletRedirectResult"/> 
 		</result-types>
+		<interceptors>
+			<interceptor name="userSessionCheckInterceptor" class="com.ls.interceptors.UserSessionCheckInterceptor"></interceptor>
+			<interceptor-stack name="lsStack">
+				<interceptor-ref name="userSessionCheckInterceptor"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="lsStack"></default-interceptor-ref>
+		<action name="home">
+			<result type="redirect">/</result>
+		</action>
 		<action name="hello" class="userAction" method="doLogin">
 			<result name="success" type="redirectAction">
 				<param name="actionName">load</param>

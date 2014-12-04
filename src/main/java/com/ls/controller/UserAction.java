@@ -55,8 +55,8 @@ public class UserAction extends BaseAction {
 
 		} else {
 
-			User storedUserInSession = (User) getSession().get(
-					XinXinConstants.CURRENT_USER);
+			User storedUserInSession = (User) getSession().get(XinXinConstants.CURRENT_USER);
+			
 			if (storedUserInSession == null) {
 				getSession().put(XinXinConstants.CURRENT_USER, user);
 			}

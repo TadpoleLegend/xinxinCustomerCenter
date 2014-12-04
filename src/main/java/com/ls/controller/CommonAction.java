@@ -105,7 +105,6 @@ public class CommonAction extends BaseAction {
 			
 			for (City city : cities) {
 				city.setCityURLs(null);
-				city.setUserCitys(null);
 			}
 		}
 		

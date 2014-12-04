@@ -39,13 +39,13 @@ public class UserSessionCheckInterceptor implements Interceptor {
 			if (!session.containsKey(XinXinConstants.CURRENT_USER)) {
 				logger.info("No user with the session");
 				addActionError(actionInvocation, null);
-				return Action.LOGIN;
+				return "home";
 			}
 
 		} else {
 			logger.info("session is NULL");
 			addActionError(actionInvocation, null);
-			return Action.LOGIN;
+			return "home";
 		}
 
 		return actionInvocation.invoke();

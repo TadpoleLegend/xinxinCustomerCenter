@@ -47,10 +47,8 @@ public class XinXinUtils {
 	
 	public static void cleanUser(User user) {
 		
-		user.setLocations(null);
 		user.setPhoneCallHistory(null);
 		user.setRoles(null);
-		user.setUserCitys(null);
 	}
 	
 	public static Map<String,String> mergeDuplicateCompanyInOnePage(List<Company> companyList,String resourceType){

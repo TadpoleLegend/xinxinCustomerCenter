@@ -26,8 +26,18 @@ public class Role {
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "roles", fetch = FetchType.LAZY)
 	protected List<User> users;
-
 	
+	public Role() {
+
+		super();
+	}
+
+	public Role( String name) {
+
+		super();
+		this.name = name;
+	}
+
 	public Integer getId() {
 	
 		return id;

@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -27,12 +26,9 @@ public class User implements Serializable {
 	protected String username;
 	protected String password;
 
-	@OneToMany(mappedBy="city")
-	protected List<UserCity> userCitys;
-
 	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinTable(name = "ls_user_location", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "city_id"))
-	protected List<Location> locations;
+	@JoinTable(name = "ls_user_city", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "city_id"))
+	protected List<City> cities;
 
 	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinTable(name = "ls_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -52,13 +48,6 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public List<Location> getLocations() {
-		return locations;
-	}
-
-	public void setLocations(List<Location> locations) {
-		this.locations = locations;
-	}
 
 	public Integer getId() {
 		return id;
@@ -101,13 +90,15 @@ public class User implements Serializable {
 	
 		this.roles = roles;
 	}
-
-	public List<UserCity> getUserCitys() {
-		return userCitys;
+	
+	public List<City> getCities() {
+	
+		return cities;
 	}
-
-	public void setUserCitys(List<UserCity> userCitys) {
-		this.userCitys = userCitys;
+	
+	public void setCities(List<City> cities) {
+	
+		this.cities = cities;
 	}
 
 	public PhoneCallHistory getPhoneCallHistory() {
@@ -117,4 +108,5 @@ public class User implements Serializable {
 	public void setPhoneCallHistory(PhoneCallHistory phoneCallHistory) {
 		this.phoneCallHistory = phoneCallHistory;
 	}
+	
 }

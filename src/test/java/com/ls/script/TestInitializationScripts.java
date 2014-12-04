@@ -17,7 +17,9 @@ import com.ls.entity.Company;
 import com.ls.entity.Dictionary;
 import com.ls.entity.Phase;
 import com.ls.entity.ProblemCategory;
+import com.ls.entity.Role;
 import com.ls.entity.Step;
+import com.ls.entity.User;
 import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CompanyRepository;
@@ -25,7 +27,9 @@ import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemCategoryRepository;
 import com.ls.repository.ProblemRepository;
+import com.ls.repository.RoleRepository;
 import com.ls.repository.StepRepository;
+import com.ls.repository.UserRepository;
 
 /**
  * This class is for basic data preparation for the web app starting up. using this class without retrieving data from the UI. The data must not be
@@ -57,6 +61,12 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private ProblemCategoryRepository problemCategoryRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {
@@ -196,6 +206,34 @@ public class TestInitializationScripts {
 	
 	@Test
 	public void pureTest() {
+		
+	}
+	
+	@Test
+	public void testCreateUserAndRoles() {
+		
+		User adminUser = new User("Jerry Jiang", "jerryjiang", "jerryjiang");
+		User bigAreaUser = new User("Allen Li", "allenli", "allenli");
+		User huliu = new User("Hu Liu", "huliu", "huliu");
+		User liuxiaoxue = new User("Liu JianXia", "liujianxia", "liujianxia");
+		
+		Role superAdmin = new Role("系统管理者");
+		Role bigAreaManager = new Role("大区经理");
+		Role customerService = new Role("客服经理");
+		Role financeManager = new Role("财务经理");
+		Role newbite = new Role("新人");
+		
+		adminUser.setRoles(ImmutableList.of(superAdmin));
+		bigAreaUser.setRoles(ImmutableList.of(bigAreaManager));
+		huliu.setRoles(ImmutableList.of(customerService));
+		liuxiaoxue.setRoles(ImmutableList.of(newbite));
+		
+		List<Role> roles = ImmutableList.of(superAdmin, bigAreaManager, customerService, financeManager, newbite);
+		
+		List<User> users = ImmutableList.of(adminUser, bigAreaUser, huliu, liuxiaoxue);
+		
+		roleRepository.save(roles);
+		userRepository.save(users);
 		
 	}
 }

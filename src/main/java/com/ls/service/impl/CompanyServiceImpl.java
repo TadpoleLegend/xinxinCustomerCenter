@@ -12,6 +12,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
+import com.ls.entity.LearningHistory;
+import com.ls.entity.Phase;
 import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
 import com.ls.entity.ProblemCategory;
@@ -187,7 +190,7 @@ public class CompanyServiceImpl implements CompanyService {
 						if (StringUtils.isNotBlank(contactStartDate)) {
 							try {
 								Date startDate = XinXinConstants.SIMPLE_DATE_FORMATTER.parse(contactStartDate);
-								predicate.getExpressions().add(criteriaBuilder.greaterThan(phoneCallHistoryJoin.<Date> get("nextDate"), startDate));
+								predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(phoneCallHistoryJoin.<Date> get("nextDate"), startDate));
 							} catch (ParseException e) {
 								//TODO
 							}
@@ -196,12 +199,34 @@ public class CompanyServiceImpl implements CompanyService {
 						if ( StringUtils.isNotBlank(contactEndDate)) {
 							try {
 								Date endDate = XinXinConstants.SIMPLE_DATE_FORMATTER.parse(contactEndDate);
-								predicate.getExpressions().add(criteriaBuilder.lessThan(phoneCallHistoryJoin.<Date> get("nextDate"), endDate));
+								predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(phoneCallHistoryJoin.<Date> get("nextDate"), endDate));
 							} catch (ParseException e) {
 								//TODO
 							}
 						}
 					}
+					
+					String phase = advanceSearch.getPhase();
+					
+					if (StringUtils.isNotBlank(phase)) {
+						
+						Subquery<Company> companyIdInLearningHistorySubquery = query.subquery(Company.class);
+						
+						Root<Company> companySubqueryRoot = companyIdInLearningHistorySubquery.from(Company.class);
+						
+						Join<Company, LearningHistory> learningHistoriesJoin = companySubqueryRoot.joinList("learningHistories", JoinType.LEFT);
+						
+						Join<LearningHistory, Phase> phaseJoin = learningHistoriesJoin.join("phase", JoinType.LEFT);
+						
+						companyIdInLearningHistorySubquery.where(criteriaBuilder.equal(phaseJoin.get("id"), Integer.valueOf(phase)));
+						
+						predicate.getExpressions().add(criteriaBuilder.not(criteriaBuilder.exists(companyIdInLearningHistorySubquery)));
+						
+						companyIdInLearningHistorySubquery.select(companySubqueryRoot);
+						
+						predicate.getExpressions().add(criteriaBuilder.greaterThan(root.<Integer>get("status"), 40));
+					}
+					
 				}
 				
 				//user private customer shown on the most top.
