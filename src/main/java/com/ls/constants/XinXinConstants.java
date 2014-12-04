@@ -27,4 +27,6 @@ public class XinXinConstants {
 	public static final String PROBLEM_CATEGORY = "problem_category";
 	
 	public static final String BIRTHDAY_TYPE = "birthday_type";
+	
+	public static final String SESSION_ACCOUNT_KEY = "session_account_key";
 }
