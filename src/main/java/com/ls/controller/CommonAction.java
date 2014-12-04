@@ -20,6 +20,7 @@ import com.ls.entity.Problem;
 import com.ls.entity.ProblemCategory;
 import com.ls.entity.Province;
 import com.ls.entity.Step;
+import com.ls.entity.User;
 import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemCategoryRepository;
@@ -96,6 +97,7 @@ public class CommonAction extends BaseAction {
 
 	
 	public String findAllProvinces() {
+		User storedUserInSession = (User) getSession().get(XinXinConstants.CURRENT_USER);
 		
 		provinces = provinceRepository.findAll();
 		

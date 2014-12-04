@@ -30,7 +30,7 @@ public class CheckSessionOutFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest hsrq = (HttpServletRequest) request;
 		HttpServletResponse hsrp = (HttpServletResponse) response;
-		User user = (User) hsrq.getSession().getAttribute(XinXinConstants.SESSION_ACCOUNT_KEY);
+		User user = (User) hsrq.getSession().getAttribute(XinXinConstants.CURRENT_USER);
 		if(user == null){
 		String currentURL = hsrq.getRequestURI();
 		if (currentURL.indexOf(PropertiesUtil.getProperty("global.webapp.loginAction","xinxin.properties")) < 0) {
