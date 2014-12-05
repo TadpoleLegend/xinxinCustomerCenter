@@ -4,8 +4,8 @@
 	<div class="row">
 		<ul id="dropdown">
 			<li><a title="" href="/ls/user/load.ls">Customer</a></li>
-			<li><a title="" href="/ls/user/loadUser.ls">User Management</a></li>
-			<li><a title="" href="/ls/user/conf.ls">Configuration</a></li>
+			<li><a title="" href="/ls/admin/loadUser.ls">User Management</a></li>
+			<li><a title="" href="/ls/admin/configuration.ls">Configuration</a></li>
 			<li><a title="" href="/ls/grab/load.ls">Grab</a></li>
 		</ul>
 	</div>

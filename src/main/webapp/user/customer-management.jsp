@@ -1366,7 +1366,7 @@
 							self.loadProblemConstants('其他问题');
 							
 							$.ajax({
-								url : '/ls/findAllProvinces.ls',
+								url : 'findAllProvinces.ls',
 								success : function(data) {
 									
 									$.each(data, function(index, value) {
@@ -1431,7 +1431,7 @@
 						self.loadProblemConstants = function(type) {
 							
 							$.ajax({
-								url : '/ls/findAllProblems.ls',
+								url : 'findAllProblems.ls',
 								data : {type : type},
 								success : function(data) {
 									if (data) {

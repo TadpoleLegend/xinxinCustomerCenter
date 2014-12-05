@@ -143,7 +143,7 @@
 						self.users = ko.observableArray([]);
 						self.locations = ko.observableArray([]);
 						self.searchUser = function() {
-							$.ajax({	url : '/ls/ajaxFindUser.ls',
+							$.ajax({	url : 'ajaxFindUser.ls',
 										data : {
 											userName : self.userName()
 										},
@@ -172,7 +172,7 @@
 						self.loadUserAccouts = function() {
 							//apply country auto-complete 
 							$.ajax({                        
-								  url: '/ls/users/getAllUserAccounts.ls',
+								  url: 'getAllUserAccounts.ls',
 								  async: false,      
 								  success: function(data) {   
 									  $("#userNameInput").autocomplete({ source: data, minLength: 2 });
@@ -183,7 +183,7 @@
 						self.loadAllUsers = function() {
 							//load all
 							$.ajax({                        
-								  url: '/ls/users/loadAllUsers.ls',
+								  url: 'loadAllUsers.ls',
 								  async: false,      
 								  success: function(data) {   
 									  	self.users.removeAll();
@@ -207,7 +207,7 @@
 							}
 							
 							$.ajax({                        
-								  url: '/ls/users/createUser.ls',
+								  url: 'createUser.ls',
 								  async: false,
 								  data: {name : self.name_new(), username : self.userName_new(), password : self.password_new() },
 								  success: function(data) {  

@@ -27,6 +27,7 @@ import com.ls.repository.DropDownRepository;
 import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemCategoryRepository;
 import com.ls.repository.ProblemRepository;
+import com.ls.repository.ProvinceRepository;
 import com.ls.repository.RoleRepository;
 import com.ls.repository.StepRepository;
 import com.ls.repository.UserRepository;
@@ -67,6 +68,9 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ProvinceRepository provinceRepository;
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {
@@ -235,5 +239,11 @@ public class TestInitializationScripts {
 		roleRepository.save(roles);
 		userRepository.save(users);
 		
+	}
+	
+	@Test
+	public void testQueryByNativeSQL() {
+		
+		System.out.println(provinceRepository.getAllProvinceIds());
 	}
 }

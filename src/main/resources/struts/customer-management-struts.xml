@@ -8,12 +8,61 @@
 	<constant name="struts.action.extension" value="ls" />
 	<constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />
 	
-	<package name="userData" extends="user">
+	<package name="customerManagement" extends="user">
 		<result-types>
 			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
 		</result-types>
-		<action name="load">
-			<result>bus/data.jsp</result>
+		<action name="grabCompanyIndexPage" method="grabCompanyIndexPage" class="grabAction">
+			<result name="success" type="json">
+				<param name="root">companies</param>
+			</result>
+		</action>
+		<action name="getcities" method="getcities" class="grabAction">
+			<result name="success" type="json">
+				<param name="root">jiangsuCities</param>
+			</result>
+		</action>
+		<action name="grabSelectedCities" method="grabSelectedCities" class="grabAction">
+			<result name="success" type="json">
+				<param name="root">grabStatistic</param>
+			</result>
+		</action>
+		<action name="findAllProblems" class="commonAction" method="findAllProblems">
+			<result name="success" type="json">
+				<param name="root">problems</param>
+			</result>
+		</action>
+		<action name="findAllProvinces" class="commonAction" method="findAllProvinces">
+			<result name="success" type="json">
+				<param name="root">provinces</param>
+			</result>
+		</action>
+		<action name="findAllSteps" class="commonAction" method="findAllSteps">
+			<result name="success" type="json">
+				<param name="root">steps</param>
+			</result>
+		</action>
+		<action name="findAllPhases" class="commonAction" method="findAllPhases">
+			<result name="success" type="json">
+				<param name="root">phases</param>
+			</result>
+		</action>
+		<action name="findDropDownDataSouce" class="commonAction" method="findDropDownDataSouce">
+			<result name="success" type="json">
+				<param name="root">companyTypes</param>
+			</result>
+		</action>
+		<action name="findProblemCategories" class="commonAction" method="findProblemCategories">
+			<result name="success" type="json">
+				<param name="root">problemCategories</param>
+			</result>
+		</action>
+		<action name="loadGrab" class="userAction" method="loadGrabPage">
+			<result name="success">bus/user_grab.jsp</result>
+		</action>
+		<action name="loadAssignLocation" class="userAction"
+			method="loadAssignLocationToUser">
+			<result name="success">bus/assign_location_to_user.jsp</result>
 		</action>
 		<action name="loadAllCompany" method="loadAllCompany" class="companyAction">
 			<result name="success" type="json">
@@ -22,7 +71,7 @@
 		</action>
 		<action name="loadCompanyInPage" method="loadCompanyInPage" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">company</param>
@@ -30,7 +79,7 @@
 		</action>
 		<action name="saveAddtionalCompanyInformation" method="saveAddtionalCompanyInformation" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">companyAdditional</param>
@@ -38,7 +87,7 @@
 		</action>
 		<action name="loadAddtionalCompanyInformation" method="loadAddtionalCompanyInformation" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">companyAdditional</param>
@@ -46,7 +95,7 @@
 		</action>
 		<action name="changeStarLevel" method="changeStarLevel" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>
@@ -54,7 +103,7 @@
 		</action>
 		<action name="checkOrUncheckProblem" method="checkOrUncheckProblem" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>
@@ -62,7 +111,7 @@
 		</action>
 		<action name="loadCompanyProblems" method="loadCompanyProblems" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">problems</param>
@@ -70,7 +119,7 @@
 		</action>
 		<action name="savePhoneCallHistory" method="savePhoneCallHistory" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>
@@ -78,7 +127,7 @@
 		</action>
 		<action name="saveLearningHistory" method="saveLearningHistory" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>
@@ -86,7 +135,7 @@
 		</action>
 		<action name="removeLearningHistory" method="removeLearningHistory" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>
@@ -94,7 +143,7 @@
 		</action>
 		<action name="removePhoneCallHistory" method="removePhoneCallHistory" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>
@@ -102,7 +151,7 @@
 		</action>
 		<action name="changeCompanyStatus" method="changeCompanyStatus" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>
@@ -110,7 +159,7 @@
 		</action>
 		<action name="loadPhoneCallHistory" method="loadPhoneCallHistory" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">historyRecords</param>
@@ -118,7 +167,7 @@
 		</action>
 		<action name="loadLearningHistory" method="loadLearningHistory" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">learningHistories</param>
@@ -126,7 +175,7 @@
 		</action>
 		<action name="saveCompany" method="saveCompany" class="companyAction">
 			<result name="input">
-				bus/data.jsp
+				customer-management.jsp
 			</result>
 			<result name="success" type="json">
 				<param name="root">response</param>

@@ -30,7 +30,7 @@
 							</div>
 							<div class="content">
 
-								<form action="user/hello.ls" method="POST">
+								<form action="login.ls" method="POST">
 									<div class="row">
 										<label for="username" class="required">ÓÃ»§Ãû</label> <input type="text" id="username" name="username" autocorrect="off" autocapitalize="off" />
 									</div>

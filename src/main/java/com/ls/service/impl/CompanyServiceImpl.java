@@ -95,6 +95,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	private Specification<Company> generateSpecification(final CompanySearchVo companySearchVo) {
+		
 		return new Specification<Company>() {
 
 			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {

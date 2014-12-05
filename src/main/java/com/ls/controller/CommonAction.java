@@ -97,7 +97,7 @@ public class CommonAction extends BaseAction {
 
 	
 	public String findAllProvinces() {
-		User storedUserInSession = (User) getSession().get(XinXinConstants.CURRENT_USER);
+	//	User storedUserInSession = (User) getSession().get(XinXinConstants.CURRENT_USER);
 		
 		provinces = provinceRepository.findAll();
 		
@@ -107,6 +107,7 @@ public class CommonAction extends BaseAction {
 			
 			for (City city : cities) {
 				city.setCityURLs(null);
+				city.setUsers(null);
 			}
 		}
 		
