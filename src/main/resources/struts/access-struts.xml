@@ -14,10 +14,10 @@
 			 <result-type name="json" class="org.apache.struts2.json.JSONResult" />
 			 <result-type name="redirect" class="org.apache.struts2.dispatcher.ServletRedirectResult"/> 
 		</result-types>
-		<action name="home">
+		<action name="login">
 			<result>index.jsp</result>
 		</action>
-		<action name="login" class="userAction" method="doLogin">
+		<action name="login-process" class="userAction" method="doLogin">
 			<result name="success" type="redirectAction">
 				<param name="actionName">load</param>
 				<param name="namespace">/user</param>

@@ -30,13 +30,13 @@
 							</div>
 							<div class="content">
 
-								<form action="login.ls" method="POST">
+								<form action="j_spring_security_check" method="POST">
 									<div class="row">
-										<label for="username" class="required">用户名</label> <input type="text" id="username" name="username" autocorrect="off" autocapitalize="off" />
+										<label for="username" class="required">用户名</label> <input type="text" id="username" name="j_username" autocorrect="off" autocapitalize="off" />
 									</div>
 									<label for="password" class="required custdrop">密码</label>
 									<div class="row">
-										<input type="password" id="password" name="password" autocorrect="off" autocapitalize="off" />
+										<input type="password" id="password" name="j_password" autocorrect="off" autocapitalize="off" />
 									</div>
 									<br>
 									<div class="row">
