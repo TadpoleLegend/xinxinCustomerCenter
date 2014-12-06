@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.parsing.Problem;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -141,25 +142,25 @@ public class TestInitializationScripts {
 		dropDownRepository.save(dictionaries);
 	}
 	
-	@Test
-	public void removeBuxianCity() {
-		List<City> cities = cityRepository.findAll();
-		for (City city : cities) {
-			if (city.getName().contains("不限")) {
-				cityRepository.delete(city);
-			}
-		}
-	}
-	
-	@Test
-	public void removeProblems() {
-		problemRepository.deleteAll();
-	}
-	
-	@Test
-	public void removeCompany() {
-		companyRepository.deleteAll();
-	}
+//	@Test
+//	public void removeBuxianCity() {
+//		List<City> cities = cityRepository.findAll();
+//		for (City city : cities) {
+//			if (city.getName().contains("不限")) {
+//				cityRepository.delete(city);
+//			}
+//		}
+//	}
+//	
+//	@Test
+//	public void removeProblems() {
+//		problemRepository.deleteAll();
+//	}
+//	
+//	@Test
+//	public void removeCompany() {
+//		companyRepository.deleteAll();
+//	}
 	
 	@Test
 	public void testAddStarLevel() {
@@ -216,23 +217,22 @@ public class TestInitializationScripts {
 	@Test
 	public void testCreateUserAndRoles() {
 		
-		User adminUser = new User("Jerry Jiang", "jerryjiang", "jerryjiang");
-		User bigAreaUser = new User("Allen Li", "allenli", "allenli");
-		User huliu = new User("Hu Liu", "huliu", "huliu");
-		User liuxiaoxue = new User("Liu JianXia", "liujianxia", "liujianxia");
+		User adminUser = new User("Jerry Jiang", "jerryjiang", getEncodedPassword("jerryjiang", "jerryjiang"));
+		User bigAreaUser = new User("Allen Li", "allenli", getEncodedPassword("allenli", "allenli"));
+		User huliu = new User("Hu Liu", "huliu",getEncodedPassword("huliu", "huliu"));
+		User liuxiaoxue = new User("Liu JianXia","liujianxia", getEncodedPassword("liujianxia", "liujianxia"));
 		
-		Role superAdmin = new Role("系统管理者");
-		Role bigAreaManager = new Role("大区经理");
-		Role customerService = new Role("客服经理");
-		Role financeManager = new Role("财务经理");
-		Role newbite = new Role("新人");
+		Role superAdmin = new Role("ROLE_ADMIN", "系统管理者");
+		Role bigAreaManager = new Role("ROLE_SALES_MANAGER", "大区经理");
+		Role customerService = new Role("ROLE_CS_MANAGER", "客服经理");
+		Role newbite = new Role("ROLE_NEW_GUY", "新人");
 		
 		adminUser.setRoles(ImmutableList.of(superAdmin));
 		bigAreaUser.setRoles(ImmutableList.of(bigAreaManager));
 		huliu.setRoles(ImmutableList.of(customerService));
 		liuxiaoxue.setRoles(ImmutableList.of(newbite));
 		
-		List<Role> roles = ImmutableList.of(superAdmin, bigAreaManager, customerService, financeManager, newbite);
+		List<Role> roles = ImmutableList.of(superAdmin, bigAreaManager, customerService, newbite);
 		
 		List<User> users = ImmutableList.of(adminUser, bigAreaUser, huliu, liuxiaoxue);
 		
@@ -241,6 +241,10 @@ public class TestInitializationScripts {
 		
 	}
 	
+	private String getEncodedPassword(String password, String username) {
+		ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(256);
+		return shaPasswordEncoder.encodePassword(password, username);
+	}
 	@Test
 	public void testQueryByNativeSQL() {
 		

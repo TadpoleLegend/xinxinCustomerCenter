@@ -117,7 +117,7 @@
 						
 						self.findAllProblems = function() {
 							$.ajax({
-								url : '/ls/getAllProblems.ls',
+								url : 'getAllProblems.ls',
 								success : function(data) {
 									self.problems(data);
 								}
@@ -128,7 +128,7 @@
 							
 							if (window.confirm('你确定要删除这个问题选项吗？')) {
 								$.ajax({
-									url : '/ls/deleteProblem.ls',
+									url : 'deleteProblem.ls',
 									data : {
 										problem : JSON.stringify(item)
 									},
@@ -149,7 +149,7 @@
 							if ($('#problemForm').valid()) {
 								
 								$.ajax({
-									url : '/ls/saveProblem.ls',
+									url : 'saveProblem.ls',
 									data : {
 										problem : JSON.stringify(self.selectedProblem())
 									},

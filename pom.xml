@@ -303,18 +303,20 @@
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit</artifactId>
 			<version>2.15</version>
+			<!-- 
 			<exclusions>
 				<exclusion>
 					<groupId>xalan</groupId>
 					<artifactId>xalan</artifactId>
 				</exclusion>
-			</exclusions> 
+			</exclusions>  -->
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
 			<version>2.6.0</version>
-		</dependency>  
+		</dependency>  -->
 	</dependencies>
 	<build>
 		<finalName>ls</finalName>

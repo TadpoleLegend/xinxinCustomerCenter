@@ -6,7 +6,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
-
+		
     <sec:global-method-security secured-annotations="enabled" />
 
     <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
@@ -14,22 +14,17 @@
     </bean>
 
     <sec:http auto-config="true">
-        <sec:intercept-url pattern="/config-browser/index*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <sec:intercept-url pattern="/api/register*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/logout*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/css/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/js/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/img/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/favicon.ico" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/*.png" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <sec:intercept-url pattern="/**" access="ROLE_USER"/>
-        <sec:intercept-url pattern="/login.ls" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <!-- Override default login and logout pages -->
-        <sec:form-login login-page="/login.ls" login-processing-url="/login-process.ls"
-            default-target-url="/index"
-            authentication-failure-url="/login?error=true" />
-        <sec:logout logout-url="/logout" logout-success-url="/logout-success" />
+        <sec:intercept-url pattern="/user/**" access="ROLE_ADMIN,ROLE_SALES_MANAGER,ROLE_CS_MANAGER,ROLE_NEW_GUY"/>
+        <sec:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
+        <sec:form-login login-page="/login.ls" default-target-url="/user/load.ls" authentication-failure-url="/login?error=true" />
+ 		<sec:logout logout-url="/logout" logout-success-url="/login.ls" />
     </sec:http>
     
     <sec:authentication-manager>

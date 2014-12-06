@@ -21,6 +21,8 @@ public class Role {
 
 	protected String name;
 	
+	protected String description;
+	
 	@OneToMany(mappedBy="role")
 	protected List<Function> functions;
 	
@@ -37,7 +39,22 @@ public class Role {
 		super();
 		this.name = name;
 	}
+	
+	public Role( String name, String description) {
 
+		super();
+		this.name = name;
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	public Integer getId() {
 	
 		return id;

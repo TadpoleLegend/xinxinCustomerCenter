@@ -22,9 +22,9 @@ import org.htmlparser.util.ParserException;
 public class LocationUtil {
 	private static LocationUtil locationUtil;
 	private static String place_138_str = "http://s.138job.com/hire/{1}?keyword=&workadd={0}&keywordtype=1&position=0&&releasedate={2}";
-	private final static String file138="138cityWithNoAreaForZhiXiaShi.jsp";
-	private final static String file58="58cityWithNoAreaForZhiXiaShi.jsp";
-	private final static String fileganji="GanjicityWithNoAreaForZhiXiaShi.jsp";
+	private final static String file138="files/138cityWithNoAreaForZhiXiaShi.jsp";
+	private final static String file58="files/58cityWithNoAreaForZhiXiaShi.jsp";
+	private final static String fileganji="files/GanjicityWithNoAreaForZhiXiaShi.jsp";
 	private LocationUtil() {}
 
 	public static LocationUtil getInstance() {

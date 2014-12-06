@@ -9,7 +9,7 @@
                         <li><a href="#"><i class="icon-download-alt small"></i> Change Server</a></li>
                         <li><a href="#"><i class="icon-cog small"></i> Settings</a></li>
                         <li><a href="#"><i class="icon-phone small"></i> Get Help</a></li>
-                        <li><a href="#"><i class="icon-power-off small"></i> Log Out</a></li>
+                        <li><a href="/ls/logout"><i class="icon-power-off small"></i> Log Out</a></li>
                     </ul>
                 </div>
             </span>
