@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Integer> , JpaSpecif
 	List<User> findByUsernameAndPassword(String name, String password);
 	
 	User findByUsername(String username);
+	
+	User findByUsernameAndActive(String username, Boolean active);
 }

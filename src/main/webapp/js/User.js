@@ -1,7 +1,10 @@
-function User(id, name, username)  {
+function User()  {
 	var self = this;
 	
-	self.id = id;
-	self.name = name;
-	self.username = username;
+	self.id = '';
+	self.name = '';
+	self.username = '';
+	self.password = '';
+	self.roles = [];
+	self.active = '';
 }

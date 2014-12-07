@@ -397,7 +397,7 @@
 										<div class="row">
 											<div class="six columns">
 												<label>备注</label> 
-												<textarea rows="2" data-bind=" value : comments"></textarea>
+												<textarea rows="1" data-bind=" value : comments"></textarea>
 											</div>
 										</div>
 										<div class="row">
@@ -613,10 +613,52 @@
 							<div id="learningHistoryDialog" title="培训记录管理" style="display:none;" data-bind="with : $root.learningHistory">
 									<form id="learningHistoryForm">
 										<div class="row">
-											<label class="label"> 培训记录编号 ：</label> <span data-bind="text : id"></span>
+											<div class="four columns">
+												<label>选择培训状态</label>
+												<select data-bind="options: $root.traningStatus,
+                      											   optionsText: 'optionText',
+                       											   value: status,
+                       											   optionsValue : 'optionValue',
+                       											   selectedOption : status,
+                       											   optionsCaption: '选择状态'"
+                       									class="required">
+                       							</select>
+											</div>
 										</div>
-										<br>
-										<hr>
+										<div class="row">
+											<div class="four columns">
+												<label>报名日期</label>
+												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : signUpDate">
+											</div>
+											<div class="four columns">
+												<label>首付日期</label>
+												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : firstPayDate">
+											
+											</div>
+											<div class="four columns">
+												<label>首付金额</label>
+												<input class="number" type="text" data-bind="value : firstPayAmount" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="four columns">
+												<label>总款</label>
+												<input class="number" type="text" data-bind="value : totalAmount" /></div>
+											<div class="four columns">
+												<label>欠款</label>
+												<input class="number" type="text" data-bind="value : debtAmount" /></div>
+											<div class="four columns">
+												<label>补款日期</label>
+												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : payDebtDate">
+											</div>
+											
+										</div>
+										<div class="row">
+											<div class="four columns">
+												<label>当月政策</label>
+												<input class="number" type="text" data-bind="value : currentMonthPolicy" />
+											</div>
+										</div>
 										<div class="row">
 											<div class="four columns">
 												<label>期数</label>
@@ -638,6 +680,7 @@
 												<input class="number" type="text" data-bind="value : highLevelManagerCount" />
 											</div>
 										</div>
+										
 										<div class="row">
 											<div class="six columns">
 												<label>开始日期</label>
@@ -775,6 +818,7 @@
 						 self.merryAnniversary='';
 						 self.loverBirthday='';
 						 self.comments = '';
+						 self.status ='';
 							
 					};
 					
@@ -809,6 +853,13 @@
 						this.middleLevelManagerCount = '';
 						this.highLevelManagerCount = '';
 						this.comments = '';
+						this.signUpDate = '';
+						this.firstPayDate = '';
+						this.firstPayAmount = '';
+						this.totalAmount = '';
+						this.debtAmount = '';
+						this.payDebtDate = '';
+						this.currentMonthPolicy = '';
 					};
 					
 					var AdvanceSearch = function() {
@@ -860,7 +911,7 @@
 						self.customerStatus = ko.observable('');
 						
 						self.selectedId = ko.observable('');
-						
+						self.traningStatus = ko.observableArray([]);
 						self.clearAllConditions = function() {
 							
 							self.starInput(0); 
@@ -1293,8 +1344,8 @@
 							$('#learningHistoryDialog').dialog({
 								autoOpen : false,
 								modal : true,
-								width : 643,
-								height : 640,
+								width : 743,
+								height : 1040,
 								open : function(e) {
 									changeButtonStyleForPopup(e);
 								},
@@ -1415,6 +1466,13 @@
 								data : {identityType : 'birthday_type'},
 								success : function(data) {
 									self.birthdayTypes(data);
+								}
+							});
+							$.ajax({
+								url : '/ls/findDropDownDataSouce.ls',
+								data : {identityType : 'traning_status'},
+								success : function(data) {
+									self.traningStatus(data);
 								}
 							});
 							

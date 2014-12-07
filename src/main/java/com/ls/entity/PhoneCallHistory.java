@@ -57,7 +57,7 @@ public class PhoneCallHistory {
 		this.createDate = createDate;
 	}
 	
-	@JSON(format="yyyy-MM-dd") 
+	@JSON(format="yy-mm-dd") 
 	public Date getNextDate() {
 		return nextDate;
 	}

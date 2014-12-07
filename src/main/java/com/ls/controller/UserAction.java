@@ -14,6 +14,8 @@ import com.ls.constants.XinXinConstants;
 import com.ls.entity.User;
 import com.ls.repository.UserRepository;
 import com.ls.service.UserService;
+import com.ls.util.XinXinUtils;
+import com.ls.vo.ResponseVo;
 
 @Component("userAction")
 public class UserAction extends BaseAction {
@@ -124,23 +126,112 @@ public class UserAction extends BaseAction {
 	public String loadAllUsers() {
 
 		users = userRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
+		for (User singleUser : users) {
+			singleUser.setCities(null);
+			//singleUser.setPassword(null);
+			singleUser.setPhoneCallHistory(null);
+		}
 
 		return SUCCESS;
 	}
 
 	public String createUser() {
 
-		String userName = getParameter("username");
-		String name = getParameter("name");
-		String password = getParameter("password");
+		try {
+			String userJson = getParameter("userJson");
+			
+			if (StringUtils.isEmpty(userJson)) {
+				setResponse(XinXinUtils.makeGeneralErrorResponse(null));
+				return SUCCESS;
+			}
+			
+			User userEntity = XinXinUtils.getJavaObjectFromJsonString(userJson, User.class);
+			
+			//new user
+			if (userEntity.getId() == null) {
+				
+				User userInDb = userRepository.findByUsername(userEntity.getUsername());
+				
+				if (userInDb == null) {
+					
+					String password = userEntity.getPassword();
+					userEntity.setPassword(XinXinUtils.getEncodedPassword(password, userEntity.getUsername()));
+					userEntity.setActive(true);
+					
+				} else {
+					
+					setResponse(ResponseVo.newFailMessage(userEntity.getUsername() + "已经存在！"));
+					
+					return SUCCESS;
+				}
+				
+			}
 
-		User userEntity = new User(name, userName, password);
-
-		user = userRepository.save(userEntity);
-
+			userRepository.save(userEntity);
+			
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			return SUCCESS;
+		}
+		setResponse(XinXinUtils.makeGeneralSuccessResponse());
+		
 		return SUCCESS;
 	}
 
+	public String disactiveUser() {
+		try {
+			String userJson = getParameter("userJson");
+			
+			if (StringUtils.isEmpty(userJson)) {
+				setResponse(XinXinUtils.makeGeneralErrorResponse(null));
+				return SUCCESS;
+			}
+			
+			User userEntity = XinXinUtils.getJavaObjectFromJsonString(userJson, User.class);
+			
+			userEntity.setActive(false);
+			userEntity.setRoles(null);
+			
+			userRepository.save(userEntity);
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			return SUCCESS;
+		}
+		
+		setResponse(XinXinUtils.makeGeneralSuccessResponse());
+		
+		return SUCCESS;
+	}
+	
+	public String resetPassword() {
+		
+		try {
+			String userJson = getParameter("userJson");
+			String newPasswordToReset = getParameter("newPasswordToReset");
+			
+			if (StringUtils.isEmpty(userJson)) {
+				setResponse(XinXinUtils.makeGeneralErrorResponse(null));
+				return SUCCESS;
+			}
+			
+			User userEntity = XinXinUtils.getJavaObjectFromJsonString(userJson, User.class);
+			
+			User freshUserInDb = userRepository.findOne(userEntity.getId());
+			
+			freshUserInDb.setPassword(XinXinUtils.getEncodedPassword(newPasswordToReset, freshUserInDb.getUsername()));
+			
+			userRepository.save(freshUserInDb);
+			
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			return SUCCESS;
+		}
+		
+		setResponse(XinXinUtils.makeGeneralSuccessResponse());
+		
+		return SUCCESS;
+	}
+	
 	public String getUsername() {
 
 		return username;

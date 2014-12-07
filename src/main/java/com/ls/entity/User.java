@@ -25,6 +25,7 @@ public class User implements Serializable {
 	protected String name;
 	protected String username;
 	protected String password;
+	protected Boolean active;
 
 	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinTable(name = "ls_user_city", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "city_id"))
@@ -41,13 +42,22 @@ public class User implements Serializable {
 		super();
 	}
 
-	public User(String name, String username, String password) {
+	public User(String name, String username, String password, Boolean active) {
 		super();
 		this.name = name;
 		this.username = username;
 		this.password = password;
+		this.active = active;
 	}
 
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 
 	public Integer getId() {
 		return id;

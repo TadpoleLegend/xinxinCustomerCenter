@@ -36,11 +36,14 @@
 			</result>
 		</action>
 		<action name="createUser" class="userAction" method="createUser">
+			<result name="input">
+				user-management.jsp
+			</result>
 			<result name="success" type="json">
-				<param name="root">user</param>
+				<param name="root">response</param>
 			</result>
 			<result name="error" type="json">
-				<param name="root">users</param>
+				<param name="root">response</param>
 			</result>
 		</action>
 		<action name="saveProblem" class="configurationAction" method="saveProblem">
@@ -60,5 +63,16 @@
 				<param name="root">response</param>
 			</result>
 		</action>
+		<action name="disactiveUser" class="userAction" method="disactiveUser">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
+		<action name="resetPassword" class="userAction" method="resetPassword">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
+		
 	</package>	
 </struts>

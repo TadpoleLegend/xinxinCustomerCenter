@@ -217,10 +217,10 @@ public class TestInitializationScripts {
 	@Test
 	public void testCreateUserAndRoles() {
 		
-		User adminUser = new User("Jerry Jiang", "jerryjiang", getEncodedPassword("jerryjiang", "jerryjiang"));
-		User bigAreaUser = new User("Allen Li", "allenli", getEncodedPassword("allenli", "allenli"));
-		User huliu = new User("Hu Liu", "huliu",getEncodedPassword("huliu", "huliu"));
-		User liuxiaoxue = new User("Liu JianXia","liujianxia", getEncodedPassword("liujianxia", "liujianxia"));
+		User adminUser = new User("Jerry Jiang", "jerryjiang", getEncodedPassword("jerryjiang", "jerryjiang"), true);
+		User bigAreaUser = new User("Allen Li", "allenli", getEncodedPassword("allenli", "allenli"), true);
+		User huliu = new User("Hu Liu", "huliu",getEncodedPassword("huliu", "huliu"), true);
+		User liuxiaoxue = new User("Liu JianXia","liujianxia", getEncodedPassword("liujianxia", "liujianxia"), true);
 		
 		Role superAdmin = new Role("ROLE_ADMIN", "系统管理者");
 		Role bigAreaManager = new Role("ROLE_SALES_MANAGER", "大区经理");
@@ -245,9 +245,24 @@ public class TestInitializationScripts {
 		ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(256);
 		return shaPasswordEncoder.encodePassword(password, username);
 	}
+	
 	@Test
-	public void testQueryByNativeSQL() {
+	public void testSaveTrainingStatus() {
+		Dictionary appoint = new Dictionary(XinXinConstants.TRANING_STATUS, "appointed", "已预约", "");
+		Dictionary inTraning = new Dictionary(XinXinConstants.TRANING_STATUS, "inTraning", "正在培训", "");
+		Dictionary trained = new Dictionary(XinXinConstants.TRANING_STATUS, "trained", "已培训", "");
 		
-		System.out.println(provinceRepository.getAllProvinceIds());
+		dropDownRepository.save(ImmutableList.of(appoint, inTraning, trained));
+	}
+
+	@Test
+	public void testActiveUsers() {
+		
+		List<User> users = userRepository.findAll();
+		for (User user : users) {
+			user.setActive(true);
+		}
+		
+		userRepository.save(users);
 	}
 }

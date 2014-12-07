@@ -85,3 +85,11 @@ function labelIt(message) {
 function bIt(message) {
 	return '<b>' + message + '</b>';
 }
+
+function handleStanderdResponse(data) {
+	if (isOK (data)) {
+		success(data.message);
+	} else {
+		fail(data.message);
+	}
+}

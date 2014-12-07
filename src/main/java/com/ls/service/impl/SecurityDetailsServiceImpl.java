@@ -27,42 +27,21 @@ public class SecurityDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
-//    private Collection<GrantedAuthority> getAuthorities(final User user) {
-//        final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(2);
-//        authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
-//        if (user.isAdmin()) {
-//            authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
-//        }
-//        return authorities;
-//    }
-
     /**
      * {@inheritDoc}
      * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
      */
     @Transactional
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException, DataAccessException {
-//        final Query q = getEm().createNamedQuery("user.findByUsername");
-//        q.setParameter("username", username);
-//        try {
-//            final User user = (User) q.getSingleResult();
-//            final org.springframework.security.core.userdetails.User userDetails
-//                = new org.springframework.security.core.userdetails.User(
-//                        user.getUsername(),
-//                        user.getPassword(),
-//                        user.isEnabled(), true, true, true, getAuthorities(user));
-//            return userDetails;
-//        } catch (final NoResultException ex) {
-//            throw new UsernameNotFoundException(ex.getMessage());
-//        }
-    	System.out.println(username);
-    	User user = userRepository.findByUsername(username);
+
+    	User user = userRepository.findByUsernameAndActive(username, true);
     	
     	if (user == null) {
-			System.out.println("No User found for " + username);
-			
+    		
 			return null;
+			
 		} else {
+			
 			List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 			
 			List<Role> userRoles = user.getRoles();

@@ -28,4 +28,6 @@ public class XinXinConstants {
 	
 	public static final String BIRTHDAY_TYPE = "birthday_type";
 	
+	public static final String TRANING_STATUS = "traning_status";
+	
 }

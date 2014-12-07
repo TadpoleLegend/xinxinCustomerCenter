@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+
 import net.sf.json.JSONObject;
 
 import com.ls.constants.XinXinConstants;
@@ -16,7 +18,11 @@ import com.ls.vo.ResponseVo;
 
 
 public class XinXinUtils {
-
+	
+	private static ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(256);
+	public static String getEncodedPassword(String password, String username) {
+		return shaPasswordEncoder.encodePassword(password, username);
+	}
 	public static <T> T getJavaObjectFromJsonString(String jsonString, Class<T> classType) {
 
 		@SuppressWarnings("unchecked")
@@ -26,6 +32,9 @@ public class XinXinUtils {
 	}
 	
 	public static ResponseVo makeGeneralErrorResponse(Exception e) {
+		if (e == null) {
+			return ResponseVo.newFailMessage("操作失败");
+		}
 		ResponseVo errorResponseVo = ResponseVo.newFailMessage("你的操作在处理时发生了错误！ 异常的消息是 ： " + e.getMessage());
 		
 		return errorResponseVo;

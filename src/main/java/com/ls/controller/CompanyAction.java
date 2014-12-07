@@ -401,6 +401,8 @@ public class CompanyAction extends BaseAction {
 				setResponse(ResponseVo.newFailMessage("你没有选择期数"));
 				return SUCCESS;
 			}
+			
+			learningHistory.setFirstPayDate(XinXinUtils.getStandardSimpleDate(learningHistory.getFirstPayDate()));
 			learningHistory.setCompany(company);
 			learningHistoryRepository.saveAndFlush(learningHistory);
 			

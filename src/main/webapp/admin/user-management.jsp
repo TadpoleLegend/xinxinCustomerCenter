@@ -11,7 +11,7 @@
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
 <title>User Management</title>
-
+<link rel="stylesheet" href="/ls/css/common.css">
 <s:include value="/jsps/common/head.jsp" />
 
 </head>
@@ -27,6 +27,12 @@
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container">
+			<div id="resetPasswordDialog" style="display : none;">
+				<form class="form-wrapper">
+					<input type="text" id="search" placeholder="请输入新的密码" required data-bind="value : newPasswordToReset"> 
+					<input type="button" value="确定" id="submit" data-bind="click : resetPassword">
+				</form>
+			</div>
 			<div class="row">
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
@@ -52,11 +58,12 @@
 				</div>
 
 				<div class="row">
-
-					<div class="seven columns">
-						<div class="app-wrapper ui-corner-top" data-bind="visible : users().length > 0">
+					<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
 								<h2>用户列表</h2>
+								<h2 class="right">
+									<a class="small white button" data-bind="click : $root.openUserManagementDialog">创建新用户</a>
+								</h2>
 							</div>
 							<div class="content">
 								<div class="row">
@@ -66,107 +73,152 @@
 												<th>编号</th>
 												<th>姓名</th>
 												<th>账号</th>
+												<th>状态</th>
+												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody data-bind="foreach : users">
-											<tr data-bind="click : $root.loadForEdit">
+											<tr>
 												<td style="text-align: center" data-bind="text : id"></td>
 												<td style="text-align: center" data-bind="text : name"></td>
 												<td style="text-align: center" data-bind="text : username"></td>
+												<td style="text-align: center">
+												
+													<span data-bind="visible : active">激活</span>	
+													<span data-bind="visible : !active">关闭</span>											
+												</td>
+												<td style="text-align: center">
+													<a title="分配角色" data-bind="click : $root.assignRoles" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
+													<a title="重置密码" data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-blue"></i></a>
+													<a title="关闭用户" data-bind="click : $root.disactiveUser" style="margin-left : 10px;" href="#"><i class="icon-trash small icon-red"></i></a>
+												</td>
 											</tr>
 										</tbody>
 									</table>
+									</div>
 									<br>
-								</div>
 							</div>
 						</div>
-
 					</div>
-					<div class="five columns">
-						<div class="app-wrapper ui-corner-top" id="createUserDiv">
-							<div class="blue module ui-corner-top clearfix">
-								<h2>创建或者修改用户信息</h2>
-							</div>
-							<div class="content">
-								<div id="createUserPop" title="创建新的用户">
-									<div class="row">
-										<div class="six columns">
-
-											<input type="text" id="user_id" data-bind="value : user_id" style="display: none" /> <label class="required">用户名</label> <input type="text" id="userName_new" data-bind="value : userName_new" />
-										</div>
-										<div class="six columns">
-										<label>姓名</label> <input type="text" id="name_new" data-bind="value : name_new" />
-										
-										</div>
-
-										
-									</div>
-									<div class="row">
-										<div class="six columns">
-											<label class="required">密码</label> <input type="password" id="password_new" data-bind="value : password_new" />
-										</div>
-										<div class="six columns">
-											<label class="required">密码再一次</label> <input type="password" id="password_new" data-bind="value : password_new_again" />
-										</div>
-									</div>
-									<hr>
-									<div class="row">
-										<p class="mb0">
-											<a id="saveBtn" class="blue button mb0" href="#0" data-bind="click : createNewUser">创建新用户</a>
-											<a id="saveBtn" class="tertiary line" href="#0" data-bind="click : updateUser">修改已有用户</a>
-										</p>
-									</div>
-									<div class="row"></div>
-								</div>
-							</div>
-						</div>
-
+				<div id="userManagementDialog" class="content" title="用户管理" style="display: none;" data-bind="with : selectedUser">
+					<div class="row">
+							<label>姓名</label>
+							<input id="userNameInput" type="text" class="addon-postfix" placeholder="请输入姓名" data-bind="value : name" />
+					</div>
+					<div class="row">
+							<label>用户名</label>
+							<input type="text" class="addon-postfix" placeholder="请输入用户名" data-bind="value : username" />
+					</div>
+					<div class="row">
+							<label>密码</label>
+							<input type="text" class="addon-postfix" placeholder="请输入密码" data-bind="value : password" />
 					</div>
 				</div>
 			</div>
-		</div>
+			</div>
 	</section>
 
 	<s:include value="/jsps/common/footer.jsp" />
 	<script src="/ls/js/User.js"></script>
 	<script>
 		$(document).ready( function() {
+			
 					var UserModel = function() {
 						var self = this;
-						self.user_id = ko.observable("");
-						self.userName_new = ko.observable("");
-						self.name_new = ko.observable("");
-						self.password_new = ko.observable("");
-						self.password_new_again = ko.observable("");
-						self.userName = ko.observable("");
-						self.userNameList = ko.observableArray([]);
+						self.userName = ko.observable('');
 						self.users = ko.observableArray([]);
-						self.locations = ko.observableArray([]);
+						self.selectedUser = ko.observable(new User());
+						self.newPasswordToReset = ko.observable('');
+						self.assignRoles = function(item, event) {
+							
+						};
+						self.disactiveUser = function(item, event) {
+							if (window.confirm('你真的确定要关闭这个用户吗？')) {
+								
+								$.ajax({
+									url : 'disactiveUser.ls',
+									method : 'POST',
+									data : {
+											userJson : JSON.stringify(item)
+									},
+									success : function(data) {
+										
+										if (isOK(data)) {
+											
+											success();
+											self.loadAllUsers();
+											
+										} else {
+											fail();
+										}
+									}
+								});
+							}
+						};
+						
+						self.resetPassword = function() {
+							$.ajax({                        
+								  url: 'resetPassword.ls',
+								  data: { newPasswordToReset : self.newPasswordToReset() , userJson : JSON.stringify(self.selectedUser()) },
+								  type : 'POST',
+								  success: function(data) {  
+									  
+									  handleStanderdResponse(data);
+									  self.selectedUser(new User());
+									  self.loadAllUsers();
+									  self.closeDialog('resetPasswordDialog');
+								  }
+								});
+						};
+						
+						self.openResetPasswordDialog = function(item, event) {
+							self.selectedUser(item);
+							
+							$('#resetPasswordDialog').dialog({
+								modal : true,
+								dialogClass : 'noTitle',
+								height : 'auto',
+								width : 'auto',
+								maxHeight: 'auto',
+								maxWidth:'auto',
+								minHeight:'auto',
+								minWidth:'auto',
+								position : ['center', 200]
+							});
+						};
+						
+						self.closeDialog = function(id) {
+							$('#' + id).dialog("close");
+						};
+						self.openUserManagementDialog = function() {
+							$('#userManagementDialog').dialog({
+								modal : true,
+								width : 500,
+								height : 300,
+								open : function(e) {
+									changeButtonStyleForPopup(e);
+								},
+								
+								buttons : {
+									'保存用户' : function() {
+										self.saveUser();
+									},
+									'关闭窗口' : function() {
+										self.closeDialog('userManagementDialog');
+									}
+								}
+							});
+						};
+						
 						self.searchUser = function() {
 							$.ajax({	url : 'ajaxFindUser.ls',
 										data : {
 											userName : self.userName()
 										},
 										success : function(data) {
-											self.users.removeAll();
-
-											for ( var i in data) {
-												user = new User(data[i].id, data[i].name, data[i].username);
-												self.users.push(user);
-											}
+											self.users(data);
 										}
 									});
-						};
-						self.loadForEdit = function(user, target) {
-							self.user_id(user.id);
-							self.userName_new(user.username);
-							self.name_new(user.name);
-							//self.password_new(user.password);
-							//self.password_new_again(user.password);
-						};
-						
-						self.assignLocation = function(target, event) {
-							$('#assignLocationPopup').dialog({});
 						};
 						
 						self.loadUserAccouts = function() {
@@ -184,44 +236,40 @@
 							//load all
 							$.ajax({                        
 								  url: 'loadAllUsers.ls',
-								  async: false,      
 								  success: function(data) {   
-									  	self.users.removeAll();
+									  	self.users(data);
 
-										for ( var i in data) {
-											user = new User(data[i].id, data[i].name, data[i].username);
-											self.users.push(user);
-										}	
 								  }
 								});
 						};
 						
-						self.changePassword = function() {
-							alert('TODO');
-						};
-						
-						self.createNewUser = function() {
-							if (self.password_new() !== self.password_new_again()) {
-								alert('两次输入的密码不一致。');
+						self.saveUser = function() {
+							var currentUser = self.selectedUser();
+							if (!currentUser.name) {
+								fail("请输入用户姓名");
 								return;
 							}
-							
+							if (!currentUser.username) {
+								fail("请输入用户账号");
+								return;
+							}
+							if (!currentUser.password) {
+								fail("请输入密码");
+								return;
+							}
 							$.ajax({                        
 								  url: 'createUser.ls',
-								  async: false,
-								  data: {name : self.name_new(), username : self.userName_new(), password : self.password_new() },
+								  data: { userJson : JSON.stringify(currentUser) },
+								  type : 'POST',
 								  success: function(data) {  
-									  var user = new User(data.id, data.name, data.username);
-									  self.users.push(user);
-									  self.userNameList.push(data.username);
+									  
+									  handleStanderdResponse(data);
+									  self.selectedUser(new User());
+									  self.loadAllUsers();
+									  self.closeDialog('userManagementDialog');
 								  }
 								});
 						};
-						
-						self.updateUser = function() {
-							
-						};
-
 					};
 					var model = new UserModel();
 					model.loadUserAccouts();
