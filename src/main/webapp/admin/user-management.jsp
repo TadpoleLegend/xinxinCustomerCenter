@@ -33,6 +33,14 @@
 					<input type="button" value="确定" id="submit" data-bind="click : resetPassword">
 				</form>
 			</div>
+			<div class="content" id="userRolesManagementDialog" style="display : none;">
+				<div data-bind="foreach : allRoles">
+					<label class="input-checkbox" for="employeeProblem">
+						<input class="icheckbox" type="checkbox" name="userRoleInput" data-bind="value : name, click : $root.updateUserRole, checked : $root.selectedUserRoles"/> <span
+															data-bind="text : description"></span>
+					</label>
+				</div>
+			</div>
 			<div class="row">
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
@@ -88,7 +96,7 @@
 													<span data-bind="visible : !active">关闭</span>											
 												</td>
 												<td style="text-align: center">
-													<a title="分配角色" data-bind="click : $root.assignRoles" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
+													<a title="分配角色" data-bind="click : $root.openAssignRolesDialog" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
 													<a title="重置密码" data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-blue"></i></a>
 													<a title="关闭用户" data-bind="click : $root.disactiveUser" style="margin-left : 10px;" href="#"><i class="icon-trash small icon-red"></i></a>
 												</td>
@@ -122,16 +130,79 @@
 	<script src="/ls/js/User.js"></script>
 	<script>
 		$(document).ready( function() {
-			
+			var Role = function() {
+				var self = this;
+				self.id = '';
+				self.name = '';
+				self.description = '';
+			}
 					var UserModel = function() {
 						var self = this;
 						self.userName = ko.observable('');
 						self.users = ko.observableArray([]);
 						self.selectedUser = ko.observable(new User());
 						self.newPasswordToReset = ko.observable('');
+						self.allRoles = ko.observable([]);
+						
+						$.ajax({
+							url : 'getAllRoles.ls',
+							success : function(data) {
+								self.allRoles(data);
+							}
+						});
+						
+						self.updateUserRole = function(item, event) {
+							$.ajax({
+								url : 'updateUserRole.ls',
+								method : 'POST',
+								data : {
+										roleJson : JSON.stringify(item),
+										checkedOrNot : $(event.target).is(':checked'),
+										userJson : JSON.stringify(self.selectedUser())
+								},
+								success : function(data) {
+									
+									if (isOK(data)) {
+										
+										success();
+										self.loadAllUsers();
+										
+									} else {
+										fail();
+									}
+								}
+							});
+							return true;
+						};
+						self.selectedUserRoles = ko.observableArray([]);
+						
+						self.openAssignRolesDialog = function(item, event) {
+							$('#userRolesManagementDialog').dialog({
+								modal : true,
+								width : 500,
+								height : 300,
+								open : function(e) {
+									changeButtonStyleForPopup(e);
+								},
+								
+								buttons : {
+									'关闭窗口' : function() {
+										self.closeDialog('userRolesManagementDialog');
+									}
+								}
+							});
+							
+							self.selectedUser(item);
+							self.selectedUserRoles([]);
+							$.each(item.roles, function(index, role) {
+								self.selectedUserRoles.push(role.name);
+							});
+						};
+						
 						self.assignRoles = function(item, event) {
 							
 						};
+						
 						self.disactiveUser = function(item, event) {
 							if (window.confirm('你真的确定要关闭这个用户吗？')) {
 								

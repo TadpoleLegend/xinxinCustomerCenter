@@ -73,6 +73,16 @@
 				<param name="root">response</param>
 			</result>
 		</action>
+		<action name="getAllRoles" class="userAction" method="getAllRoles">
+			<result name="success" type="json">
+				<param name="root">roles</param>
+			</result>
+		</action>
 		
+		<action name="updateUserRole" class="userAction" method="updateUserRole">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
 	</package>	
 </struts>

@@ -11,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.ls.constants.XinXinConstants;
+import com.ls.entity.Role;
 import com.ls.entity.User;
+import com.ls.repository.RoleRepository;
 import com.ls.repository.UserRepository;
 import com.ls.service.UserService;
 import com.ls.util.XinXinUtils;
@@ -23,6 +25,9 @@ public class UserAction extends BaseAction {
 	private static final long serialVersionUID = -3519886427026056067L;
 	private String username;
 	private String name;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
 	private List<User> users;
 
@@ -35,6 +40,7 @@ public class UserAction extends BaseAction {
 
 	@Autowired
 	private UserRepository userRepository;
+	private List<Role> roles;
 
 	public void setUsername(String username) {
 
@@ -203,6 +209,38 @@ public class UserAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	public String updateUserRole() {
+		
+		try {
+			String userJson = getParameter("userJson");
+			String roleJson = getParameter("roleJson");
+			String checkedOrNot = getParameter("checkedOrNot");
+			
+			User userFromClient = XinXinUtils.getJavaObjectFromJsonString(userJson, User.class);
+			Role roleFromClient = XinXinUtils.getJavaObjectFromJsonString(roleJson, Role.class);
+			
+			User freshUser = userRepository.findOne(userFromClient.getId());
+			Role freshRole = roleRepository.findOne(roleFromClient.getId());
+			
+			if (StringUtils.isNotBlank(checkedOrNot) && checkedOrNot.equals("true")) {
+				
+				freshUser.getRoles().add(freshRole);
+				userRepository.save(freshUser);
+				
+			} else {
+				
+				freshUser.getRoles().remove(freshRole);
+				userRepository.save(freshUser);
+			}
+			
+		} catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			return SUCCESS;
+		}
+		
+		setResponse(XinXinUtils.makeGeneralSuccessResponse());
+		return SUCCESS;
+	}
 	public String resetPassword() {
 		
 		try {
@@ -232,6 +270,11 @@ public class UserAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	public String getAllRoles() {
+		
+		roles  = roleRepository.findAll();
+		return SUCCESS;
+	}
 	public String getUsername() {
 
 		return username;
@@ -265,6 +308,14 @@ public class UserAction extends BaseAction {
 	public void setUser(User user) {
 
 		this.user = user;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 }
