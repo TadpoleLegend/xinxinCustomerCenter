@@ -30,7 +30,7 @@ function success(message) {
 		});
 	} else {
 		Messenger().post({
-			message : '<label class=\"text-success\"> ÄãµÄ²Ù×÷ÒÑ¾­<b>³É¹¦</b>Ö´ÐÐ£¡</label> <i class="icon-smile small icon-green"></i>',
+			message : '<label class=\"text-success\"> ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½<b>ï¿½É¹ï¿½</b>Ö´ï¿½Ð£ï¿½</label> <i class="icon-smile small icon-green"></i>',
 			showCloseButton : true,
 			hideAfter: 2
 		});
@@ -51,7 +51,7 @@ function fail(message) {
 		});
 	} else {
 		Messenger().post({
-			message : '<label class=\"text-error\"> ²Ù×÷<b>Ê§°Ü</b></label> <i class=\"icon-frown small icon-red\"></i>',
+			message : '<label class=\"text-error\"> ï¿½ï¿½ï¿½ï¿½<b>Ê§ï¿½ï¿½</b></label> <i class=\"icon-frown small icon-red\"></i>',
 			showCloseButton : true,
 			type : 'error'
 		});
@@ -92,4 +92,20 @@ function handleStanderdResponse(data) {
 	} else {
 		fail(data.message);
 	}
+}
+
+function hasRole(user, roleName) {
+	
+	var hasRoleFlag = false;
+	
+	if (user && user.roles) {
+		
+		$.each(user.roles, function(i , n) {
+			if (n.name == roleName) {
+				hasRoleFlag = true;
+			}
+		});
+	}
+	
+	return hasRoleFlag;
 }

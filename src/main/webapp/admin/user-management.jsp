@@ -262,6 +262,8 @@
 							$('#' + id).dialog("close");
 						};
 						self.openUserManagementDialog = function() {
+							self.selectedUser(new User());
+							
 							$('#userManagementDialog').dialog({
 								modal : true,
 								width : 500,

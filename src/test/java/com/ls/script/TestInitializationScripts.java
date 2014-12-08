@@ -226,10 +226,11 @@ public class TestInitializationScripts {
 		Role bigAreaManager = new Role("ROLE_SALES_MANAGER", "大区经理");
 		Role customerService = new Role("ROLE_CS_MANAGER", "客服经理");
 		Role newbite = new Role("ROLE_NEW_GUY", "新人");
+		Role willingCustomerApprover = new Role("ROLE_WC_APPROVER", "意向客户审核");
 		
 		adminUser.setRoles(ImmutableList.of(superAdmin));
 		bigAreaUser.setRoles(ImmutableList.of(bigAreaManager));
-		huliu.setRoles(ImmutableList.of(customerService));
+		huliu.setRoles(ImmutableList.of(customerService, willingCustomerApprover));
 		liuxiaoxue.setRoles(ImmutableList.of(newbite));
 		
 		List<Role> roles = ImmutableList.of(superAdmin, bigAreaManager, customerService, newbite);

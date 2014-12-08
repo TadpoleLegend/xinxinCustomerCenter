@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.struts2.ServletActionContext;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 
 import net.sf.json.JSONObject;
 
@@ -112,6 +114,13 @@ public class XinXinUtils {
 		
 		Date now = new Date();
 		return XinXinConstants.SIMPLE_DATE_FORMATTER.format(now);
+	}
+	
+	public static boolean isUserHasRole(String role) {
+		
+		SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper = new SecurityContextHolderAwareRequestWrapper(ServletActionContext.getRequest(), "ROLE_");
+		return securityContextHolderAwareRequestWrapper.isUserInRole(role);
+		
 	}
 	
 }
