@@ -17,8 +17,6 @@
 <link rel="stylesheet" href="/ls/css/common.css">
 
 <s:include value="/jsps/common/head.jsp" />
-
-
 </head>
 <body>
 	<s:include value="/jsps/common/brand.jsp" />
@@ -970,6 +968,9 @@
 									'关闭窗口' : function() {
 										self.closeDialog('selectedCompanyDialog');
 									}
+								},
+								close : function() {
+									$('#wizard').show();
 								}
 							});
 						};
@@ -1334,6 +1335,9 @@
 									'关闭窗口' : function() {
 										self.closeDialog('phoneCallDialog');
 									}
+								},
+								close : function() {
+									$('#wizard').show();
 								}
 							});
 							
@@ -1353,6 +1357,9 @@
 									'关闭窗口' : function() {
 										self.closeDialog('learningHistoryDialog');
 									}
+								},
+								close : function() {
+									$('#wizard').show();
 								}
 							});
 							
@@ -1564,8 +1571,8 @@
 												num_display_entries: 15, //主体页数
 												callback: self.pageselectCallback,
 												items_per_page: 10, //每页显示1项
-												prev_text: "前一页",
-												next_text: "后一页",
+												prev_text: "上一页",
+												next_text: "下一页",
 												current_page : self.currentIndex() - 1,
 												load_first_page : false
 											});

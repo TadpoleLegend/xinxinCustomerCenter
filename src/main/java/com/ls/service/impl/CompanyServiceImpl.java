@@ -71,6 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
 
 	public List<Company> findCompany(String name) {
 		// TODO Auto-generated method stub
@@ -371,10 +372,12 @@ public class CompanyServiceImpl implements CompanyService {
 		if (targetStatus == CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
 			
 			if (applyingWillingCustomer == null) {
+				CompanyAdditional companyAdditional = companyAdditionalRepository.findByCompany(company);
 				
 				ApplyingWillingCustomer applyingWillingCustomerToSave = new ApplyingWillingCustomer();
 				
 				applyingWillingCustomerToSave.setUser(currentUser);
+				applyingWillingCustomerToSave.setBossName(companyAdditional.getBossName());
 				applyingWillingCustomerToSave.setCompanyId(Integer.valueOf(companyId));
 				applyingWillingCustomerToSave.setApplyingDate(XinXinUtils.getNow());
 				applyingWillingCustomerToSave.setUpdateDate(XinXinUtils.getNow());

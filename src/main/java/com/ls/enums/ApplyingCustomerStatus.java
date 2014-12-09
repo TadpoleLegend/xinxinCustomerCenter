@@ -3,8 +3,8 @@ package com.ls.enums;
 
 public enum ApplyingCustomerStatus {
 	APPLYING(10, "正在申请", 1),
-	APPROVED(20, "已批准", 2),
-	REJECTED(30, "被拒绝", 3);
+	APPROVED(20, "审核通过", 2),
+	REJECTED(30, "未通过审核", 3);
 	
 	private Integer id;
 	private String name;

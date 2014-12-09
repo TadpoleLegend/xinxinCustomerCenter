@@ -69,4 +69,10 @@ public class ApplyingCustomerServiceImpl implements ApplyingCustomerService {
 		applyingWillingCustomerRepository.save(freshApplyingWillingCustomer);
 	}
 
+	public ResponseVo checkApplyingCustomer(ApplyingWillingCustomer applyingWillingCustomer) {
+		ResponseVo responseVo = ResponseVo.newSuccessMessage("建议：可以申请通过");
+		
+		return responseVo;
+	}
+
 }

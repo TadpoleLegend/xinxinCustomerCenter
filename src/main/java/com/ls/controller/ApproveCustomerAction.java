@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ls.entity.ApplyingWillingCustomer;
+import com.ls.enums.ApplyingCustomerStatus;
 import com.ls.repository.ApplyingWillingCustomerRepository;
 import com.ls.service.ApplyingCustomerService;
 import com.ls.util.XinXinUtils;
@@ -39,13 +40,20 @@ public class ApproveCustomerAction extends BaseAction {
 	}
 	
 	public String approveCustomer() {
-		ResponseVo responseVo = null;
+		ResponseVo responseVo = XinXinUtils.makeGeneralSuccessResponse();
 		try {
 			String applyingCustomerJson = getParameter("applyingCustomerJson");
 			
 			ApplyingWillingCustomer applyingWillingCustomer = XinXinUtils.getJavaObjectFromJsonString(applyingCustomerJson, ApplyingWillingCustomer.class);
 			
-			responseVo = applyingCustomerService.approveCustomer(applyingWillingCustomer);
+			if (applyingWillingCustomer.getStatus() != ApplyingCustomerStatus.APPLYING.getId()) {
+				
+				responseVo = ResponseVo.newFailMessage("这个申请已经处理过了");
+				
+			} else {
+				responseVo = applyingCustomerService.approveCustomer(applyingWillingCustomer);
+			}
+			
 		} catch (Exception e) {
 			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
 		}
@@ -55,13 +63,19 @@ public class ApproveCustomerAction extends BaseAction {
 	}
 	
 	public String rejectCustomer() {
-		ResponseVo responseVo = null;
+		ResponseVo responseVo = XinXinUtils.makeGeneralSuccessResponse();
 		try {
 			String applyingCustomerJson = getParameter("applyingCustomerJson");
 			
 			ApplyingWillingCustomer applyingWillingCustomer = XinXinUtils.getJavaObjectFromJsonString(applyingCustomerJson, ApplyingWillingCustomer.class);
+			if (applyingWillingCustomer.getStatus() != ApplyingCustomerStatus.APPLYING.getId()) {
+				
+				responseVo = ResponseVo.newFailMessage("这个申请已经处理过了");
+				
+			} else {
+				responseVo = applyingCustomerService.rejectCustomer(applyingWillingCustomer);
+			}
 			
-			responseVo = applyingCustomerService.rejectCustomer(applyingWillingCustomer);
 		} catch (Exception e) {
 			
 			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
@@ -73,7 +87,12 @@ public class ApproveCustomerAction extends BaseAction {
 	}
 	
 	public String checkApplyingCustomer() {
+		ResponseVo responseVo = XinXinUtils.makeGeneralSuccessResponse();
 		
+		String applyingCustomerJson = getParameter("applyingCustomerJson");
+		ApplyingWillingCustomer applyingWillingCustomer = XinXinUtils.getJavaObjectFromJsonString(applyingCustomerJson, ApplyingWillingCustomer.class);
+		
+		setResponse(responseVo);
 		return SUCCESS;
 	}
 	

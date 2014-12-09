@@ -9,4 +9,6 @@ public interface ApplyingCustomerService {
 	ResponseVo approveCustomer(ApplyingWillingCustomer applyingWillingCustomer);
 	
 	ResponseVo rejectCustomer(ApplyingWillingCustomer applyingWillingCustomer);
+	
+	ResponseVo checkApplyingCustomer(ApplyingWillingCustomer applyingWillingCustomer);
 }

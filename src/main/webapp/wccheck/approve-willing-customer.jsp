@@ -41,6 +41,7 @@
 												<th style="text-align: center">公司名称</th>
 												<th style="text-align: center">院长姓名</th>
 												<th style="text-align: center">申请人</th>
+												<th style="text-align: center">状态</th>
 												<th style="text-align: center">申请日期</th>
 												<th style="text-align: center">操作</th>
 											</tr>
@@ -51,11 +52,22 @@
 												<td style="text-align: center" data-bind="text : companyName"></td>
 												<td style="text-align: center" data-bind="text : bossName"></td>
 												<td style="text-align: center" data-bind="text : applyerName"></td>
+												<td style="text-align: center">
+													<span data-bind="visible: status == 10 ">
+														正在申请
+													</span>
+													<span data-bind="visible: status == 20 ">
+														审核通过
+													</span>
+													<span data-bind="visible: status == 30 ">
+														未通过审核
+													</span>
+												</td>
 												<td style="text-align: center" data-bind="text : applyingDate"></td>
 												<td style="text-align: center">
-													<a title="批准" data-bind="click : $root.checkApplyingCustomer" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i>批准</a>
-													<a title="批准" data-bind="click : $root.approveCustomer" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i>批准</a>
-													<a title="拒绝" data-bind="click : $root.rejectCustomer" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-blue"></i>拒绝</a>
+													<a title="检查" class="tiny blue button" data-bind="click : $root.checkApplyingCustomer" style="margin-left : 5px;" href="#">检查</a>
+													<a title="批准" class="tiny white button" data-bind="click : $root.approveCustomer" style="margin-left : 5px;" href="#">批准</a>
+													<a title="拒绝" class="tiny red button" data-bind="click : $root.rejectCustomer" style="margin-left : 5px;" href="#">拒绝</a>
 												</td>
 											</tr>
 										</tbody>
