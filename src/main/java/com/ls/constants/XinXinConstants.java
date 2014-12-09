@@ -30,4 +30,6 @@ public class XinXinConstants {
 	
 	public static final String TRANING_STATUS = "traning_status";
 	
+	public static final String APPLYING_CUSTOMER_STATUS = "applying_customer_status";
+	
 }

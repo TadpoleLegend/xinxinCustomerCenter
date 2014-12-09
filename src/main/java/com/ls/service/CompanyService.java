@@ -8,6 +8,7 @@ import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
 import com.ls.entity.Problem;
 import com.ls.vo.CompanySearchVo;
+import com.ls.vo.ResponseVo;
 
 public interface CompanyService {
 	List<Company> findCompany(String name);
@@ -25,4 +26,6 @@ public interface CompanyService {
 	CompanyAdditional findCompanyAddtionalInformationByCompanyId(Integer companyId);
 	
 	void checkOrUncheckProblem(String companyJson, String problemJson, String checkFlag);
+	
+	ResponseVo changeCompanyStatus(String companyId, String statusId);
 }

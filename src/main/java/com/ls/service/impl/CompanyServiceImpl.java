@@ -15,15 +15,18 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang.StringUtils;
+import org.omg.CORBA.COMM_FAILURE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.ImmutableList;
 import com.ls.constants.XinXinConstants;
+import com.ls.entity.ApplyingWillingCustomer;
 import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyAdditional;
@@ -33,14 +36,20 @@ import com.ls.entity.PhoneCallHistory;
 import com.ls.entity.Problem;
 import com.ls.entity.ProblemCategory;
 import com.ls.entity.Province;
+import com.ls.entity.User;
+import com.ls.enums.ApplyingCustomerStatus;
+import com.ls.enums.CustomerStatusEnum;
+import com.ls.repository.ApplyingWillingCustomerRepository;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
+import com.ls.repository.UserRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.AdvanceSearch;
 import com.ls.vo.CompanySearchVo;
+import com.ls.vo.ResponseVo;
 
 @Service("companyService")
 public class CompanyServiceImpl implements CompanyService {
@@ -53,10 +62,15 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Autowired
 	private ProvinceRepository provinceRepository;
-
+	
+	@Autowired 
+	private ApplyingWillingCustomerRepository applyingWillingCustomerRepository;
 	
 	@Autowired
 	private CompanyAdditionalRepository companyAdditionalRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	public List<Company> findCompany(String name) {
 		// TODO Auto-generated method stub
@@ -319,6 +333,70 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 		}
 		return null;
+	}
+	
+	@Secured({"ROLE_SALES_MANAGER", "ROLE_ADMIN"})
+	public ResponseVo changeCompanyStatus(String companyId, String statusId) {
+		
+		ResponseVo response = XinXinUtils.makeGeneralSuccessResponse();
+		
+		String currentUsername = XinXinUtils.getCurrentUserName();
+		User currentUser = userRepository.findByUsername(currentUsername);
+		
+		ApplyingWillingCustomer applyingWillingCustomer = applyingWillingCustomerRepository.findByCompanyIdAndUser(Integer.valueOf(companyId), currentUser);
+		
+		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		Integer targetStatus = Integer.valueOf(statusId);
+		
+		if (company.getStatus() == CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
+			
+			if (targetStatus > CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
+				
+				response = ResponseVo.newFailMessage("该顾客正在意向客户申请中，不能改变状态！");
+				return response;
+			} else if (targetStatus > CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
+				
+				response = ResponseVo.newFailMessage("该顾客已经在意向客户申请中！");
+				return response;
+			} else {
+				
+				if (applyingWillingCustomer != null) {
+					applyingWillingCustomerRepository.delete(applyingWillingCustomer);
+				}
+				response = ResponseVo.newSuccessMessage("该客户的意向申请已经取消！");
+			}
+			
+		}
+		
+		if (targetStatus == CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
+			
+			if (applyingWillingCustomer == null) {
+				
+				ApplyingWillingCustomer applyingWillingCustomerToSave = new ApplyingWillingCustomer();
+				
+				applyingWillingCustomerToSave.setUser(currentUser);
+				applyingWillingCustomerToSave.setCompanyId(Integer.valueOf(companyId));
+				applyingWillingCustomerToSave.setApplyingDate(XinXinUtils.getNow());
+				applyingWillingCustomerToSave.setUpdateDate(XinXinUtils.getNow());
+				applyingWillingCustomerToSave.setStatus(ApplyingCustomerStatus.APPLYING.getId());
+				applyingWillingCustomerToSave.setCompanyName(company.getName());
+				applyingWillingCustomerToSave.setApplyerName(currentUser.getName());
+				
+				applyingWillingCustomerRepository.save(applyingWillingCustomerToSave);
+				
+				response = ResponseVo.newSuccessMessage("已成功提交意向客户申请！");
+				
+			} else {
+				
+				response = ResponseVo.newFailMessage("该申请已经存在！");
+				return response;
+			}
+		}
+		
+		company.setStatus(targetStatus);
+		companyRepository.save(company);
+		
+		return response;
 	}
 	
 }

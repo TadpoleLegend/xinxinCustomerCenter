@@ -14,10 +14,37 @@
 			 <result-type name="json" class="org.apache.struts2.json.JSONResult" />
 			 <result-type name="redirect" class="org.apache.struts2.dispatcher.ServletRedirectResult"/> 
 		</result-types>
+		
+		<action name="loadApproveCustomer">
+			<result>approve-willing-customer.jsp</result>
+		</action>
+		
 		<action name="approveCustomerToWillList" class="approveCustomerAction" method="approveCustomerToWillList">
 			<result name="success" type="json">
 				<param name="root">response</param>
 			</result>
 		</action>
+		
+		<action name="getAllApplyingList" class="approveCustomerAction" method="getAllApplyingList">
+			<result name="success" type="json">
+				<param name="root">applyingWillingCustomers</param>
+			</result>
+		</action>
+		<action name="approveCustomer" class="approveCustomerAction" method="approveCustomer">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
+		<action name="rejectCustomer" class="approveCustomerAction" method="rejectCustomer">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
+		<action name="checkApplyingCustomer" class="approveCustomerAction" method="checkApplyingCustomer">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
+		
 	</package>	
 </struts>

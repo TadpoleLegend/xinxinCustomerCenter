@@ -119,8 +119,13 @@ public class XinXinUtils {
 	public static boolean isUserHasRole(String role) {
 		
 		SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper = new SecurityContextHolderAwareRequestWrapper(ServletActionContext.getRequest(), "ROLE_");
+		
 		return securityContextHolderAwareRequestWrapper.isUserInRole(role);
 		
 	}
 	
+	public static String getCurrentUserName() {
+		SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper = new SecurityContextHolderAwareRequestWrapper(ServletActionContext.getRequest(), "ROLE_");
+		return securityContextHolderAwareRequestWrapper.getUserPrincipal().getName();
+	}
 }

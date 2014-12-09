@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
 import com.ls.constants.XinXinConstants;
@@ -424,15 +425,13 @@ public class CompanyAction extends BaseAction {
 	public String changeCompanyStatus() {
 		
 		try {
+			
 			String companyId =  getParameter("companyId");
 			String statusId = getParameter("statusId");
 			
-			Company company = companyRepository.findOne(Integer.valueOf(companyId));
-			company.setStatus(Integer.valueOf(statusId));
+			ResponseVo responseVo = companyService.changeCompanyStatus(companyId, statusId);
 			
-			companyRepository.save(company);
-			
-			setResponse(XinXinUtils.makeGeneralSuccessResponse());
+			setResponse(responseVo);
 			
 		} catch (NumberFormatException e) {
 			setResponse(XinXinUtils.makeGeneralErrorResponse(e));

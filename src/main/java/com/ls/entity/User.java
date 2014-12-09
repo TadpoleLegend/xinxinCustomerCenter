@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -37,6 +38,9 @@ public class User implements Serializable {
 	
 	@OneToOne(mappedBy="user")
 	protected PhoneCallHistory phoneCallHistory;
+	
+	@OneToMany(mappedBy="user")
+	protected List<ApplyingWillingCustomer> applyingWillingCustomers;
 
 	public User() {
 		super();
@@ -117,6 +121,18 @@ public class User implements Serializable {
 
 	public void setPhoneCallHistory(PhoneCallHistory phoneCallHistory) {
 		this.phoneCallHistory = phoneCallHistory;
+	}
+
+	
+	public List<ApplyingWillingCustomer> getApplyingWillingCustomers() {
+	
+		return applyingWillingCustomers;
+	}
+
+	
+	public void setApplyingWillingCustomers(List<ApplyingWillingCustomer> applyingWillingCustomers) {
+	
+		this.applyingWillingCustomers = applyingWillingCustomers;
 	}
 	
 }

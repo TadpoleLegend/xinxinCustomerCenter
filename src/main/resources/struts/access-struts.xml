@@ -17,6 +17,9 @@
 		<action name="login">
 			<result>index.jsp</result>
 		</action>
+		<action name="badaccess">
+			<result>access-denied.jsp</result>
+		</action>
 		<action name="login-process" class="userAction" method="doLogin">
 			<result name="success" type="redirectAction">
 				<param name="actionName">load</param>

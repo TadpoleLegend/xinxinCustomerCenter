@@ -1078,13 +1078,9 @@
 										
 										$('#stepLink' + item.id).attr('class', 'active');
 										
-										var message = self.selectedCompany().name + '已更改为 ' + bIt(item.name);
-										success(message);
-										
-									} else {
-										
-										fail();
-									}
+									} 
+									
+									handleStanderdResponse(data);
 								}
 							});
 							

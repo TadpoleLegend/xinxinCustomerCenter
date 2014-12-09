@@ -21,6 +21,7 @@ import com.ls.entity.ProblemCategory;
 import com.ls.entity.Role;
 import com.ls.entity.Step;
 import com.ls.entity.User;
+import com.ls.enums.ApplyingCustomerStatus;
 import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CompanyRepository;
@@ -75,25 +76,26 @@ public class TestInitializationScripts {
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {
+		
+		CustomerStatusEnum statusEnum[] = CustomerStatusEnum.values();
+		for (CustomerStatusEnum customerStatusEnum : statusEnum) {
+			Step step = new Step(customerStatusEnum.getId(), customerStatusEnum.getName(), customerStatusEnum.getOrderNumber());
+			stepRepository.save(step);
+		}
 
-		Step stepOne = new Step(10, "非意向客户", 1);
-		Step stepTwo = new Step(20, "申请成为意向客户", 2);
-		Step stepThree = new Step(30, "公开课", 4);
-		Step stepFour = new Step(40, "内训班", 3);
-		Step stepFive = new Step(50, "精品班", 5);
-		Step stepSix = new Step(60, "院长班", 6);
-		Step stepSeven = new Step(70, "连锁班", 7);
-		
-		stepRepository.save(stepOne);
-		stepRepository.save(stepTwo);
-		stepRepository.save(stepThree);
-		stepRepository.save(stepFour);
-		stepRepository.save(stepFive);
-		stepRepository.save(stepSix);
-		stepRepository.save(stepSeven);
-		
 	}
 
+	@Test
+	public void testInitialApplyingCustomerStatus() throws Exception {
+		
+		ApplyingCustomerStatus statusEnum[] = ApplyingCustomerStatus.values();
+		for (ApplyingCustomerStatus customerStatusEnum : statusEnum) {
+			Dictionary dictionary = new Dictionary(XinXinConstants.APPLYING_CUSTOMER_STATUS, customerStatusEnum.getId().toString(), customerStatusEnum.getName(), "");
+			dropDownRepository.save(dictionary);
+		}
+
+	}
+	
 	/**
 	 * init company data
 	 * 
@@ -218,26 +220,37 @@ public class TestInitializationScripts {
 	public void testCreateUserAndRoles() {
 		
 		User adminUser = new User("Jerry Jiang", "jerryjiang", getEncodedPassword("jerryjiang", "jerryjiang"), true);
+		
 		User bigAreaUser = new User("Allen Li", "allenli", getEncodedPassword("allenli", "allenli"), true);
+		
 		User huliu = new User("Hu Liu", "huliu",getEncodedPassword("huliu", "huliu"), true);
+		
 		User liuxiaoxue = new User("Liu JianXia","liujianxia", getEncodedPassword("liujianxia", "liujianxia"), true);
 		
 		Role superAdmin = new Role("ROLE_ADMIN", "系统管理者");
+		
 		Role bigAreaManager = new Role("ROLE_SALES_MANAGER", "大区经理");
+		
 		Role customerService = new Role("ROLE_CS_MANAGER", "客服经理");
+		
 		Role newbite = new Role("ROLE_NEW_GUY", "新人");
+		
 		Role willingCustomerApprover = new Role("ROLE_WC_APPROVER", "意向客户审核");
 		
 		adminUser.setRoles(ImmutableList.of(superAdmin));
+		
 		bigAreaUser.setRoles(ImmutableList.of(bigAreaManager));
+		
 		huliu.setRoles(ImmutableList.of(customerService, willingCustomerApprover));
+		
 		liuxiaoxue.setRoles(ImmutableList.of(newbite));
 		
-		List<Role> roles = ImmutableList.of(superAdmin, bigAreaManager, customerService, newbite);
+		List<Role> roles = ImmutableList.of(superAdmin, bigAreaManager, customerService, newbite, willingCustomerApprover);
 		
 		List<User> users = ImmutableList.of(adminUser, bigAreaUser, huliu, liuxiaoxue);
 		
 		roleRepository.save(roles);
+		
 		userRepository.save(users);
 		
 	}
