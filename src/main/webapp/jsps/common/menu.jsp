@@ -2,12 +2,32 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <nav class="site-nav" id="nav">
 	<div class="row">
-		<ul id="dropdown">
-			<li><a title="" href="/ls/user/load.ls">Customer Management</a></li>
-			<li><a title="" href="/ls/grab/load.ls">Manually Grab</a></li>
-			<li><a title="" href="/ls/admin/configuration.ls">Problem Configuration</a></li>
-			<li><a title="" href="/ls/admin/loadUser.ls">User Management</a></li>
-			<li><a title="" href="/ls/wccheck/loadApproveCustomer.ls">Approve Customer</a></li>
+		<ul id="dropdown" data-bind="foreach: menuList">
+			<li><a data-bind="attr : { 'href' : url, 'title' : title, 'id': elementId}"><b data-bind="text : title"></b></a></li>
 		</ul>
 	</div>
 </nav>
+<script>
+	$(document).ready(function() {
+		
+		var MenuModel = function() {
+			var self = this;
+			
+			self.menuList = ko.observableArray([]);
+			self.loadMenus = function() {
+				$.ajax({
+					url : '/ls/findAllMenus.ls',
+					success : function(data) {
+						self.menuList(data);
+					}
+				});
+			};
+			
+			self.loadMenus();
+		};
+		var menuModel = new MenuModel();
+		var $menuContainer = $("#nav")[0];
+		ko.applyBindings(menuModel, $menuContainer);
+		
+	});
+</script>

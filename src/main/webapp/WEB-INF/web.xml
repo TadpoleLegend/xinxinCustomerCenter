@@ -68,7 +68,9 @@
 		<filter-name>struts2</filter-name>
 		<url-pattern>*.ls</url-pattern>
 	</filter-mapping>
-	
+	<session-config>
+  		<session-timeout>1440</session-timeout>
+ 	</session-config>
 	<error-page>
 		<error-code>404</error-code>
 		<location>/404.html</location>

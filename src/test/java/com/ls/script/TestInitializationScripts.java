@@ -16,6 +16,7 @@ import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.Dictionary;
+import com.ls.entity.Menu;
 import com.ls.entity.Phase;
 import com.ls.entity.ProblemCategory;
 import com.ls.entity.Role;
@@ -26,6 +27,7 @@ import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.DropDownRepository;
+import com.ls.repository.MenuRepository;
 import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemCategoryRepository;
 import com.ls.repository.ProblemRepository;
@@ -73,6 +75,22 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private ProvinceRepository provinceRepository;
+	
+	@Autowired
+	private MenuRepository menuRepository;
+	
+	@Test
+	public void testInitialMenus() {
+		
+		Menu menu1 = new Menu("顾客中心", "/ls/user/load.ls", "customerCenter");
+		Menu menu2 = new Menu("用户管理", "/ls/admin/loadUser.ls", "userManager");
+		Menu menu3 = new Menu("系统配置", "/ls/admin/configuration.ls", "systemConfiguration");
+		Menu menu4 = new Menu("数据采集", "/ls/grab/load.ls", "dataCollection");
+		Menu menu5 = new Menu("意向客户审批", "/ls/wccheck/loadApproveCustomer.ls", "willingCustomerApprove");
+		
+		menuRepository.save(ImmutableList.of(menu1, menu2, menu3, menu4, menu5));
+		
+	}
 
 	@Test
 	public void testInitialCompanySteps() throws Exception {

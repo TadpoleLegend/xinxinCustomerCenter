@@ -2,6 +2,7 @@ package com.ls.service.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.ls.constants.XinXinConstants;
 import com.ls.entity.ApplyingWillingCustomer;
@@ -119,9 +121,27 @@ public class CompanyServiceImpl implements CompanyService {
 				
 				Predicate predicate = criteriaBuilder.conjunction();
 				
-				if (StringUtils.isNotBlank(companySearchVo.getSearchId())) {
-					predicate.getExpressions().add(criteriaBuilder.equal(root.get("id"), Integer.valueOf(companySearchVo.getSearchId()))); 
+				String searchId = companySearchVo.getSearchId();
+				if (StringUtils.isNotBlank(searchId)) {
 					
+					Iterable<String> ids = null;
+					
+					if (searchId.trim().contains(" ")) {
+						ids = Splitter.on(" ").omitEmptyStrings().trimResults().split(searchId);
+					} else if (searchId.trim().contains(",")) {
+						ids = Splitter.on(",").omitEmptyStrings().trimResults().split(searchId);
+					} else {
+						predicate.getExpressions().add(criteriaBuilder.equal(root.get("id"), Integer.valueOf(companySearchVo.getSearchId()))); 
+					}
+					
+					if (ids != null) {
+						
+						List<Integer> idsIntegers = new ArrayList<Integer>();
+						for (String id : ids) {
+							idsIntegers.add(Integer.valueOf(id));
+						}
+						predicate.getExpressions().add(root.get("id").in(idsIntegers));
+					}
 					return predicate;
 				}
 				
@@ -384,7 +404,7 @@ public class CompanyServiceImpl implements CompanyService {
 				applyingWillingCustomerToSave.setStatus(ApplyingCustomerStatus.APPLYING.getId());
 				applyingWillingCustomerToSave.setCompanyName(company.getName());
 				applyingWillingCustomerToSave.setApplyerName(currentUser.getName());
-				
+				applyingWillingCustomerToSave.setCompanyAdditionalId(companyAdditional.getId());
 				applyingWillingCustomerRepository.save(applyingWillingCustomerToSave);
 				
 				response = ResponseVo.newSuccessMessage("已成功提交意向客户申请！");

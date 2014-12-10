@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
 import com.ls.entity.Dictionary;
+import com.ls.entity.Menu;
 import com.ls.entity.Phase;
 import com.ls.entity.Problem;
 import com.ls.entity.ProblemCategory;
@@ -22,6 +23,7 @@ import com.ls.entity.Province;
 import com.ls.entity.Step;
 import com.ls.entity.User;
 import com.ls.repository.DropDownRepository;
+import com.ls.repository.MenuRepository;
 import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemCategoryRepository;
 import com.ls.repository.ProblemRepository;
@@ -55,6 +57,9 @@ public class CommonAction extends BaseAction {
 	@Autowired
 	private ProblemCategoryRepository problemCategoryRepository;
 	
+	@Autowired
+	private MenuRepository menuRepository;
+	
 	private List<Dictionary> companyTypes;
 	
 	private List<Problem> problems;
@@ -63,6 +68,7 @@ public class CommonAction extends BaseAction {
 	private List<Step> steps;
 	private List<Phase> phases;
 	private List<ProblemCategory> problemCategories;
+	private List<Menu> menus;
 	
 	public String findAllPhases() {
 		
@@ -141,6 +147,24 @@ public class CommonAction extends BaseAction {
 		
 		return SUCCESS;
 	}
+	
+	public String findAllMenus() {
+		
+		menus = menuRepository.findAll();
+		
+		return SUCCESS;
+	}
+	public List<Menu> getMenus() {
+	
+		return menus;
+	}
+
+	
+	public void setMenus(List<Menu> menus) {
+	
+		this.menus = menus;
+	}
+
 	public List<Province> getProvinces() {
 		return provinces;
 	}

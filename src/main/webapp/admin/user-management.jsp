@@ -26,7 +26,7 @@
 
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
-		<div class="container">
+		<div class="container" id ="userModeContainer">
 			<div id="resetPasswordDialog" style="display : none;">
 				<form class="form-wrapper">
 					<input type="text" id="search" placeholder="ÇëÊäÈëÐÂµÄÃÜÂë" required data-bind="value : newPasswordToReset"> 
@@ -347,7 +347,9 @@
 					var model = new UserModel();
 					model.loadUserAccouts();
 					model.loadAllUsers();
-					ko.applyBindings(model);
+					
+					var $userModeContainer = $("#userModeContainer")[0];
+					ko.applyBindings(model, userModeContainer);
 					
 				});
 	</script>

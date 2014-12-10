@@ -146,8 +146,8 @@
 											console.debug(JSON.stringify(data));
 										}
 									});
-							//self.users.push(new User('1', 'ÁõÏşÑ©'));
 						};
+						
 						self.showLocation = function(target) {
 							alert('test');
 						};

@@ -26,7 +26,7 @@
 
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
-		<div class="container">
+		<div class="container" id="applyCustomerModeContainer">
 				<div class="row">
 					<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
@@ -74,6 +74,27 @@
 									</table>
 									</div>
 									<br>
+									<div id="checkDuplicationDialog" data-bind="with : willingCustomerCheckResult" style="display : none;" title="检查结果">
+										<label class="green label"> 提示 ： 搜索结果是公司编号列表</label>
+										<div class="row">
+											<label>
+												姓名检查: 
+											</label>
+											<textarea data-bind="text:bossNameResult"></textarea>
+										</div>
+										<div class="row">
+											<label>
+												院长手机号码检查:
+											</label>
+											<textarea data-bind="text:bossMobileResult"></textarea>
+										</div>
+										<div class="row">
+											<label>
+												公司名称检查:
+											</label>
+											<textarea data-bind="text:companyNameResult"></textarea>
+										</div>
+									</div>
 							</div>
 						</div>
 					</div>
@@ -83,10 +104,17 @@
 	<s:include value="/jsps/common/footer.jsp" />
 	<script>
 		$(document).ready( function() {
-			
+					var WillCustomerCheckResult = function(){
+						var self = this;
+						self.bossNameResult = '';
+						self.bossMobileResult = '';
+						self.companyNameResult = '';
+					};
+					
 					var ApplyCustomerMode = function() {
 						var self = this;
 						self.applyingList = ko.observableArray([]);
+						self.willingCustomerCheckResult = ko.observable(new WillCustomerCheckResult());
 						
 						self.getAllApplyingList = function() {
 							$.ajax({
@@ -99,8 +127,38 @@
 						self.getAllApplyingList();
 						
 						self.checkApplyingCustomer = function(item, event) {
-							
+							$.ajax({
+								url : 'checkApplyingCustomer.ls',
+								method : 'POST',
+								data : {
+										applyingCustomerJson : JSON.stringify(item)
+								},
+								success : function(data) {
+									
+									handleStanderdResponse(data);
+									
+									if(isOK(data)) {
+										self.willingCustomerCheckResult(data.object);
+										$('#checkDuplicationDialog').dialog({
+											modal : true,
+											width : 500,
+											height : 500,
+											open : function(e) {
+												changeButtonStyleForPopup(e);
+											},
+											
+											buttons : {
+												
+												'关闭窗口' : function() {
+													closeDialog('checkDuplicationDialog');
+												}
+											}
+										});
+									}
+								}
+							});
 						};
+						
 						self.approveCustomer = function(item, event) {
 							$.ajax({
 								url : 'approveCustomer.ls',
@@ -124,7 +182,6 @@
 										applyingCustomerJson : JSON.stringify(item)
 								},
 								success : function(data) {
-									
 									handleStanderdResponse(data);
 									self.getAllApplyingList();
 								}
@@ -132,8 +189,9 @@
 						};
 					};
 					
-					var model = new ApplyCustomerMode();
-					ko.applyBindings(model);
+					var applyCustomerMode = new ApplyCustomerMode();
+					var $applyCustomerModeContainer = $("#applyCustomerModeContainer")[0];
+					ko.applyBindings(applyCustomerMode, applyCustomerModeContainer);
 					
 				});
 	</script>

@@ -1576,6 +1576,10 @@
 												current_page : self.currentIndex() - 1,
 												load_first_page : false
 											});
+								},
+								
+								error : function() {
+									
 								}
 							});
 						};
@@ -1648,6 +1652,7 @@
 						$('#searchboxDialog').dialog("close");
 					});
 					
+					$('#customerCenter').addClass('active');
 				});
 	</script>
 </body>

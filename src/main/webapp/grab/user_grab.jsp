@@ -26,7 +26,7 @@
 
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
-		<div class="container">
+		<div class="container" id="grabModelContainer">
 			<div class="row">
 				<div class="four columns">
 					<div class="app-wrapper ui-corner-top">
@@ -282,9 +282,11 @@
 
 				};
 
-			var model = new GrabModel();
-			model.initCities();
-			ko.applyBindings(model);
+			var grabModel = new GrabModel();
+			grabModel.initCities();
+			
+			var $grabModelContainer = $('#grabModelContainer')[0];
+			ko.applyBindings(grabModel, $grabModelContainer);
 		});
 	</script>
 </body>

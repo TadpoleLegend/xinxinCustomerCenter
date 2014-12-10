@@ -23,6 +23,8 @@ public class ApplyingWillingCustomer implements Serializable {
 	
 	protected Integer companyId;
 	
+	protected Integer companyAdditionalId;
+	
 	protected String companyName;
 	
 	protected String bossName;
@@ -124,6 +126,16 @@ public class ApplyingWillingCustomer implements Serializable {
 	public void setApplyerName(String applyerName) {
 	
 		this.applyerName = applyerName;
+	}
+	
+	public Integer getCompanyAdditionalId() {
+	
+		return companyAdditionalId;
+	}
+	
+	public void setCompanyAdditionalId(Integer companyAdditionalId) {
+	
+		this.companyAdditionalId = companyAdditionalId;
 	}
 	
 }

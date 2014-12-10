@@ -24,7 +24,7 @@
 	</header>
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
-		<div class="container">
+		<div class="container" id="configurationModelContainer">
 			<div id="problemDialog" style="display: none;" title="ÎÊÌâ±êÇ©" data-bind="with : selectedProblem">
 
 				<form id="problemForm">
@@ -201,7 +201,8 @@
 
 					var configurationModel = new ConfigurationModel();
 					configurationModel.findAllProblems();
-					ko.applyBindings(configurationModel);
+					var $configurationModelContainer = $("#configurationModelContainer")[0];
+					ko.applyBindings(configurationModel, configurationModelContainer);
 					
 				});
 	</script>

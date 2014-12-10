@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.ApplyingWillingCustomer;
 import com.ls.enums.ApplyingCustomerStatus;
+import com.ls.exception.ApplicationException;
 import com.ls.repository.ApplyingWillingCustomerRepository;
 import com.ls.service.ApplyingCustomerService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.ResponseVo;
+import com.ls.vo.WillCustomerCheckResult;
 
 @Component("approveCustomerAction")
 public class ApproveCustomerAction extends BaseAction {
@@ -87,12 +89,23 @@ public class ApproveCustomerAction extends BaseAction {
 	}
 	
 	public String checkApplyingCustomer() {
-		ResponseVo responseVo = XinXinUtils.makeGeneralSuccessResponse();
 		
-		String applyingCustomerJson = getParameter("applyingCustomerJson");
-		ApplyingWillingCustomer applyingWillingCustomer = XinXinUtils.getJavaObjectFromJsonString(applyingCustomerJson, ApplyingWillingCustomer.class);
+		try {
+			ResponseVo responseVo = XinXinUtils.makeGeneralSuccessResponse();
+			
+			String applyingCustomerJson = getParameter("applyingCustomerJson");
+			ApplyingWillingCustomer applyingWillingCustomer = XinXinUtils.getJavaObjectFromJsonString(applyingCustomerJson, ApplyingWillingCustomer.class);
+			
+			WillCustomerCheckResult willCustomerCheckResult = applyingCustomerService.checkApplyingCustomer(applyingWillingCustomer);
+			responseVo.setObject(willCustomerCheckResult);
+			
+			setResponse(responseVo);
+		} catch(ApplicationException e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+		}	catch (Exception e) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+		}
 		
-		setResponse(responseVo);
 		return SUCCESS;
 	}
 	

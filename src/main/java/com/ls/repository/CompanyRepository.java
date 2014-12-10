@@ -16,6 +16,8 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> , Jpa
 	
 	List<Company> findByNameAndContactorAndArea(String name, String contactor, String area);
 	
+	List<Company> findByNameAndNameNot(String name, String myName);
+	
 	@Query(value="SELECT lc.* FROM ls_company lc where lc.cityId = :cityId and (lc.oTEresourceId = :oTEresourceId or lc.name = :name)", nativeQuery=true)
 	Company findCompanyFor138GrabJob(@Param("cityId") Integer cityId,@Param("oTEresourceId") String oTEresourceId,@Param("name") String name);
 	

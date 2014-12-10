@@ -1,7 +1,9 @@
 package com.ls.service;
 
 import com.ls.entity.ApplyingWillingCustomer;
+import com.ls.exception.ApplicationException;
 import com.ls.vo.ResponseVo;
+import com.ls.vo.WillCustomerCheckResult;
 
 
 public interface ApplyingCustomerService {
@@ -10,5 +12,5 @@ public interface ApplyingCustomerService {
 	
 	ResponseVo rejectCustomer(ApplyingWillingCustomer applyingWillingCustomer);
 	
-	ResponseVo checkApplyingCustomer(ApplyingWillingCustomer applyingWillingCustomer);
+	WillCustomerCheckResult checkApplyingCustomer(ApplyingWillingCustomer applyingWillingCustomer) throws ApplicationException;
 }

@@ -1,6 +1,4 @@
 <!-- Footer -->
-
-
 <footer role="footer">
 		<div class="container">
 			<div class="row">
@@ -16,7 +14,7 @@
 			</div>
 		</div>
 	</footer>
-	
+	<div id="commonErrorMessageDialog" title=""></div>
 	<script>
 
 	$(document).ajaxStart(function() {
@@ -25,4 +23,24 @@
 		Common.prototype.closeAjaxLoader();
 	});
 	
+	$(document).ajaxError(
+		function ajaxRequestFailHandler(event, xmlhttprequest, ajaxoptions, errorthrown) {
+		
+		var htmlResponseText = xmlhttprequest.responseText;
+		$('#commonErrorMessageDialog').html(htmlResponseText);
+		
+		$('#commonErrorMessageDialog').dialog({
+			modal : true,
+			width : 700,
+			height : 700,
+			buttons : {
+				
+				'Close Window' : function() {
+					closeDialog('commonErrorMessageDialog');
+				}
+			}
+		});
+		
+		fail(errorthrown);
+	});
 </script>

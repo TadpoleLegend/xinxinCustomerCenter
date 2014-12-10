@@ -40,5 +40,10 @@
 				<param name="namespace">/</param>
 			</result>
 		</action>
+		<action name="findAllMenus" class="commonAction" method="findAllMenus">
+			<result name="success" type="json">
+				<param name="root">menus</param>
+			</result>
+		</action>
 	</package>	
 </struts>
