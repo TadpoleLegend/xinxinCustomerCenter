@@ -18,32 +18,10 @@
 <script src="/ls/js/common.js"></script>
 <script src="/ls/js/knockout-jqueryui.min.js"></script>
 <script src="/ls/js/jquery.hotkeys.js"></script>
-
+<script src="/ls/js/User.js"></script>
 <script>
 	Messenger.options = {
 	    extraClasses: 'messenger-fixed messenger-on-top',
 	    theme: 'future'
 	};
-	
-	function headerDropdown () {
-		$(".js-header-dropdown-trigger").click(function() {
-		    $(".js-header-dropdown-menu")
-		        .show()
-		        .position({
-		            my: "right top",
-		            at: "right bottom",
-		            of: $(".js-header-dropdown-trigger")
-		        });
-		    $(document).one("click", function() {
-		        $(".js-header-dropdown-menu").hide();
-		    });
-		    return false;
-		});
-	}
-	
-	$(document).ready(function() {
-		
-		headerDropdown();
-		$('testaaaa').text('testaaaa');
-	});
 </script>

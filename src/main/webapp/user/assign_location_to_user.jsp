@@ -23,7 +23,7 @@
 			</div>
 		</div>
 	</header>
-
+	<s:include value="/jsps/common/brand.jsp" />
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container">

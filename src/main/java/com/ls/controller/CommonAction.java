@@ -29,7 +29,9 @@ import com.ls.repository.ProblemCategoryRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.repository.StepRepository;
+import com.ls.repository.UserRepository;
 import com.ls.service.CompanyService;
+import com.ls.util.XinXinUtils;
 
 @Component("commonAction")
 @Scope("prototype")
@@ -60,6 +62,9 @@ public class CommonAction extends BaseAction {
 	@Autowired
 	private MenuRepository menuRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	private List<Dictionary> companyTypes;
 	
 	private List<Problem> problems;
@@ -69,6 +74,7 @@ public class CommonAction extends BaseAction {
 	private List<Phase> phases;
 	private List<ProblemCategory> problemCategories;
 	private List<Menu> menus;
+	private User user;
 	
 	public String findAllPhases() {
 		
@@ -101,9 +107,13 @@ public class CommonAction extends BaseAction {
 		return SUCCESS;
 	}
 
+	public String loadMe() {
+		String username = XinXinUtils.getCurrentUserName();
+		user = userRepository.findByUsername(username);
+		return SUCCESS;
+	}
 	
 	public String findAllProvinces() {
-	//	User storedUserInSession = (User) getSession().get(XinXinConstants.CURRENT_USER);
 		
 		provinces = provinceRepository.findAll();
 		
@@ -134,8 +144,6 @@ public class CommonAction extends BaseAction {
 	public String findDropDownDataSouce() {
 		String identityType = getParameter("identityType");
 		
-	//	Order order = new Order(Direction.ASC, "id");
-	//	Sort sort = new Sort(order);
 		companyTypes = dropDownRepository.findByIdentity(identityType);
 		
 		return SUCCESS;
@@ -158,8 +166,15 @@ public class CommonAction extends BaseAction {
 	
 		return menus;
 	}
-
 	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public void setMenus(List<Menu> menus) {
 	
 		this.menus = menus;

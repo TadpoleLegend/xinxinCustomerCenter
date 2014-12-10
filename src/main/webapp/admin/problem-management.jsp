@@ -10,18 +10,12 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>Configuration</title>
+<title>系统管理</title>
 
 <s:include value="/jsps/common/head.jsp" />
 </head>
 <body>
-	<header id="brand">
-		<div class="container">
-			<div class="row">
-				<div class="appname hide-on-phones"></div>
-			</div>
-		</div>
-	</header>
+	<s:include value="/jsps/common/brand.jsp" />
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id="configurationModelContainer">
@@ -205,6 +199,9 @@
 					ko.applyBindings(configurationModel, configurationModelContainer);
 					
 				});
+		function activeCurrentMenuItem() {
+			$('#systemConfiguration').addClass('active');
+		}
 	</script>
 </body>
 </html>

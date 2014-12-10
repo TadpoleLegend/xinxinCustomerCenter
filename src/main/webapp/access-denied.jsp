@@ -18,49 +18,6 @@
 <link rel="stylesheet" href="/ls/css/messenger.css">
 <link rel="stylesheet" href="/ls/css/messenger-theme-future.css">
 
-<!-- Required JS Files -->
-<!--  <script src="/ls/js/jquery-2.1.0.js"></script> -->
-<script src="/ls/js/jquery-1.10.2.js"></script>
-<script src="/ls/js/jquery-ui-1.10.4.custom.js"></script>
-<script src="/ls/js/jquery.dataTables.js"></script>
-<script src="/ls/js/knockout-3.1.0.js"></script>
-<script src="/ls/js/jquery.loader.js"></script>
-<script src="/ls/js/messenger.min.js"></script>
-<script src="/ls/js/messenger-theme-future.js"></script>
-<script src="/ls/js/jquery.validate.js"></script>
-<script src="/ls/js/icheck.js"></script>
-<script src="/ls/js/common.js"></script>
-<script src="/ls/js/knockout-jqueryui.min.js"></script>
-<script src="/ls/js/jquery.hotkeys.js"></script>
-
-<script>
-	Messenger.options = {
-	    extraClasses: 'messenger-fixed messenger-on-top',
-	    theme: 'future'
-	};
-	
-	function headerDropdown () {
-		$(".js-header-dropdown-trigger").click(function() {
-		    $(".js-header-dropdown-menu")
-		        .show()
-		        .position({
-		            my: "right top",
-		            at: "right bottom",
-		            of: $(".js-header-dropdown-trigger")
-		        });
-		    $(document).one("click", function() {
-		        $(".js-header-dropdown-menu").hide();
-		    });
-		    return false;
-		});
-	}
-	
-	$(document).ready(function() {
-		
-		headerDropdown();
-	});
-</script>
-
 </head>
 <body>
 	<header id="brand">
@@ -73,18 +30,15 @@
 <nav class="site-nav" id="nav">
 	<div class="row">
 		<ul id="dropdown">
-			<li><a title="" href="/ls/user/load.ls">Customer Management</a></li>
-			<li><a title="" href="/ls/grab/load.ls">Manually Grab</a></li>
-			<li><a title="" href="/ls/admin/configuration.ls">Problem Configuration</a></li>
-			<li><a title="" href="/ls/admin/loadUser.ls">User Management</a></li>
-			<li><a title="" href="/ls/wccheck/loadApproveCustomer.ls">Approve Customer</a></li>
+			<li></li>
 		</ul>
 	</div>
 </nav>
 	<section class="mainbg">
 		<div class="container">
 				<div class="row">
-					<h4 class="text-center">抱歉！你没有权限！</h4>
+					<h4 class="text-center">抱歉！你没有权限访问这个页面！你可以 <a href="javascript:history.go(-1);">返回上一页</a></h4>
+					
 					<hr>
 				</div>
 		</div>		

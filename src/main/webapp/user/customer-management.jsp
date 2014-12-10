@@ -705,9 +705,7 @@
 	<s:include value="/jsps/common/footer.jsp" />
 	<script src="/ls/js/list.js"></script>
 	<script src="/ls/js/jquery.raty.js"></script>
-	<script src="/ls/js/User.js"></script>
 	<script src="/ls/js/jquery.pagination.js"></script>
-	
 	<script>
 		$(document).bind('keypress.alt_1', function() {
 			
@@ -725,7 +723,6 @@
 		});
 	
 		$(document).ready( function() {
-		
 			
 					$("#searchWrapper").accordion({
 						collapsible: true
@@ -1652,8 +1649,12 @@
 						$('#searchboxDialog').dialog("close");
 					});
 					
-					$('#customerCenter').addClass('active');
+					
 				});
+		
+		function activeCurrentMenuItem() {
+			$('#customerCenter').addClass('active');
+		}
 	</script>
 </body>
 </html>

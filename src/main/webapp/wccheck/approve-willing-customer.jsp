@@ -10,20 +10,12 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>Willing customer Management</title>
+<title>意向客户管理</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <s:include value="/jsps/common/head.jsp" />
-
 </head>
 <body>
-	<header id="brand">
-		<div class="container">
-			<div class="row">
-				<div class="appname hide-on-phones"></div>
-			</div>
-		</div>
-	</header>
-
+	<s:include value="/jsps/common/brand.jsp" />
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id="applyCustomerModeContainer">
@@ -194,6 +186,10 @@
 					ko.applyBindings(applyCustomerMode, applyCustomerModeContainer);
 					
 				});
+		
+		function activeCurrentMenuItem() {
+			$('#willingCustomerApprove').addClass('active');
+		}
 	</script>
 </body>
 </html>

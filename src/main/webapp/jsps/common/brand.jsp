@@ -1,18 +1,42 @@
-<header id="brand">
-    <div class="row">
-        <div class="appname hide-on-phones"></div>
-        <address>
-            <span>
-                <div class="header-dropdown">
-                    <a href="#0" class="js-header-dropdown-trigger">Jerry Jiang <i class="icon-caret-down small"></i></a>
-                    <ul class="js-header-dropdown-menu dropdown-menu text-left">
-                        <li><a href="#"><i class="icon-download-alt small"></i> Change Server</a></li>
-                        <li><a href="#"><i class="icon-cog small"></i> Settings</a></li>
-                        <li><a href="#"><i class="icon-phone small"></i> Get Help</a></li>
-                        <li><a href="/ls/logout"><i class="icon-power-off small"></i> Log Out</a></li>
-                    </ul>
-                </div>
-            </span>
-        </address>
-    </div>
+<header id="brand" data-bind="with : user">
+	<div class="row">
+		<div class="appname hide-on-phones"></div>
+		<address>
+			<span> 
+				<div class="row">
+					<b data-bind="text : name"></b><label class="label green">1</label>
+					<div data-bind="foreach : roles">
+						<b data-bind="text : description"></b>
+					</div>
+				</div>
+				<div class="row">
+					<a href="/ls/logout"><i class="icon-power-off small"></i></a>
+				</div>
+			</span>
+		</address>
+	</div>
 </header>
+<script>
+	$(document).ready(function() {
+
+		var UserModel = function() {
+			var self = this;
+			self.user = ko.observable(new User());
+			self.loadMe = function() {
+				$.ajax({
+					url : '/ls/loadMe.ls',
+					success : function(data) {
+						
+						if (data && data.id) {
+							self.user(data);
+						}
+					}
+				});
+			};
+			self.loadMe();
+		};
+		var userModel = new UserModel();
+		var $userContainer = $('#brand')[0];
+		ko.applyBindings(userModel, $userContainer);
+	});
+</script>

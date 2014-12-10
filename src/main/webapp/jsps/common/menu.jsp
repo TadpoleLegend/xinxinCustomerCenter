@@ -19,6 +19,8 @@
 					url : '/ls/findAllMenus.ls',
 					success : function(data) {
 						self.menuList(data);
+						
+						activeCurrentMenuItem();
 					}
 				});
 			};

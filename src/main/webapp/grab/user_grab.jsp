@@ -16,14 +16,7 @@
 
 </head>
 <body>
-	<header id="brand">
-		<div class="container">
-			<div class="row">
-				<div class="appname hide-on-phones">欣心客户数据中心</div>
-			</div>
-		</div>
-	</header>
-
+	<s:include value="/jsps/common/brand.jsp" />
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id="grabModelContainer">
@@ -288,6 +281,11 @@
 			var $grabModelContainer = $('#grabModelContainer')[0];
 			ko.applyBindings(grabModel, $grabModelContainer);
 		});
+		
+
+		function activeCurrentMenuItem() {
+			$('#dataCollection').addClass('active');
+		}
 	</script>
 </body>
 </html>

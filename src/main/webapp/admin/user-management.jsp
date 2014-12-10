@@ -16,14 +16,7 @@
 
 </head>
 <body>
-	<header id="brand">
-		<div class="container">
-			<div class="row">
-				<div class="appname hide-on-phones"></div>
-			</div>
-		</div>
-	</header>
-
+	<s:include value="/jsps/common/brand.jsp" />
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id ="userModeContainer">
@@ -352,6 +345,10 @@
 					ko.applyBindings(model, userModeContainer);
 					
 				});
+		
+		function activeCurrentMenuItem() {
+			$('#userManager').addClass('active');
+		}
 	</script>
 </body>
 </html>
