@@ -5,21 +5,35 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.util.JSONUtils;
+
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.ImmutableList;
 import com.ls.constants.XinXinConstants;
+import com.ls.entity.City;
+import com.ls.entity.Province;
 import com.ls.entity.Role;
 import com.ls.entity.User;
+import com.ls.exception.ApplicationException;
+import com.ls.repository.CityRepository;
+import com.ls.repository.ProvinceRepository;
 import com.ls.repository.RoleRepository;
 import com.ls.repository.UserRepository;
 import com.ls.service.UserService;
 import com.ls.util.XinXinUtils;
+import com.ls.vo.JsTreeOptions;
 import com.ls.vo.ResponseVo;
 
 @Component("userAction")
+@Scope("prototype")
 public class UserAction extends BaseAction {
 
 	private static final long serialVersionUID = -3519886427026056067L;
@@ -40,7 +54,16 @@ public class UserAction extends BaseAction {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private CityRepository cityRepository;
+	@Autowired
+	private ProvinceRepository provinceRepository;
+	
 	private List<Role> roles;
+	
+	private List<City> chinaCities;
+	private List<Province> chinaProvinces;
 
 	public void setUsername(String username) {
 
@@ -273,8 +296,86 @@ public class UserAction extends BaseAction {
 	public String getAllRoles() {
 		
 		roles  = roleRepository.findAll();
+		
 		return SUCCESS;
 	}
+	
+	public String updateUserCity() {
+		
+		try {
+			String selectedCities = getParameter("selectedCities");
+			
+			User userToAssign = null;
+			String targetUser = getParameter("userJson");
+			if (StringUtils.isBlank(targetUser)) {
+				setResponse(XinXinUtils.makeGeneralErrorResponse(new ApplicationException("未选择用户")));
+				return SUCCESS;
+			} else {
+				userToAssign = XinXinUtils.getJavaObjectFromJsonString(targetUser, User.class);
+			}
+			
+			Object[] cityArray = JSONArray.fromObject(selectedCities).toArray();
+			
+			userService.updateUserCityAssignments(userToAssign, cityArray);
+			
+		} catch (Exception e) {
+			
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			return SUCCESS;
+		}
+		
+		setResponse(XinXinUtils.makeGeneralSuccessResponse());
+		
+		return SUCCESS;
+	}
+	
+	public String showAssignedCities() {
+		
+		String userId = getParameter("userId");
+		
+		if (StringUtils.isBlank(userId)) {
+			setResponse(XinXinUtils.makeGeneralErrorResponse(new ApplicationException("没有找到用户!")));
+			
+			return SUCCESS;
+		}
+		
+		User targetUser = userRepository.findOne(Integer.valueOf(userId));
+		
+		chinaProvinces = provinceRepository.findAll();
+		List<City> userCities = cityRepository.findByUsers(ImmutableList.of(targetUser));
+		
+		for (Province province : chinaProvinces) {
+			List<City> citiesInTheProvince = province.getCitys();
+			
+			for (City singleCityInChina : citiesInTheProvince) {
+				
+				singleCityInChina.setProvince(null);
+				singleCityInChina.setUsers(null);
+				singleCityInChina.setCityURLs(null);
+				if (userCities.contains(singleCityInChina)) {
+					JsTreeOptions jsTreeOptions = new JsTreeOptions(true);
+					
+					singleCityInChina.setJsTreeJsonValue(JSONObject.fromObject(jsTreeOptions).toString().replace("\"", "\\\""));
+				} else {
+					JsTreeOptions jsTreeOptions = new JsTreeOptions(false);
+					singleCityInChina.setJsTreeJsonValue(JSONObject.fromObject(jsTreeOptions).toString());
+				}
+			}
+		}
+		
+		return SUCCESS;
+	}
+	
+	public List<City> getChinaCities() {
+	
+		return chinaCities;
+	}
+	
+	public void setChinaCities(List<City> chinaCities) {
+	
+		this.chinaCities = chinaCities;
+	}
+
 	public String getUsername() {
 
 		return username;
@@ -316,6 +417,16 @@ public class UserAction extends BaseAction {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+	
+	public List<Province> getChinaProvinces() {
+	
+		return chinaProvinces;
+	}
+	
+	public void setChinaProvinces(List<Province> chinaProvinces) {
+	
+		this.chinaProvinces = chinaProvinces;
 	}
 
 }
