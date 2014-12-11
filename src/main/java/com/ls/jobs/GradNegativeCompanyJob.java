@@ -68,6 +68,7 @@ public class GradNegativeCompanyJob {
 		try {
 			WebClient webClient= new WebClient(BrowserVersion.CHROME);
 			webClient.getOptions().setJavaScriptEnabled(false);
+			webClient.getOptions().setCssEnabled(false);
 			List<NegativeCompany> list = this.negativeCompanyRepository.findAll();
 			if(!list.isEmpty()){
 				for(NegativeCompany negativeCompany:list){
@@ -81,13 +82,13 @@ public class GradNegativeCompanyJob {
 						String testURL = negativeCompany.getUrl();
 						HtmlPage mainPage = webClient.getPage(testURL);
 						String htmlDetail = mainPage.getWebResponse().getContentAsString();
-						parse.findCompanyDetails(company, htmlDetail);
+						//parse.findCompanyDetails(company, htmlDetail);
 					}else if(ResourceTypeEnum.FiveEight.getId().equals(negativeCompany.getResourceType())){
 						HtmlParserUtilFor58 parse = HtmlParserUtilFor58.getInstance();
 						String testURL = negativeCompany.getUrl();
 						HtmlPage mainPage = webClient.getPage(testURL);
 						String htmlDetail = mainPage.getWebResponse().getContentAsString();
-						parse.findCompanyDetails(company,htmlDetail);
+						//parse.findCompanyDetails(company,htmlDetail);
 					}
 					if(XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())){
 						continue;
@@ -126,6 +127,7 @@ public class GradNegativeCompanyJob {
 				ruleSaveForCompany(dataBaseCompany,company,recourceType);
 				try {
 					this.companyRepository.save(dataBaseCompany);
+					this.negativeCompanyRepository.delete(negativeCompanyId);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

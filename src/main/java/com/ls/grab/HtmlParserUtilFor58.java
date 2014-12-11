@@ -1,5 +1,7 @@
 package com.ls.grab;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,7 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.entity.Company;
-import com.ls.enums.ResourceTypeEnum;
+import com.ls.entity.FeCompanyURL;
 import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
@@ -36,6 +38,7 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 	static{
 		webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
+		webClient.getOptions().setCssEnabled(false);
 	}
 	
 	public static HtmlParserUtilFor58 getInstance(){
@@ -48,9 +51,9 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 	
 	
 	
-	public List<Company> findPagedCompanyList(String url) {
+	public List<FeCompanyURL> findPagedCompanyList(String url) {
 
-		final List<Company> companyList = new ArrayList<Company>();
+		final List<FeCompanyURL> companyList = new ArrayList<FeCompanyURL>();
 
 		try {
 			HtmlPage mainPage = webClient.getPage(url);
@@ -67,9 +70,9 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 
 					if (TagFinderUtil.findCompanyLink(tag)) {
 						LinkTag linkTag = (LinkTag) tag;
-						Company company = new Company();
+						FeCompanyURL company = new FeCompanyURL();
 						company.setName(StringUtils.trimToEmpty(tag.getAttribute("title")));
-						company.setfEurl(tag.getAttribute("href"));
+						company.setUrl(tag.getAttribute("href"));
 						
 						Node nodeLink = linkTag.getParent().getParent();
 						
@@ -91,13 +94,13 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 							}
 							
 						}
-						String testURL = company.getfEurl();
+						String testURL = company.getUrl();
 						int index = testURL.indexOf("58.com");
 						if(index!=-1){
 							String sub = testURL.substring(index+7);
 							int sIndex = sub.indexOf("/");
 							if(sIndex!=-1){
-									company.setfEresourceId(sub.substring(0,sIndex));
+									company.setCompanyId(sub.substring(0,sIndex));
 								}
 							}
 						companyList.add(company);
@@ -112,23 +115,18 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 			e.printStackTrace();
 		}
 		
-		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companyList,ResourceTypeEnum.FiveEight.getId());
-		List<Company> returnCompanyList = reduceDuplicateCompany(companyList,map);
+		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePageFor58(companyList);
+		List<FeCompanyURL> returnCompanyList = reduceDuplicateCompany(companyList,map);
 		return returnCompanyList;
 	}
 
 	
-	private List<Company> reduceDuplicateCompany( List<Company> companyList,Map<String,String> map){
-		List<Company> returnCompanyList = new ArrayList<Company>();
-		for(Company company:companyList){
-			if(map.containsKey(company.getfEresourceId())){
+	private List<FeCompanyURL> reduceDuplicateCompany( List<FeCompanyURL> companyList,Map<String,String> map){
+		List<FeCompanyURL> returnCompanyList = new ArrayList<FeCompanyURL>();
+		for(FeCompanyURL company:companyList){
+			if(map.containsKey(company.getCompanyId())){
 				try {
-					String testURL = company.getfEurl();
-					HtmlPage mainPage = webClient.getPage(testURL);
-					String htmlDetail = mainPage.getWebResponse().getContentAsString();
-					findCompanyDetails(company,htmlDetail);
-					company.setDescription(findCompanyDescription(htmlDetail));
-					map.remove(company.getfEresourceId());
+					map.remove(company.getCompanyId());
 					returnCompanyList.add(company);
 				} catch (FailingHttpStatusCodeException e) {
 					e.printStackTrace();
@@ -140,8 +138,22 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 		return returnCompanyList;
 	}
 	
-	
-	public String findCompanyDetails(final Company company,String detailPageHtml) {
+	public void findCompanyDetails(Company company){
+		try {
+			String testURL = company.getfEurl();
+			HtmlPage mainPage = webClient.getPage(testURL);
+			String htmlDetail = mainPage.getWebResponse().getContentAsString();
+			parseDetails(company,htmlDetail);
+			company.setDescription(findCompanyDescription(htmlDetail));
+		} catch (FailingHttpStatusCodeException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public String parseDetails(final Company company,String detailPageHtml) {
 		final StringBuilder contactorsPhoneImgSrcBuilder = new StringBuilder();
 		try {
 			Parser htmlParser = new Parser();

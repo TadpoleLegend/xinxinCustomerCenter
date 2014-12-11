@@ -1,5 +1,7 @@
 package com.ls.grab;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +19,6 @@ import org.htmlparser.tags.DefinitionListBullet;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ParagraphTag;
-import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -25,7 +26,7 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.entity.Company;
-import com.ls.enums.ResourceTypeEnum;
+import com.ls.entity.GanjiCompanyURL;
 import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
@@ -43,13 +44,14 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 	static{
 		webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
+		webClient.getOptions().setCssEnabled(false);
 	}
 	public static SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 	public static String todayStr = sf.format(Calendar.getInstance().getTime());
 	
 	
-	public List<Company> findPagedCompanyList(String url) {
-		final List<Company> companyList = new ArrayList<Company>();
+	public List<GanjiCompanyURL> findPagedCompanyList(String url) {
+		final List<GanjiCompanyURL> companyList = new ArrayList<GanjiCompanyURL>();
 		try {
 			HtmlPage mainPage = webClient.getPage(url);
 			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
@@ -62,9 +64,9 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 					if (TagFinderUtil.findCompanyForGanji(tag)) {
 						DefinitionListBullet definitionListBullet = (DefinitionListBullet) tag;
 						LinkTag lt = (LinkTag)definitionListBullet.getChild(0);
-						Company company = new Company();
+						GanjiCompanyURL company = new GanjiCompanyURL();
 						company.setName(StringUtils.trimToEmpty(lt.getStringText()));
-						company.setGanjiUrl(lt.getAttribute("href"));
+						company.setUrl(lt.getAttribute("href"));
 						Node nodeLink = definitionListBullet.getParent();
 						Node[] nodes = nodeLink.getChildren().toNodeArray();
 						
@@ -88,13 +90,13 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 							}
 							
 						}
-						String testURL = company.getGanjiUrl();
+						String testURL = company.getUrl();
 						int index = testURL.indexOf("gongsi");
 						if(index!=-1){
 							String sub = testURL.substring(index+7);
 							int sIndex = sub.indexOf("/");
 							if(sIndex!=-1){
-									company.setGanjiresourceId(sub.substring(0,sIndex));
+									company.setCompanyId(sub.substring(0,sIndex));
 								}
 							}
 						companyList.add(company);
@@ -106,27 +108,17 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companyList,ResourceTypeEnum.Ganji.getId());
-		List<Company> returnCompanyList = reduceDuplicateCompany(companyList,map);
+		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePageForGanji(companyList);
+		List<GanjiCompanyURL> returnCompanyList = reduceDuplicateCompany(companyList,map);
 		return returnCompanyList;
 	}
 
-	private List<Company> reduceDuplicateCompany( List<Company> companyList,Map<String,String> map){
-		List<Company> returnCompanyList = new ArrayList<Company>();
-		for(Company company:companyList){
-			if(map.containsKey(company.getGanjiresourceId())){
+	private List<GanjiCompanyURL> reduceDuplicateCompany( List<GanjiCompanyURL> companyList,Map<String,String> map){
+		List<GanjiCompanyURL> returnCompanyList = new ArrayList<GanjiCompanyURL>();
+		for(GanjiCompanyURL company:companyList){
+			if(map.containsKey(company.getCompanyId())){
 				try {
-					String testURL = company.getGanjiUrl();
-					HtmlPage mainPage = webClient.getPage(testURL);
-					String htmlDetail = mainPage.getWebResponse().getContentAsString();
-					/*String phoneImgSrc = findContactorPhoneNumberImgSrc(htmlDetail);
-					
-					company.setContactor(findContactorName(htmlDetail));
-					company.setAddress(findCompanyAddress(htmlDetail));
-					company.setEmployeeCount(findCompanyEmployeeCount(htmlDetail));*/
-					findCompanyDetails(company,htmlDetail);
-					company.setDescription(findCompanyDescription(htmlDetail));
-					map.remove(company.getGanjiresourceId());
+					map.remove(company.getCompanyId());
 					returnCompanyList.add(company);
 				} catch (FailingHttpStatusCodeException e) {
 					e.printStackTrace();
@@ -137,9 +129,23 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 		}
 		return returnCompanyList;
 	}
+	public void findCompanyDetails(Company company){
+		try {
+			String testURL = company.getfEurl();
+			HtmlPage mainPage = webClient.getPage(testURL);
+			String htmlDetail = mainPage.getWebResponse().getContentAsString();
+			parseDetails(company,htmlDetail);
+			company.setDescription(findCompanyDescription(htmlDetail));
+		} catch (FailingHttpStatusCodeException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	
-	public String findCompanyDetails(final Company company,String detailPageHtml) {
+	public String parseDetails(final Company company,String detailPageHtml) {
 		final StringBuilder contactorsPhoneImgSrcBuilder = new StringBuilder();
 		try {
 			Parser htmlParser = new Parser();

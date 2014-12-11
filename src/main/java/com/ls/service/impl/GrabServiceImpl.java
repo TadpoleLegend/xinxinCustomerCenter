@@ -18,9 +18,6 @@ import com.ls.entity.Company;
 import com.ls.entity.CompanyResource;
 import com.ls.entity.NegativeCompany;
 import com.ls.enums.ResourceTypeEnum;
-import com.ls.grab.GrapImgUtil;
-import com.ls.grab.HtmlParserUtilPlanB;
-import com.ls.grab.HttpClientGrabUtil;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
@@ -79,9 +76,9 @@ public class GrabServiceImpl implements GrabService {
 				
 				
 				String pagedCompanyURLWithPageNumber = pagedCompanyURL + i;
-				String pagedCompanyHTML = HttpClientGrabUtil.fetchHTMLwithURL(pagedCompanyURLWithPageNumber);
+				String pagedCompanyHTML = null;
 				
-				List<Company> companies = HtmlParserUtilPlanB.findPagedCompanyList(pagedCompanyHTML);
+				List<Company> companies = null;
 				
 				for (Company company : companies) {
 					
@@ -111,9 +108,9 @@ public class GrabServiceImpl implements GrabService {
 
 	public List<Company> grabCompanyInPage(String indexPageURL) {
 		
-		String pagedCompanyHTML = HttpClientGrabUtil.fetchHTMLwithURL(indexPageURL);
+		String pagedCompanyHTML = null;
 		
-		List<Company> companies = HtmlParserUtilPlanB.findPagedCompanyList(pagedCompanyHTML);
+		List<Company> companies = null;
 		
 		return companies;
 	}
@@ -124,7 +121,7 @@ public class GrabServiceImpl implements GrabService {
 		if (StringUtils.isBlank(detailPageUrl)) {
 			throw new IllegalArgumentException("detail page url is empty");
 		}
-		String detailPageHtml =  HttpClientGrabUtil.fetchHTMLwithURL(detailPageUrl);
+		String detailPageHtml =  null;
 		
 		return company;
 	}
@@ -148,9 +145,9 @@ public class GrabServiceImpl implements GrabService {
 			proccessCount ++;
 			String pageURL = url + "meirongshi/pn" + pageNumber;
 			
-			String html = HttpClientGrabUtil.fetchHTMLwithURL(pageURL);
+			String html = null;
 			
-			List<Company> basicCompany = HtmlParserUtilPlanB.findPagedCompanyList(html);
+			List<Company> basicCompany = null;
 			//List<City> citys = cityRepository.findByUrl(url);
 			List<City> citys = null;
 			City myCity = citys.get(0);
@@ -163,27 +160,27 @@ public class GrabServiceImpl implements GrabService {
 					try {
 						
 						String companyDetailUrl = company.getfEurl();
-						String detailPageHtml = HttpClientGrabUtil.fetchHTMLwithURL(companyDetailUrl);
+						String detailPageHtml = null;
 
-						String contactor = HtmlParserUtilPlanB.findContactorName(detailPageHtml);
+						String contactor = null;
 						company.setContactor(contactor);
 
-						String phoneImgSrc = HtmlParserUtilPlanB.findContactorPhoneNumberImgSrc(detailPageHtml);
+						String phoneImgSrc = null;
 						company.setPhoneSrc(phoneImgSrc);
 						
-						String address = HtmlParserUtilPlanB.findCompanyAddress(detailPageHtml);
+						String address = null;
 						company.setAddress(address);
 						
 						if (StringUtils.isNotBlank(phoneImgSrc)) {
-							String imgFileNameAfterGrabed = GrapImgUtil.grabImgWithSrc(phoneImgSrc);
+							String imgFileNameAfterGrabed = null;
 							company.setPhoneSrc(imgFileNameAfterGrabed);
 						}
 						
-						String emailImgSrc = HtmlParserUtilPlanB.findContactorEmailImgSrc(detailPageHtml);
+						String emailImgSrc = null;
 						company.setEmailSrc(emailImgSrc);
 						
 						if (StringUtils.isNotBlank(emailImgSrc)) {
-							String emailImgFileNameAfterGrabed = GrapImgUtil.grabImgWithSrc(emailImgSrc);
+							String emailImgFileNameAfterGrabed = null;
 							company.setEmailSrc(emailImgFileNameAfterGrabed);
 						}
 						
@@ -314,7 +311,7 @@ public class GrabServiceImpl implements GrabService {
 			if(!XinXinUtils.stringIsEmpty(company.getDescription())){
 				String desc = company.getDescription();
 				if(desc.length()>2000){
-					company.setDescription(desc.substring(0,desc.length()-10)+".....");
+					company.setDescription(desc.substring(0,1990)+".....");
 				}
 			}
 			Company dataBaseCompany = null;
