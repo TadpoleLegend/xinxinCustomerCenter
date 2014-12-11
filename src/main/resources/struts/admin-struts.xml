@@ -20,6 +20,9 @@
 		<action name="loadUser">
 			<result>user-management.jsp</result>
 		</action>
+		<action name="userCityAssign">
+			<result>user-city-assign.jsp</result>
+		</action>
 		<action name="ajaxFindUser" class="userAction" method="ajaxFindUser">
 			<result name="success" type="json">
 				<param name="root">users</param>
@@ -84,5 +87,16 @@
 				<param name="root">response</param>
 			</result>
 		</action>
+		<action name="updateUserCity" class="userAction" method="updateUserCity">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
+		<action name="showAssignedCities" class="userAction" method="showAssignedCities">
+			<result name="success" type="json">
+				<param name="root">chinaProvinces</param>
+			</result>
+		</action>
+		
 	</package>	
 </struts>

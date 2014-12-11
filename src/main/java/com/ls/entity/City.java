@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="ls_city")
@@ -34,6 +35,9 @@ public class City implements Serializable {
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "cities", fetch = FetchType.LAZY)
 	protected List<User> users;
+	
+	@Transient
+	protected String jsTreeJsonValue;
 	
 	public Integer getId() {
 		return id;
@@ -72,4 +76,13 @@ public class City implements Serializable {
 		this.users = users;
 	}
 	
+	public String getJsTreeJsonValue() {
+	
+		return jsTreeJsonValue;
+	}
+	
+	public void setJsTreeJsonValue(String jsTreeJsonValue) {
+	
+		this.jsTreeJsonValue = jsTreeJsonValue;
+	}
 }
