@@ -353,14 +353,7 @@ public class UserAction extends BaseAction {
 				singleCityInChina.setProvince(null);
 				singleCityInChina.setUsers(null);
 				singleCityInChina.setCityURLs(null);
-				if (userCities.contains(singleCityInChina)) {
-					JsTreeOptions jsTreeOptions = new JsTreeOptions(true);
-					
-					singleCityInChina.setJsTreeJsonValue(JSONObject.fromObject(jsTreeOptions).toString().replace("\"", "\\\""));
-				} else {
-					JsTreeOptions jsTreeOptions = new JsTreeOptions(false);
-					singleCityInChina.setJsTreeJsonValue(JSONObject.fromObject(jsTreeOptions).toString());
-				}
+				singleCityInChina.setSelected(userCities.contains(singleCityInChina));
 			}
 		}
 		

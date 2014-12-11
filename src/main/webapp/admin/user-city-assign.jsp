@@ -96,11 +96,19 @@
 								<div class="row">
 									<div id="userCityTree" style="margin-top:2em;">
 											<ul data-bind="foreach : userCities">
-												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}'> 
+												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
 													<span datatype="province" data-bind="text : name, attr : {'id' : id}"></span>
 													<ul data-bind="foreach : citys" >
 														<span data-bind="text : name"></span>
-														<li data-bind='attr : {"data-jstree" : "{selected:true}" }'><span datatype="city" data-bind="text : name, attr : {id, id}"></span></li>
+														<!-- ko if: selected -->
+														<li data-jstree="{ &quot;selected&quot; : true, &quot;opened&quot; : true }">
+														<span datatype="city" data-bind="text : name, attr : {id, id}"></span></li>
+														<!-- /ko -->
+														<!-- ko if: !selected -->
+														<li data-bind="if : !selected" data-jstree="{ &quot;selected&quot; : false, &quot;opened&quot; : false }">
+														<span datatype="city" data-bind="text : name, attr : {id, id}"></span></li>
+														<!-- /ko -->
+														
 													</ul>
 												</li>
 											</ul>
@@ -173,9 +181,10 @@
 									    self.assignOrCancelCity();
 									    
 									  }).jstree({
-										plugins : ["checkbox"]
+										plugins : ["checkbox"], "checkbox" : {
+										      "keep_selected_style" : false
+									    },
 									});
-									
 								}
 							});
 						};

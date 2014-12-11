@@ -37,8 +37,14 @@ public class City implements Serializable {
 	protected List<User> users;
 	
 	@Transient
-	protected String jsTreeJsonValue;
+	protected boolean selected;
 	
+	public boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -74,15 +80,5 @@ public class City implements Serializable {
 	public void setUsers(List<User> users) {
 	
 		this.users = users;
-	}
-	
-	public String getJsTreeJsonValue() {
-	
-		return jsTreeJsonValue;
-	}
-	
-	public void setJsTreeJsonValue(String jsTreeJsonValue) {
-	
-		this.jsTreeJsonValue = jsTreeJsonValue;
 	}
 }
