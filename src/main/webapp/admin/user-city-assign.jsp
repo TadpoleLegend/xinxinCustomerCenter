@@ -99,7 +99,8 @@
 												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}'> 
 													<span datatype="province" data-bind="text : name, attr : {'id' : id}"></span>
 													<ul data-bind="foreach : citys" >
-														<li><span datatype="city" data-jstree = '' data-bind="text : name, attr : {'id' : id, 'data-jstree' : jsTreeJsonValue}"></span></li>
+														<span data-bind="text : name"></span>
+														<li data-bind='attr : {"data-jstree" : "{selected:true}" }'><span datatype="city" data-bind="text : name, attr : {id, id}"></span></li>
 													</ul>
 												</li>
 											</ul>
@@ -191,7 +192,7 @@
 								method : 'POST',
 								data : {
 										selectedCities : JSON.stringify(self.selectedCities()),
-										userJson : JSON.stringify(self.selectedUser())
+										userId : self.selectedUser().id
 								},
 								success : function(data) {
 									
@@ -247,8 +248,11 @@
 					
 					var $usercityModelContainer = $("#usercityModelContainer")[0];
 					ko.applyBindings(usercityModel, $usercityModelContainer);
-					
 				});
+		
+		function activeCurrentMenuItem() {
+			$('#userCityAssign').addClass('active');
+		}
 	</script>
 </body>
 </html>

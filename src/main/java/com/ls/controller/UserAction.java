@@ -305,13 +305,14 @@ public class UserAction extends BaseAction {
 		try {
 			String selectedCities = getParameter("selectedCities");
 			
+			
+			String targetUserId = getParameter("userId");
 			User userToAssign = null;
-			String targetUser = getParameter("userJson");
-			if (StringUtils.isBlank(targetUser)) {
+			if (StringUtils.isBlank(targetUserId)) {
 				setResponse(XinXinUtils.makeGeneralErrorResponse(new ApplicationException("未选择用户")));
 				return SUCCESS;
 			} else {
-				userToAssign = XinXinUtils.getJavaObjectFromJsonString(targetUser, User.class);
+				userToAssign = userRepository.findOne(Integer.valueOf(targetUserId));
 			}
 			
 			Object[] cityArray = JSONArray.fromObject(selectedCities).toArray();
