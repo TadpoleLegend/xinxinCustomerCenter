@@ -6,16 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.apache.struts2.ServletActionContext;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 
-import net.sf.json.JSONObject;
-
 import com.ls.constants.XinXinConstants;
-import com.ls.entity.Company;
+import com.ls.entity.FeCompanyURL;
+import com.ls.entity.GanjiCompanyURL;
+import com.ls.entity.OteCompanyURL;
 import com.ls.entity.User;
-import com.ls.enums.ResourceTypeEnum;
 import com.ls.vo.ResponseVo;
 
 
@@ -62,17 +63,25 @@ public class XinXinUtils {
 		user.setRoles(null);
 	}
 	
-	public static Map<String,String> mergeDuplicateCompanyInOnePage(List<Company> companyList,String resourceType){
+	public static Map<String,String> mergeDuplicateCompanyInOnePageFor138(List<OteCompanyURL> companyList){
 		Map<String,String> map = new HashMap<String,String>();
-		for(Company company:companyList){
-			if(ResourceTypeEnum.OneThreeEight.getId().equals(resourceType)){
-				map.put(company.getoTEresourceId(), company.getoTEresourceId());
-			}else if(ResourceTypeEnum.Ganji.getId().equals(resourceType)){
-				map.put(company.getGanjiresourceId(), company.getGanjiresourceId());
-			}else if(ResourceTypeEnum.FiveEight.getId().equals(resourceType)){
-				map.put(company.getfEresourceId(), company.getfEresourceId());
+		for(OteCompanyURL company:companyList){
+				map.put(company.getCompanyId(), company.getCompanyId());
 			}
-		}
+		return map;
+	}
+	public static Map<String,String> mergeDuplicateCompanyInOnePageForGanji(List<GanjiCompanyURL> companyList){
+		Map<String,String> map = new HashMap<String,String>();
+		for(GanjiCompanyURL company:companyList){
+				map.put(company.getCompanyId(), company.getCompanyId());
+			}
+		return map;
+	}
+	public static Map<String,String> mergeDuplicateCompanyInOnePageFor58(List<FeCompanyURL> companyList){
+		Map<String,String> map = new HashMap<String,String>();
+		for(FeCompanyURL company:companyList){
+				map.put(company.getCompanyId(), company.getCompanyId());
+			}
 		return map;
 	}
 	

@@ -25,6 +25,12 @@ public class LocationAction extends BaseAction {
 	private ProvinceRepository provinceRepository;
 	
 	public String getUserAssignedCities() {
+			//	User storedUserInSession = (User) getSession().get(XinXinConstants.CURRENT_USER);
+//		setupSession();
+				provinces = provinceRepository.findAll();
+				
+//				getSession().put("provinces", provinces);
+				
 		return SUCCESS;
 	}
 }

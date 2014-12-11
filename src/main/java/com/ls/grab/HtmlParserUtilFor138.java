@@ -35,7 +35,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.ls.entity.Company;
-import com.ls.enums.ResourceTypeEnum;
+import com.ls.entity.OteCompanyURL;
 import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
@@ -49,6 +49,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	static{
 		webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
+		webClient.getOptions().setCssEnabled(false);
 		login138();
 	}
 	
@@ -98,10 +99,9 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 	public static String todayStr = sf.format(Calendar.getInstance().getTime());
 	
 	
-	public List<Company> findPagedCompanyList(String url) {
+	public List<OteCompanyURL> findPagedCompanyList(String url) {
 
-		final List<Company> companyList = new ArrayList<Company>();
-//		login138();
+		final List<OteCompanyURL> companyList = new ArrayList<OteCompanyURL>();
 		try {
 			HtmlPage mainPage = webClient.getPage(url);
 			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
@@ -117,9 +117,9 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 					if (TagFinderUtil.findCompanyFor138(tag)) {
 						Span span = (Span) tag;
 						LinkTag lt = (LinkTag)span.getChild(0);
-						Company company = new Company();
+						OteCompanyURL company = new OteCompanyURL();
 						company.setName(StringUtils.trimToEmpty(lt.getStringText()));
-						company.setOteUrl(lt.getAttribute("href"));
+						company.setUrl(lt.getAttribute("href"));
 						Node nodeLink = span.getParent();
 						Node[] nodes = nodeLink.getChildren().toNodeArray();
 						for (int i = 0; i < nodes.length; i++) {
@@ -192,7 +192,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 							}
 							
 						}
-						String testURL = company.getOteUrl();
+						String testURL = company.getUrl();
 						int index = testURL.lastIndexOf("/");
 						if(index!=-1){
 							String sub = testURL.substring(index+1);
@@ -201,7 +201,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 								String ssub = sub.substring(0,sIndex-1);
 								String []crr = ssub.split("_");
 								if(crr!=null && crr.length==2){
-									company.setoTEresourceId(crr[1]);
+									company.setCompanyId(crr[1]);
 								}
 							}
 							
@@ -218,26 +218,20 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 			e.printStackTrace();
 		}
-		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePage(companyList,ResourceTypeEnum.OneThreeEight.getId());
-		List<Company> returnCompanyList = reduceDuplicateCompany(companyList,map);
+		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePageFor138(companyList);
+		List<OteCompanyURL> returnCompanyList = reduceDuplicateCompany(companyList,map);
 		return returnCompanyList;
 	}
 	
 	
-	private List<Company> reduceDuplicateCompany( List<Company> companyList,Map<String,String> map){
-		List<Company> returnCompanyList = new ArrayList<Company>();
-		for(Company company:companyList){
-			if(map.containsKey(company.getoTEresourceId())){
+	private List<OteCompanyURL> reduceDuplicateCompany( List<OteCompanyURL> companyList,Map<String,String> map){
+		List<OteCompanyURL> returnCompanyList = new ArrayList<OteCompanyURL>();
+		for(OteCompanyURL company:companyList){
+			if(map.containsKey(company.getCompanyId())){
 				try {
-					String contactDiv =  getContactDiv(company.getoTEresourceId());
-					parseContactDivForTelAndMobile(contactDiv,company);
-					parseContactDivForContactPerson(contactDiv,company);
-					parseContactDivForAddress(contactDiv,company);
-					HtmlPage mainPage = webClient.getPage(company.getOteUrl());
-					String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
-					company.setDescription(findCompanyDescription(wholeCityPageHTML));
-					company.setEmployeeCount(findCompanyEmployeeCount(wholeCityPageHTML));
-					map.remove(company.getoTEresourceId());
+					
+					
+					map.remove(company.getCompanyId());
 					returnCompanyList.add(company);
 				} catch (FailingHttpStatusCodeException e) {
 					e.printStackTrace();
@@ -247,6 +241,25 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			}
 		}
 		return returnCompanyList;
+	}
+	
+	public void findCompanyDetails(Company company){
+		try {
+			String contactDiv =  getContactDiv(company.getoTEresourceId());
+			parseContactDivForTelAndMobile(contactDiv,company);
+			parseContactDivForContactPerson(contactDiv,company);
+			parseContactDivForAddress(contactDiv,company);
+			HtmlPage mainPage = webClient.getPage(company.getOteUrl());
+			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
+			company.setDescription(findCompanyDescription(wholeCityPageHTML));
+			company.setEmployeeCount(findCompanyEmployeeCount(wholeCityPageHTML));
+		} catch (FailingHttpStatusCodeException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private String parseContactDivForAddress(String detailPageHtml,final Company company){

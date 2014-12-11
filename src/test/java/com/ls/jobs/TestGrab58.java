@@ -67,7 +67,8 @@ public class TestGrab58 {
 				String cityUrl = cityURL.getUrl();
 				String url =  MessageFormat.format(cityUrl, arr);
 				System.err.println("url is : " + url);
-				List<Company> companiesInThisPage = HtmlParserUtilFor58.getInstance().findPagedCompanyList(url);
+				//List<Company> companiesInThisPage = HtmlParserUtilFor58.getInstance().findPagedCompanyList(url);
+				List<Company> companiesInThisPage = null;
 				if(companiesInThisPage.isEmpty()){
 					cityURL.setUpdateDate(date);
 					cityURLRepository.save(cityURL);

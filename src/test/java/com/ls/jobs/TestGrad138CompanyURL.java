@@ -1,10 +1,9 @@
 package com.ls.jobs;
+
 import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,27 +12,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ls.entity.CityURL;
-import com.ls.entity.Company;
+import com.ls.entity.OteCompanyURL;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilFor138;
 import com.ls.repository.CityURLRepository;
-import com.ls.repository.CompanyRepository;
-import com.ls.service.GrabService;
+import com.ls.repository.OteCompanyURLRepository;
 import com.ls.util.DateUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
-public class TestGrab138 {
+public class TestGrad138CompanyURL {
 	@Autowired
 	private CityURLRepository cityURLRepository;
 	@Autowired
-	private CompanyRepository companyRepository;
-	@Resource(name = "grabService")
-	private GrabService grabService;
-	
+	private OteCompanyURLRepository oteCompanyURLRepository;
 	@Test
 	public void testGrabCompanyList() throws Exception{
-		try {
+		try{
+
 			Date date  = Calendar.getInstance().getTime();
 			List<CityURL> cityUrls = cityURLRepository.findByResourceType(ResourceTypeEnum.OneThreeEight.getId());
 			for(CityURL cityURL:cityUrls){
@@ -50,25 +46,27 @@ public class TestGrab138 {
 				String cityUrl = cityURL.getUrl();
 				String url =  MessageFormat.format(cityUrl, arr);
 				System.err.println("url is : " + url);
-				//List<Company> companiesInThisPage = HtmlParserUtilFor138.getInstance().findPagedCompanyList(url);
-				List<Company> companiesInThisPage = null;
+				List<OteCompanyURL> companiesInThisPage = HtmlParserUtilFor138.getInstance().findPagedCompanyList(url);
+				
 				if(companiesInThisPage.isEmpty()){
 					cityURL.setUpdateDate(date);
 					cityURLRepository.save(cityURL);
 					break;
 				}
-				for(Company company:companiesInThisPage){
+				for(OteCompanyURL company:companiesInThisPage){
 					company.setCityId(cityURL.getCity().getId());
-					company.setResouceType(ResourceTypeEnum.OneThreeEight.getId());
-					grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
+					OteCompanyURL oteCompanyURL = this.oteCompanyURLRepository.findCompany(company.getCityId(), company.getCompanyId());
+					if(oteCompanyURL == null){
+						this.oteCompanyURLRepository.save(company);
+					}
 				}
 				
 				}
 			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 	}
-	
 }
