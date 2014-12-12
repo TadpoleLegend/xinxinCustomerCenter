@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.struts2.interceptor.ParameterAware;
 
+import com.ls.service.CommonService;
 import com.ls.vo.ResponseVo;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -14,6 +17,10 @@ import com.opensymphony.xwork2.ActionSupport;
 public class BaseAction extends ActionSupport implements ParameterAware {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Resource(name = "commonService")
+	public CommonService commonService;
+	
 	private ResponseVo response;
 	Map<String, Object> application;
 	Map<String, Object> session;

@@ -136,6 +136,12 @@ public class UserAction extends BaseAction {
 			users = userService.findUserByName(name);
 		}
 
+		for (User user : users) {
+			user.setCities(null);
+			user.setRoles(null);
+			user.setApplyingWillingCustomers(null);
+			user.setPassword("");
+		}
 		return SUCCESS;
 	}
 
@@ -158,6 +164,7 @@ public class UserAction extends BaseAction {
 			singleUser.setCities(null);
 			//singleUser.setPassword(null);
 			singleUser.setPhoneCallHistory(null);
+			user.setApplyingWillingCustomers(null);
 		}
 
 		return SUCCESS;

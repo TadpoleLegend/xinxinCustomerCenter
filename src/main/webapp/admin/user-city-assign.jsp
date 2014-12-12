@@ -17,13 +17,7 @@
 
 </head>
 <body>
-	<header id="brand">
-		<div class="container">
-			<div class="row">
-				<div class="appname hide-on-phones"></div>
-			</div>
-		</div>
-	</header>
+	<s:include value="/jsps/common/brand.jsp" />
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id ="usercityModelContainer">
@@ -98,10 +92,10 @@
 									<div id="userCityTree">
 											<ul data-bind="foreach : userCities">
 												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
-													<span datatype="province" data-bind="text : name, attr : {'id' : id}"></span>
+													<span datatype="province" data-bind="text : name"></span>
 													<ul data-bind="foreach : citys" > <b data-bind="text : name"></b>
 														<li data-bind="attr : {id : 'city' + id }">
-														<span datatype="city" data-bind="text : name, attr : {id, id}"></span></li>
+														<span datatype="city" data-bind="text : name, attr : {id : id}"></span></li>
 													</ul>
 												</li>
 											</ul>

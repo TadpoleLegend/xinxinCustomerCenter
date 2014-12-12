@@ -1,5 +1,6 @@
 package com.ls.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,12 +8,9 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
-import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
 import com.ls.entity.Dictionary;
 import com.ls.entity.Menu;
@@ -23,6 +21,7 @@ import com.ls.entity.Province;
 import com.ls.entity.Role;
 import com.ls.entity.Step;
 import com.ls.entity.User;
+import com.ls.repository.CityRepository;
 import com.ls.repository.DropDownRepository;
 import com.ls.repository.MenuRepository;
 import com.ls.repository.PhaseRepository;
@@ -65,6 +64,9 @@ public class CommonAction extends BaseAction {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private CityRepository cityRepository;
 	
 	private List<Dictionary> companyTypes;
 	
@@ -128,13 +130,28 @@ public class CommonAction extends BaseAction {
 	
 	public String findAllProvinces() {
 		
-		provinces = provinceRepository.findAll();
+		
+		List<City> userCities = cityRepository.findByUsers(ImmutableList.of(commonService.getCurrentLoggedInUser()));
+		
+		provinces = new ArrayList<Province>();
+		
+		for (City singleCity : userCities) {
+			Province singleProvince = singleCity.getProvince();
+			
+			if (!provinces.contains(singleProvince)) {
+				provinces.add(singleProvince);
+			}
+		}
 		
 		for (Province province : provinces) {
 			
 			List<City> cities = province.getCitys();
 			
 			for (City city : cities) {
+				
+				if (!checkExistsInCityList(city, userCities)) {
+					cities.remove(city);
+				}
 				city.setCityURLs(null);
 				city.setUsers(null);
 			}
@@ -143,6 +160,26 @@ public class CommonAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	
+	private boolean checkExistsInProvinceList(Province province, List<Province> provinces) {
+		for (Province singleProvince : provinces) {
+			if (singleProvince.getId() == province.getId()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean checkExistsInCityList(City city, List<City> cities) {
+		for (City singleCity : cities) {
+			if (singleCity.getId() == city.getId()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	public String findAllCities() {
 		return SUCCESS;
 	}

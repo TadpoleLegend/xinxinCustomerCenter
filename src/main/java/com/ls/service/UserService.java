@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.ls.entity.City;
 import com.ls.entity.User;
-import com.ls.vo.ResponseVo;
 
 public interface UserService {
 	List<User> findUserByName(String name);
