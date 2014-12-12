@@ -11,7 +11,8 @@
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
 <title>抓取</title>
-
+<link rel="stylesheet" href="/ls/css/common.css">
+<link rel="stylesheet" href="/ls/css/jstree-style.css">
 <s:include value="/jsps/common/head.jsp" />
 
 </head>
@@ -21,117 +22,67 @@
 	<section class="mainbg">
 		<div class="container" id="grabModelContainer">
 			<div class="row">
-				<div class="four columns">
+				<div class="three columns">
 					<div class="app-wrapper ui-corner-top">
 						<div class="blue module ui-corner-top clearfix">
-							<h2>江苏</h2>
+							<h2>我的区域</h2>
 						</div>
-						<div>
-							<ul style="border: 0; margin: 0;" class="smartlist nice" data-bind="foreach : jiangsuCities">
-								<li><label>
-										<div class="row collapse">
-											<div class="one columns text-center">
-												<input type="checkbox" data-bind="value : url, checked: $root.selectedURLs">
-											</div>
-											<div class="two columns" data-bind="text : name"></div>
-											<div class="nice columns" data-bind="text : url"></div>
-										</div>
-								</label></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="four columns">
-				<div class="app-wrapper ui-corner-top">
-						<div class="blue module ui-corner-top clearfix">
-							<h2>安徽</h2>
-						</div>
-						<div>
-							<ul style="border: 0; margin: 0;" class="smartlist nice" data-bind="foreach : anhuiCities">
-								<li><label>
-										<div class="row collapse">
-											<div class="one columns text-center">
-												<input type="checkbox" data-bind="value : url, checked: $root.selectedURLs">
-											</div>
-											<div class="two columns" data-bind="text : name"></div>
-											<div class="nice columns" data-bind="text : url"></div>
-										</div>
-								</label></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="four columns">
-				<div class="app-wrapper ui-corner-top">
-						<div class="blue module ui-corner-top clearfix">
-							<h2>浙江</h2>
-						</div>
-						<div>
-							<ul style="border: 0; margin: 0;" class="smartlist nice" data-bind="foreach : zhejiangCities">
-								<li><label>
-										<div class="row collapse">
-											<div class="one columns text-center">
-												<input type="checkbox" data-bind="value : url, checked: $root.selectedURLs">
-											</div>
-											<div class="two columns" data-bind="text : name"></div>
-											<div class="nice columns" data-bind="text : url"></div>
-										</div>
-								</label></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row" style="display:none;">
-				<div class="app-wrapper ui-corner-top">
-					
-					<div class="blue module ui-corner-top clearfix">
-						<h2>抓取任务</h2>
-					</div>
-					<div class="content">
-						<div class="row">
-							<label>示例链接</label>
-							<p>
-								http://su.58.com/meirongshi/pn2/?PGTID=14052516562690.6999314113601204&ClickID=1
-							</p>
-						</div>
-						<hr>
-						<div class="row">
-							<label>目标链接</label>
-							<input type="text" data-bind="value : url" >
-						</div>
-						<!-- <a class="nice radius blue button" href="#" data-bind="click : grabSelected">开始抓取</a> -->
-					</div>
-				</div>
-			</div>
-			
-			<div class="row">
-				<div class="app-wrapper ui-corner-top">
-					
-					<div class="blue module ui-corner-top clearfix">
-						<h2>抓取任务</h2>
-					</div>
-					<div class="content">
-						<div class="row">
-							<div class="four columns"></div>
-							<div class="four columns">
-							<div class="row collapse">
-							<label>数据源的最后更新时间</label>
-								<div class="ten columns">
-									<input type="text" class="medium input-text addon-postfix " id="lastPublishDate" data-bind="value:lastPublishDate">
-								</div>
-								<div class="two columns">
-									<a id="lastPublishDate-btn" href="javascript:void(0);"><span title="Choose Date" class="button-addon postfix"><i class="icon-calendar"></i></span></a>
-								</div>
-							</div>	
-							</div>
-							<div class="four columns">
-							<br>
-								<a class="nice radius blue button" href="#"
-									data-bind="click : grabSelected" style="border-radius : 50px">开始抓取</a>
+						<div class="content">
+							<div class="row">
+									<div id="userCityTree">
+											<ul data-bind="foreach : userCities">
+												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
+													<span datatype="province" data-bind="text : name"></span>
+													<ul data-bind="foreach : citys" > <b data-bind="text : name"></b>
+														<li data-bind="attr : {id : 'city' + id }">
+														<span datatype="city" data-bind="text : name, attr : {id : id}"></span></li>
+													</ul>
+												</li>
+											</ul>
+									</div>
+									<br>
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="nine columns">
+					<div class="app-wrapper ui-corner-top">
+						<div class="blue module ui-corner-top clearfix">
+							<h2>数据资源</h2>
+						</div>
+						<div class="content">
+							<div class="row">
+								<div class="three columns">
+									共计<label class="green label" data-bind="text : totalLength"></label>条资源记录
+								</div>
+								<div class="six columns"></div>
+								<div class="three columns">
+									<a class="small blue button" href="#" data-bind="click : grabSelected">全部抓取</a>
+								</div>
+							</div>
+							<table class="infoTable">
+									<thead>
+										<tr>
+											<th class="text-center">公司名</th>
+											<th class="text-center">资源编号</th>
+											<th class="text-center">发表时间</th>
+											<th class="text-center">链接</th>
+										</tr>
+									</thead>
+									<tbody data-bind="foreach: otePreviewList">
+										<tr>
+											<td class="text-center"><span data-bind="text: name"></span></td>
+											<td class="text-center"><span data-bind="text: companyId"></span></td>
+											<td class="text-center"><span data-bind="text: publishDate"></span></td>
+											<td class="text-center"><span data-bind="text: url"></span></td>
+										</tr>
+
+									</tbody>
+								</table>
+						</div>
+					</div>
+				</div>
+				
 				</div>
 			</div>
 			
@@ -165,7 +116,7 @@
 		</div>
 	</section>
 	<s:include value="/jsps/common/footer.jsp" />
-
+	<script src="/ls/js/jstree.min.js"></script>
 	<script>
 		$(document).ready(function() {
 			
@@ -186,66 +137,63 @@
 				var self = this;
 				self.url = ko.observable("");
 				self.companyList = ko.observableArray([]);
-				self.jiangsuCities =  ko.observableArray([]);
-				self.anhuiCities =  ko.observableArray([]);
-				self.zhejiangCities = ko.observableArray([]);
 				self.selectedURLs = ko.observableArray([]);
 				self.lastPublishDate = ko.observable('');
-				self.initCities = function(city) {
-					
+				self.userCities = ko.observableArray([]);
+				self.otePreviewList = ko.observableArray([]);
+				self.selectedCities = ko.observableArray([]);
+				self.totalLength = ko.observable('');
+				self.filterUrlsWithCity = function() {
 					$.ajax({
-						method : 'GET',
-						url : '/ls/grab/getcities.ls',
-						data : {province : "浙江"},
-						sync : false,
+						data : {
+							cityIdsHtml : JSON.stringify(self.selectedCities())
+						},
+						url : 'load138PreviewList.ls',
 						success: function(data) {
-
-							$.each(data, function(index, value) {
-								var city = new City( value.name, value.url );
-								self.zhejiangCities.push(city);
-
-								});
-						}
-					});
-					
-					$.ajax({method : 'get', url : '/ls/grab/getcities.ls',
-						data : {province : "江苏"},
-						sync : false,
-						success: function(data) {
-
-							$.each(data, function(index, value) {
-								var city = new City( value.name, value.url );
-								self.jiangsuCities.push(city);
-
-								});
-						}
-					});
-					
-					$.ajax({method : 'get', url : '/ls/grab/getcities.ls',
-						data : {province : "安徽"},
-						sync : false,
-						success: function(data) {
-
-							$.each(data, function(index, value) {
-								var city = new City( value.name, value.url );
-								self.anhuiCities.push(city);
-
-								});
-						}
-					});
-					
-					$("#lastPublishDate").datepicker();
-					$("#lastPublishDate-btn").click( function(){
-						if ( $("#lastPublishDate").datepicker("widget").is(":visible") ) {
-							$("#lastPublishDate").datepicker("hide");
-						} else {
-							$("#lastPublishDate").datepicker("show");
+							self.otePreviewList(data);
+							self.totalLength(self.otePreviewList().length);
 						}
 					});
 				};
+				self.createJstree = function() {
+					
+					$('#userCityTree').on('changed.jstree', function (e, data) {
+					    var i, j, r = [];
+					    for(i = 0, j = data.selected.length; i < j; i++) {
+					      r.push(data.instance.get_node(data.selected[i]).text);
+					    }
+					    self.selectedCities(r);
+
+					    self.filterUrlsWithCity();
+
+					  }).jstree({
+							plugins : ["checkbox"], "checkbox" : {
+							      "keep_selected_style" : false
+						    },
+						});
+				};
+					
+				self.initCities = function(city) {
+					
+					$.ajax({
+						url : '/ls/user/findAllProvinces.ls',
+						success: function(data) {
+							self.userCities(data);
+							self.createJstree();
+						}
+					});
+					
+					$.ajax({
+						url : 'load138PreviewList.ls',
+						success: function(data) {
+							self.otePreviewList(data);
+							self.totalLength(self.otePreviewList().length);
+						}
+					});
+					
+				};
 				
 				self.grab = function() {
-					
 						$.ajax({url : '/ls/grab/grabCompanyIndexPage.ls',
 								data : {url : encodeURIComponent(self.url())},
 								success: function(data) {

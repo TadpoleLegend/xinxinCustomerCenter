@@ -130,56 +130,11 @@ public class CommonAction extends BaseAction {
 	
 	public String findAllProvinces() {
 		
-		
-		List<City> userCities = cityRepository.findByUsers(ImmutableList.of(commonService.getCurrentLoggedInUser()));
-		
-		provinces = new ArrayList<Province>();
-		
-		for (City singleCity : userCities) {
-			Province singleProvince = singleCity.getProvince();
-			
-			if (!provinces.contains(singleProvince)) {
-				provinces.add(singleProvince);
-			}
-		}
-		
-		for (Province province : provinces) {
-			
-			List<City> cities = province.getCitys();
-			
-			for (City city : cities) {
-				
-				if (!checkExistsInCityList(city, userCities)) {
-					cities.remove(city);
-				}
-				city.setCityURLs(null);
-				city.setUsers(null);
-			}
-		}
+		provinces = commonService.findUserAssignedCities();
 		
 		return SUCCESS;
 	}
 	
-	
-	private boolean checkExistsInProvinceList(Province province, List<Province> provinces) {
-		for (Province singleProvince : provinces) {
-			if (singleProvince.getId() == province.getId()) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private boolean checkExistsInCityList(City city, List<City> cities) {
-		for (City singleCity : cities) {
-			if (singleCity.getId() == city.getId()) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
 	public String findAllCities() {
 		return SUCCESS;
 	}

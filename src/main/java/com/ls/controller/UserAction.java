@@ -164,7 +164,7 @@ public class UserAction extends BaseAction {
 			singleUser.setCities(null);
 			//singleUser.setPassword(null);
 			singleUser.setPhoneCallHistory(null);
-			user.setApplyingWillingCustomers(null);
+			singleUser.setApplyingWillingCustomers(null);
 		}
 
 		return SUCCESS;

@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.json.JSONException;
 import org.apache.struts2.json.JSONUtil;
@@ -18,10 +20,13 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.ImmutableList;
 import com.ls.entity.City;
 import com.ls.entity.Company;
+import com.ls.entity.OteCompanyURL;
 import com.ls.entity.Province;
 import com.ls.repository.CityRepository;
+import com.ls.repository.OteCompanyURLRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.service.GrabService;
+import com.ls.service.UserService;
 import com.ls.vo.GrabStatistic;
 
 @Component("grabAction")
@@ -32,12 +37,18 @@ public class GrabAction extends BaseAction {
 
 	@Resource(name = "grabService")
 	private GrabService grabService;
+	
+	@Resource(name = "userService")
+	private UserService userService;
 
 	@Autowired
 	private CityRepository cityRepository;
 
 	@Autowired
 	private ProvinceRepository provinceRepository;
+	
+	@Autowired
+	private OteCompanyURLRepository oteCompanyURLRepository;
 
 	private List<Company> companies;
 
@@ -46,12 +57,11 @@ public class GrabAction extends BaseAction {
 	private String statistic;
 	
 	private GrabStatistic grabStatistic;
+	
+	private List<OteCompanyURL> oteCompanyURLs;
 
 	public String grabCompanyIndexPage() {
 		String url = getParameter("url");
-		System.out.println(url);
-		System.out.println(URLDecoder.decode(url));
-		
 		if (null != url) {
 			url = URLDecoder.decode(url);
 
@@ -62,14 +72,13 @@ public class GrabAction extends BaseAction {
 
 			companies = ImmutableList.of(company);
 		} else {
-
+			
 		}
 
 		return SUCCESS;
 	}
 
 	public String getcities() {
-		System.out.println(provinceRepository.getProvinceRepository().toString());
 		
 		String provinceName = getParameter("province");
 		
@@ -122,6 +131,42 @@ public class GrabAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	public String load138PreviewList() {
+		
+		String cityIds = getParameter("cityIdsHtml");
+		
+		List<Integer> userCityIds = new ArrayList<Integer>();
+		List<City> userCities = null;
+		if (StringUtils.isEmpty(cityIds)) {
+			userCities = cityRepository.findByUsers(ImmutableList.of(commonService.getCurrentLoggedInUser()));
+		} else {
+			Object[] cityArray = JSONArray.fromObject(cityIds).toArray();
+			if (cityArray == null || cityArray.length == 0) {
+				userCities = cityRepository.findByUsers(ImmutableList.of(commonService.getCurrentLoggedInUser()));
+			} else {
+				userCities = userService.getCitiesFromSpans(cityArray);
+			}
+			
+		}
+		
+		for (City city : userCities) {
+			userCityIds.add(city.getId());
+		}
+		
+		oteCompanyURLs = oteCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
+		
+		return SUCCESS;
+	}
+	
+	public List<OteCompanyURL> getOteCompanyURLs() {
+		
+		return oteCompanyURLs;
+	}
+
+	public void setOteCompanyURLs(List<OteCompanyURL> oteCompanyURLs) {
+		this.oteCompanyURLs = oteCompanyURLs;
+	}
+
 	public List<Company> getCompanies() {
 		return companies;
 	}

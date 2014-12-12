@@ -30,6 +30,12 @@
 				<param name="root">grabStatistic</param>
 			</result>
 		</action>
+		<action name="load138PreviewList" method="load138PreviewList" class="grabAction">
+			<result name="success" type="json">
+				<param name="root">oteCompanyURLs</param>
+			</result>
+		</action>
+		
 	</package>
 	
 </struts>
