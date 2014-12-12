@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>User Management</title>
+<title>用户区域分配</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <link rel="stylesheet" href="/ls/css/jstree-style.css">
 <s:include value="/jsps/common/head.jsp" />
@@ -24,7 +24,6 @@
 			</div>
 		</div>
 	</header>
-
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id ="usercityModelContainer">
@@ -86,29 +85,23 @@
 							</div>
 						</div>
 					</div>
-					
 					<div class="six columns">
 							<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
 								<h2>城市分配</h2>
+								<h2 class="right" data-bind="with : selectedUser">
+									<span data-bind="text : name"></span>
+								</h2>
 							</div>
 							<div class="content">
 								<div class="row">
-									<div id="userCityTree" style="margin-top:2em;">
+									<div id="userCityTree">
 											<ul data-bind="foreach : userCities">
 												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
 													<span datatype="province" data-bind="text : name, attr : {'id' : id}"></span>
-													<ul data-bind="foreach : citys" >
-														<span data-bind="text : name"></span>
-														<!-- ko if: selected -->
-														<li data-jstree="{ &quot;selected&quot; : true, &quot;opened&quot; : true }">
+													<ul data-bind="foreach : citys" > <b data-bind="text : name"></b>
+														<li data-bind="attr : {id : 'city' + id }">
 														<span datatype="city" data-bind="text : name, attr : {id, id}"></span></li>
-														<!-- /ko -->
-														<!-- ko if: !selected -->
-														<li data-bind="if : !selected" data-jstree="{ &quot;selected&quot; : false, &quot;opened&quot; : false }">
-														<span datatype="city" data-bind="text : name, attr : {id, id}"></span></li>
-														<!-- /ko -->
-														
 													</ul>
 												</li>
 											</ul>
@@ -117,21 +110,6 @@
 								</div>
 							</div>
 						</div>		
-					</div>
-					
-					</div>
-				<div id="userManagementDialog" class="content" title="用户管理" style="display: none;" data-bind="with : selectedUser">
-					<div class="row">
-							<label>姓名</label>
-							<input id="userNameInput" type="text" class="addon-postfix" placeholder="请输入姓名" data-bind="value : name" />
-					</div>
-					<div class="row">
-							<label>用户名</label>
-							<input type="text" class="addon-postfix" placeholder="请输入用户名" data-bind="value : username" />
-					</div>
-					<div class="row">
-							<label>密码</label>
-							<input type="text" class="addon-postfix" placeholder="请输入密码" data-bind="value : password" />
 					</div>
 				</div>
 			</div>
@@ -143,12 +121,7 @@
 	<script src="/ls/js/jstree.min.js"></script>
 	<script>
 		$(document).ready( function() {
-			var Role = function() {
-				var self = this;
-				self.id = '';
-				self.name = '';
-				self.description = '';
-			}
+			
 					var UserModel = function() {
 						var self = this;
 						self.userName = ko.observable('');
@@ -157,6 +130,18 @@
 						self.userCities = ko.observableArray([]);						
 						
 						self.selectedCities = ko.observableArray([]);
+						
+						self.loadChina = function() {
+							$.ajax({	
+								url : 'loadChina.ls',
+								success : function(data) {
+									
+									self.userCities(data);
+									self.createJstree();
+								}
+							});
+						};
+						self.loadChina();
 						
 						self.showAssignedCities = function(item) {
 							
@@ -169,23 +154,32 @@
 								},
 								success : function(data) {
 									
-									self.userCities(data);
+									$.jstree.reference('#userCityTree').deselect_all([false]);
 									
-									$('#userCityTree').on('changed.jstree', function (e, data) {
-									    var i, j, r = [];
-									    for(i = 0, j = data.selected.length; i < j; i++) {
-									      r.push(data.instance.get_node(data.selected[i]).text);
-									    }
-									    self.selectedCities(r);
-									    
-									    self.assignOrCancelCity();
-									    
-									  }).jstree({
-										plugins : ["checkbox"], "checkbox" : {
-										      "keep_selected_style" : false
-									    },
-									});
+									if (data) {
+										$.each(data, function(index, value) {
+											$.jstree.reference('#userCityTree').select_node(value, [true,false]);
+										});
+									}
 								}
+							});
+						};
+						
+						self.createJstree = function() {
+							
+						$('#userCityTree').on('changed.jstree', function (e, data) {
+						    var i, j, r = [];
+						    for(i = 0, j = data.selected.length; i < j; i++) {
+						      r.push(data.instance.get_node(data.selected[i]).text);
+						    }
+						    self.selectedCities(r);
+
+						    self.assignOrCancelCity();
+
+						  }).jstree({
+								plugins : ["checkbox"], "checkbox" : {
+								      "keep_selected_style" : false
+							    },
 							});
 						};
 						
@@ -204,22 +198,11 @@
 										userId : self.selectedUser().id
 								},
 								success : function(data) {
-									
-									if (isOK(data)) {
-										
-										success();
-										
-									} else {
-										fail();
-									}
+									handleStanderdResponse(data);
 								}
 							});
 						};
 						
-						self.closeDialog = function(id) {
-							$('#' + id).dialog("close");
-						};
-					
 						self.searchUser = function() {
 							$.ajax({	url : 'ajaxFindUser.ls',
 										data : {
@@ -251,6 +234,7 @@
 								});
 						};
 					};
+					
 					var usercityModel = new UserModel();
 					usercityModel.loadUserAccouts();
 					usercityModel.loadAllUsers();

@@ -6,17 +6,15 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.util.JSONUtils;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
 import com.ls.entity.Province;
@@ -29,7 +27,6 @@ import com.ls.repository.RoleRepository;
 import com.ls.repository.UserRepository;
 import com.ls.service.UserService;
 import com.ls.util.XinXinUtils;
-import com.ls.vo.JsTreeOptions;
 import com.ls.vo.ResponseVo;
 
 @Component("userAction")
@@ -64,6 +61,8 @@ public class UserAction extends BaseAction {
 	
 	private List<City> chinaCities;
 	private List<Province> chinaProvinces;
+	
+	private List<String> userOwnedCityIds;
 
 	public void setUsername(String username) {
 
@@ -296,7 +295,9 @@ public class UserAction extends BaseAction {
 	public String getAllRoles() {
 		
 		roles  = roleRepository.findAll();
-		
+		for (Role role : roles) {
+			role.setUsers(null);
+		}
 		return SUCCESS;
 	}
 	
@@ -342,9 +343,21 @@ public class UserAction extends BaseAction {
 		
 		User targetUser = userRepository.findOne(Integer.valueOf(userId));
 		
-		chinaProvinces = provinceRepository.findAll();
 		List<City> userCities = cityRepository.findByUsers(ImmutableList.of(targetUser));
+		for (City city : userCities) {
+			if (null == userOwnedCityIds) {
+				userOwnedCityIds = Lists.newArrayList();
+			}
+			
+			userOwnedCityIds.add("city" + city.getId());
+		}
 		
+		return SUCCESS;
+	}
+	
+	public String loadChina() {
+		
+		chinaProvinces = provinceRepository.findAll();
 		for (Province province : chinaProvinces) {
 			List<City> citiesInTheProvince = province.getCitys();
 			
@@ -353,7 +366,6 @@ public class UserAction extends BaseAction {
 				singleCityInChina.setProvince(null);
 				singleCityInChina.setUsers(null);
 				singleCityInChina.setCityURLs(null);
-				singleCityInChina.setSelected(userCities.contains(singleCityInChina));
 			}
 		}
 		
@@ -421,6 +433,16 @@ public class UserAction extends BaseAction {
 	public void setChinaProvinces(List<Province> chinaProvinces) {
 	
 		this.chinaProvinces = chinaProvinces;
+	}
+	
+	public List<String> getUserOwnedCityIds() {
+	
+		return userOwnedCityIds;
+	}
+	
+	public void setUserOwnedCityIds(List<String> userOwnedCityIds) {
+	
+		this.userOwnedCityIds = userOwnedCityIds;
 	}
 
 }

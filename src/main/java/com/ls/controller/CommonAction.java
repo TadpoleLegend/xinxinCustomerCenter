@@ -20,6 +20,7 @@ import com.ls.entity.Phase;
 import com.ls.entity.Problem;
 import com.ls.entity.ProblemCategory;
 import com.ls.entity.Province;
+import com.ls.entity.Role;
 import com.ls.entity.Step;
 import com.ls.entity.User;
 import com.ls.repository.DropDownRepository;
@@ -108,9 +109,21 @@ public class CommonAction extends BaseAction {
 	}
 
 	public String loadMe() {
+	
 		String username = XinXinUtils.getCurrentUserName();
+		
 		user = userRepository.findByUsername(username);
+		
+		user.setCities(null);
+		
+		user.setApplyingWillingCustomers(null);
+		
+		List<Role> roles = user.getRoles();
+		for (Role role : roles) {
+			role.setUsers(null);
+		}
 		return SUCCESS;
+
 	}
 	
 	public String findAllProvinces() {

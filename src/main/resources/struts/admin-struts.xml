@@ -94,6 +94,11 @@
 		</action>
 		<action name="showAssignedCities" class="userAction" method="showAssignedCities">
 			<result name="success" type="json">
+				<param name="root">userOwnedCityIds</param>
+			</result>
+		</action>
+		<action name="loadChina" class="userAction" method="loadChina">
+			<result name="success" type="json">
 				<param name="root">chinaProvinces</param>
 			</result>
 		</action>
