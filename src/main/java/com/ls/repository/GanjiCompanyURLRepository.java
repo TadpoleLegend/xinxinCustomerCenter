@@ -1,5 +1,7 @@
 package com.ls.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -10,4 +12,7 @@ import com.ls.entity.GanjiCompanyURL;
 public interface GanjiCompanyURLRepository extends JpaRepository<GanjiCompanyURL, Integer> , JpaSpecificationExecutor<GanjiCompanyURL>{
 	@Query(value="SELECT lc.* FROM ls_ganji_companyurl lc where lc.hasGet=0 and lc.cityId = :cityId and lc.companyId = :companyId", nativeQuery=true)
 	GanjiCompanyURL findCompany(@Param("cityId") Integer cityId,@Param("companyId") String companyId);
+	
+	@Query(value="SELECT lc.* FROM ls_ganji_companyurl lc where lc.hasGet=0 and lc.cityId = :cityId", nativeQuery=true)
+	List<GanjiCompanyURL> findByCityId(@Param("cityId") Integer cityId);
 }

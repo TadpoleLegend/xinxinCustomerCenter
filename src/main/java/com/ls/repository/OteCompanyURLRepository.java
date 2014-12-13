@@ -14,4 +14,6 @@ public interface OteCompanyURLRepository extends JpaRepository<OteCompanyURL, In
 	OteCompanyURL findCompany(@Param("cityId") Integer cityId,@Param("companyId") String companyId);
 	
 	List<OteCompanyURL> findTop20ByCityIdInOrderByIdAsc(List<Integer> cityIds);
+	@Query(value="SELECT lc.* FROM ls_ote_companyurl lc where lc.hasGet=0 and lc.cityId = :cityId", nativeQuery=true)
+	List<OteCompanyURL> findByCityId(@Param("cityId") Integer cityId);
 }

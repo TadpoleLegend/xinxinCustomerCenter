@@ -1,8 +1,7 @@
 package com.ls.jobs;
 
-import java.text.MessageFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,14 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ls.entity.CityURL;
+import com.ls.entity.City;
 import com.ls.entity.Company;
+import com.ls.entity.GanjiCompanyURL;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilForGanJi;
+import com.ls.repository.CityRepository;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
+import com.ls.repository.GanjiCompanyURLRepository;
 import com.ls.service.GrabService;
-import com.ls.util.DateUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 public class TestGrabGanji {
@@ -31,8 +32,12 @@ public class TestGrabGanji {
 	private CompanyRepository companyRepository;
 	@Resource(name = "grabService")
 	private GrabService grabService;
-	
-	@Test
+	@Autowired
+	private CityRepository cityRepository;
+	@Autowired
+	private GanjiCompanyURLRepository ganjiCompanyURLRepository;
+	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+	/*@Test
 	public void testGrabCompanyList() throws Exception{
 		try {
 			Date date  = Calendar.getInstance().getTime();
@@ -73,6 +78,43 @@ public class TestGrabGanji {
 //					companyRepository.save(company);
 				}
 				
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}*/
+	
+	private Company envelopeCompany(GanjiCompanyURL ganjiCompanyURL){
+		try {
+			Company company = new Company();
+			company.setName(ganjiCompanyURL.getName());
+			company.setArea(ganjiCompanyURL.getArea());
+			company.setUpdateDate(sf.parse(ganjiCompanyURL.getPublishDate()));
+			company.setCityId(ganjiCompanyURL.getCityId());
+			company.setGanjiresourceId(ganjiCompanyURL.getCompanyId());
+			company.setGanjiUrl(ganjiCompanyURL.getUrl());
+			return company;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@Test
+	public void testGrabCompany() throws Exception{
+		try {
+			List<City> Cities = cityRepository.findAll();
+			for(City City:Cities){
+				List<GanjiCompanyURL> list = ganjiCompanyURLRepository.findByCityId(City.getId());
+				for(GanjiCompanyURL ganjiCompanyURL:list){
+					Company company = envelopeCompany(ganjiCompanyURL);
+					if(company != null){
+						HtmlParserUtilForGanJi.getInstance().findCompanyDetails(company);
+						grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
+						ganjiCompanyURL.setHasGet(1);
+						ganjiCompanyURLRepository.save(ganjiCompanyURL);
+					}
 				}
 			}
 			
