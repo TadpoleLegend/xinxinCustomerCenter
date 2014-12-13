@@ -2,7 +2,9 @@ package com.ls.grab;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +32,8 @@ import com.ls.entity.FeCompanyURL;
 import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
-
-
+	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+	private Calendar cal = Calendar.getInstance();
 	private static  HtmlParserUtilFor58 htmlParserUtilFor58;
 	private HtmlParserUtilFor58(){}
 	private static final WebClient webClient;
@@ -89,7 +91,28 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 									company.setArea(nodeTranslated.getStringText());
 								}
 								if (className!= null && className.equals("w68")) {
-									company.setPublishDate(nodeTranslated.getStringText());
+									String puStr = nodeTranslated.getStringText();
+									if(!XinXinUtils.stringIsEmpty(puStr)){
+										if(puStr.contains("小时")){
+											company.setPublishDate(sf.format(Calendar.getInstance().getTime()));
+										}else if(puStr.contains("今天")){
+											company.setPublishDate(sf.format(cal.getTime()));
+										}else{	
+											String [] darr = puStr.split("-");
+											if(darr!=null && darr.length==2){
+												String mStr = darr[0];
+												int mint  = Integer.parseInt(mStr);
+												int cmonth = cal.get(Calendar.MONTH)+1;
+												if(mint>cmonth){
+													company.setPublishDate((cal.get(Calendar.YEAR)-1)+"-"+puStr);
+												}else{
+													company.setPublishDate(cal.get(Calendar.YEAR)+"-"+puStr);
+												}
+											}
+										}
+									}else{
+										company.setPublishDate(sf.format(cal.getTime()));
+									}
 								}
 							}
 							
