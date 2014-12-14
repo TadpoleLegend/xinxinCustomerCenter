@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
@@ -27,7 +29,7 @@ import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.TagFinderUtil;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.FeCompanyURLRepository;
-import com.sun.org.apache.bcel.internal.generic.NEW;
+import com.ls.service.GrabCompanyDetailPageUrlService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
@@ -38,9 +40,12 @@ public class TestGrad58CompanyURLJerry {
 
 	@Autowired
 	private FeCompanyURLRepository feCompanyURLRepository;
-	
+
+	@Resource(name = "FEGrabCompanyDetailPageUrlService")
+	private GrabCompanyDetailPageUrlService grabCompanyDetailPageUrlService;
+
 	private Integer currentCityId;
-	
+
 	NodeVisitor companyUrlListVisitor = new NodeVisitor() {
 
 		public void visitTag(Tag tag) {
@@ -51,10 +56,10 @@ public class TestGrad58CompanyURLJerry {
 
 				LinkTag linkTag = (LinkTag) tag;
 				FeCompanyURL yaojinboUrl = new FeCompanyURL();
-				
+
 				String testURL = tag.getAttribute("href");
 				int index = testURL.indexOf("58.com");
-				
+
 				if (index != -1) {
 					String sub = testURL.substring(index + 7);
 					int sIndex = sub.indexOf("/");
@@ -68,10 +73,10 @@ public class TestGrad58CompanyURLJerry {
 						}
 					}
 				}
-				
+
 				yaojinboUrl.setName(StringUtils.trimToEmpty(tag.getAttribute("title")));
 				yaojinboUrl.setUrl(tag.getAttribute("href"));
-				
+
 				Node nodeLink = linkTag.getParent().getParent();
 
 				Node[] nodes = nodeLink.getChildren().toNodeArray();
@@ -107,49 +112,12 @@ public class TestGrad58CompanyURLJerry {
 			}
 		}
 	};
-	
+
 	@Test
 	public void testGrabCompanyUrls() throws Exception {
-
-		List<CityURL> cityUrls = cityURLRepository.findByResourceType(ResourceTypeEnum.FiveEight.getId());
-		
-		final WebClient webClient = new WebClient(BrowserVersion.CHROME);
-		webClient.getOptions().setJavaScriptEnabled(false);
-		webClient.getOptions().setCssEnabled(false);
-		webClient.getOptions().setThrowExceptionOnScriptError(false);
-
-		Parser htmlParser = new Parser();
-		
-		for (CityURL cityURL : cityUrls) {
-			
-			currentCityId = cityURL.getCity().getId();
-			
-			int currentPageIndex = 1;
-			
-			try {
-				String baseMeirongshiUrl = cityURL.getBaseUrl() + currentPageIndex;
-				
-				final HtmlPage customerListPage = webClient.getPage(baseMeirongshiUrl);
-				
-				String listHtml = customerListPage.getWebResponse().getContentAsString();
-				htmlParser.setInputHTML(listHtml);
-
-				htmlParser.visitAllNodesWith(companyUrlListVisitor);
-				
-				if (!listHtml.contains("下一页")) {
-					continue;
-				}
-				currentPageIndex ++;
-				
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-			
-		}
-		Thread.sleep(3000);
+		grabCompanyDetailPageUrlService.grabUrl(null);
 	}
-	
-	
+
 	@Test
 	public void testGrabSingleCityCompanyUrls() throws Exception {
 
@@ -164,39 +132,44 @@ public class TestGrad58CompanyURLJerry {
 		try {
 			while (true) {
 				String baseMeirongshiUrl = "http://smx.58.com/meirongshi/pn" + currentPageIndex;
-				
+
 				final HtmlPage customerListPage = webClient.getPage(baseMeirongshiUrl);
-				
+
 				String listHtml = customerListPage.getWebResponse().getContentAsString();
 				htmlParser.setInputHTML(listHtml);
 
 				htmlParser.visitAllNodesWith(companyUrlListVisitor);
-				
+
 				if (!listHtml.contains("下一页")) {
 					break;
 				}
-				currentPageIndex ++;
+				currentPageIndex++;
 			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testHandlePublishDate() {
 		String todayString = "今天";
 		String hoursAgao = "10小时前";
 		String lastYearExample = "1-23";
-		
+
 		try {
 			System.out.println(XinXinConstants.MONTH_AND_DAY_DATE_FORMATTER.parse(lastYearExample));
-			
+
 			System.out.println(XinXinConstants.MONTH_AND_DAY_DATE_FORMATTER.format(new Date()));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+	}
+
+	@Test
+	public void testgrabTwoDaysRecently() {
+		grabCompanyDetailPageUrlService.grabTwoDaysRecently();
 	}
 }

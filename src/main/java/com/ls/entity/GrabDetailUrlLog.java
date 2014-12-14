@@ -22,18 +22,29 @@ public class GrabDetailUrlLog implements Serializable{
 	
 	private String type;
 	private String message;
+	private Date startDate;
 	private Date createDate;
-	
-	public GrabDetailUrlLog() {
-		super();
+	private String queryParameter;
+	private String status;
+		
+	public Date getStartDate() {
+		return startDate;
 	}
-	public GrabDetailUrlLog(String type, String message, Date createDate) {
-		super();
-		this.type = type;
-		this.message = message;
-		this.createDate = createDate;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
-	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getQueryParameter() {
+		return queryParameter;
+	}
+	public void setQueryParameter(String queryParameter) {
+		this.queryParameter = queryParameter;
+	}
 	public Long getId() {
 		return id;
 	}

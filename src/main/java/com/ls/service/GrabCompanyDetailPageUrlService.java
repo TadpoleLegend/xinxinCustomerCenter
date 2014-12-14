@@ -6,4 +6,5 @@ public interface GrabCompanyDetailPageUrlService {
 	
 	ResponseVo grabUrl(String postdate);
 
+	void grabTwoDaysRecently();
 }

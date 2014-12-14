@@ -22,11 +22,15 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.constants.XinXinConstants;
 import com.ls.entity.CityURL;
 import com.ls.entity.FeCompanyURL;
+import com.ls.entity.GrabDetailUrlLog;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.TagFinderUtil;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.FeCompanyURLRepository;
+import com.ls.repository.GrabDetailUrlLogRepository;
 import com.ls.service.GrabCompanyDetailPageUrlService;
+import com.ls.util.DateUtils;
+import com.ls.util.XinXinUtils;
 import com.ls.vo.ResponseVo;
 
 @Service("FEGrabCompanyDetailPageUrlService")
@@ -38,6 +42,9 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 	@Autowired
 	private FeCompanyURLRepository feCompanyURLRepository;
+
+	@Autowired
+	private GrabDetailUrlLogRepository grabDetailUrlLogRepository;
 
 	private Logger logger = LoggerFactory.getLogger(FEGrabCompanyDetailPageUrlServiceImpl.class);
 
@@ -91,7 +98,7 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 							yaojinboUrl.setArea(nodeTranslated.getStringText());
 						}
 						if (className != null && className.equals("w68")) {
-							if (nodeTranslated.getStringText().contains("今天") || nodeTranslated.getStringText().contains("小时")) {
+							if (nodeTranslated.getStringText().contains("今天") || nodeTranslated.getStringText().contains("小时") || nodeTranslated.getStringText().contains("分钟")) {
 								yaojinboUrl.setPublishDate(XinXinConstants.MONTH_AND_DAY_DATE_FORMATTER.format(new Date()));
 							} else {
 								yaojinboUrl.setPublishDate(nodeTranslated.getStringText());
@@ -101,11 +108,12 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 				}
 				yaojinboUrl.setCityId(currentCityId);
+				yaojinboUrl.setCreateDate(XinXinUtils.getNow());
 				feCompanyURLRepository.save(yaojinboUrl);
 
 				grabedUrlCount++;
 				try {
-					Thread.sleep(500);
+					Thread.sleep(700);
 				} catch (InterruptedException e) {
 					logger.error("Sleeping failed " + e.getMessage());
 				}
@@ -132,13 +140,18 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 			try {
 				String baseMeirongshiUrl = cityURL.getBaseUrl() + currentPageIndex;
-				
+
 				if (StringUtils.isNotBlank(postdate)) {
-					baseMeirongshiUrl += ( "?" + postdate);
+					baseMeirongshiUrl += ("?postdate=" + postdate);
 				}
 				final HtmlPage customerListPage = webClient.getPage(baseMeirongshiUrl);
 
 				String listHtml = customerListPage.getWebResponse().getContentAsString();
+				
+				if (listHtml.contains("请输入验证码继续访问")) {
+					//TODO
+					return ResponseVo.newFailMessage("你的IP因为访问过于频繁而被封，需要手动解封，并重新执行任务");
+				}
 				htmlParser.setInputHTML(listHtml);
 
 				htmlParser.visitAllNodesWith(companyUrlListVisitor);
@@ -162,4 +175,37 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 		return ResponseVo.newSuccessMessage("Totally grabed " + grabedUrlCount + " records of url");
 	}
 
+	public void grabTwoDaysRecently() {
+
+		String postDateParameter = null;
+
+		GrabDetailUrlLog grabDetailUrlLog = new GrabDetailUrlLog();
+		try {
+			Date todayByNow = new Date();
+			long yesterdayByNow = todayByNow.getTime() - 24 * 60 * 60 * 1000;
+			Date yesterday = new Date(yesterdayByNow);
+			
+			postDateParameter = DateUtils.getPostDateParameter(yesterday, todayByNow);
+			
+			grabDetailUrlLog.setQueryParameter(postDateParameter);
+			grabDetailUrlLog.setStartDate(XinXinUtils.getNow());
+			
+			ResponseVo response = this.grabUrl(postDateParameter);
+			
+			grabDetailUrlLog.setCreateDate(XinXinUtils.getNow());
+
+			grabDetailUrlLog.setMessage(response.toString());
+
+			logger.info(response.toString());
+			grabDetailUrlLog.setStatus("success");
+
+		} catch (Exception e) {
+
+			grabDetailUrlLog.setStatus("fail");
+			grabDetailUrlLog.setMessage(e.getMessage());
+			grabDetailUrlLog.setCreateDate(XinXinUtils.getNow());
+		}
+
+		grabDetailUrlLogRepository.save(grabDetailUrlLog);
+	}
 }

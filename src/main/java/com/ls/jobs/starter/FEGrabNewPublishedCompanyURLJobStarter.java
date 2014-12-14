@@ -35,7 +35,6 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 		JobDataMap jobDataMap = new JobDataMap();
 		
 		jobDataMap.put("grabCompanyDetailPageUrlService", grabCompanyDetailPageUrlService);
-		jobDataMap.put("grabDetailUrlLogRepository", grabDetailUrlLogRepository);
 
 		JobDetail sixOclockJobDetail = JobBuilder.newJob(FEGrabNewPublishedCompanyURLJob.class).usingJobData(jobDataMap).withIdentity("FEGrabNewPublishedCompanyURLJob_6_00", "GRAB_URL").build();
 		JobDetail elevenOclockJobDetail = JobBuilder.newJob(FEGrabNewPublishedCompanyURLJob.class).usingJobData(jobDataMap).withIdentity("FEGrabNewPublishedCompanyURLJob_11_00", "GRAB_URL").build();
@@ -44,7 +43,7 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 		sixOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_afternoon_at_six_clock");
 		sixOclockTrigger.setGroup("GRAB_URL");
 
-		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(23, 0).build();
+		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(21, 47).build();
 		elevenOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_evening_at_eleven_clock");
 		elevenOclockTrigger.setGroup("GRAB_URL");
 

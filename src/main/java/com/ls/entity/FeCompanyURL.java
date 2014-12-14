@@ -1,6 +1,7 @@
 package com.ls.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +25,13 @@ public class FeCompanyURL implements Serializable {
 	private String publishDate;
 	private Integer cityId;
 	private int hasGet;
-	
+	private Date createDate;
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 	public int getHasGet() {
 		return hasGet;
 	}
