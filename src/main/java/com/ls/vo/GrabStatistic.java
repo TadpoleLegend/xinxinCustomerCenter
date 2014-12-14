@@ -10,6 +10,16 @@ public class GrabStatistic implements Serializable {
 	private Integer duplicate;
 	private Integer saved;
 	private Integer totalReaded;
+	
+	public GrabStatistic() {
+		super();
+	}
+	
+	public GrabStatistic(Integer success) {
+		super();
+		this.success = success;
+	}
+	
 	public Integer getSuccess() {
 		return success;
 	}
@@ -33,5 +43,9 @@ public class GrabStatistic implements Serializable {
 	}
 	public void setTotalReaded(Integer totalReaded) {
 		this.totalReaded = totalReaded;
+	}
+	
+	public static GrabStatistic newGrabStatistic(int successCount) {
+		return new GrabStatistic(successCount);
 	}
 }

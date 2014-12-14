@@ -73,6 +73,8 @@ public class FeCompanyURL implements Serializable {
 	public void setCityId(Integer cityId) {
 		this.cityId = cityId;
 	}
-	
-
+	@Override
+	public String toString() {
+		return "FeCompanyURL [id=" + id + ", name=" + name + ", area=" + area + ", url=" + url + ", companyId=" + companyId + ", publishDate=" + publishDate + ", cityId=" + cityId + ", hasGet=" + hasGet + "]";
+	}
 }

@@ -72,6 +72,7 @@ public class TestGrabProvince {
 									city58URL.setCity(city);
 									city58URL.setUrl(url);
 									city58URL.setResourceType(ResourceTypeEnum.FiveEight.getId());
+									city58URL.setBaseUrl(city58.getValue() + "meirongshi/pn");
 									cityURLRepository.save(city58URL);
 									find58flag = true;
 									}

@@ -12,7 +12,13 @@ public class TagFinderUtil {
 		
 		return find;
 	}
-
+	
+	public static boolean findNextButtonLink(Tag tag) {
+		
+		boolean find = tag.getTagName().equalsIgnoreCase("a") && tag.getAttribute("class") != null && tag.getAttribute("class").equals("next");
+		
+		return find;
+	}
 	public static boolean findCompanyName(Tag tag) {
 		
 		boolean find = tag.getTagName().equalsIgnoreCase("div") && tag.getAttribute("class") != null && tag.getAttribute("class").equals("company");

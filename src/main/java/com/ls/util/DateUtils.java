@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.ls.constants.XinXinConstants;
+
 public class DateUtils {
 	
 	public static int minusDate(Date date1,Date date2){
@@ -29,4 +31,7 @@ public class DateUtils {
 		return sf.format(date); 
 	}
 	
+	public static String getPostDateParameter(Date startDate, Date endDate) {
+		return XinXinConstants.POST_DATE_FORMATTER.format(startDate) + "_" + XinXinConstants.POST_DATE_FORMATTER.format(endDate);
+	}
 }

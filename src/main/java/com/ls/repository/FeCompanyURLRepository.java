@@ -15,4 +15,6 @@ public interface FeCompanyURLRepository  extends JpaRepository<FeCompanyURL, Int
 	
 	@Query(value="SELECT lc.* FROM ls_fe_companyurl lc where lc.hasGet=0 and lc.cityId = :cityId", nativeQuery=true)
 	List<FeCompanyURL> findByCityId(@Param("cityId") Integer cityId);
+
+	FeCompanyURL findByCompanyId(String resouceId);
 }

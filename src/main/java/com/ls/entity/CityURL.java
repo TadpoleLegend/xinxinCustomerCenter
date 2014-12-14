@@ -23,6 +23,7 @@ public class CityURL implements Serializable {
 	protected String url;
 	protected String resourceType;
 	protected Date updateDate;
+	protected String baseUrl;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="city_id")
@@ -68,6 +69,14 @@ public class CityURL implements Serializable {
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 }
