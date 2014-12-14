@@ -45,5 +45,15 @@
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<jpa:repositories base-package="com.ls.repository" repository-impl-postfix="Impl" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" />
-
+	<!-- grab company url job 
+	<import resource="job/grab-138-company-url.xml"/>
+	<import resource="job/grab-58-company-url.xml"/>
+	<import resource="job/grab-ganji-company-url.xml"/>
+	
+	-->
+	<!-- grab company job
+	<import resource="job/grab-138-company.xml"/>
+	<import resource="job/grab-58-company.xml"/>
+	<import resource="job/grab-ganji-company.xml"/>
+	 -->
 </beans>
