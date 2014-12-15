@@ -220,17 +220,27 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 		return contactorsPhoneImgSrcBuilder.toString();
 	}
 	
+	
 	public void findCompanyName(Company company,String detailPageHtml){
 		try{
 			try {
-				Div nameDiv = findFirstOneWithClassName(detailPageHtml, "c-title");
+				Div nameDiv = findFirstOneWithClassName(detailPageHtml, "compT");
 				Node nodes [] =nameDiv.getChildrenAsNodeArray();
 				if(nodes!=null){
 				for(Node node:nodes){
 					if(node instanceof HeadingTag){
 						HeadingTag ht = (HeadingTag)node;
-						company.setName(ht.getStringText());
-						return ;
+						Node htNodes [] = ht.getChildrenAsNodeArray();
+						if(htNodes!=null){
+							for(Node htNode:htNodes){
+								if(htNode instanceof LinkTag){
+									LinkTag lt = (LinkTag)htNode;
+									company.setName(lt.getStringText());
+									return ;
+								}
+							}
+						}
+						
 					}
 					
 				}
