@@ -24,20 +24,25 @@ public class FeCompanyURL implements Serializable {
 	private String companyId;
 	private String publishDate;
 	private Integer cityId;
-	private int hasGet;
 	private Date createDate;
+	private Boolean hasGet;
+	
+	public Boolean getHasGet() {
+	
+		return hasGet;
+	}
+	
+	public void setHasGet(Boolean hasGet) {
+	
+		this.hasGet = hasGet;
+	}
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	public int getHasGet() {
-		return hasGet;
-	}
-	public void setHasGet(int hasGet) {
-		this.hasGet = hasGet;
-	}
+	
 	public Integer getId() {
 		return id;
 	}

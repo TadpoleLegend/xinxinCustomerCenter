@@ -20,9 +20,13 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.ImmutableList;
 import com.ls.entity.City;
 import com.ls.entity.Company;
+import com.ls.entity.FeCompanyURL;
+import com.ls.entity.GanjiCompanyURL;
 import com.ls.entity.OteCompanyURL;
 import com.ls.entity.Province;
 import com.ls.repository.CityRepository;
+import com.ls.repository.FeCompanyURLRepository;
+import com.ls.repository.GanjiCompanyURLRepository;
 import com.ls.repository.OteCompanyURLRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.service.GrabService;
@@ -49,6 +53,12 @@ public class GrabAction extends BaseAction {
 	
 	@Autowired
 	private OteCompanyURLRepository oteCompanyURLRepository;
+	
+	@Autowired
+	private FeCompanyURLRepository feCompanyURLRepository;
+	
+	@Autowired
+	private GanjiCompanyURLRepository ganjiCompanyURLRepository;
 
 	private List<Company> companies;
 
@@ -59,6 +69,8 @@ public class GrabAction extends BaseAction {
 	private GrabStatistic grabStatistic;
 	
 	private List<OteCompanyURL> oteCompanyURLs;
+	private List<FeCompanyURL> feCompanyURLs;
+	private List<GanjiCompanyURL> ganjiCompanyURLs;
 
 	public String grabCompanyIndexPage() {
 		String url = getParameter("url");
@@ -133,31 +145,101 @@ public class GrabAction extends BaseAction {
 	
 	public String load138PreviewList() {
 		
-		String cityIds = getParameter("cityIdsHtml");
+		String selectedIds = getParameter("selectedIds");
 		
-		List<Integer> userCityIds = new ArrayList<Integer>();
-		List<City> userCities = null;
-		if (StringUtils.isEmpty(cityIds)) {
-			userCities = cityRepository.findByUsers(ImmutableList.of(commonService.getCurrentLoggedInUser()));
-		} else {
-			Object[] cityArray = JSONArray.fromObject(cityIds).toArray();
-			if (cityArray == null || cityArray.length == 0) {
-				userCities = cityRepository.findByUsers(ImmutableList.of(commonService.getCurrentLoggedInUser()));
+		try {
+			List<Integer> userCityIds = new ArrayList<Integer>();
+			
+			if (StringUtils.isEmpty(selectedIds) || selectedIds.equals("[]")) {
+				oteCompanyURLs = new ArrayList<OteCompanyURL>();
+				return SUCCESS;
+				
 			} else {
-				userCities = userService.getCitiesFromSpans(cityArray);
+				Object[] cityArray = JSONArray.fromObject(selectedIds).toArray();
+				for (Object object : cityArray) {
+					String idString = object.toString();
+					if (idString.contains("province")) {
+						continue;
+					}
+					
+					String cityId = idString.substring("city".length());
+					userCityIds.add(Integer.valueOf(cityId));
+				}
 			}
 			
+			oteCompanyURLs = oteCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
+			
+		} catch (Exception e) {
+			oteCompanyURLs = new ArrayList<OteCompanyURL>();
 		}
-		
-		for (City city : userCities) {
-			userCityIds.add(city.getId());
-		}
-		
-		oteCompanyURLs = oteCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
 		
 		return SUCCESS;
 	}
 	
+	public String load58PreviewList() {
+		
+		String selectedIds = getParameter("selectedIds");
+		
+		try {
+			List<Integer> userCityIds = new ArrayList<Integer>();
+			
+			if (StringUtils.isEmpty(selectedIds) || selectedIds.equals("[]")) {
+				feCompanyURLs = new ArrayList<FeCompanyURL>();
+				return SUCCESS;
+				
+			} else {
+				Object[] cityArray = JSONArray.fromObject(selectedIds).toArray();
+				for (Object object : cityArray) {
+					String idString = object.toString();
+					if (idString.contains("province")) {
+						continue;
+					}
+					
+					String cityId = idString.substring("city".length());
+					userCityIds.add(Integer.valueOf(cityId));
+				}
+			}
+			
+			feCompanyURLs = feCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
+			
+		} catch (Exception e) {
+			feCompanyURLs = new ArrayList<FeCompanyURL>();
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String loadGanjiPreviewList() {
+		String selectedIds = getParameter("selectedIds");
+		
+		try {
+			List<Integer> userCityIds = new ArrayList<Integer>();
+			
+			if (StringUtils.isEmpty(selectedIds) || selectedIds.equals("[]")) {
+				ganjiCompanyURLs = new ArrayList<GanjiCompanyURL>();
+				return SUCCESS;
+				
+			} else {
+				Object[] cityArray = JSONArray.fromObject(selectedIds).toArray();
+				for (Object object : cityArray) {
+					String idString = object.toString();
+					if (idString.contains("province")) {
+						continue;
+					}
+					
+					String cityId = idString.substring("city".length());
+					userCityIds.add(Integer.valueOf(cityId));
+				}
+			}
+			
+			ganjiCompanyURLs = ganjiCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
+			
+		} catch (Exception e) {
+			ganjiCompanyURLs = new ArrayList<GanjiCompanyURL>();
+		}
+		return SUCCESS;
+	}
+
 	public List<OteCompanyURL> getOteCompanyURLs() {
 		
 		return oteCompanyURLs;
@@ -197,6 +279,26 @@ public class GrabAction extends BaseAction {
 
 	public void setGrabStatistic(GrabStatistic grabStatistic) {
 		this.grabStatistic = grabStatistic;
+	}
+
+	public List<FeCompanyURL> getFeCompanyURLs() {
+	
+		return feCompanyURLs;
+	}
+
+	public void setFeCompanyURLs(List<FeCompanyURL> feCompanyURLs) {
+	
+		this.feCompanyURLs = feCompanyURLs;
+	}
+	
+	public List<GanjiCompanyURL> getGanjiCompanyURLs() {
+	
+		return ganjiCompanyURLs;
+	}
+
+	public void setGanjiCompanyURLs(List<GanjiCompanyURL> ganjiCompanyURLs) {
+	
+		this.ganjiCompanyURLs = ganjiCompanyURLs;
 	}
 	
 }

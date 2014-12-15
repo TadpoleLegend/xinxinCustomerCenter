@@ -17,4 +17,6 @@ public interface FeCompanyURLRepository  extends JpaRepository<FeCompanyURL, Int
 	List<FeCompanyURL> findByCityId(@Param("cityId") Integer cityId);
 
 	FeCompanyURL findByCompanyId(String resouceId);
+
+	List<FeCompanyURL> findTop20ByCityIdInOrderByIdAsc(List<Integer> userCityIds);
 }

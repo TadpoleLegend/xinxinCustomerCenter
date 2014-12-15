@@ -15,4 +15,6 @@ public interface GanjiCompanyURLRepository extends JpaRepository<GanjiCompanyURL
 	
 	@Query(value="SELECT lc.* FROM ls_ganji_companyurl lc where lc.hasGet=0 and lc.cityId = :cityId", nativeQuery=true)
 	List<GanjiCompanyURL> findByCityId(@Param("cityId") Integer cityId);
+
+	List<GanjiCompanyURL> findTop20ByCityIdInOrderByIdAsc(List<Integer> userCityIds);
 }

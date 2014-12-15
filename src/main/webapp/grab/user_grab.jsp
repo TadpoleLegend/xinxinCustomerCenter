@@ -27,6 +27,9 @@
 						<div class="blue module ui-corner-top clearfix">
 							<h2>我的区域</h2>
 						</div>
+						<div>
+							
+						</div>
 						<div class="content">
 							<div class="row">
 									<div id="userCityTree">
@@ -49,6 +52,11 @@
 					<div class="app-wrapper ui-corner-top">
 						<div class="blue module ui-corner-top clearfix">
 							<h2>数据资源</h2>
+							<h2 class="right">
+								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, '138')">搜索138美容网</a>
+								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, '58')">搜索58同城</a>
+								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, 'gj')">搜索赶集网</a>
+							</h2>
 						</div>
 						<div class="content">
 							<div class="row">
@@ -79,6 +87,7 @@
 
 									</tbody>
 								</table>
+								<br>
 						</div>
 					</div>
 				</div>
@@ -143,6 +152,39 @@
 				self.otePreviewList = ko.observableArray([]);
 				self.selectedCities = ko.observableArray([]);
 				self.totalLength = ko.observable('');
+				
+				self.searchUrlResources = function(type, item, event ) {
+					
+					
+					var url = '';
+					if (type == '58') {
+						url = "load58PreviewList.ls";
+					} else if (type == '138') {
+						url = "load138PreviewList.ls";
+					} else if (type =='ganji') {
+						url = "loadGanjiPreviewList.ls";
+					} else {
+						fail('操作错误');
+						return;
+					}
+					
+					var selectedIds = $.jstree.reference('#userCityTree').get_selected();
+					$.ajax({
+						data : {
+							selectedIds : JSON.stringify(selectedIds)
+						},
+						url : url,
+						success: function(data) {
+							if(data) {
+								self.otePreviewList(data);
+								self.totalLength(self.otePreviewList().length);
+							} else {
+								success("没有发现资源数据");
+							}
+							
+						}
+					});
+				};
 				self.filterUrlsWithCity = function() {
 					$.ajax({
 						data : {
@@ -157,20 +199,11 @@
 				};
 				self.createJstree = function() {
 					
-					$('#userCityTree').on('changed.jstree', function (e, data) {
-					    var i, j, r = [];
-					    for(i = 0, j = data.selected.length; i < j; i++) {
-					      r.push(data.instance.get_node(data.selected[i]).text);
-					    }
-					    self.selectedCities(r);
-
-					    self.filterUrlsWithCity();
-
-					  }).jstree({
+					$('#userCityTree').jstree({
 							plugins : ["checkbox"], "checkbox" : {
 							      "keep_selected_style" : false
 						    },
-						});
+					});
 				};
 					
 				self.initCities = function(city) {
@@ -180,14 +213,6 @@
 						success: function(data) {
 							self.userCities(data);
 							self.createJstree();
-						}
-					});
-					
-					$.ajax({
-						url : 'load138PreviewList.ls',
-						success: function(data) {
-							self.otePreviewList(data);
-							self.totalLength(self.otePreviewList().length);
 						}
 					});
 					

@@ -129,7 +129,7 @@ public class TestGrab58 {
 					if(company != null){
 						HtmlParserUtilFor58.getInstance().findCompanyDetails(company);
 						grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
-						feCompanyURL.setHasGet(1);
+						feCompanyURL.setHasGet(true);
 						feCompanyURLRepository.save(feCompanyURL);
 					}
 				}

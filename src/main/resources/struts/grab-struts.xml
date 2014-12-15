@@ -35,7 +35,16 @@
 				<param name="root">oteCompanyURLs</param>
 			</result>
 		</action>
-		
+		<action name="load58PreviewList" method="load58PreviewList" class="grabAction">
+			<result name="success" type="json">
+				<param name="root">feCompanyURLs</param>
+			</result>
+		</action>
+		<action name="loadGanjiPreviewList" method="loadGanjiPreviewList" class="grabAction">
+			<result name="success" type="json">
+				<param name="root">ganjiCompanyURLs</param>
+			</result>
+		</action>
 	</package>
 	
 </struts>

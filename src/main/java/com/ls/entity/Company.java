@@ -58,6 +58,7 @@ public class Company implements Serializable {
 	protected String type;
 	protected Integer ownerUserId; //manually input company belongs to the user who inputs it to the system.
 	protected Date updateDate;
+	protected Date createDate;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ls_company_problem", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
@@ -365,6 +366,16 @@ public class Company implements Serializable {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
+	
+	public Date getCreateDate() {
+	
+		return createDate;
+	}
+	
+	public void setCreateDate(Date createDate) {
+	
+		this.createDate = createDate;
+	}
 
 	public static Company create() {
 		
@@ -373,9 +384,21 @@ public class Company implements Serializable {
 		company.setActive(true);
 		company.setIsTracked(false);
 		company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
-		company.setGrabDate(XinXinConstants.FULL_DATE_FORMATTER.format(new Date()));
+		
 		company.setUpdateDate(XinXinUtils.getNow());
+		company.setCreateDate(XinXinUtils.getNow());
 		
 		return company;
 	}
+
+	@Override
+	public String toString() {
+
+		return "Company [id=" + id + ", oTEresourceId=" + oTEresourceId + ", fEresourceId=" + fEresourceId + ", ganjiresourceId=" + ganjiresourceId + ", resouceType=" + resouceType + ", name=" + name + ", contactor=" + contactor + ", email=" + email + ", emailSrc=" + emailSrc + ", phone=" + phone + ", phoneSrc=" + phoneSrc +
+			", mobilePhone=" + mobilePhone + ", mobilePhoneSrc=" + mobilePhoneSrc + ", isTracked=" + isTracked + ", address=" + address + ", star=" + star + ", area=" + area + ", fEurl=" + fEurl + ", oteUrl=" + oteUrl + ", ganjiUrl=" + ganjiUrl + ", cityId=" + cityId + ", provinceId=" + provinceId + ", employeeCount=" +
+			employeeCount + ", description=" + description + ", grabDate=" + grabDate + ", active=" + active + ", status=" + status + ", type=" + type + ", ownerUserId=" + ownerUserId + ", updateDate=" + updateDate + ", createDate=" + createDate + ", problems=" + problems + ", publishDate=" + publishDate + ", addtion=" + addtion +
+			", phoneCallHistories=" + phoneCallHistories + ", learningHistories=" + learningHistories + "]";
+	}
+	
+	
 }

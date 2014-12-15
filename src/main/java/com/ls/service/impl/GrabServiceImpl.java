@@ -1,5 +1,7 @@
 package com.ls.service.impl;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,21 +13,27 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.google.common.collect.ImmutableList;
 import com.ls.entity.City;
 import com.ls.entity.CityURL;
 import com.ls.entity.Company;
 import com.ls.entity.CompanyResource;
+import com.ls.entity.FeCompanyURL;
 import com.ls.entity.NegativeCompany;
 import com.ls.enums.ResourceTypeEnum;
+import com.ls.grab.HtmlParserUtilFor58;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.CompanyResourceRepository;
+import com.ls.repository.FeCompanyURLRepository;
 import com.ls.repository.NegativeCompanyRepository;
 import com.ls.service.GrabService;
 import com.ls.util.DateUtils;
+import com.ls.util.FiveEightOneCityDetailPageParser;
 import com.ls.util.XinXinUtils;
+import com.ls.vo.CompanyDetailVo;
 import com.ls.vo.GrabStatistic;
 
 @Service("grabService")
@@ -45,6 +53,9 @@ public class GrabServiceImpl implements GrabService {
 	
 	@Autowired
 	private CityRepository cityRepository;
+	
+	@Autowired
+	private FeCompanyURLRepository feCompanyURLRepository;
 	
 	public List<String> findFeCityURLs() {
 		
@@ -115,7 +126,7 @@ public class GrabServiceImpl implements GrabService {
 		return companies;
 	}
 
-	public Company grabCompanyDetail(String detailPageUrl) {
+	public Company grabCompanyDetailByUrl(String detailPageUrl) {
 		Company company = new Company();
 		
 		if (StringUtils.isBlank(detailPageUrl)) {
@@ -411,5 +422,39 @@ public class GrabServiceImpl implements GrabService {
 		dbCompany.setDescription(websiteCompany.getDescription()==null?dbCompany.getDescription():websiteCompany.getDescription());
 		
 	}
-	
+
+	public Company grabSingleFECompanyByUrlId(Integer urlId) {
+
+		FeCompanyURL feCompanyURL = feCompanyURLRepository.findOne(urlId);
+		if(feCompanyURL.getHasGet()) {
+			return null;
+		}
+		
+		String resouceId = feCompanyURL.getCompanyId();
+		Integer cityId = feCompanyURL.getCityId();
+		
+		Integer existingCompanyId = companyRepository.findCompanyByFEResourceIdAndCityId(resouceId, cityId);
+		if(existingCompanyId != null) {
+			return null;
+		}
+		
+		Company initialCompany = Company.create();
+		initialCompany.setCityId(cityId);
+		initialCompany.setfEresourceId(resouceId);
+		initialCompany.setArea(feCompanyURL.getArea());
+		initialCompany.setfEurl(feCompanyURL.getUrl());
+
+		CompanyDetailVo detailVo = null;
+		try {
+			detailVo = FiveEightOneCityDetailPageParser.parseDetailFromUrl(feCompanyURL.getUrl());
+			
+		} catch (FailingHttpStatusCodeException e) {
+		} catch (MalformedURLException e) {
+		} catch (IOException e) {
+		}
+		
+		System.out.println(detailVo.toString());
+		
+		return null;
+	}
 }
