@@ -7,6 +7,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
@@ -39,7 +40,15 @@ public class LocationUtil {
 	public static void main(String[] args) {
 //		find138Cities();
 //		Map<String,Map<String,String>> list = find58Cities();
-		findGanjiCities();
+//		Map<String,Map<String,String>> cities = findGanjiCities();
+		Map<String,Map<String,String>> cities = find58Cities();
+		for(Entry<String, Map<String, String>>en:cities.entrySet()){
+			System.out.println(en.getKey());
+			Map<String,String> value = en.getValue();
+			for(Entry<String,String> vs:value.entrySet()){
+				System.err.println(vs.getKey() + "  " +vs.getValue());
+			}
+		}
 	}
 	private static String getHTML(String file){
 		String detailPageHtml = null;
@@ -69,7 +78,8 @@ public class LocationUtil {
 	}
 	
 	public static Map<String,Map<String,String>> findGanjiCities() {
-		Map<String,Map<String,String>> cities = find58Cities();
+//		Map<String,Map<String,String>> cities = find58Cities();
+		Map<String,Map<String,String>> cities = find138Cities();
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
 		String detailPageHtml = getHTML(fileganji);
 		if(!cities.isEmpty()){
@@ -80,7 +90,7 @@ public class LocationUtil {
 				for(Entry<String,String> city:map.entrySet()){
 					String [] str = city.getValue().split("58");
 					String cityStr = str[0];
-					final String city58 = cityStr.substring(cityStr.indexOf("//")+2,cityStr.length()-1);
+//					final String city58 = cityStr.substring(cityStr.indexOf("//")+2,cityStr.length()-1);
 					final String cityName = city.getKey();
 					try {
 
@@ -115,7 +125,8 @@ public class LocationUtil {
 															LinkTag cityLink = (LinkTag) cityLinks[j];
 															//System.out.println(cityLink.getStringText()+"----------"+cityName);
 															//if(cityLink.getStringText().contains(cityName)||cityName.contains(cityLink.getStringText())){
-															if(cityLink.getAttribute("href").contains(city58)||cityName.contains(cityLink.getStringText())||cityLink.getStringText().contains(cityName)){
+//															if(cityLink.getAttribute("href").contains(city58)||cityName.contains(cityLink.getStringText())||cityLink.getStringText().contains(cityName)){
+															if(cityName.contains(cityLink.getStringText())||cityLink.getStringText().contains(cityName)){
 //															System.out.println(cityLink.getStringText()+"----------"+cityName);
 //															City city = new City();
 //															city.setName(cityLink.getStringText());
@@ -288,6 +299,12 @@ public class LocationUtil {
 										definitionListBullet.getStringText().equals("甘肃") ||
 										definitionListBullet.getStringText().equals("宁夏") ||
 										definitionListBullet.getStringText().equals("青海") ||
+										
+										definitionListBullet.getStringText().equals("上海") ||
+										definitionListBullet.getStringText().equals("重庆") ||
+										definitionListBullet.getStringText().equals("天津") ||
+										definitionListBullet.getStringText().equals("北京") ||
+										
 										definitionListBullet.getStringText().equals("其他")) 
 									{
 //										Province province = new Province();
@@ -335,7 +352,7 @@ public class LocationUtil {
 			e.printStackTrace();
 		}
 		//for popular city
-		Map<String,String> shcity = new HashMap<String,String>();
+		/*Map<String,String> shcity = new HashMap<String,String>();
 		Map<String,String> tjcity = new HashMap<String,String>();
 		Map<String,String> bjcity = new HashMap<String,String>();
 		Map<String,String> cqcity = new HashMap<String,String>();
@@ -346,7 +363,7 @@ public class LocationUtil {
 		province.put("上海", shcity);
 		province.put("北京", bjcity);
 		province.put("天津", tjcity);
-		province.put("重庆", cqcity);
+		province.put("重庆", cqcity);*/
 		return province;
 
 	}
