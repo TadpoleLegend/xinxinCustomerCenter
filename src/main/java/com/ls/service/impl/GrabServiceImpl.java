@@ -22,7 +22,6 @@ import com.ls.entity.CompanyResource;
 import com.ls.entity.FeCompanyURL;
 import com.ls.entity.NegativeCompany;
 import com.ls.enums.ResourceTypeEnum;
-import com.ls.grab.HtmlParserUtilFor58;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
@@ -317,7 +316,8 @@ public class GrabServiceImpl implements GrabService {
 		
 	}
 	
-	public void mergeCompanyData(Company company,String recourceType){
+	public Company mergeCompanyData(Company company,String recourceType){
+		Company savedCompany = null;
 		try {
 			if(!XinXinUtils.stringIsEmpty(company.getDescription())){
 				String desc = company.getDescription();
@@ -345,7 +345,7 @@ public class GrabServiceImpl implements GrabService {
 						}
 					}else{
 						company.setGrabDate(dateTime);
-						this.companyRepository.save(company);
+						savedCompany = this.companyRepository.save(company);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -367,6 +367,7 @@ public class GrabServiceImpl implements GrabService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return savedCompany;
 	}
 	/**
 	 * 138 is the basic inforamtion website

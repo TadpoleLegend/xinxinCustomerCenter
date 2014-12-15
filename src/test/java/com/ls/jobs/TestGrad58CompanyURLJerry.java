@@ -93,9 +93,9 @@ public class TestGrad58CompanyURLJerry {
 						}
 						if (className != null && className.equals("w68")) {
 							if (nodeTranslated.getStringText().contains("今天") || nodeTranslated.getStringText().contains("小时")) {
-								yaojinboUrl.setPublishDate(XinXinConstants.MONTH_AND_DAY_DATE_FORMATTER.format(new Date()));
+								yaojinboUrl.setPublishDate(XinXinConstants.SIMPLE_DATE_FORMATTER.format(new Date()));
 							} else {
-								yaojinboUrl.setPublishDate(nodeTranslated.getStringText());
+								yaojinboUrl.setPublishDate("2014-" + nodeTranslated.getStringText());
 							}
 						}
 					}

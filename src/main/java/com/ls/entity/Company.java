@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -51,6 +52,7 @@ public class Company implements Serializable {
 	protected Integer cityId;
 	protected Integer provinceId;
 	protected String employeeCount;
+	@Column(length=25555)
 	protected String description;
 	protected String grabDate;
 	protected Boolean active;

@@ -10,7 +10,7 @@ import org.htmlparser.util.ParserException;
 
 public class BaseHtmlParseUtil {
 	
-	public Div findFirstOneWithClassName(String html, final String className) {
+	public static Div findFirstOneWithClassName(String html, final String className) {
 		Node[] nodes = null;
 		try {
 			Parser htmlParser = new Parser();

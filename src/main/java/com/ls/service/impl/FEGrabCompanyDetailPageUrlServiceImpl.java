@@ -99,9 +99,9 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 						}
 						if (className != null && className.equals("w68")) {
 							if (nodeTranslated.getStringText().contains("今天") || nodeTranslated.getStringText().contains("小时") || nodeTranslated.getStringText().contains("分钟")) {
-								yaojinboUrl.setPublishDate(XinXinConstants.MONTH_AND_DAY_DATE_FORMATTER.format(new Date()));
+								yaojinboUrl.setPublishDate(XinXinConstants.SIMPLE_DATE_FORMATTER.format(new Date()));
 							} else {
-								yaojinboUrl.setPublishDate(nodeTranslated.getStringText());
+								yaojinboUrl.setPublishDate("2014-" + nodeTranslated.getStringText());
 							}
 						}
 					}
@@ -109,6 +109,7 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 				}
 				yaojinboUrl.setCityId(currentCityId);
 				yaojinboUrl.setCreateDate(XinXinUtils.getNow());
+				yaojinboUrl.setHasGet(false);
 				feCompanyURLRepository.save(yaojinboUrl);
 
 				grabedUrlCount++;
@@ -198,7 +199,8 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 			logger.info(response.toString());
 			grabDetailUrlLog.setStatus("success");
-
+			grabDetailUrlLog.setType("58");
+			
 		} catch (Exception e) {
 
 			grabDetailUrlLog.setStatus("fail");
@@ -208,4 +210,5 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 		grabDetailUrlLogRepository.save(grabDetailUrlLog);
 	}
+	
 }

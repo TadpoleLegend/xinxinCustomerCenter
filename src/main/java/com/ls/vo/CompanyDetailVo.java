@@ -91,6 +91,12 @@ public class CompanyDetailVo {
 	
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return "CompanyDetailVo [name=" + name + ", contactor=" + contactor + ", contactorCellPhoneImageSrc=" + contactorCellPhoneImageSrc + ", contactorFixPhoneImageSrc=" + contactorFixPhoneImageSrc + ", scale=" + scale + ", emailImageSrc=" + emailImageSrc + ", address="
+				+ address + ", description=" + description + "]";
+	}
 	
 	
 
