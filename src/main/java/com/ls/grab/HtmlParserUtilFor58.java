@@ -225,6 +225,7 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 		try{
 			try {
 				Div nameDiv = findFirstOneWithClassName(detailPageHtml, "compT");
+				if(nameDiv!=null){
 				Node nodes [] =nameDiv.getChildrenAsNodeArray();
 				if(nodes!=null){
 				for(Node node:nodes){
@@ -243,6 +244,7 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 						
 					}
 					
+				}
 				}
 				}
 				
