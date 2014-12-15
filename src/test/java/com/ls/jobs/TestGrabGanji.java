@@ -111,7 +111,7 @@ public class TestGrabGanji {
 					Company company = envelopeCompany(ganjiCompanyURL);
 					if(company != null){
 						HtmlParserUtilForGanJi.getInstance().findCompanyDetails(company);
-						grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
+						grabService.mergeCompanyData(company, ResourceTypeEnum.Ganji.getId());
 						ganjiCompanyURL.setHasGet(1);
 						ganjiCompanyURLRepository.save(ganjiCompanyURL);
 					}

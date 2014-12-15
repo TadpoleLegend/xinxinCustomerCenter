@@ -15,6 +15,7 @@ import org.htmlparser.Parser;
 import org.htmlparser.Tag;
 import org.htmlparser.tags.DefinitionListBullet;
 import org.htmlparser.tags.Div;
+import org.htmlparser.tags.HeadingTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Span;
@@ -168,6 +169,7 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 			String htmlDetail = mainPage.getWebResponse().getContentAsString();
 			parseDetails(company,htmlDetail);
 			company.setDescription(findCompanyDescription(htmlDetail));
+			findCompanyName(company, htmlDetail);
 		} catch (FailingHttpStatusCodeException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
@@ -218,6 +220,31 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 		return contactorsPhoneImgSrcBuilder.toString();
 	}
 	
+	public void findCompanyName(Company company,String detailPageHtml){
+		try{
+			try {
+				Div nameDiv = findFirstOneWithClassName(detailPageHtml, "c-title");
+				Node nodes [] =nameDiv.getChildrenAsNodeArray();
+				if(nodes!=null){
+				for(Node node:nodes){
+					if(node instanceof HeadingTag){
+						HeadingTag ht = (HeadingTag)node;
+						company.setName(ht.getStringText());
+						return ;
+					}
+					
+				}
+				}
+				
+			} catch (FailingHttpStatusCodeException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
 	
 	public boolean findContactorPhoneNumberImgSrc(Company company,Node node){
 		try{

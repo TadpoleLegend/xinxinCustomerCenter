@@ -72,8 +72,8 @@ public class Grab58Company {
 					Company company = envelopeCompany(feCompanyURL);
 					if(company != null){
 						HtmlParserUtilFor58.getInstance().findCompanyDetails(company);
-						grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
-						feCompanyURL.setHasGet(1);
+						grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
+						feCompanyURL.setHasGet(true);
 						feCompanyURLRepository.save(feCompanyURL);
 					}
 				}
