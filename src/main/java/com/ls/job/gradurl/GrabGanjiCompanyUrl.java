@@ -52,17 +52,20 @@ public class GrabGanjiCompanyUrl {
 			List<CityURL> cityUrls = cityURLRepository.findByResourceType(ResourceTypeEnum.Ganji.getId());
 			for(CityURL cityURL:cityUrls){
 				int days= 0;
-				Object [] arr = new Object[2];
+				String cityUrl = null;
+				Object [] arr =null;
 				if(cityURL.getUpdateDate()==null){
-					arr[0]=0;
+					arr = new Object[1];
+					cityUrl = cityURL.getBaseUrl();
 				}else{
+					arr = new Object[2];
+					cityUrl = cityURL.getUrl();
 					days = DateUtils.minusDate(cityURL.getUpdateDate(),date);
 					int u = DateUtils.getGanjiDate(days);
-					arr[0]=u;
+					arr[1]=u;
 				}
 				for(int i=1;i<1000;i++){
 				arr[1]=i;
-				String cityUrl = cityURL.getUrl();
 				String url =  MessageFormat.format(cityUrl, arr);
 				System.err.println("url is : " + url);
 				List<GanjiCompanyURL> companiesInThisPage = HtmlParserUtilForGanJi.getInstance().findPagedCompanyList(url);
