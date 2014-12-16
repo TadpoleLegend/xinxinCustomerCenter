@@ -90,10 +90,11 @@ public class TestGrabProvince {
 								Map<String,String> mapganji = entry_ganji.getValue();
 								for(Entry<String,String> cityganji:mapganji.entrySet()){
 									if(cityganji.getKey().equals(c.getKey())){
-									String url = cityganji.getValue()+"meirongshi/u{0}o{1}";
+									String url = cityganji.getValue()+"meirongshi/u{1}o{0}";
 									CityURL cityGanjiURL = new CityURL();
 									cityGanjiURL.setCity(city);
 									cityGanjiURL.setUrl(url);
+									cityGanjiURL.setBaseUrl(cityganji.getValue()+"/meirongshi/o{0}/");
 									cityGanjiURL.setResourceType(ResourceTypeEnum.Ganji.getId());
 									cityURLRepository.save(cityGanjiURL);
 									findgajiflag = true;

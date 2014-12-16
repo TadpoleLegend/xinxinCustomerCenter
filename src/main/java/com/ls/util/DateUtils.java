@@ -1,7 +1,6 @@
 package com.ls.util;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.ls.constants.XinXinConstants;
@@ -18,11 +17,10 @@ public class DateUtils {
 	}
 	
 	public static int getGanjiDate(int days){
-		if(days == 0) return 0;
-		if(days>0&&days<=3)return 1;
-		else if(days>0&&days<=5)return 2;
-		else if(days>0&&days<=15)return 3;
-		else if(days>0&&days<=30)return 4;
+		if(days>=0&&days<=3)return 1;
+		else if(days>3&&days<=5)return 2;
+		else if(days>5&&days<=15)return 3;
+		else if(days>15&&days<=30)return 4;
 		return 0;
 	}
 	
