@@ -52,7 +52,19 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 	private int grabedUrlCount = 0;
 
-	NodeVisitor companyUrlListVisitor = new NodeVisitor() {
+	boolean hasFoundNextPageButton = true;
+
+	public boolean getHasFoundNextPageButton() {
+
+		return hasFoundNextPageButton;
+	}
+
+	public void setHasFoundNextPageButton(boolean hasFoundNextPageButton) {
+
+		this.hasFoundNextPageButton = hasFoundNextPageButton;
+	}
+
+	NodeVisitor companyUrlListVisitor = new NodeVisitor(){
 
 		public void visitTag(Tag tag) {
 
@@ -60,7 +72,7 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 			if (TagFinderUtil.findCompanyLink(tag)) {
 
-				LinkTag linkTag = (LinkTag) tag;
+				LinkTag linkTag = (LinkTag)tag;
 				FeCompanyURL yaojinboUrl = new FeCompanyURL();
 
 				String testURL = tag.getAttribute("href");
@@ -92,7 +104,7 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 					Node node = nodes[i];
 					if (node instanceof DefinitionListBullet) {
 
-						DefinitionListBullet nodeTranslated = (DefinitionListBullet) node;
+						DefinitionListBullet nodeTranslated = (DefinitionListBullet)node;
 						String className = nodeTranslated.getAttribute("class");
 						if (className != null && className.equals("w96")) {
 							yaojinboUrl.setArea(nodeTranslated.getStringText());
@@ -119,6 +131,14 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 					logger.error("Sleeping failed " + e.getMessage());
 				}
 			}
+
+			if (tag instanceof LinkTag && StringUtils.isNotBlank(tag.getAttribute("class")) && tag.getAttribute("class").equals("next")) {
+				
+				LinkTag nextButton = (LinkTag) tag;
+				System.out.println(nextButton.getText());
+				
+				setHasFoundNextPageButton(true);
+			}
 		}
 	};
 
@@ -134,11 +154,29 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 		Parser htmlParser = new Parser();
 
 		for (CityURL cityURL : cityUrls) {
+			
+			setHasFoundNextPageButton(true);
+			
+			grabSingleCity(postdate, cityURL, webClient, htmlParser);
 
-			currentCityId = cityURL.getCity().getId();
+		}
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			logger.error("Sleeping failed " + e.getMessage());
+		}
 
-			int currentPageIndex = 1;
+		return ResponseVo.newSuccessMessage("Totally grabed " + grabedUrlCount + " records of url");
+	}
 
+	private void grabSingleCity(String postdate, CityURL cityURL, WebClient webClient, Parser htmlParser) {
+
+		currentCityId = cityURL.getCity().getId();
+
+		int currentPageIndex = 1;
+		while (getHasFoundNextPageButton()) {
+			
 			try {
 				String baseMeirongshiUrl = cityURL.getBaseUrl() + currentPageIndex;
 
@@ -148,32 +186,24 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 				final HtmlPage customerListPage = webClient.getPage(baseMeirongshiUrl);
 
 				String listHtml = customerListPage.getWebResponse().getContentAsString();
-				
+
 				if (listHtml.contains("请输入验证码继续访问")) {
-					//TODO
-					return ResponseVo.newFailMessage("你的IP因为访问过于频繁而被封，需要手动解封，并重新执行任务");
+					throw new RuntimeException("你的IP因为访问过于频繁而被封，需要手动解封，并重新执行任务");
 				}
 				htmlParser.setInputHTML(listHtml);
-
+				
+				//reset flag
+				setHasFoundNextPageButton(false);
+				
 				htmlParser.visitAllNodesWith(companyUrlListVisitor);
 
-				if (!listHtml.contains("下一页")) {
-					continue;
-				}
 				currentPageIndex++;
 
 			} catch (Exception e) {
 				logger.error("Grab URL failed by " + e.getMessage());
 			}
-
 		}
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			logger.error("Sleeping failed " + e.getMessage());
-		}
-
-		return ResponseVo.newSuccessMessage("Totally grabed " + grabedUrlCount + " records of url");
+		
 	}
 
 	public void grabTwoDaysRecently() {
@@ -185,14 +215,14 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 			Date todayByNow = new Date();
 			long yesterdayByNow = todayByNow.getTime() - 24 * 60 * 60 * 1000;
 			Date yesterday = new Date(yesterdayByNow);
-			
+
 			postDateParameter = DateUtils.getPostDateParameter(yesterday, todayByNow);
-			
+
 			grabDetailUrlLog.setQueryParameter(postDateParameter);
 			grabDetailUrlLog.setStartDate(XinXinUtils.getNow());
-			
+
 			ResponseVo response = this.grabUrl(postDateParameter);
-			
+
 			grabDetailUrlLog.setCreateDate(XinXinUtils.getNow());
 
 			grabDetailUrlLog.setMessage(response.toString());
@@ -200,7 +230,7 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 			logger.info(response.toString());
 			grabDetailUrlLog.setStatus("success");
 			grabDetailUrlLog.setType("58");
-			
+
 		} catch (Exception e) {
 
 			grabDetailUrlLog.setStatus("fail");
@@ -210,5 +240,20 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 
 		grabDetailUrlLogRepository.save(grabDetailUrlLog);
 	}
-	
+
+	public ResponseVo grabSingleCityUrl(Integer cityUrlId) {
+
+		CityURL cityURL = cityURLRepository.findOne(cityUrlId);
+		final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+		webClient.getOptions().setJavaScriptEnabled(false);
+		webClient.getOptions().setCssEnabled(false);
+		webClient.getOptions().setThrowExceptionOnScriptError(false);
+
+		Parser htmlParser = new Parser();
+		
+		grabSingleCity(null, cityURL, webClient, htmlParser);
+		
+		return null;
+	}
+
 }

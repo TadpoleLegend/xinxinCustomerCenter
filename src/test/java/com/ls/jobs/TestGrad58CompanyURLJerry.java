@@ -119,37 +119,10 @@ public class TestGrad58CompanyURLJerry {
 	}
 
 	@Test
-	public void testGrabSingleCityCompanyUrls() throws Exception {
-
-		final WebClient webClient = new WebClient(BrowserVersion.CHROME);
-		webClient.getOptions().setJavaScriptEnabled(false);
-		webClient.getOptions().setCssEnabled(false);
-		webClient.getOptions().setThrowExceptionOnScriptError(false);
-
-		Parser htmlParser = new Parser();
-
-		int currentPageIndex = 1;
-		try {
-			while (true) {
-				String baseMeirongshiUrl = "http://smx.58.com/meirongshi/pn" + currentPageIndex;
-
-				final HtmlPage customerListPage = webClient.getPage(baseMeirongshiUrl);
-
-				String listHtml = customerListPage.getWebResponse().getContentAsString();
-				htmlParser.setInputHTML(listHtml);
-
-				htmlParser.visitAllNodesWith(companyUrlListVisitor);
-
-				if (!listHtml.contains("下一页")) {
-					break;
-				}
-				currentPageIndex++;
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+	public void testGrabSingleCity() throws Exception {
+		grabCompanyDetailPageUrlService.grabSingleCityUrl(797);
 	}
+	
 
 	@Test
 	public void testHandlePublishDate() {
