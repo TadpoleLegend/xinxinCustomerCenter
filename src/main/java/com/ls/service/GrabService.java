@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ls.entity.Company;
+import com.ls.entity.FeCompanyURL;
 import com.ls.vo.GrabStatistic;
 
 public interface GrabService {
@@ -22,4 +23,8 @@ public interface GrabService {
 	Company mergeCompanyData(Company company,String recourceType);
 	
 	Company grabSingleFECompanyByUrlId(Integer urlId);
+	
+	Company grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL);
+
+	void feJobDailyWork();
 }

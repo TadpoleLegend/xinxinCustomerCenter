@@ -146,5 +146,9 @@ public class TestGrab58 {
 		}
 	}
 
-	
+	@Test
+	public void testGrabDailyJob() {
+		
+		grabService.feJobDailyWork();
+	}
 }

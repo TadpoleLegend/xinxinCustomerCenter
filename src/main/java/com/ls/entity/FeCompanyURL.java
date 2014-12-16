@@ -27,7 +27,6 @@ public class FeCompanyURL implements Serializable {
 	private Integer cityId;
 	private Date createDate;
 	private Boolean hasGet;
-	@Column(length=1000)
 	private String savedCompany;
 	
 	public Boolean getHasGet() {

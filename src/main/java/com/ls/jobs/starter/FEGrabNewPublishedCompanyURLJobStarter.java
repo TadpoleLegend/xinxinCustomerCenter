@@ -52,10 +52,10 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 			logger.error("schedular null. ");
 			return;
 		} else {
-			//scheduler.scheduleJobs(ImmutableMap.of(jobDetail, ImmutableList.of(sixOclockTrigger, elevenOclockTrigger)), true );
 			scheduler.scheduleJob(sixOclockJobDetail, sixOclockTrigger);
 			scheduler.scheduleJob(elevenOclockJobDetail, elevenOclockTrigger);
 		}
 
 	}
+	
 }
