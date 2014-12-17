@@ -23,6 +23,7 @@ import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableHeader;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.visitors.NodeVisitor;
+import org.htmlparser.visitors.TextExtractingVisitor;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -30,6 +31,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.entity.Company;
 import com.ls.entity.FeCompanyURL;
+import com.ls.util.ChineseConverter;
 import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
@@ -281,11 +283,20 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 						TableColumn td = (org.htmlparser.tags.TableColumn) current;
 						if (td.getAttribute("class") != null && td.getAttribute("class").equals("telNum")) {
 							Node[] list = td.getChildren().toNodeArray();
+							boolean cellPhoneFound = false;
+							
 							for (Node img : list) {
+								
 								if (img instanceof ImageTag) {
+
 									ImageTag imageTag = (ImageTag) img;
+
+									if (!cellPhoneFound) {
+										company.setMobilePhoneSrc(imageTag.getImageURL());
+										cellPhoneFound = true;
+										continue;
+									}
 									company.setPhoneSrc(imageTag.getImageURL());
-									return true;
 								}
 							}
 						}
@@ -293,10 +304,11 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 				}
 			}
 		}catch(Exception ex){
-			ex.printStackTrace();
-		}finally{
+			
 			return false;
 		}
+		
+		return false;
 	}
 	
 	
@@ -433,15 +445,27 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 
 	
 	public String findCompanyDescription(String detailPageHtml) {
+		
 		try {
 			Div descriptionDiv = findFirstOneWithClassName(detailPageHtml, "compIntro");
-			return descriptionDiv == null ? "" : descriptionDiv.getStringText();
+			
+			if (null == descriptionDiv) {
+				return "";
+			}
+			
+			Parser parser = new Parser(descriptionDiv.getStringText());
+			TextExtractingVisitor textExtractingVisitor = new TextExtractingVisitor();
+			parser.visitAllNodesWith(textExtractingVisitor);
+			
+			String descriptionIWant = textExtractingVisitor.getExtractedText();
+			
+			return  ChineseConverter.simplized(descriptionIWant.trim());
+			
 		} catch (FailingHttpStatusCodeException e) {
-			e.printStackTrace();
+			return "";
 		} catch (Exception e) {
-			e.printStackTrace();
+			return "";
 		}
-		return null;
 	}
 
 }

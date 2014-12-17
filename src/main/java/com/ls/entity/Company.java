@@ -52,7 +52,7 @@ public class Company implements Serializable {
 	protected Integer cityId;
 	protected Integer provinceId;
 	protected String employeeCount;
-	@Column(length=25555)
+	@Column(length=3000)
 	protected String description;
 	protected String grabDate;
 	protected Boolean active;
@@ -386,7 +386,7 @@ public class Company implements Serializable {
 		company.setActive(true);
 		company.setIsTracked(false);
 		company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
-		
+		company.setStar(0);
 		company.setUpdateDate(XinXinUtils.getNow());
 		company.setCreateDate(XinXinUtils.getNow());
 		

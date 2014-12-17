@@ -13,6 +13,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -47,6 +49,8 @@ import com.ls.vo.GrabStatistic;
 @Scope("prototype")
 public class GrabServiceImpl implements GrabService {
 
+	private Logger logger = LoggerFactory.getLogger(GrabServiceImpl.class);
+
 	@Autowired
 	private CityURLRepository cityURLRepository;
 
@@ -64,7 +68,7 @@ public class GrabServiceImpl implements GrabService {
 
 	@Autowired
 	private FeCompanyURLRepository feCompanyURLRepository;
-	
+
 	@Autowired
 	private GrabCompanyDetailLogRepository grabCompanyDetailLogRepository;
 
@@ -136,6 +140,7 @@ public class GrabServiceImpl implements GrabService {
 	}
 
 	public Company grabCompanyDetailByUrl(String detailPageUrl) {
+
 		Company company = new Company();
 
 		if (StringUtils.isBlank(detailPageUrl)) {
@@ -150,6 +155,7 @@ public class GrabServiceImpl implements GrabService {
 	 * 只抓10分钟,悠着点
 	 */
 	public GrabStatistic grabCompanyInformationByUrl(String url, Date publishDateEnd) {
+
 		long start = System.currentTimeMillis();
 
 		GrabStatistic grabStatistic = new GrabStatistic();
@@ -274,6 +280,7 @@ public class GrabServiceImpl implements GrabService {
 	}
 
 	private boolean ifCompanyDataValueable(Company company) {
+
 		if (StringUtils.isBlank(company.getName()) || StringUtils.isBlank(company.getContactor()) || StringUtils.isBlank(company.getfEurl()) || StringUtils.isEmpty(company.getPhoneSrc())) {
 			return false;
 		}
@@ -282,6 +289,7 @@ public class GrabServiceImpl implements GrabService {
 	}
 
 	private boolean isDulpicate(Company company) {
+
 		List<Company> companies = companyRepository.findByNameAndContactorAndArea(company.getName(), company.getContactor(), company.getArea());
 
 		if (companies == null || companies.size() == 0)
@@ -291,6 +299,7 @@ public class GrabServiceImpl implements GrabService {
 	}
 
 	private NegativeCompany envelopNegativeCompany(Company company, String recourceType) {
+
 		NegativeCompany nc = new NegativeCompany();
 		try {
 			nc.setCityId(company.getCityId());
@@ -307,7 +316,7 @@ public class GrabServiceImpl implements GrabService {
 				nc.setResourceId(company.getfEresourceId());
 				nc.setUrl(company.getfEurl());
 			}
-			nc.setDescription(company.getDescription());
+			// nc.setDescription(company.getDescription());
 			nc.setEmployeeCount(company.getEmployeeCount());
 			nc.setName(company.getName());
 			nc.setAddress(company.getAddress());
@@ -323,9 +332,12 @@ public class GrabServiceImpl implements GrabService {
 	}
 
 	public Company mergeCompanyData(Company company, String recourceType) {
+
 		Company savedCompany = null;
+
 		try {
-			if (!XinXinUtils.stringIsEmpty(company.getDescription())) {
+			if (StringUtils.isNotEmpty(company.getDescription())) {
+
 				String desc = company.getDescription();
 				if (desc.length() > 2000) {
 					company.setDescription(desc.substring(0, 1990) + ".....");
@@ -341,25 +353,41 @@ public class GrabServiceImpl implements GrabService {
 			}
 			String dateTime = DateUtils.getDateFormate(Calendar.getInstance().getTime(), "yyyy-MM-dd hh:mm:ss");
 			if (dataBaseCompany == null) {
-				try {
-					if (XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())) {
-						NegativeCompany nc = envelopNegativeCompany(company, recourceType);
-						NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
-						if (dbNC == null) {
+
+				if (XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())) {
+
+					NegativeCompany nc = envelopNegativeCompany(company, recourceType);
+					NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
+					if (dbNC == null) {
+
+						try {
 							nc.setGrabDate(dateTime);
 							this.negativeCompanyRepository.save(nc);
+
+						} catch (Throwable e) {
+							tryToSaveNegativeCompanyWithSimpleData(nc);
 						}
-					} else {
-						company.setGrabDate(dateTime);
-						savedCompany = this.companyRepository.save(company);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+
+				} else {
+					company.setGrabDate(dateTime);
+					try {
+
+						savedCompany = this.companyRepository.save(company);
+
+						// Here
+					} catch (Throwable e) {
+						tryToSaveCompanyWithSimpleData(company);
+
+					}
 				}
 			} else {
+
 				ruleSaveForCompany(dataBaseCompany, company, recourceType);
+
 				try {
 					this.companyRepository.save(dataBaseCompany);
+
 				} catch (Exception e) {
 					NegativeCompany nc = envelopNegativeCompany(company, recourceType);
 					NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
@@ -376,9 +404,38 @@ public class GrabServiceImpl implements GrabService {
 		return savedCompany;
 	}
 
+	private void tryToSaveNegativeCompanyWithSimpleData(NegativeCompany nc) {
+
+		NegativeCompany negativeCompany = new NegativeCompany();
+		negativeCompany.setCityId(nc.getCityId());
+		negativeCompany.setResourceId(nc.getResourceId());
+		negativeCompany.setResourceType(nc.getResourceType());
+		negativeCompany.setSb_count(1);
+		negativeCompany.setUrl(nc.getUrl());
+
+		negativeCompanyRepository.save(negativeCompany);
+	}
+
+	private void tryToSaveCompanyWithSimpleData(Company oldCompany) {
+
+		Company company = Company.create();
+		
+		company.setCityId(oldCompany.getCityId());
+		company.setContactor(oldCompany.getContactor());
+		company.setMobilePhoneSrc(oldCompany.getMobilePhoneSrc());
+		company.setPhoneSrc(oldCompany.getPhoneSrc());
+		company.setfEresourceId(oldCompany.getfEresourceId());
+		company.setfEurl(oldCompany.getfEurl());
+		company.setoTEresourceId(oldCompany.getoTEresourceId());
+		company.setOteUrl(oldCompany.getOteUrl());
+		company.setGanjiresourceId(oldCompany.getGanjiresourceId());
+		company.setGanjiUrl(oldCompany.getGanjiUrl());
+		
+		companyRepository.save(company);
+	}
+
 	/**
-	 * 138 is the basic inforamtion website if 138 not have the company, then
-	 * set ganji website as the second choice the last choice is 58 website
+	 * 138 is the basic inforamtion website if 138 not have the company, then set ganji website as the second choice the last choice is 58 website
 	 * 
 	 * @param dbcompany
 	 * @param websiteCompany
@@ -386,6 +443,7 @@ public class GrabServiceImpl implements GrabService {
 	 */
 
 	private void ruleSaveForCompany(Company dbCompany, Company websiteCompany, String recourceType) {
+
 		if (ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)) {
 			generateDBCompany(dbCompany, websiteCompany);
 		} else if (ResourceTypeEnum.Ganji.getId().equals(recourceType)) {
@@ -433,35 +491,38 @@ public class GrabServiceImpl implements GrabService {
 
 	public Company grabSingleFECompanyByUrlId(Integer urlId) {
 
-		return null;
+		return grabSingleFECompanyByUrl(feCompanyURLRepository.findOne(urlId));
 	}
 
 	public Company grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL) {
 
 		Company company = envelopeCompany(feCompanyURL);
 
-		if (company != null) {
-			HtmlParserUtilFor58.getInstance().findCompanyDetails(company);
+		HtmlParserUtilFor58.getInstance().findCompanyDetails(company);
+		try {
 			Company savedCompany = mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
 			feCompanyURL.setHasGet(true);
 			if (savedCompany != null) {
 				feCompanyURL.setSavedCompany(savedCompany.getId().toString());
 			}
-
-			feCompanyURLRepository.save(feCompanyURL);
-
-			try {
-				Thread.sleep(700);
-			} catch (InterruptedException e) {
-
-			}
+		} catch (org.springframework.orm.jpa.JpaSystemException tmdException) {
+			System.out.println(tmdException.getMessage());
 		}
 
-		return null;
+		feCompanyURLRepository.save(feCompanyURL);
+
+		try {
+			Thread.sleep(700);
+		} catch (InterruptedException e) {
+
+		}
+
+		return company;
 	}
 
 	private Company envelopeCompany(FeCompanyURL feCompanyURL) {
-		Company company = new Company();
+
+		Company company = Company.create();
 
 		try {
 
@@ -482,8 +543,9 @@ public class GrabServiceImpl implements GrabService {
 	}
 
 	public void feJobDailyWork() {
+
 		GrabCompanyDetailLog grabCompanyDetailLog = new GrabCompanyDetailLog();
-		
+
 		int pageNumber = 0;
 		int pageSize = 3;
 
@@ -498,12 +560,15 @@ public class GrabServiceImpl implements GrabService {
 				for (FeCompanyURL feCompanyURL : feCompanyUrlPage) {
 					try {
 						grabSingleFECompanyByUrl(feCompanyURL);
-						successCount ++;
+						System.out.println(feCompanyURL.toString());
+
+						successCount++;
 					} catch (Exception e) {
-						failCount ++;
+						failCount++;
 						grabCompanyDetailLog.setStatus("fail");
+						logger.error("Grab single company fail : " + e.getMessage() + "      --------------->     " + feCompanyURL.toString());
 					}
-					
+
 				}
 
 				if (!feCompanyUrlPage.hasNextPage()) {
@@ -511,36 +576,34 @@ public class GrabServiceImpl implements GrabService {
 				}
 				pageNumber++;
 			}
-			
+
 			grabCompanyDetailLog.setStatus("success");
 			grabCompanyDetailLog.setEndDate(XinXinUtils.getNow());
-			
+
 		} catch (Exception e) {
-			
+
 			grabCompanyDetailLog.setStatus("fail");
 		}
-		
+
 		grabCompanyDetailLog.setFailCount(failCount);
 		grabCompanyDetailLog.setSuccessCount(successCount);
-		
 		grabCompanyDetailLog.setType("58");
-		
+
 		grabCompanyDetailLogRepository.save(grabCompanyDetailLog);
-		
-		
+
 	}
 
 	private Specification<FeCompanyURL> generateSpecificationForDailyJobUrl() {
 
-		return new Specification<FeCompanyURL>() {
+		return new Specification<FeCompanyURL>(){
 
 			public Predicate toPredicate(Root<FeCompanyURL> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
 				Predicate predicate = criteriaBuilder.conjunction();
-				
+
 				predicate.getExpressions().add(criteriaBuilder.isNull(root.get("savedCompany")));
-				predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Date>get("createDate"), new Date()));
-				
+				predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Date> get("createDate"), new Date()));
+
 				return predicate;
 			}
 

@@ -145,7 +145,17 @@ public class TestGrab58 {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@Test
+	public void testGrabSingleCompany() throws Exception{
+		try {
+			
+			grabService.grabSingleFECompanyByUrlId(72);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	@Test
 	public void testGrabDailyJob() {
 		

@@ -188,16 +188,25 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 				String listHtml = customerListPage.getWebResponse().getContentAsString();
 
 				if (listHtml.contains("请输入验证码继续访问")) {
-					throw new RuntimeException("你的IP因为访问过于频繁而被封，需要手动解封，并重新执行任务");
+					logger.error("Grab URL failed by ip blocked.");
+					break;
+					
 				}
+				
 				htmlParser.setInputHTML(listHtml);
 				
 				//reset flag
 				setHasFoundNextPageButton(false);
 				
+				//do it
 				htmlParser.visitAllNodesWith(companyUrlListVisitor);
 
 				currentPageIndex++;
+				
+				// safe quite for unexpected errors
+				if (currentPageIndex > 71) {
+					break;
+				}
 
 			} catch (Exception e) {
 				logger.error("Grab URL failed by " + e.getMessage());

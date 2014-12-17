@@ -137,4 +137,6 @@ public class XinXinUtils {
 		SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper = new SecurityContextHolderAwareRequestWrapper(ServletActionContext.getRequest(), "ROLE_");
 		return securityContextHolderAwareRequestWrapper.getUserPrincipal().getName();
 	}
+	
+
 }
