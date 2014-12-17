@@ -2,13 +2,11 @@ package com.ls.jobs;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.Tag;
 import org.htmlparser.tags.DefinitionListBullet;
 import org.htmlparser.tags.LinkTag;
@@ -19,13 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ls.constants.XinXinConstants;
-import com.ls.entity.CityURL;
 import com.ls.entity.FeCompanyURL;
-import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.TagFinderUtil;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.FeCompanyURLRepository;

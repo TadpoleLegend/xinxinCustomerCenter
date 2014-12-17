@@ -42,7 +42,7 @@ public class FEGrabNewPublishedCompanyJobStarter implements InitializingBean {
 			logger.error("schedular null. ");
 			return;
 		} else {
-			scheduler.scheduleJob(jobDetail, sixOclockTrigger);
+		//	scheduler.scheduleJob(jobDetail, sixOclockTrigger);
 		}
 
 	}

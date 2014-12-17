@@ -125,11 +125,6 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 				feCompanyURLRepository.save(yaojinboUrl);
 
 				grabedUrlCount++;
-				try {
-					Thread.sleep(700);
-				} catch (InterruptedException e) {
-					logger.error("Sleeping failed " + e.getMessage());
-				}
 			}
 
 			if (tag instanceof LinkTag && StringUtils.isNotBlank(tag.getAttribute("class")) && tag.getAttribute("class").equals("next")) {
@@ -179,7 +174,10 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 			
 			try {
 				String baseMeirongshiUrl = cityURL.getBaseUrl() + currentPageIndex;
-
+				
+				//
+				restAlittleWhile(1100);
+				
 				if (StringUtils.isNotBlank(postdate)) {
 					baseMeirongshiUrl += ("?postdate=" + postdate);
 				}
@@ -215,6 +213,14 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 		
 	}
 
+	public void restAlittleWhile(Integer miliseconds) {
+		try {
+			Thread.sleep(miliseconds);
+		} catch (InterruptedException e) {
+			logger.error("Sleeping failed " + e.getMessage());
+		}
+	}
+	
 	public void grabTwoDaysRecently() {
 
 		String postDateParameter = null;
