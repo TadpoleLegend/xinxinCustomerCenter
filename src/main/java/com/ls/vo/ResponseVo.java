@@ -77,12 +77,14 @@ public class ResponseVo {
 		return vo;                                                                                                                          
 	}                                                                                                                                       
                                                                                                                                             
-	@Override                                                                                                                               
-	public String toString() {                                                                                                              
+	                                                                                                                                     
                                                                                                                                             
-		return "ResponseVo [type=" + type + ", message=" + message + ", mode=" + mode + "]";                                                
-	}                                                                                                                                       
-                                                                                                                                            
+	@Override
+	public String toString() {
+
+		return "ResponseVo [type=" + type + ", message=" + message + ", mode=" + mode + ", object=" + object == null? "" : object.toString() + "]";
+	}
+
 	public Object getObject() {                                                                                                             
 		return object;                                                                                                                      
 	}                                                                                                                                       

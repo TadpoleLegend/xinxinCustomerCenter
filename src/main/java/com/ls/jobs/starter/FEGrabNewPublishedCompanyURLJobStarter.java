@@ -53,7 +53,7 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 			return;
 		} else {
 			//scheduler.scheduleJob(sixOclockJobDetail, sixOclockTrigger);
-			scheduler.scheduleJob(elevenOclockJobDetail, elevenOclockTrigger);
+			//scheduler.scheduleJob(elevenOclockJobDetail, elevenOclockTrigger);
 		}
 
 	}

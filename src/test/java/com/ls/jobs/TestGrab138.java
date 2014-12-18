@@ -102,7 +102,7 @@ public class TestGrab138 {
 					Company company = envelopeCompany(oteCompanyURL);
 					if(company != null){
 						HtmlParserUtilFor138.getInstance().findCompanyDetails(company);
-						grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
+					//	grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
 						oteCompanyURL.setHasGet(1);
 						oteCompanyURLRepository.save(oteCompanyURL);
 					}

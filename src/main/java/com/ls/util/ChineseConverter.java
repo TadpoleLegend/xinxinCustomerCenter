@@ -31,6 +31,6 @@ public class ChineseConverter {
   
     public static void main(String[] args) {
 
-		System.out.println(simplized("丈上丑丐不丙世丕且丘丞丢并中串丸丹主乃久么之尹乍乏乎乒乓乖乘乙九也乞鰱鰾鰻鱉鱈鰹鰳鰼鰷鰲鱖鱔鱗鱒鱘鱍鱣鱧鱠鱟鱮鱷鱸鱺鳥鳩鳧鳳鳴鳶鳲鴉鴆鴇雁鴃鴛鴦鴨鴒鴕鴣鴥鴞鴝鴻鴿鵁鴰鵂鵃鵠鵑鵝鵓鵡鵲鶉鵬鵪鵷鶊鶄鵰鵩昆吃鶘鶪鶗鶡鶚鷀鶖鶯鶴鷂鶼鷇鶹鶺鶬鷓鷗霤鷚鷟鷙鷖鷥鷯鷫鷸鷦鷲鷺鷹鸂鸇鷽鸋鸑鸕鸚鸛鸞鸝鹵鹹鹺鹼鹽鹿麂麀麃麈麇麋麒麗麓麑麝麟麤麥麩麰麴麵麻麼麾黃黌黍黎黏黑墨黓黙黔"));
+		System.out.println(simplized("北京勰睿基业化妆品有限公司"));
 	}
 } 

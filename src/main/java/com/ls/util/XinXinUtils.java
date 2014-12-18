@@ -8,11 +8,13 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 
 import com.ls.constants.XinXinConstants;
+import com.ls.entity.Company;
 import com.ls.entity.FeCompanyURL;
 import com.ls.entity.GanjiCompanyURL;
 import com.ls.entity.OteCompanyURL;
@@ -136,6 +138,21 @@ public class XinXinUtils {
 	public static String getCurrentUserName() {
 		SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper = new SecurityContextHolderAwareRequestWrapper(ServletActionContext.getRequest(), "ROLE_");
 		return securityContextHolderAwareRequestWrapper.getUserPrincipal().getName();
+	}
+
+	public static boolean checkIfCompanyIsStupid(Company company) {
+		
+		if (StringUtils.isBlank(company.getContactor())) {
+			return true;
+		}
+		
+		if (StringUtils.isBlank(company.getPhoneSrc()) && StringUtils.isBlank(company.getMobilePhoneSrc()) 
+			&& StringUtils.isBlank(company.getPhone()) && StringUtils.isBlank(company.getMobilePhone())) {
+			return true;
+		}
+		
+		return false;
+			
 	}
 	
 

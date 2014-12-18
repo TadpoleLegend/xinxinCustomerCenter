@@ -129,12 +129,7 @@ public class TestGrab58 {
 					Company company = envelopeCompany(feCompanyURL);
 					if(company != null){
 						HtmlParserUtilFor58.getInstance().findCompanyDetails(company);
-						Company savedCompany = grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
-						feCompanyURL.setHasGet(true);
-						if (savedCompany != null) {
-							feCompanyURL.setSavedCompany(savedCompany.getId().toString());
-						}
-						feCompanyURLRepository.save(feCompanyURL);
+						grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId(), feCompanyURL);
 						
 						Thread.sleep(700);
 					}
@@ -150,7 +145,7 @@ public class TestGrab58 {
 	public void testGrabSingleCompany() throws Exception{
 		try {
 			
-			grabService.grabSingleFECompanyByUrlId(72);
+			grabService.grabSingleFECompanyByUrlId(7);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

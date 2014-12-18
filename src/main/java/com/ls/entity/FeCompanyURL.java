@@ -28,7 +28,18 @@ public class FeCompanyURL implements Serializable {
 	private Date createDate;
 	private Boolean hasGet;
 	private String savedCompany;
+	private String status;
 	
+	public String getStatus() {
+	
+		return status;
+	}
+	
+	public void setStatus(String status) {
+	
+		this.status = status;
+	}
+
 	public Boolean getHasGet() {
 	
 		return hasGet;

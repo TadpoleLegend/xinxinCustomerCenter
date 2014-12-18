@@ -44,6 +44,7 @@ import com.ls.service.GrabService;
 import com.ls.util.DateUtils;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.GrabStatistic;
+import com.ls.vo.ResponseVo;
 
 @Service("grabService")
 @Scope("prototype")
@@ -331,80 +332,141 @@ public class GrabServiceImpl implements GrabService {
 
 	}
 
-	public Company mergeCompanyData(Company company, String recourceType) {
+	private Company checkIfCompanyAlreadyExists(Company company, String recourceType) {
+
+		Company dataBaseCompany = null;
+
+		if (ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)) {
+			dataBaseCompany = this.companyRepository.findCompanyFor138GrabJob(company.getCityId(), company.getoTEresourceId(), company.getName());
+		} else if (ResourceTypeEnum.Ganji.getId().equals(recourceType)) {
+			dataBaseCompany = this.companyRepository.findCompanyForGanjiGrabJob(company.getCityId(), company.getGanjiresourceId(), company.getName());
+		} else if (ResourceTypeEnum.FiveEight.getId().equals(recourceType)) {
+			dataBaseCompany = this.companyRepository.findCompanyFor58GrabJob(company.getCityId(), company.getfEresourceId(), company.getName());
+		}
+
+		return dataBaseCompany;
+	}
+
+	private void handleDescription(Company company) {
+
+		if (StringUtils.isNotEmpty(company.getDescription())) {
+
+			String desc = company.getDescription();
+			if (desc.length() > 2000) {
+				company.setDescription("");
+			}
+		}
+
+	}
+
+	private ResponseVo saveStupidCompany(Company company, String recourceType, FeCompanyURL feCompanyURL) {
+
+		ResponseVo responseVo = ResponseVo.newSuccessMessage("sb company saved successfully.");
+
+		NegativeCompany negativeCompany = envelopNegativeCompany(company, recourceType);
+
+		NegativeCompany resultNegativeCompany = negativeCompanyRepository.findNegativeCompany(company.getCityId(), negativeCompany.getResourceId(), recourceType);
+
+		if (resultNegativeCompany == null) {
+
+			NegativeCompany savedStupidCompany = null;
+			try {
+
+				savedStupidCompany = negativeCompanyRepository.saveAndFlush(negativeCompany);
+
+			} catch (Throwable e) {
+				// will try to save again
+			}
+
+			if (null == savedStupidCompany) {
+
+				savedStupidCompany = tryToSaveNegativeCompanyWithSimpleData(negativeCompany);
+
+				if (null == savedStupidCompany) {
+					responseVo = XinXinUtils.makeGeneralErrorResponse(new Exception("retry to save stupid company fail"));
+					feCompanyURL.setStatus("SB_SAVE_FAIL");
+				}
+			}
+
+			feCompanyURL.setStatus("SB_SAVED_SUCCESS");
+			
+			responseVo.setObject(savedStupidCompany);
+		}
+
+		feCompanyURLRepository.save(feCompanyURL);
+
+		return responseVo;
+
+	}
+
+	public ResponseVo mergeCompanyData(Company company, String recourceType, FeCompanyURL feCompanyURL) {
+
+		ResponseVo responseVo = ResponseVo.newSuccessMessage("The company inserted successfully.");
+
+		handleDescription(company);
 
 		Company savedCompany = null;
 
 		try {
-			if (StringUtils.isNotEmpty(company.getDescription())) {
 
-				String desc = company.getDescription();
-				if (desc.length() > 2000) {
-					company.setDescription(desc.substring(0, 1990) + ".....");
-				}
-			}
-			Company dataBaseCompany = null;
-			if (ResourceTypeEnum.OneThreeEight.getId().equals(recourceType)) {
-				dataBaseCompany = this.companyRepository.findCompanyFor138GrabJob(company.getCityId(), company.getoTEresourceId(), company.getName());
-			} else if (ResourceTypeEnum.Ganji.getId().equals(recourceType)) {
-				dataBaseCompany = this.companyRepository.findCompanyForGanjiGrabJob(company.getCityId(), company.getGanjiresourceId(), company.getName());
-			} else if (ResourceTypeEnum.FiveEight.getId().equals(recourceType)) {
-				dataBaseCompany = this.companyRepository.findCompanyFor58GrabJob(company.getCityId(), company.getfEresourceId(), company.getName());
-			}
-			String dateTime = DateUtils.getDateFormate(Calendar.getInstance().getTime(), "yyyy-MM-dd hh:mm:ss");
-			if (dataBaseCompany == null) {
+			Company resultCompany = checkIfCompanyAlreadyExists(company, recourceType);
 
-				if (XinXinUtils.stringIsEmpty(company.getPhoneSrc()) && XinXinUtils.stringIsEmpty(company.getMobilePhoneSrc())) {
+			if (resultCompany == null) {
 
-					NegativeCompany nc = envelopNegativeCompany(company, recourceType);
-					NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
-					if (dbNC == null) {
+				boolean stupid = XinXinUtils.checkIfCompanyIsStupid(company);
 
-						try {
-							nc.setGrabDate(dateTime);
-							this.negativeCompanyRepository.save(nc);
+				if (stupid) {
 
-						} catch (Throwable e) {
-							tryToSaveNegativeCompanyWithSimpleData(nc);
-						}
-					}
+					responseVo = saveStupidCompany(company, recourceType, feCompanyURL);
+				
 
 				} else {
-					company.setGrabDate(dateTime);
+
 					try {
 
 						savedCompany = this.companyRepository.save(company);
-
 						// Here
 					} catch (Throwable e) {
-						tryToSaveCompanyWithSimpleData(company);
+						// can't go in here!
 
 					}
+
+					if (null == savedCompany || savedCompany.getId() == null) {
+
+						savedCompany = tryToSaveCompanyWithSimpleData(company);
+
+						if (null == savedCompany) {
+							feCompanyURL.setStatus("NON_SB_RETRY_FAIL");
+							responseVo = XinXinUtils.makeGeneralErrorResponse(new Exception("retry to save company fail"));
+						} else {
+							feCompanyURL.setStatus("NON_SB_RETRY_SUCCESS");
+							feCompanyURL.setHasGet(true);
+							responseVo = ResponseVo.newSuccessMessage("retry to save company successfully.");
+						}
+					} else {
+						feCompanyURL.setSavedCompany(savedCompany.getId().toString());
+						feCompanyURL.setStatus("NON_SB_SUCCESS");
+						feCompanyURL.setHasGet(true);
+					}
+
+					feCompanyURLRepository.save(feCompanyURL);
+					responseVo.setObject(savedCompany);
+
 				}
+
 			} else {
 
-				ruleSaveForCompany(dataBaseCompany, company, recourceType);
-
-				try {
-					this.companyRepository.save(dataBaseCompany);
-
-				} catch (Exception e) {
-					NegativeCompany nc = envelopNegativeCompany(company, recourceType);
-					NegativeCompany dbNC = this.negativeCompanyRepository.findNegativeCompany(company.getCityId(), nc.getResourceId(), recourceType);
-					if (dbNC == null) {
-						nc.setGrabDate(dateTime);
-						this.negativeCompanyRepository.save(nc);
-					}
-					e.printStackTrace();
-				}
+				return ResponseVo.newSuccessMessage("The company already grabed.");
 			}
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			return XinXinUtils.makeGeneralErrorResponse(e);
 		}
-		return savedCompany;
+
+		return responseVo;
 	}
 
-	private void tryToSaveNegativeCompanyWithSimpleData(NegativeCompany nc) {
+	private NegativeCompany tryToSaveNegativeCompanyWithSimpleData(NegativeCompany nc) {
 
 		NegativeCompany negativeCompany = new NegativeCompany();
 		negativeCompany.setCityId(nc.getCityId());
@@ -413,13 +475,13 @@ public class GrabServiceImpl implements GrabService {
 		negativeCompany.setSb_count(1);
 		negativeCompany.setUrl(nc.getUrl());
 
-		negativeCompanyRepository.save(negativeCompany);
+		return negativeCompanyRepository.saveAndFlush(negativeCompany);
 	}
 
-	private void tryToSaveCompanyWithSimpleData(Company oldCompany) {
+	private Company tryToSaveCompanyWithSimpleData(Company oldCompany) {
 
 		Company company = Company.create();
-		
+
 		company.setCityId(oldCompany.getCityId());
 		company.setContactor(oldCompany.getContactor());
 		company.setMobilePhoneSrc(oldCompany.getMobilePhoneSrc());
@@ -430,8 +492,8 @@ public class GrabServiceImpl implements GrabService {
 		company.setOteUrl(oldCompany.getOteUrl());
 		company.setGanjiresourceId(oldCompany.getGanjiresourceId());
 		company.setGanjiUrl(oldCompany.getGanjiUrl());
-		
-		companyRepository.save(company);
+
+		return companyRepository.saveAndFlush(company);
 	}
 
 	/**
@@ -489,27 +551,25 @@ public class GrabServiceImpl implements GrabService {
 
 	}
 
-	public Company grabSingleFECompanyByUrlId(Integer urlId) {
+	public ResponseVo grabSingleFECompanyByUrlId(Integer urlId) {
 
 		return grabSingleFECompanyByUrl(feCompanyURLRepository.findOne(urlId));
 	}
 
-	public Company grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL) {
+	public ResponseVo grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL) {
 
 		Company company = envelopeCompany(feCompanyURL);
 
+		ResponseVo response = null;
+
 		HtmlParserUtilFor58.getInstance().findCompanyDetails(company);
 		try {
-			Company savedCompany = mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId());
-			feCompanyURL.setHasGet(true);
-			if (savedCompany != null) {
-				feCompanyURL.setSavedCompany(savedCompany.getId().toString());
-			}
+
+			response = mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId(), feCompanyURL);
+
 		} catch (org.springframework.orm.jpa.JpaSystemException tmdException) {
 			System.out.println(tmdException.getMessage());
 		}
-
-		feCompanyURLRepository.save(feCompanyURL);
 
 		try {
 			Thread.sleep(700);
@@ -517,29 +577,22 @@ public class GrabServiceImpl implements GrabService {
 
 		}
 
-		return company;
+		return response;
 	}
 
 	private Company envelopeCompany(FeCompanyURL feCompanyURL) {
 
 		Company company = Company.create();
 
-		try {
+		company.setName(feCompanyURL.getName());
+		company.setArea(feCompanyURL.getArea());
 
-			company.setName(feCompanyURL.getName());
-			company.setArea(feCompanyURL.getArea());
+		company.setCityId(feCompanyURL.getCityId());
+		company.setfEresourceId(feCompanyURL.getCompanyId());
+		company.setfEurl(feCompanyURL.getUrl());
 
-			company.setCityId(feCompanyURL.getCityId());
-			company.setfEresourceId(feCompanyURL.getCompanyId());
-			company.setfEurl(feCompanyURL.getUrl());
-
-			company.setUpdateDate(XinXinConstants.SIMPLE_DATE_FORMATTER.parse(feCompanyURL.getPublishDate()));
-			return company;
-
-		} catch (ParseException e) {
-			company.setUpdateDate(null);
-		}
 		return company;
+
 	}
 
 	public void feJobDailyWork() {
@@ -547,31 +600,38 @@ public class GrabServiceImpl implements GrabService {
 		GrabCompanyDetailLog grabCompanyDetailLog = new GrabCompanyDetailLog();
 
 		int pageNumber = 0;
-		int pageSize = 3;
+		int pageSize = 1000;
 
 		int successCount = 0;
 		int failCount = 0;
 		try {
 			grabCompanyDetailLog.setStartDate(XinXinUtils.getNow());
+
 			while (true) {
+
 				PageRequest pageRequest = new PageRequest(pageNumber, pageSize);
+
 				Page<FeCompanyURL> feCompanyUrlPage = feCompanyURLRepository.findAll(generateSpecificationForDailyJobUrl(), pageRequest);
 
 				for (FeCompanyURL feCompanyURL : feCompanyUrlPage) {
-					try {
-						grabSingleFECompanyByUrl(feCompanyURL);
-						System.out.println(feCompanyURL.toString());
 
-						successCount++;
+					ResponseVo response = null;
+					try {
+						response = grabSingleFECompanyByUrl(feCompanyURL);
 					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					System.out.println(response.toString());
+
+					if (null == response || response.getType().equals("FAIL")) {
 						failCount++;
-						grabCompanyDetailLog.setStatus("fail");
-						logger.error("Grab single company fail : " + e.getMessage() + "      --------------->     " + feCompanyURL.toString());
+					} else {
+						successCount++;
 					}
 
 				}
 
-				if (!feCompanyUrlPage.hasNextPage()) {
+				if (feCompanyUrlPage.isLastPage()) {
 					break;
 				}
 				pageNumber++;

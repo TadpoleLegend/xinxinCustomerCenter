@@ -171,4 +171,11 @@ public class NegativeCompany implements Serializable {
 		this.resourceType = resourceType;
 	}
 
+	@Override
+	public String toString() {
+
+		return "NegativeCompany [id=" + id + ", resourceType=" + resourceType + ", url=" + url + ", cityId=" + cityId + ", sb_count=" + sb_count + ", resourceId=" + resourceId + ", grabDate=" + grabDate + ", name=" + name + ", description=" + description + ", employeeCount=" + employeeCount + ", address=" + address + ", area=" +
+			area + ", emailSrc=" + emailSrc + ", contactor=" + contactor + "]";
+	}
+
 }
