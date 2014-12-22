@@ -76,19 +76,15 @@ public class FEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 				FeCompanyURL yaojinboUrl = new FeCompanyURL();
 
 				String testURL = tag.getAttribute("href");
-				int index = testURL.indexOf("58.com");
-
-				if (index != -1) {
-					String sub = testURL.substring(index + 7);
-					int sIndex = sub.indexOf("/");
-					if (sIndex != -1) {
-						String resouceId = sub.substring(0, sIndex);
-						FeCompanyURL feCompanyURL = feCompanyURLRepository.findByCompanyId(resouceId);
-						if (feCompanyURL != null) {
-							return;
-						} else {
-							yaojinboUrl.setCompanyId(resouceId);
-						}
+				
+				String resourceId = XinXinUtils.parseFEResourceId(testURL);
+				
+				if (StringUtils.isNotBlank(resourceId)) {
+					FeCompanyURL feCompanyURL = feCompanyURLRepository.findByCompanyId(resourceId);
+					if (feCompanyURL != null) {
+						return;
+					} else {
+						yaojinboUrl.setCompanyId(resourceId);
 					}
 				}
 

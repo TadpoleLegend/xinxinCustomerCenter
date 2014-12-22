@@ -29,4 +29,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> , Jpa
 	
 	@Query(value="SELECT id FROM ls_company lc where lc.fEresourceId = :fEresourceId and lc.cityId = :cityId", nativeQuery=true)
 	Integer findCompanyByFEResourceIdAndCityId(@Param("fEresourceId") String fEresourceId , @Param("cityId") Integer cityId);
+	
+	Company findByFEresourceId(String fEresourceId);
 }

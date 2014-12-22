@@ -86,10 +86,11 @@ public class TestInitializationScripts {
 		Menu menu2 = new Menu("用户管理", "/ls/admin/loadUser.ls", "userManager");
 		Menu menu3 = new Menu("系统配置", "/ls/admin/configuration.ls", "systemConfiguration");
 		Menu menu4 = new Menu("数据采集", "/ls/grab/load.ls", "dataCollection");
+		Menu menu7 = new Menu("单页抓取", "/ls/grab/loadSingleGrab.ls", "singleGrab");
 		Menu menu5 = new Menu("意向客户审批", "/ls/wccheck/loadApproveCustomer.ls", "willingCustomerApprove");
 		Menu menu6 = new Menu("城市分配", "/ls/admin/userCityAssign.ls", "userCityAssign");
 		
-		menuRepository.save(ImmutableList.of(menu1, menu2, menu6, menu3, menu4, menu5));
+		menuRepository.save(ImmutableList.of(menu1, menu2, menu6, menu3, menu4, menu7, menu5));
 		
 	}
 

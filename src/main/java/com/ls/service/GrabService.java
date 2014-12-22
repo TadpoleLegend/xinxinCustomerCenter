@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ls.entity.Company;
 import com.ls.entity.FeCompanyURL;
+import com.ls.exception.UrlAlreadySavedException;
 import com.ls.vo.GrabStatistic;
 import com.ls.vo.ResponseVo;
 
@@ -27,6 +28,8 @@ public interface GrabService {
 	ResponseVo grabSingleFECompanyByUrlId(Integer urlId);
 	
 	ResponseVo grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL);
+	
+	ResponseVo grabSingleFECompanyByUrl(String url);
 
 	void feJobDailyWork();
 }

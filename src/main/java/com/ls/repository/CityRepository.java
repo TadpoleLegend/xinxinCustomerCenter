@@ -11,4 +11,6 @@ import com.ls.entity.User;
 public interface CityRepository extends JpaRepository<City, Integer> , JpaSpecificationExecutor<City>{
 	
 	public List<City> findByUsers(List<User> users);
+	
+	public City findByName(String name);
 }

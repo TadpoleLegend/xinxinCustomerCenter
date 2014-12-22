@@ -19,7 +19,7 @@
 			</div>
 		</div>
 	</header>
-	<section class="mainbg">
+	<section class="mainbg" style="background-image:url('images/login_bg.jpg')">
 		<div class="container">
 			<div class="content">
 				<div class="row">
@@ -47,13 +47,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="eight columns">
+					<div class="eight columns" >
 
-						<div class="app-wrapper ui-corner-top">
+						<div class="app-wrapper ui-corner-top" style="height:422px; background-image:url('images/login_bg.jpg')">
 							<div class="blue module ui-corner-top clearfix">
-								<h2>系统更新信息</h2>
+								<h2>系统信息</h2>
 							</div>
-							<div class="content">
+							<div class="content" >
 								<h4>第一版本功能</h4>
 								<hr>
 								<p>客户信息抓取</p>

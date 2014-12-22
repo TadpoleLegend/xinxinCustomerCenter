@@ -50,6 +50,9 @@ public class Company implements Serializable {
 	protected String oteUrl; // one three eight( ote) 138 URL 
 	protected String ganjiUrl;
 	protected Integer cityId;
+	
+	@Transient
+	protected String cityName;
 	protected Integer provinceId;
 	protected String employeeCount;
 	@Column(length=3000)
@@ -78,6 +81,18 @@ public class Company implements Serializable {
 	@OneToMany(mappedBy="company")
 	protected List<LearningHistory> learningHistories;
 	
+	
+	public String getCityName() {
+	
+		return cityName;
+	}
+
+	
+	public void setCityName(String cityName) {
+	
+		this.cityName = cityName;
+	}
+
 	public List<LearningHistory> getLearningHistories() {
 	
 		return learningHistories;

@@ -32,6 +32,7 @@ import com.ls.repository.ProvinceRepository;
 import com.ls.service.GrabService;
 import com.ls.service.UserService;
 import com.ls.vo.GrabStatistic;
+import com.ls.vo.ResponseVo;
 
 @Component("grabAction")
 @Scope("prototype")
@@ -61,6 +62,8 @@ public class GrabAction extends BaseAction {
 	private GanjiCompanyURLRepository ganjiCompanyURLRepository;
 
 	private List<Company> companies;
+	
+	private List<Company> grabedCompanies;
 
 	private List<City> jiangsuCities = new ArrayList<City>();
 	
@@ -92,15 +95,15 @@ public class GrabAction extends BaseAction {
 
 	public String getcities() {
 		
-		String provinceName = getParameter("province");
-		
-		List<Province> provinces = provinceRepository.getProvinceRepository().findByName(provinceName);
-		
-		if (provinces == null || provinces.isEmpty()) {
-			System.out.println("Not found");
-		} else {
-			jiangsuCities = provinces.get(0).getCitys();
-		}
+//		String provinceName = getParameter("province");
+//		
+//		List<Province> provinces = provinceRepository.getProvinceRepository().findByName(provinceName);
+//		
+//		if (provinces == null || provinces.isEmpty()) {
+//			System.out.println("Not found");
+//		} else {
+//			jiangsuCities = provinces.get(0).getCitys();
+//		}
 
 		return SUCCESS;
 	}
@@ -238,6 +241,36 @@ public class GrabAction extends BaseAction {
 			ganjiCompanyURLs = new ArrayList<GanjiCompanyURL>();
 		}
 		return SUCCESS;
+	}
+
+	public String grabSinglePage() {
+		
+		String targetDetailUrl = getParameter("userInputTargetDetailUrl");
+		
+		if (StringUtils.isBlank(targetDetailUrl)) {
+			grabedCompanies = new ArrayList<Company>();
+			return SUCCESS;
+		}
+		
+		if (targetDetailUrl.contains("58.com")) {
+			ResponseVo responseVo = grabService.grabSingleFECompanyByUrl(targetDetailUrl);
+			
+			setResponse(responseVo);
+		}
+		
+		return SUCCESS;
+	}
+	
+	
+	public List<Company> getGrabedCompanies() {
+	
+		return grabedCompanies;
+	}
+
+	
+	public void setGrabedCompanies(List<Company> grabedCompanies) {
+	
+		this.grabedCompanies = grabedCompanies;
 	}
 
 	public List<OteCompanyURL> getOteCompanyURLs() {

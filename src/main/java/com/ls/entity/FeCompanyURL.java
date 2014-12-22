@@ -29,7 +29,19 @@ public class FeCompanyURL implements Serializable {
 	private Boolean hasGet;
 	private String savedCompany;
 	private String status;
+	protected String description;
 	
+	public String getDescription() {
+	
+		return description;
+	}
+
+	
+	public void setDescription(String description) {
+	
+		this.description = description;
+	}
+
 	public String getStatus() {
 	
 		return status;
