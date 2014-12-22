@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
+import org.quartz.JobDataMap;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 
@@ -180,21 +181,22 @@ public class XinXinUtils {
 			if (sIndex != -1) {
 				return sub.substring(0, sIndex);
 			}
-		} 
-		
+		}
+
 		return "";
 	}
 
 	public static String parseCityUrl(String url) {
 
 		Iterable<String> iterable = Splitter.on("/").omitEmptyStrings().split(url);
-		
+
 		for (String singleString : iterable) {
 			if (singleString.contains("58.com")) {
 				return "http://" + singleString;
 			}
 		}
-		
+
 		return "";
 	}
+
 }

@@ -24,6 +24,7 @@ import com.ls.entity.FeCompanyURL;
 import com.ls.entity.GanjiCompanyURL;
 import com.ls.entity.OteCompanyURL;
 import com.ls.entity.Province;
+import com.ls.jobs.GrabFeJobOneByOneController;
 import com.ls.repository.CityRepository;
 import com.ls.repository.FeCompanyURLRepository;
 import com.ls.repository.GanjiCompanyURLRepository;
@@ -113,6 +114,13 @@ public class GrabAction extends BaseAction {
 		
 		String selectedURLs = getParameter("selectedURLs");
 		String lastPublishDate = getParameter("lastPublishDate");
+		
+		if (GrabFeJobOneByOneController.checkIfSomeOtherJobIsRunning()) {
+			
+			setResponse(ResponseVo.newFailMessage("有其他人或者系统在执行采集58同城数据的任务，请稍后重试"));
+			
+			return SUCCESS;
+		}
 		
 		if (StringUtils.isBlank(lastPublishDate)) {
 			lastPublishDate = "2014/01/01";

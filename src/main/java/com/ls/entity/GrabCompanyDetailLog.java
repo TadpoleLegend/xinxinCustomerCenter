@@ -30,7 +30,28 @@ public class GrabCompanyDetailLog implements Serializable{
 	private Integer successCount;
 	private Integer failCount;
 	private Date endDate;
-		
+	private String starterUserId;
+	private String starterName;
+	
+	public String getStarterUserId() {
+	
+		return starterUserId;
+	}
+	
+	public void setStarterUserId(String starterUserId) {
+	
+		this.starterUserId = starterUserId;
+	}
+	
+	public String getStarterName() {
+	
+		return starterName;
+	}
+	
+	public void setStarterName(String starterName) {
+	
+		this.starterName = starterName;
+	}
 	public Integer getSuccessCount() {
 		return successCount;
 	}
