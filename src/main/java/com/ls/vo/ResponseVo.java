@@ -82,7 +82,7 @@ public class ResponseVo {
 	@Override
 	public String toString() {
 
-		return "ResponseVo [type=" + type + ", message=" + message + ", mode=" + mode + ", object=" + object == null? "" : object.toString() + "]";
+		return "ResponseVo [type=" + type + ", message=" + message + ", mode=" + mode  + "]";
 	}
 
 	public Object getObject() {                                                                                                             

@@ -13,7 +13,7 @@ import com.ls.entity.Province;
 
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public interface ProvinceRepository extends JpaRepository<Province, Integer> , JpaSpecificationExecutor<Province>{
-	List<Province> findByName(String name);
+	Province findByName(String name);
 	
 	ProvinceRepository getProvinceRepository();
 	

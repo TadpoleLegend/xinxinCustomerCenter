@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=gb2312"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>	<html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
@@ -32,7 +34,9 @@
 						<h2>500:系统错误</h2>
 					</div>
 						<div class="content">
-
+							<div style="color: red">
+								<s:fielderror />
+							</div>
 							<form class="nice custom">
 
 								<p>你在处理的时候发生了一个系统错误，请检查你的错误<b>重试</b>,或者联系技术人员解决。</p>

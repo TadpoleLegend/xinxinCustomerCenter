@@ -27,6 +27,10 @@ public interface GrabService {
 	ResponseVo grabSingleFECompanyByUrlId(Integer urlId);
 	
 	ResponseVo grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL);
+	
+	ResponseVo grabSingleFECompanyByUrl(String url);
 
 	void feJobDailyWork();
+	
+	ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds);
 }

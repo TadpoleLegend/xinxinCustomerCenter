@@ -77,7 +77,7 @@
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/500.html</location>
+		<location>/500.jsp</location>
 	</error-page>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

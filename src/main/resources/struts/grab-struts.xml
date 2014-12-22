@@ -15,6 +15,9 @@
 		<action name="load">
 			<result>user_grab.jsp</result>
 		</action>
+		<action name="loadSingleGrab">
+			<result>single_page_grab.jsp</result>
+		</action>
 		<action name="grabCompanyIndexPage" method="grabCompanyIndexPage" class="grabAction">
 			<result name="success" type="json">
 				<param name="root">companies</param>
@@ -43,6 +46,14 @@
 		<action name="loadGanjiPreviewList" method="loadGanjiPreviewList" class="grabAction">
 			<result name="success" type="json">
 				<param name="root">ganjiCompanyURLs</param>
+			</result>
+		</action>
+		<action name="grabSinglePage" method="grabSinglePage" class="grabAction">
+			<result name="input">
+				single_page_grab.jsp
+			</result>
+			<result name="success" type="json">
+				<param name="root">response</param>
 			</result>
 		</action>
 	</package>

@@ -87,6 +87,12 @@ function bIt(message) {
 }
 
 function handleStanderdResponse(data) {
+	if (!data) {
+		
+		success("操作完成，服务器未返回消息");
+		return;
+	}
+
 	if (isOK (data)) {
 		success(data.message);
 	} else {

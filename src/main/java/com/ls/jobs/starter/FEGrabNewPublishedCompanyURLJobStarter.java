@@ -43,7 +43,7 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 //		sixOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_afternoon_at_six_clock");
 //		sixOclockTrigger.setGroup("GRAB_URL");
 
-		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(20, 35).build();
+		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(20, 04).build();
 		elevenOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_evening_at_eleven_clock");
 		elevenOclockTrigger.setGroup("GRAB_URL");
 
@@ -53,7 +53,7 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 			return;
 		} else {
 			//scheduler.scheduleJob(sixOclockJobDetail, sixOclockTrigger);
-			//scheduler.scheduleJob(elevenOclockJobDetail, elevenOclockTrigger);
+			scheduler.scheduleJob(elevenOclockJobDetail, elevenOclockTrigger);
 		}
 
 	}

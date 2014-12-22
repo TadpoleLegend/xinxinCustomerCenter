@@ -19,5 +19,6 @@ public interface FeCompanyURLRepository  extends JpaRepository<FeCompanyURL, Int
 
 	FeCompanyURL findByCompanyId(String resouceId);
 
-	List<FeCompanyURL> findTop20ByCityIdInOrderByIdAsc(List<Integer> userCityIds, Pageable pageable);
+	List<FeCompanyURL> findByCityIdInAndSavedCompanyIsNullOrderByIdDesc(List<Integer> userCityIds, Pageable pageable);
+	
 }

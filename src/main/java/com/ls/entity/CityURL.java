@@ -24,11 +24,12 @@ public class CityURL implements Serializable {
 	protected String resourceType;
 	protected Date updateDate;
 	protected String baseUrl;
+	
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="city_id")
 	protected City city;
-
+	
 
 	public Integer getId() {
 		return id;

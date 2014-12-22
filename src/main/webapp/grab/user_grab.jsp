@@ -60,10 +60,9 @@
 						</div>
 						<div class="content">
 							<div class="row">
-								<div class="three columns">
-									共计<label class="green label" data-bind="text : totalLength"></label>条资源记录
+								<div class="nine columns">
+									（最多显示500条资源记录，采集过程可能需要很长时间，请耐心等待....）
 								</div>
-								<div class="six columns"></div>
 								<div class="three columns">
 									<a class="small blue button" href="#" data-bind="click : grabSelected">全部抓取</a>
 								</div>
@@ -73,7 +72,6 @@
 										<tr>
 											<th class="text-center">公司名</th>
 											<th class="text-center">资源编号</th>
-											<th class="text-center">发表时间</th>
 											<th class="text-center">链接</th>
 										</tr>
 									</thead>
@@ -81,7 +79,6 @@
 										<tr>
 											<td class="text-center"><span data-bind="text: name"></span></td>
 											<td class="text-center"><span data-bind="text: companyId"></span></td>
-											<td class="text-center"><span data-bind="text: publishDate"></span></td>
 											<td class="text-center"><span data-bind="text: url"></span></td>
 										</tr>
 
@@ -152,6 +149,7 @@
 				self.otePreviewList = ko.observableArray([]);
 				self.selectedCities = ko.observableArray([]);
 				self.totalLength = ko.observable('');
+				self.datasourceType = ko.observable('');
 				
 				self.searchUrlResources = function(type, item, event ) {
 					
@@ -182,6 +180,7 @@
 								success("没有发现资源数据");
 							}
 							
+							self.datasourceType(type);
 						}
 					});
 				};
@@ -236,14 +235,18 @@
 					};
 					
 				self.grabSelected = function() {
-						console.debug(self.lastPublishDate());
-						$.ajax({url : '/ls/grab/grabSelectedCities.ls',
-								data : {selectedURLs : JSON.stringify(self.selectedURLs()), lastPublishDate : self.lastPublishDate()},
-								success: function(data) {
-										alert(JSON.stringify(data));
-									}
-								});
-					
+						var selectedIds = $.jstree.reference('#userCityTree').get_selected();
+						
+						$.ajax({
+							data : {
+								selectedIds : JSON.stringify(selectedIds),
+								datasourceType : self.datasourceType()
+							},
+							url : 'grabSelectedCities.ls',
+							success: function(data) {
+								handleStanderdResponse(data);
+							}
+						});
 					};
 
 				};
