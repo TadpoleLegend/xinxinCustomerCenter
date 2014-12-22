@@ -3,7 +3,6 @@ package com.ls.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,7 +28,16 @@ public class FeCompanyURL implements Serializable {
 	private Boolean hasGet;
 	private String savedCompany;
 	private String status;
+	private String comments;
 	
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
 	public String getStatus() {
 	
 		return status;
@@ -98,6 +106,8 @@ public class FeCompanyURL implements Serializable {
 	public void setCityId(Integer cityId) {
 		this.cityId = cityId;
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "FeCompanyURL [id=" + id + ", name=" + name + ", area=" + area + ", url=" + url + ", companyId=" + companyId + ", publishDate=" + publishDate + ", cityId=" + cityId + ", hasGet=" + hasGet + "]";

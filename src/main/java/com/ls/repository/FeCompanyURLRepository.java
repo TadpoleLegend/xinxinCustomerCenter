@@ -2,6 +2,7 @@ package com.ls.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +19,5 @@ public interface FeCompanyURLRepository  extends JpaRepository<FeCompanyURL, Int
 
 	FeCompanyURL findByCompanyId(String resouceId);
 
-	List<FeCompanyURL> findTop20ByCityIdInOrderByIdAsc(List<Integer> userCityIds);
+	List<FeCompanyURL> findTop20ByCityIdInOrderByIdAsc(List<Integer> userCityIds, Pageable pageable);
 }

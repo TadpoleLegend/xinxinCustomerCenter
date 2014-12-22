@@ -15,6 +15,7 @@ import org.apache.struts2.json.JSONException;
 import org.apache.struts2.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
@@ -199,8 +200,8 @@ public class GrabAction extends BaseAction {
 					userCityIds.add(Integer.valueOf(cityId));
 				}
 			}
-			
-			feCompanyURLs = feCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
+			PageRequest pageRequest = new PageRequest(0, 500);
+			feCompanyURLs = feCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds, pageRequest);
 			
 		} catch (Exception e) {
 			feCompanyURLs = new ArrayList<FeCompanyURL>();

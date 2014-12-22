@@ -360,7 +360,9 @@ public class GrabServiceImpl implements GrabService {
 	}
 
 	private ResponseVo saveStupidCompany(Company company, String recourceType, FeCompanyURL feCompanyURL) {
-
+		
+		feCompanyURL.setComments("sb company");
+		
 		ResponseVo responseVo = ResponseVo.newSuccessMessage("sb company saved successfully.");
 
 		NegativeCompany negativeCompany = envelopNegativeCompany(company, recourceType);
@@ -424,7 +426,8 @@ public class GrabServiceImpl implements GrabService {
 
 					try {
 
-						savedCompany = this.companyRepository.save(company);
+						savedCompany = this.companyRepository.saveAndFlush(company);
+						
 						// Here
 					} catch (Throwable e) {
 						// can't go in here!
@@ -449,17 +452,21 @@ public class GrabServiceImpl implements GrabService {
 						feCompanyURL.setHasGet(true);
 					}
 
-					feCompanyURLRepository.save(feCompanyURL);
+					feCompanyURLRepository.saveAndFlush(feCompanyURL);
 					responseVo.setObject(savedCompany);
 
 				}
 
 			} else {
-
+				
 				return ResponseVo.newSuccessMessage("The company already grabed.");
 			}
 
 		} catch (Exception e) {
+			
+			feCompanyURL.setComments(e.getMessage());
+			feCompanyURLRepository.saveAndFlush(feCompanyURL);
+			
 			return XinXinUtils.makeGeneralErrorResponse(e);
 		}
 
@@ -621,12 +628,15 @@ public class GrabServiceImpl implements GrabService {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					System.out.println(response.toString());
 
 					if (null == response || response.getType().equals("FAIL")) {
 						failCount++;
+						
+						System.out.println("fail--->" + feCompanyURL.toString());
 					} else {
 						successCount++;
+						
+						System.out.println("success--->" + feCompanyURL.toString());
 					}
 
 				}
@@ -641,7 +651,9 @@ public class GrabServiceImpl implements GrabService {
 			grabCompanyDetailLog.setEndDate(XinXinUtils.getNow());
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
+			grabCompanyDetailLog.setMessage(e.getMessage());
+			
 			grabCompanyDetailLog.setStatus("fail");
 		}
 
