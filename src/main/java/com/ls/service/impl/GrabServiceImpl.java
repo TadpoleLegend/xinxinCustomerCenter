@@ -431,7 +431,7 @@ public class GrabServiceImpl extends BasicGrabService {
 				Predicate predicate = criteriaBuilder.conjunction();
 
 				predicate.getExpressions().add(criteriaBuilder.isNull(root.get("savedCompany")));
-				predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Date> get("createDate"), new Date()));
+				//predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Date> get("createDate"), new Date()));
 
 				return predicate;
 			}
