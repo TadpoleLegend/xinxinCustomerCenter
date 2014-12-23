@@ -25,6 +25,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlHeading1;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.ls.entity.Company;
@@ -145,16 +146,19 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 
 		try {
 			String testURL = company.getGanjiUrl();
+			
 			HtmlPage mainPage = webClient.getPage(testURL);
+			
 			String htmlDetail = mainPage.getWebResponse().getContentAsString();
 			
 			compositeCityAndProvince(mainPage, company);
 			
-			List<?> nodes = mainPage.getByXPath("/html/body/div[1]/div/div[1]/a");
-			
-			System.out.println(nodes.get(0).toString());
 			parseDetails(company, htmlDetail);
-			company.setDescription(findCompanyDescription(htmlDetail));
+			
+			parseDescription(mainPage, company);
+			
+			parseName(mainPage, company);
+			
 		} catch (FailingHttpStatusCodeException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
@@ -165,19 +169,56 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 	}
 
 	
-	public void handleDescription(HtmlPage mainPage, Company company) {
+	public void parseDescription(HtmlPage mainPage, Company company) {
+		
 		String descriptionXPath = "/html/body/div[3]/div[4]/div[1]/div[1]/p";
 		
-		List<?> descriptionNodes = mainPage.getByXPath(descriptionXPath);
-		if (null != descriptionNodes && !descriptionNodes.isEmpty()) {
-			
-			if (descriptionNodes.get(0) instanceof HtmlParagraph) {
-				HtmlParagraph htmlParagraph = ( HtmlParagraph ) descriptionNodes.get(0);
-				company.setDescription(htmlParagraph.getFirstChild().asText().toString());
+		try {
+			List<?> descriptionNodes = mainPage.getByXPath(descriptionXPath);
+			if (null != descriptionNodes && !descriptionNodes.isEmpty()) {
+				
+				if (descriptionNodes.get(0) instanceof HtmlParagraph) {
+					HtmlParagraph htmlParagraph = ( HtmlParagraph ) descriptionNodes.get(0);
+					
+					String descriptionText = htmlParagraph.getFirstChild().asText().trim();
+					
+					if (descriptionText.length() > 2000) {
+						descriptionText = descriptionText.substring(0, 1999);
+					}
+					company.setDescription(descriptionText);
+				}
 			}
-		}
+		} catch (Exception e) {
+
+			company.setDescription("");
+			
+		} 
 	}
 	
+	public void parseName(HtmlPage mainPage, Company company) {
+		
+		String nameXPath = "/html/body/div[3]/div[2]/h1";
+		
+		try {
+			List<?> nameNodes = mainPage.getByXPath(nameXPath);
+			
+			if (null != nameNodes && !nameNodes.isEmpty()) {
+				
+				if (nameNodes.get(0) instanceof HtmlHeading1) {
+					HtmlHeading1 htmlParagraph = ( HtmlHeading1 ) nameNodes.get(0);
+					
+					String name = htmlParagraph.getFirstChild().asText().trim();
+						
+					company.setName(name);
+				}
+			}
+		} catch (Exception e) {
+
+			company.setName("");
+			
+		} 
+	}
+
 	public String parseDetails(final Company company, String detailPageHtml) {
 
 		final StringBuilder contactorsPhoneImgSrcBuilder = new StringBuilder();
