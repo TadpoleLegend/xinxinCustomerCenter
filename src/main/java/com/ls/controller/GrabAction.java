@@ -110,44 +110,44 @@ public class GrabAction extends BaseAction {
 
 		String selectedCityIds = getParameter("selectedIds");
 		String datasourceType = getParameter("datasourceType");
-		
+
 		if (StringUtils.isBlank(datasourceType)) {
 			setResponse(ResponseVo.newFailMessage("未搜索需要采集的数据源！"));
-			
+
 			return SUCCESS;
 		}
-		
+
 		List<Integer> userCityIds = new ArrayList<Integer>();
 		if (StringUtils.isEmpty(selectedCityIds) || selectedCityIds.equals("[]")) {
-			
+
 			setResponse(ResponseVo.newFailMessage("未选择需要采集的城市"));
-			
+
 			return SUCCESS;
 
 		} else {
-			
+
 			Object[] cityArray = JSONArray.fromObject(selectedCityIds).toArray();
-			
+
 			for (Object object : cityArray) {
-				
+
 				String idString = object.toString();
-				
+
 				if (idString.contains("province")) {
 					continue;
 				}
 
 				String cityId = idString.substring("city".length());
-				
+
 				userCityIds.add(Integer.valueOf(cityId));
 			}
-			
+
 			if (datasourceType.equals("58")) {
 				grabService.grabCompanyDetailInCityList(userCityIds);
 			}
 		}
-		
+
 		setResponse(ResponseVo.newSuccessMessage(null));
-		
+
 		return SUCCESS;
 	}
 
@@ -262,8 +262,9 @@ public class GrabAction extends BaseAction {
 
 			setResponse(responseVo);
 		} else if (targetDetailUrl.contains("ganji.com")) {
-			//grabService.grabS
-			
+			ResponseVo responseVo = grabService.grabSingleGJCompanyByUrl(targetDetailUrl);
+
+			setResponse(responseVo);
 		}
 
 		return SUCCESS;

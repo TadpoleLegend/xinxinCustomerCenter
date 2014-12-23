@@ -33,7 +33,7 @@ public class FEGrabNewPublishedCompanyJobStarter implements InitializingBean {
 
 		JobDetail jobDetail = JobBuilder.newJob(FEGrabCompanyDetailDailyJob.class).usingJobData(jobDataMap).withIdentity("daily_grab_new_company_job_at_11_00", "GRAB_Company").build();
 		
-		CronTriggerImpl sixOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(22, 26).build();
+		CronTriggerImpl sixOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(23, 22).build();
 		sixOclockTrigger.setName("daily_grab_new_company_job_at_11_night");
 		sixOclockTrigger.setGroup("GRAB_Company");
 

@@ -94,7 +94,7 @@ public class TestGrabProvince {
 									CityURL cityGanjiURL = new CityURL();
 									cityGanjiURL.setCity(city);
 									cityGanjiURL.setUrl(url);
-									cityGanjiURL.setBaseUrl(cityganji.getValue()+"meirongshi/o/");
+									cityGanjiURL.setBaseUrl(cityganji.getValue()+"meirongshi/o");
 									cityGanjiURL.setResourceType(ResourceTypeEnum.Ganji.getId());
 									cityURLRepository.save(cityGanjiURL);
 									findgajiflag = true;

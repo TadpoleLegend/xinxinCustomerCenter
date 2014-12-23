@@ -157,7 +157,10 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 			
 			parseDescription(mainPage, company);
 			
-			parseName(mainPage, company);
+			if (StringUtils.isEmpty(company.getName())) {
+				parseName(mainPage, company);
+			}
+			
 			
 		} catch (FailingHttpStatusCodeException e) {
 			e.printStackTrace();
@@ -197,26 +200,32 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 	
 	public void parseName(HtmlPage mainPage, Company company) {
 		
-		String nameXPath = "/html/body/div[3]/div[2]/h1";
-		
-		try {
-			List<?> nameNodes = mainPage.getByXPath(nameXPath);
+		String[] nameXPath ={ "/html/body/div[3]/div[2]/h1", "/html/body/div[2]/div[1]/div/div[1]/h1", "/html/body/div[2]/div[1]/div[2]/h1" };
+		for (String singleNamePath : nameXPath) {
 			
-			if (null != nameNodes && !nameNodes.isEmpty()) {
+			try {
+				List<?> nameNodes = mainPage.getByXPath(singleNamePath);
 				
-				if (nameNodes.get(0) instanceof HtmlHeading1) {
-					HtmlHeading1 htmlParagraph = ( HtmlHeading1 ) nameNodes.get(0);
+				if (null != nameNodes && !nameNodes.isEmpty()) {
 					
-					String name = htmlParagraph.getFirstChild().asText().trim();
+					if (nameNodes.get(0) instanceof HtmlHeading1) {
+						HtmlHeading1 htmlParagraph = ( HtmlHeading1 ) nameNodes.get(0);
 						
-					company.setName(name);
+						String name = htmlParagraph.getFirstChild().asText().trim();
+						if (StringUtils.isNotBlank(name)) {
+							company.setName(name);
+							break;
+						}	
+					}
 				}
-			}
-		} catch (Exception e) {
+			} catch (Exception e) {
 
-			company.setName("");
-			
-		} 
+				company.setName("");
+				
+			} 
+		}
+		
+		
 	}
 
 	public String parseDetails(final Company company, String detailPageHtml) {
@@ -323,9 +332,9 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 									String phoneImgSrc = imageTag.getImageURL();
 									if (phoneImgSrc != null && phoneImgSrc.trim().length() > 0) {
 										if (phoneImgSrc.startsWith("/") && !phoneImgSrc.contains("www.ganji.com")) {
-											company.setPhoneSrc("http://www.ganji.com" + phoneImgSrc);
+											company.setMobilePhoneSrc("http://www.ganji.com" + phoneImgSrc);
 										} else {
-											company.setPhoneSrc(phoneImgSrc);
+											company.setMobilePhoneSrc(phoneImgSrc);
 										}
 									}
 								}

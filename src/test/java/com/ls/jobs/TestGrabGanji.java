@@ -20,6 +20,7 @@ import com.ls.repository.CityRepository;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.GanjiCompanyURLRepository;
+import com.ls.service.GrabCompanyDetailPageUrlService;
 import com.ls.service.GrabService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,6 +37,10 @@ public class TestGrabGanji {
 	private CityRepository cityRepository;
 	@Autowired
 	private GanjiCompanyURLRepository ganjiCompanyURLRepository;
+	
+	@Resource(name= "GJGrabCompanyDetailPageUrlService")
+	GrabCompanyDetailPageUrlService grabCompanyDetailPageUrlService;
+	
 	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 	private Company envelopeCompany(GanjiCompanyURL ganjiCompanyURL) {
@@ -82,5 +87,11 @@ public class TestGrabGanji {
 	public void testGrabWithSingleUrl() {
 		String singleUrl = "http://www.ganji.com/gongsi/24170227/";
 		grabService.grabSingleGJCompanyByUrl(singleUrl);
+	}
+	
+	@Test
+	public void testGrabAllUrl() {
+		
+		grabCompanyDetailPageUrlService.grabUrl(null);
 	}
 }

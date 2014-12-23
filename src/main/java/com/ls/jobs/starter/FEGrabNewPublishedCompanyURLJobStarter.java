@@ -43,7 +43,7 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 //		sixOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_afternoon_at_six_clock");
 //		sixOclockTrigger.setGroup("GRAB_URL");
 
-		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(20, 04).build();
+		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(17, 01).build();
 		elevenOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_evening_at_eleven_clock");
 		elevenOclockTrigger.setGroup("GRAB_URL");
 

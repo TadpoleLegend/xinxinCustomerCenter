@@ -338,7 +338,7 @@ public class GrabServiceImpl extends BasicGrabService {
 		return grabSingleFECompanyByUrl(feCompanyURLRepository.findOne(urlId));
 	}
 
-	public ResponseVo grabSingleFECompanyByUrl(BaseCompanyURL feCompanyURL) {
+	public ResponseVo grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL) {
 
 		Company company = compositeBasicCompanyInfo(feCompanyURL);
 
@@ -433,7 +433,7 @@ public class GrabServiceImpl extends BasicGrabService {
 
 					ResponseVo response = null;
 					try {
-						response = grabSingleFECompanyByUrl(feCompanyURL);
+						response = this.grabSingleFECompanyByUrl(feCompanyURL);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -509,18 +509,18 @@ public class GrabServiceImpl extends BasicGrabService {
 			ResponseVo responseVo = ResponseVo.newFailMessage("这个公司已经采集，编号是：" + existedCompanyInDb.getId());
 			return responseVo;
 		}
-		BaseCompanyURL dbUrl = feCompanyURLRepository.findByCompanyId(resourceId);
+		FeCompanyURL dbUrl = feCompanyURLRepository.findByCompanyId(resourceId);
 
 		// save new url to db
 		if (null == dbUrl) {
-			BaseCompanyURL newUrlToSave = new BaseCompanyURL();
+			FeCompanyURL newUrlToSave = new FeCompanyURL();
 
 			newUrlToSave.setCompanyId(resourceId);
 			newUrlToSave.setUrl(url);
 			newUrlToSave.setCreateDate(XinXinUtils.getNow());
 			newUrlToSave.setComments("MANUALLY_SAVED");
 
-			dbUrl = commonSaveUrl(newUrlToSave);
+			dbUrl = feCompanyURLRepository.saveAndFlush(newUrlToSave);
 			
 		}
 
