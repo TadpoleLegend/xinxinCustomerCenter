@@ -8,6 +8,10 @@ import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.Div;
 import org.htmlparser.util.ParserException;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.google.common.base.Splitter;
+import com.ls.entity.Company;
+
 public class BaseHtmlParseUtil {
 	
 	public static Div findFirstOneWithClassName(String html, final String className) {
@@ -110,4 +114,25 @@ public class BaseHtmlParseUtil {
 		return null;
 	}
 	
+	public void compositeCityAndProvince(HtmlPage mainPage, Company company) {
+
+		try {
+			String locationMeta = mainPage.getElementsByName("location").get(0).getAttribute("content");
+			Iterable<String> locationElements = Splitter.on(";").omitEmptyStrings().split(locationMeta);
+
+			for (String string : locationElements) {
+				if (string.contains("=")) {
+
+					String[] locationDetailElements = string.split("=");
+					String locationKey = locationDetailElements[0];
+					if (locationDetailElements.length == 2 && locationKey.equals("city")) {
+						String locationValue = locationDetailElements[1];
+						company.setCityName(locationValue);
+					}
+				}
+			}
+		} catch (Exception e) {
+
+		}
+	}
 }

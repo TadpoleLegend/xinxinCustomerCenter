@@ -70,7 +70,7 @@ public class TestGrab58 {
 					Company company = envelopeCompany(feCompanyURL);
 					if (company != null) {
 						HtmlParserUtilFor58.getInstance().findCompanyDetails(company);
-						grabService.mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId(), feCompanyURL);
+						grabService.saveCompanyToDb(company, ResourceTypeEnum.FiveEight.getId(), feCompanyURL);
 
 						Thread.sleep(700);
 					}

@@ -103,7 +103,7 @@ public class TestGrab138 {
 					if(company != null){
 						HtmlParserUtilFor138.getInstance().findCompanyDetails(company);
 					//	grabService.mergeCompanyData(company, ResourceTypeEnum.OneThreeEight.getId());
-						oteCompanyURL.setHasGet(1);
+						oteCompanyURL.setHasGet(true);
 						oteCompanyURLRepository.save(oteCompanyURL);
 					}
 				}

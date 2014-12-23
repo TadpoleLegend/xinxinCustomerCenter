@@ -180,28 +180,6 @@ public class HtmlParserUtilFor58 extends BaseHtmlParseUtil {
 		return returnCompanyList;
 	}
 
-	private void compositeCityAndProvince(HtmlPage mainPage, Company company) {
-
-		try {
-			String locationMeta = mainPage.getElementsByName("location").get(0).getAttribute("content");
-			Iterable<String> locationElements = Splitter.on(";").omitEmptyStrings().split(locationMeta);
-
-			for (String string : locationElements) {
-				if (string.contains("=")) {
-
-					String[] locationDetailElements = string.split("=");
-					String locationKey = locationDetailElements[0];
-					if (locationDetailElements.length == 2 && locationKey.equals("city")) {
-						String locationValue = locationDetailElements[1];
-						company.setCityName(locationValue);
-					}
-				}
-			}
-		} catch (Exception e) {
-
-		}
-	}
-
 	public void findCompanyDetails(Company company) {
 
 		try {

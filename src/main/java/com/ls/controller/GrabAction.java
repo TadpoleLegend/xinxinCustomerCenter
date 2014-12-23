@@ -261,6 +261,9 @@ public class GrabAction extends BaseAction {
 			ResponseVo responseVo = grabService.grabSingleFECompanyByUrl(targetDetailUrl);
 
 			setResponse(responseVo);
+		} else if (targetDetailUrl.contains("ganji.com")) {
+			//grabService.grabS
+			
 		}
 
 		return SUCCESS;

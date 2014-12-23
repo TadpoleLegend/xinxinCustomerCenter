@@ -17,4 +17,6 @@ public interface GanjiCompanyURLRepository extends JpaRepository<GanjiCompanyURL
 	List<GanjiCompanyURL> findByCityId(@Param("cityId") Integer cityId);
 
 	List<GanjiCompanyURL> findTop20ByCityIdInOrderByIdAsc(List<Integer> userCityIds);
+
+	GanjiCompanyURL findByCompanyId(String resourceId);
 }

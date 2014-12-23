@@ -31,4 +31,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> , Jpa
 	Integer findCompanyByFEResourceIdAndCityId(@Param("fEresourceId") String fEresourceId , @Param("cityId") Integer cityId);
 	
 	Company findByFEresourceId(String fEresourceId);
+	
+	Company findByGanjiresourceId(String ganjiresourceId);
 }

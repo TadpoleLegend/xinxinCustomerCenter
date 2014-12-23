@@ -20,20 +20,27 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableList;
+import com.ls.entity.BaseCompanyURL;
 import com.ls.entity.City;
 import com.ls.entity.Company;
+import com.ls.entity.BaseCompanyURL;
 import com.ls.entity.FeCompanyURL;
+import com.ls.entity.GanjiCompanyURL;
 import com.ls.entity.GrabCompanyDetailLog;
 import com.ls.entity.NegativeCompany;
+import com.ls.entity.OteCompanyURL;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.grab.HtmlParserUtilFor58;
+import com.ls.grab.HtmlParserUtilForGanJi;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.CompanyResourceRepository;
 import com.ls.repository.FeCompanyURLRepository;
+import com.ls.repository.GanjiCompanyURLRepository;
 import com.ls.repository.GrabCompanyDetailLogRepository;
 import com.ls.repository.NegativeCompanyRepository;
+import com.ls.repository.OteCompanyURLRepository;
 import com.ls.service.BasicGrabService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.ResponseVo;
@@ -64,6 +71,12 @@ public class GrabServiceImpl extends BasicGrabService {
 
 	@Autowired
 	private GrabCompanyDetailLogRepository grabCompanyDetailLogRepository;
+	
+	@Autowired
+	private GanjiCompanyURLRepository ganjiCompanyURLRepository;
+	
+	@Autowired
+	private OteCompanyURLRepository oteCompanyURLRepository;
 
 	public List<String> findFeCityURLs() {
 
@@ -132,7 +145,7 @@ public class GrabServiceImpl extends BasicGrabService {
 
 	}
 
-	private ResponseVo saveStupidCompany(Company company, String recourceType, FeCompanyURL feCompanyURL) {
+	private ResponseVo saveStupidCompany(Company company, String recourceType, BaseCompanyURL feCompanyURL) {
 
 		feCompanyURL.setComments("sb company");
 
@@ -171,13 +184,13 @@ public class GrabServiceImpl extends BasicGrabService {
 			responseVo.setObject(savedStupidCompany);
 		}
 
-		feCompanyURLRepository.save(feCompanyURL);
+		commonSaveUrl(feCompanyURL);
 
 		return responseVo;
 
 	}
 
-	private ResponseVo saveNormalCompany(Company company, String recourceType, FeCompanyURL feCompanyURL) {
+	private ResponseVo saveNormalCompany(Company company, String recourceType, BaseCompanyURL feCompanyURL) {
 
 		ResponseVo responseVo = ResponseVo.newSuccessMessage(null);
 		Company savedCompany = null;
@@ -213,14 +226,15 @@ public class GrabServiceImpl extends BasicGrabService {
 			feCompanyURL.setCityId(savedCompany.getCityId());
 		}
 
-		feCompanyURLRepository.save(feCompanyURL);
+		commonSaveUrl (feCompanyURL);
+		
 		responseVo.setObject(savedCompany);
 		responseVo.setMessage("采集成功，公司编号是 " + savedCompany.getId());
 
 		return responseVo;
 	}
 
-	public ResponseVo mergeCompanyData(Company company, String recourceType, FeCompanyURL feCompanyURL) {
+	public ResponseVo saveCompanyToDb(Company company, String recourceType, BaseCompanyURL baseCompanyURL) {
 
 		ResponseVo responseVo = ResponseVo.newSuccessMessage("The company inserted successfully.");
 
@@ -236,28 +250,29 @@ public class GrabServiceImpl extends BasicGrabService {
 
 				if (stupid) {
 
-					responseVo = saveStupidCompany(company, recourceType, feCompanyURL);
+					responseVo = saveStupidCompany(company, recourceType, baseCompanyURL);
 
 				} else {
-					responseVo = saveNormalCompany(company, recourceType, feCompanyURL);
+					responseVo = saveNormalCompany(company, recourceType, baseCompanyURL);
 				}
 
 			} else {
 				// update company reference if other url with the same company
 				// name is saved to ls_company
-				if (feCompanyURL.getSavedCompany() == null) {
+				if (baseCompanyURL.getSavedCompany() == null) {
 
-					feCompanyURL.setSavedCompany(resultCompany.getId().toString());
-					feCompanyURL.setComments("duplicate url");
-					feCompanyURLRepository.saveAndFlush(feCompanyURL);
+					baseCompanyURL.setSavedCompany(resultCompany.getId().toString());
+					baseCompanyURL.setComments("duplicate url");
+					commonSaveUrl (baseCompanyURL);
+					
 				}
 				return ResponseVo.newSuccessMessage("这个公司已经采集，编号是 " + resultCompany.getId());
 			}
 
 		} catch (Exception e) {
 
-			feCompanyURL.setComments(e.getMessage());
-			feCompanyURLRepository.saveAndFlush(feCompanyURL);
+			baseCompanyURL.setComments(e.getMessage());
+			commonSaveUrl (baseCompanyURL);
 
 			return XinXinUtils.makeGeneralErrorResponse(e);
 		}
@@ -265,6 +280,29 @@ public class GrabServiceImpl extends BasicGrabService {
 		return responseVo;
 	}
 
+	private BaseCompanyURL commonSaveUrl(BaseCompanyURL baseCompanyURL) {
+		
+		if (baseCompanyURL instanceof FeCompanyURL) {
+			
+			FeCompanyURL feCompanyURL = (FeCompanyURL) baseCompanyURL;
+			return feCompanyURLRepository.saveAndFlush(feCompanyURL);
+			
+		} else if (baseCompanyURL instanceof GanjiCompanyURL) {
+			GanjiCompanyURL ganjiCompanyURL = (GanjiCompanyURL) baseCompanyURL;
+			
+			return ganjiCompanyURLRepository.save(ganjiCompanyURL);
+		} else if (baseCompanyURL instanceof OteCompanyURL) {
+			
+			OteCompanyURL oteCompanyURL = (OteCompanyURL) baseCompanyURL;
+			
+			return oteCompanyURLRepository.save(oteCompanyURL);
+		}
+		
+		return null;
+		
+	}
+	
+	
 	private NegativeCompany tryToSaveNegativeCompanyWithSimpleData(NegativeCompany nc) {
 
 		NegativeCompany negativeCompany = new NegativeCompany();
@@ -300,9 +338,9 @@ public class GrabServiceImpl extends BasicGrabService {
 		return grabSingleFECompanyByUrl(feCompanyURLRepository.findOne(urlId));
 	}
 
-	public ResponseVo grabSingleFECompanyByUrl(FeCompanyURL feCompanyURL) {
+	public ResponseVo grabSingleFECompanyByUrl(BaseCompanyURL feCompanyURL) {
 
-		Company company = envelopeCompany(feCompanyURL);
+		Company company = compositeBasicCompanyInfo(feCompanyURL);
 
 		ResponseVo response = null;
 
@@ -312,7 +350,7 @@ public class GrabServiceImpl extends BasicGrabService {
 
 		try {
 
-			response = mergeCompanyData(company, ResourceTypeEnum.FiveEight.getId(), feCompanyURL);
+			response = saveCompanyToDb(company, ResourceTypeEnum.FiveEight.getId(), feCompanyURL);
 
 		} catch (org.springframework.orm.jpa.JpaSystemException tmdException) {
 			System.out.println(tmdException.getMessage());
@@ -344,16 +382,30 @@ public class GrabServiceImpl extends BasicGrabService {
 
 	}
 
-	private Company envelopeCompany(FeCompanyURL feCompanyURL) {
+	private Company compositeBasicCompanyInfo(BaseCompanyURL basicCompanyURL) {
 
 		Company company = Company.create();
 
-		company.setName(feCompanyURL.getName());
-		company.setArea(feCompanyURL.getArea());
+		company.setName(basicCompanyURL.getName());
+		company.setArea(basicCompanyURL.getArea());
 
-		company.setCityId(feCompanyURL.getCityId());
-		company.setfEresourceId(feCompanyURL.getCompanyId());
-		company.setfEurl(feCompanyURL.getUrl());
+		company.setCityId(basicCompanyURL.getCityId());
+		
+		if (basicCompanyURL instanceof FeCompanyURL) {
+			
+			company.setfEresourceId(basicCompanyURL.getCompanyId());
+			company.setfEurl(basicCompanyURL.getUrl());
+			
+		} else if (basicCompanyURL instanceof GanjiCompanyURL) {
+			
+			company.setGanjiresourceId(basicCompanyURL.getCompanyId());
+			company.setGanjiUrl(basicCompanyURL.getUrl());
+			
+		} else if (basicCompanyURL instanceof OteCompanyURL ) {
+			
+			company.setoTEresourceId(basicCompanyURL.getCompanyId());
+			company.setOteUrl(basicCompanyURL.getUrl());
+		}
 
 		return company;
 
@@ -457,18 +509,19 @@ public class GrabServiceImpl extends BasicGrabService {
 			ResponseVo responseVo = ResponseVo.newFailMessage("这个公司已经采集，编号是：" + existedCompanyInDb.getId());
 			return responseVo;
 		}
-		FeCompanyURL dbUrl = feCompanyURLRepository.findByCompanyId(resourceId);
+		BaseCompanyURL dbUrl = feCompanyURLRepository.findByCompanyId(resourceId);
 
 		// save new url to db
 		if (null == dbUrl) {
-			FeCompanyURL newUrlToSave = new FeCompanyURL();
+			BaseCompanyURL newUrlToSave = new BaseCompanyURL();
 
 			newUrlToSave.setCompanyId(resourceId);
 			newUrlToSave.setUrl(url);
 			newUrlToSave.setCreateDate(XinXinUtils.getNow());
 			newUrlToSave.setComments("MANUALLY_SAVED");
 
-			dbUrl = feCompanyURLRepository.saveAndFlush(newUrlToSave);
+			dbUrl = commonSaveUrl(newUrlToSave);
+			
 		}
 
 		// grab it
@@ -510,4 +563,88 @@ public class GrabServiceImpl extends BasicGrabService {
 		return ResponseVo.newSuccessMessage(null);
 	}
 
+	@Override
+	public ResponseVo grabSingleGJCompanyByUrlId(Integer urlId) {
+
+		return super.grabSingleGJCompanyByUrlId(urlId);
+	}
+
+	@Override
+	public ResponseVo grabSingleGJCompanyByUrl(GanjiCompanyURL ganjiCompanyURL) {
+
+		Company company = compositeBasicCompanyInfo(ganjiCompanyURL);
+
+		ResponseVo response = null;
+
+		HtmlParserUtilForGanJi.getInstance().findCompanyDetails(company);
+
+		handleLocation(company);
+		
+		try {
+
+			response = saveCompanyToDb(company, ResourceTypeEnum.Ganji.getId(), ganjiCompanyURL);
+
+		} catch (org.springframework.orm.jpa.JpaSystemException tmdException) {
+			System.out.println(tmdException.getMessage());
+		}
+
+		try {
+			Thread.sleep(700);
+		} catch (InterruptedException e) {
+
+		}
+
+		return response;
+	
+	}
+
+	@Override
+	public ResponseVo grabSingleGJCompanyByUrl(String url) {
+
+		// remove parameters
+		HttpURI gjhHttpURI = new HttpURI(url);
+
+		String resourceId = gjhHttpURI.getPath().replace("/", "").replace("gongsi", "");
+
+		if (StringUtils.isBlank(resourceId)) {
+			ResponseVo responseVo = ResponseVo.newFailMessage("请求数据错误");
+			return responseVo;
+		}
+
+		Company existedCompanyInDb = companyRepository.findByGanjiresourceId(resourceId);
+		
+		if (existedCompanyInDb != null) {
+			ResponseVo responseVo = ResponseVo.newFailMessage("这个公司已经采集，编号是：" + existedCompanyInDb.getId());
+			return responseVo;
+		}
+		GanjiCompanyURL dbUrl = ganjiCompanyURLRepository.findByCompanyId(resourceId);
+
+		// save new url to db
+		if (null == dbUrl) {
+			GanjiCompanyURL newUrlToSave = GanjiCompanyURL.create();
+
+			newUrlToSave.setCompanyId(resourceId);
+			newUrlToSave.setUrl(url);
+			newUrlToSave.setCreateDate(XinXinUtils.getNow());
+			newUrlToSave.setComments("MANUALLY_SAVED");
+
+			dbUrl = ganjiCompanyURLRepository.saveAndFlush(newUrlToSave);
+		}
+
+		// grab it
+		ResponseVo response = grabSingleGJCompanyByUrl(dbUrl);
+
+		if (null != response && null != response.getObject() && response.getObject() instanceof Company) {
+			return response;
+		} else {
+
+			// clear data
+			ResponseVo responseVo = ResponseVo.newFailMessage(response.getMessage());
+
+			return responseVo;
+		}
+	
+	}
+
+	
 }

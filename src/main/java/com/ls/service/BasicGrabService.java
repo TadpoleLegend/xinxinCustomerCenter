@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ls.entity.Company;
 import com.ls.entity.FeCompanyURL;
+import com.ls.entity.GanjiCompanyURL;
 import com.ls.exception.UrlAlreadySavedException;
 import com.ls.vo.GrabStatistic;
 import com.ls.vo.ResponseVo;
@@ -48,7 +49,7 @@ public class BasicGrabService implements GrabService {
 		return null;
 	}
 
-	public ResponseVo mergeCompanyData(Company company, String recourceType, FeCompanyURL feCompanyURL) {
+	public ResponseVo saveCompanyToDb(Company company, String recourceType, FeCompanyURL feCompanyURL) {
 
 		// TODO Auto-generated method stub
 		return null;
@@ -79,6 +80,24 @@ public class BasicGrabService implements GrabService {
 	}
 
 	public ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ResponseVo grabSingleGJCompanyByUrlId(Integer urlId) {
+
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ResponseVo grabSingleGJCompanyByUrl(GanjiCompanyURL ganjiCompanyURL) {
+
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ResponseVo grabSingleGJCompanyByUrl(String url) {
+
 		// TODO Auto-generated method stub
 		return null;
 	}
