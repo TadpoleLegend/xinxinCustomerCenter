@@ -16,6 +16,7 @@ import com.ls.constants.XinXinConstants;
 import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.Dictionary;
+import com.ls.entity.JobScheduleConfiguration;
 import com.ls.entity.Menu;
 import com.ls.entity.Phase;
 import com.ls.entity.ProblemCategory;
@@ -27,6 +28,7 @@ import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.CityRepository;
 import com.ls.repository.CompanyRepository;
 import com.ls.repository.DropDownRepository;
+import com.ls.repository.JobScheduleConfigurationRepository;
 import com.ls.repository.MenuRepository;
 import com.ls.repository.PhaseRepository;
 import com.ls.repository.ProblemCategoryRepository;
@@ -78,6 +80,33 @@ public class TestInitializationScripts {
 	
 	@Autowired
 	private MenuRepository menuRepository;
+	
+	@Autowired
+	private JobScheduleConfigurationRepository jobScheduleConfigurationRepository;
+	
+	@Test
+	public void testInitialConfiguration() {
+		
+		JobScheduleConfiguration jobScheduleConfiguration = new JobScheduleConfiguration();
+		
+		jobScheduleConfiguration.setFeUrlStartHour(20);
+		jobScheduleConfiguration.setFeUrlStartMinute(10);
+		jobScheduleConfiguration.setGjUrlStartHour(20);
+		jobScheduleConfiguration.setGjUrlStartMinute(20);
+		jobScheduleConfiguration.setOteUrlStartHour(20);
+		jobScheduleConfiguration.setOteUrlStartMinute(30);
+		
+		
+		jobScheduleConfiguration.setFeStartHour(2);
+		jobScheduleConfiguration.setFeStartMinute(2);
+		jobScheduleConfiguration.setGjStartHour(2);
+		jobScheduleConfiguration.setGjStartMinute(2);
+		jobScheduleConfiguration.setOteStartHour(2);
+		jobScheduleConfiguration.setOteStartMinute(2);
+		
+		jobScheduleConfigurationRepository.save(jobScheduleConfiguration);
+		
+	}
 	
 	@Test
 	public void testInitialMenus() {

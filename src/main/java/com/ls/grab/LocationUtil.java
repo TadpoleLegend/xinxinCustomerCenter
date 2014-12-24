@@ -180,7 +180,7 @@ public class LocationUtil {
 	}
 	
 	
-	public static Map<String,Map<String,String>> find138Cities() {
+	public static Map<String, Map<String, String>> find138Cities() {
 		final Map<String,Map<String,String>> province = new HashMap<String,Map<String,String>>();
 		try {
 			String detailPageHtml = getHTML(file138);

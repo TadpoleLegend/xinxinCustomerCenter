@@ -3,10 +3,10 @@ package com.ls.service;
 import java.util.Date;
 import java.util.List;
 
+import com.ls.entity.BaseCompanyURL;
 import com.ls.entity.Company;
 import com.ls.entity.FeCompanyURL;
 import com.ls.entity.GanjiCompanyURL;
-import com.ls.exception.UrlAlreadySavedException;
 import com.ls.vo.GrabStatistic;
 import com.ls.vo.ResponseVo;
 
@@ -49,7 +49,7 @@ public class BasicGrabService implements GrabService {
 		return null;
 	}
 
-	public ResponseVo saveCompanyToDb(Company company, String recourceType, FeCompanyURL feCompanyURL) {
+	public ResponseVo saveCompanyToDb(Company company, String recourceType, BaseCompanyURL feCompanyURL) {
 
 		// TODO Auto-generated method stub
 		return null;
@@ -100,6 +100,12 @@ public class BasicGrabService implements GrabService {
 
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void gjJobDailyWork() {
+
+		// TODO Auto-generated method stub
+		
 	}
 
 }

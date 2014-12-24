@@ -18,15 +18,15 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.JobScheduleConfiguration;
 import com.ls.jobs.XinXinJobHelper;
-import com.ls.jobs.fe.FEGrabNewPublishedCompanyURLJob;
+import com.ls.jobs.gj.GJGrabNewPublishedCompanyURLJob;
 import com.ls.repository.GrabDetailUrlLogRepository;
 import com.ls.repository.JobScheduleConfigurationRepository;
 import com.ls.service.GrabCompanyDetailPageUrlService;
 
-@Component("FEGrabNewPublishedCompanyURLJobStarter")
-public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean {
+@Component("GJGrabNewPublishedCompanyURLJobStarter")
+public class GJGrabNewPublishedCompanyURLJobStarter implements InitializingBean {
 
-	private Logger logger = LoggerFactory.getLogger(FEGrabNewPublishedCompanyURLJobStarter.class);
+	private Logger logger = LoggerFactory.getLogger(GJGrabNewPublishedCompanyURLJobStarter.class);
 
 	@Autowired
 	private GrabDetailUrlLogRepository grabDetailUrlLogRepository;
@@ -34,7 +34,7 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 	@Autowired
 	private JobScheduleConfigurationRepository jobScheduleConfigurationRepository;
 
-	@Resource(name = "FEGrabCompanyDetailPageUrlService")
+	@Resource(name = "GJGrabCompanyDetailPageUrlService")
 	private GrabCompanyDetailPageUrlService grabCompanyDetailPageUrlService;
 
 	public void afterPropertiesSet() throws Exception {
@@ -42,9 +42,10 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 		int startHour, startMinute;
 
 		List<JobScheduleConfiguration> onlyOneJobScheduleConfigurations = jobScheduleConfigurationRepository.findAll();
+
 		if (onlyOneJobScheduleConfigurations == null || onlyOneJobScheduleConfigurations.isEmpty()) {
 			startHour = 20;
-			startMinute = 10;
+			startMinute = 20;
 		} else {
 
 			JobScheduleConfiguration configuration = onlyOneJobScheduleConfigurations.get(0);
@@ -56,10 +57,10 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 
 		jobDataMap.put("grabCompanyDetailPageUrlService", grabCompanyDetailPageUrlService);
 
-		JobDetail elevenOclockJobDetail = JobBuilder.newJob(FEGrabNewPublishedCompanyURLJob.class).usingJobData(jobDataMap).withIdentity("FEGrabNewPublishedCompanyURLJob_11_00", "GRAB_URL").build();
+		JobDetail elevenOclockJobDetail = JobBuilder.newJob(GJGrabNewPublishedCompanyURLJob.class).usingJobData(jobDataMap).withIdentity("GanJi_Daily_grab_new_company_url_job", "GRAB_URL").build();
 
 		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(startHour, startMinute).build();
-		elevenOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_evening_at_eleven_clock");
+		elevenOclockTrigger.setName("GanJi_Daily_grab_new_company_url_job_trigger");
 		elevenOclockTrigger.setGroup("GRAB_URL");
 
 		Scheduler scheduler = XinXinJobHelper.getScheduler();

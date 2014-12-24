@@ -3,6 +3,7 @@ package com.ls.service;
 import java.util.Date;
 import java.util.List;
 
+import com.ls.entity.BaseCompanyURL;
 import com.ls.entity.Company;
 import com.ls.entity.FeCompanyURL;
 import com.ls.entity.GanjiCompanyURL;
@@ -23,7 +24,7 @@ public interface GrabService {
 
 	GrabStatistic grabCompanyInformationByUrl(String url, Date publishDateEnd);
 	
-	ResponseVo saveCompanyToDb(Company company,String recourceType, FeCompanyURL feCompanyURL);
+	ResponseVo saveCompanyToDb(Company company,String recourceType, BaseCompanyURL baseCompanyURL);
 	
 	ResponseVo grabSingleFECompanyByUrlId(Integer urlId);
 	
@@ -32,6 +33,7 @@ public interface GrabService {
 	ResponseVo grabSingleFECompanyByUrl(String url);
 
 	void feJobDailyWork();
+	void gjJobDailyWork();
 	
 	ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds);
 	

@@ -18,33 +18,30 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.JobScheduleConfiguration;
 import com.ls.jobs.XinXinJobHelper;
-import com.ls.jobs.fe.FEGrabNewPublishedCompanyURLJob;
-import com.ls.repository.GrabDetailUrlLogRepository;
+import com.ls.jobs.gj.GJGrabCompanyDetailDailyJob;
 import com.ls.repository.JobScheduleConfigurationRepository;
-import com.ls.service.GrabCompanyDetailPageUrlService;
+import com.ls.service.GrabService;
 
-@Component("FEGrabNewPublishedCompanyURLJobStarter")
-public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean {
+@Component("GJGrabNewPublishedCompanyJobStarter")
+public class GJGrabNewPublishedCompanyJobStarter implements InitializingBean {
 
-	private Logger logger = LoggerFactory.getLogger(FEGrabNewPublishedCompanyURLJobStarter.class);
-
-	@Autowired
-	private GrabDetailUrlLogRepository grabDetailUrlLogRepository;
+	private Logger logger = LoggerFactory.getLogger(GJGrabNewPublishedCompanyJobStarter.class);
 
 	@Autowired
 	private JobScheduleConfigurationRepository jobScheduleConfigurationRepository;
-
-	@Resource(name = "FEGrabCompanyDetailPageUrlService")
-	private GrabCompanyDetailPageUrlService grabCompanyDetailPageUrlService;
+	
+	@Resource(name = "grabService")
+	private GrabService grabService;
 
 	public void afterPropertiesSet() throws Exception {
-
+		
 		int startHour, startMinute;
 
 		List<JobScheduleConfiguration> onlyOneJobScheduleConfigurations = jobScheduleConfigurationRepository.findAll();
+
 		if (onlyOneJobScheduleConfigurations == null || onlyOneJobScheduleConfigurations.isEmpty()) {
 			startHour = 20;
-			startMinute = 10;
+			startMinute = 20;
 		} else {
 
 			JobScheduleConfiguration configuration = onlyOneJobScheduleConfigurations.get(0);
@@ -53,23 +50,23 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 		}
 
 		JobDataMap jobDataMap = new JobDataMap();
+		
+		jobDataMap.put("grabService", grabService);
 
-		jobDataMap.put("grabCompanyDetailPageUrlService", grabCompanyDetailPageUrlService);
-
-		JobDetail elevenOclockJobDetail = JobBuilder.newJob(FEGrabNewPublishedCompanyURLJob.class).usingJobData(jobDataMap).withIdentity("FEGrabNewPublishedCompanyURLJob_11_00", "GRAB_URL").build();
-
-		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(startHour, startMinute).build();
-		elevenOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_evening_at_eleven_clock");
-		elevenOclockTrigger.setGroup("GRAB_URL");
+		JobDetail jobDetail = JobBuilder.newJob(GJGrabCompanyDetailDailyJob.class).usingJobData(jobDataMap).withIdentity("daily_grab_new_company_job", "GRAB_Company").build();
+		
+		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(startHour, startMinute).build();
+		grabCompanyTrigger.setName("daily_grab_new_company_job_trigger");
+		grabCompanyTrigger.setGroup("GRAB_Company");
 
 		Scheduler scheduler = XinXinJobHelper.getScheduler();
 		if (null == scheduler) {
 			logger.error("schedular null. ");
 			return;
 		} else {
-			scheduler.scheduleJob(elevenOclockJobDetail, elevenOclockTrigger);
+			scheduler.scheduleJob(jobDetail, grabCompanyTrigger);
 		}
 
 	}
-
+	
 }

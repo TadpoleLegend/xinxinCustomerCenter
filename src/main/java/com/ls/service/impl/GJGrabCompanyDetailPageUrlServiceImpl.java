@@ -1,5 +1,6 @@
 package com.ls.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,12 +19,15 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.ls.entity.CityURL;
 import com.ls.entity.GanjiCompanyURL;
+import com.ls.entity.GrabDetailUrlLog;
 import com.ls.enums.ResourceTypeEnum;
 import com.ls.repository.CityURLRepository;
 import com.ls.repository.FeCompanyURLRepository;
 import com.ls.repository.GanjiCompanyURLRepository;
 import com.ls.repository.GrabDetailUrlLogRepository;
 import com.ls.service.GrabCompanyDetailPageUrlService;
+import com.ls.util.DateUtils;
+import com.ls.util.XinXinUtils;
 import com.ls.vo.ResponseVo;
 
 @Service("GJGrabCompanyDetailPageUrlService")
@@ -101,13 +105,16 @@ public class GJGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 		while (true) {
 			
 			try {
-				String baseMeirongshiUrl = cityURL.getBaseUrl() + currentPageIndex;
+				String baseMeirongshiUrl = cityURL.getBaseUrl();
 				
 				restAlittleWhile(1100);
 				
 				if (StringUtils.isNotBlank(postdate)) {
 					baseMeirongshiUrl += "u1";
 				}
+				
+				baseMeirongshiUrl = (baseMeirongshiUrl + "o" + currentPageIndex);
+				
 				final HtmlPage customerListPage = webClient.getPage(baseMeirongshiUrl);
 
 				String listHtml = customerListPage.getWebResponse().getContentAsString();
@@ -178,8 +185,32 @@ public class GJGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 		
 	}
 	public void grabTwoDaysRecently() {
-		// TODO Auto-generated method stub
 
+		GrabDetailUrlLog grabDetailUrlLog = new GrabDetailUrlLog();
+		try {
+
+			grabDetailUrlLog.setQueryParameter("recent three days");
+			grabDetailUrlLog.setStartDate(XinXinUtils.getNow());
+
+			ResponseVo response = this.grabUrl("o2");
+
+			grabDetailUrlLog.setCreateDate(XinXinUtils.getNow());
+
+			grabDetailUrlLog.setMessage(response.toString());
+
+			logger.info(response.toString());
+			grabDetailUrlLog.setStatus("success");
+			grabDetailUrlLog.setType("ganji");
+
+		} catch (Exception e) {
+
+			grabDetailUrlLog.setStatus("fail");
+			grabDetailUrlLog.setMessage(e.getMessage());
+			grabDetailUrlLog.setCreateDate(XinXinUtils.getNow());
+		}
+
+		grabDetailUrlLogRepository.save(grabDetailUrlLog);
+	
 	}
 
 }
