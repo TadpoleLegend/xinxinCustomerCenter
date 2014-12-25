@@ -145,29 +145,29 @@ public class TestInitializationScripts {
 
 	}
 	
-	/**
-	 * init company data
-	 * 
-	 * star : 0
-	 * status : no willing 
-	 * istracked : false
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void testInitialCompanyStatus() throws Exception {
-
-		List<Company> companies = companyRepository.findAll();
-		for (Company company : companies) {
-			company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
-			company.setIsTracked(false);
-			company.setStar(0);
-			
-			companyRepository.save(company);
-		}
-		
-	}
-	
+//	/**
+//	 * init company data
+//	 * 
+//	 * star : 0
+//	 * status : no willing 
+//	 * istracked : false
+//	 * 
+//	 * @throws Exception
+//	 */
+//	@Test
+//	public void testInitialCompanyStatus() throws Exception {
+//
+//		List<Company> companies = companyRepository.findAll();
+//		for (Company company : companies) {
+//			company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
+//			company.setIsTracked(false);
+//			company.setStar(0);
+//			
+//			companyRepository.save(company);
+//		}
+//		
+//	}
+//	
 	@Test
 	public void testInitialPhase() throws Exception {
 		

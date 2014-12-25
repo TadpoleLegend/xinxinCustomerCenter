@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.ls.entity.City;
 import com.ls.entity.Company;
 import com.ls.entity.FeCompanyURL;
@@ -141,9 +142,9 @@ public class GrabAction extends BaseAction {
 				userCityIds.add(Integer.valueOf(cityId));
 			}
 
-			if (datasourceType.equals("58")) {
-				grabService.grabCompanyDetailInCityList(userCityIds);
-			}
+			
+			grabService.grabCompanyDetailInCityList(userCityIds, datasourceType);
+			
 		}
 
 		setResponse(ResponseVo.newSuccessMessage(null));
@@ -239,8 +240,9 @@ public class GrabAction extends BaseAction {
 					userCityIds.add(Integer.valueOf(cityId));
 				}
 			}
-
-			ganjiCompanyURLs = ganjiCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
+			//List<String> queryUrlDatasourceExcludeList = ImmutableList.of("SB_SAVED_SUCCESS", "NON_SB_RETRY_SUCCESS");
+			
+			ganjiCompanyURLs = ganjiCompanyURLRepository.findByCityIdInAndSavedCompanyIsNullAndStatusIsNullOrderByIdDesc(userCityIds);
 
 		} catch (Exception e) {
 			ganjiCompanyURLs = new ArrayList<GanjiCompanyURL>();

@@ -79,7 +79,7 @@ public class BasicGrabService implements GrabService {
 		return null;
 	}
 
-	public ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds) {
+	public ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds, String datasourceType) {
 		// TODO Auto-generated method stub
 		return null;
 	}

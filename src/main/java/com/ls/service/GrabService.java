@@ -35,7 +35,7 @@ public interface GrabService {
 	void feJobDailyWork();
 	void gjJobDailyWork();
 	
-	ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds);
+	ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds, String datasourceType);
 	
 	ResponseVo grabSingleGJCompanyByUrlId(Integer urlId);
 	
