@@ -94,4 +94,10 @@ public class TestGrabGanji {
 		
 		grabCompanyDetailPageUrlService.grabUrl(null);
 	}
+	
+	@Test
+	public void testGrabAll() {
+		
+		grabService.gjJobDailyWork();
+	}
 }
