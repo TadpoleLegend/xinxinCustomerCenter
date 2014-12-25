@@ -221,6 +221,7 @@ public class GrabServiceImpl extends BasicGrabService {
 			} else {
 				baseCompanyURL.setStatus("NON_SB_RETRY_SUCCESS");
 				baseCompanyURL.setHasGet(true);
+				baseCompanyURL.setCompanyId("" + savedCompany.getId());
 				responseVo = ResponseVo.newSuccessMessage("retry to save company successfully.");
 			}
 		} else {
@@ -305,6 +306,8 @@ public class GrabServiceImpl extends BasicGrabService {
 
 					baseCompanyURL.setSavedCompany(resultCompany.getId().toString());
 					baseCompanyURL.setComments("duplicate url");
+					baseCompanyURL.setStatus("DUPLICATE_URL");
+					
 					commonSaveUrl(baseCompanyURL);
 
 				}
@@ -660,26 +663,63 @@ public class GrabServiceImpl extends BasicGrabService {
 	}
 
 	@Override
-	public ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds) {
+	public ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds, String datasourceType) {
+		
+		if (StringUtils.isEmpty(datasourceType)) {
+			
+			return ResponseVo.newFailMessage("Unknown Data Source Type.");
+		}
+		
+		
+		//58
+		if (datasourceType.equals("58")) {
+			
+			for (Integer cityId : userCityIds) {
 
-		for (Integer cityId : userCityIds) {
+				List<FeCompanyURL> feCompaniesInCity = feCompanyURLRepository.findByCityId(cityId);
 
-			List<FeCompanyURL> feCompaniesInCity = feCompanyURLRepository.findByCityId(cityId);
+				for (FeCompanyURL feCompanyURL : feCompaniesInCity) {
+					String savedCompanyId = feCompanyURL.getSavedCompany();
+					if (StringUtils.isEmpty(savedCompanyId) && !feCompanyURL.getHasGet()) {
 
-			for (FeCompanyURL feCompanyURL : feCompaniesInCity) {
-				String savedCompanyId = feCompanyURL.getSavedCompany();
-				if (StringUtils.isEmpty(savedCompanyId) && !feCompanyURL.getHasGet()) {
+						grabSingleFECompanyByUrl(feCompanyURL);
 
-					grabSingleFECompanyByUrl(feCompanyURL);
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+						}
 
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
 					}
-
 				}
 			}
+			
+		//ganji	
+		} else if ( datasourceType.equals("gj")) {
+			
+			
+			for (Integer cityId : userCityIds) {
+
+				List<GanjiCompanyURL> ganjiCompaniesInCity = ganjiCompanyURLRepository.findByCityId(cityId);
+
+				for (GanjiCompanyURL ganjiCompanyURL : ganjiCompaniesInCity) {
+					
+					String savedCompanyId = ganjiCompanyURL.getSavedCompany();
+					if (StringUtils.isEmpty(savedCompanyId) && !ganjiCompanyURL.getHasGet()) {
+
+						grabSingleGJCompanyByUrl(ganjiCompanyURL);
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+						}
+
+					}
+				}
+			}
+		
+			
 		}
+
+		
 
 		return ResponseVo.newSuccessMessage(null);
 	}

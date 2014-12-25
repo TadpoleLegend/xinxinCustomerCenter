@@ -153,13 +153,12 @@
 				
 				self.searchUrlResources = function(type, item, event ) {
 					
-					
 					var url = '';
 					if (type == '58') {
 						url = "load58PreviewList.ls";
 					} else if (type == '138') {
 						url = "load138PreviewList.ls";
-					} else if (type =='ganji') {
+					} else if (type =='gj') {
 						url = "loadGanjiPreviewList.ls";
 					} else {
 						fail('²Ù×÷´íÎó');
