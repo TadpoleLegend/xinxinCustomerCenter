@@ -145,9 +145,9 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 	public void findCompanyDetails(Company company) {
 
 		try {
-			String testURL = company.getGanjiUrl();
+			String detailUrl = company.getGanjiUrl();
 			
-			HtmlPage mainPage = webClient.getPage(testURL);
+			HtmlPage mainPage = webClient.getPage(detailUrl);
 			
 			String htmlDetail = mainPage.getWebResponse().getContentAsString();
 			
