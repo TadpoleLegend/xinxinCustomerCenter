@@ -14,6 +14,7 @@ import org.quartz.JobDataMap;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.base.Splitter;
 import com.ls.constants.XinXinConstants;
 import com.ls.entity.Company;
@@ -199,4 +200,28 @@ public class XinXinUtils {
 		return "";
 	}
 
+	public static String getOteResourceIdFromUrl(String href) {
+
+		int resourceIdStart = href.indexOf("_");
+		int resourceIdEnd = href.indexOf(".shtml");
+
+		String resourceId = href.substring(resourceIdStart + 1, resourceIdEnd);
+
+		return resourceId;
+	}
+
+	public static Object getFirstElementByXPath(HtmlPage htmlPage, String xPath) {
+
+		try {
+			List<?> nodes = htmlPage.getByXPath(xPath);
+			if (null != nodes && !nodes.isEmpty()) {
+
+				return nodes.get(0);
+			}
+		} catch (Exception e) {
+
+		}
+
+		return null;
+	}
 }

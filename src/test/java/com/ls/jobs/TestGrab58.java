@@ -87,7 +87,8 @@ public class TestGrab58 {
 
 		try {
 
-			grabService.grabSingleFECompanyByUrlId(7);
+			ResponseVo responseVo = grabService.grabSingleFECompanyByUrlId(7);
+			System.out.println(responseVo);
 
 		} catch (Exception e) {
 			e.printStackTrace();
