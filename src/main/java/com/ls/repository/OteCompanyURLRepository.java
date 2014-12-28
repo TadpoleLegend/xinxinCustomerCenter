@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ls.entity.GanjiCompanyURL;
 import com.ls.entity.OteCompanyURL;
 
 public interface OteCompanyURLRepository extends JpaRepository<OteCompanyURL, Integer> , JpaSpecificationExecutor<OteCompanyURL>{
@@ -19,4 +18,6 @@ public interface OteCompanyURLRepository extends JpaRepository<OteCompanyURL, In
 	List<OteCompanyURL> findByCityId(@Param("cityId") Integer cityId);
 
 	OteCompanyURL findByCompanyId(String resourceId);
+
+	List<OteCompanyURL> findByCityIdInAndSavedCompanyIsNullAndStatusIsNullOrderByIdDesc(List<Integer> userCityIds);
 }

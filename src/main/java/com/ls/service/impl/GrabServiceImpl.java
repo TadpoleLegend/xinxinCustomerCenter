@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomText;
 import com.gargoylesoftware.htmlunit.html.HtmlHeading1;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.ImmutableList;
@@ -34,7 +35,9 @@ import com.ls.entity.GanjiCompanyURL;
 import com.ls.entity.GrabCompanyDetailLog;
 import com.ls.entity.NegativeCompany;
 import com.ls.entity.OteCompanyURL;
+import com.ls.entity.Province;
 import com.ls.enums.ResourceTypeEnum;
+import com.ls.grab.HtmlParserUtilFor138;
 import com.ls.grab.HtmlParserUtilFor58;
 import com.ls.grab.HtmlParserUtilForGanJi;
 import com.ls.repository.CityRepository;
@@ -46,6 +49,7 @@ import com.ls.repository.GanjiCompanyURLRepository;
 import com.ls.repository.GrabCompanyDetailLogRepository;
 import com.ls.repository.NegativeCompanyRepository;
 import com.ls.repository.OteCompanyURLRepository;
+import com.ls.repository.ProvinceRepository;
 import com.ls.service.BasicGrabService;
 
 import static com.ls.util.XinXinUtils.*;
@@ -84,7 +88,10 @@ public class GrabServiceImpl extends BasicGrabService {
 
 	@Autowired
 	private OteCompanyURLRepository oteCompanyURLRepository;
-
+	
+	@Autowired
+	private ProvinceRepository provinceRepository;
+	
 	public List<String> findFeCityURLs() {
 
 		List<String> list = ImmutableList.of("http://su.58.com/", "http://nj.58.com/");
@@ -584,7 +591,6 @@ public class GrabServiceImpl extends BasicGrabService {
 				Predicate predicate = criteriaBuilder.conjunction();
 
 				predicate.getExpressions().add(criteriaBuilder.isNull(root.get("savedCompany")));
-				// predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Date> get("createDate"), new Date()));
 
 				return predicate;
 			}
@@ -599,9 +605,9 @@ public class GrabServiceImpl extends BasicGrabService {
 			public Predicate toPredicate(Root<GanjiCompanyURL> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
 				Predicate predicate = criteriaBuilder.conjunction();
-
+				
+				//URL表中没有已保存的公司ID表示： 1，新的数据。 2，抓取失败的数据。 3，重要数据缺失的公司
 				predicate.getExpressions().add(criteriaBuilder.isNull(root.get("savedCompany")));
-
 				return predicate;
 			}
 
@@ -845,23 +851,13 @@ public class GrabServiceImpl extends BasicGrabService {
 		try {
 
 			getOTECompanyDetails(company, company.getOteUrl());
-
-			handleLocation(company);
-
+			
 			response = saveCompanyToDb(company, ResourceTypeEnum.OneThreeEight.getId(), oteCompanyURL);
 
 		} catch (org.springframework.orm.jpa.JpaSystemException tmdException) {
 			System.out.println(tmdException.getMessage());
-
-		} catch (FailingHttpStatusCodeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("fails -->" + e.getMessage() + " FOR --> " + oteCompanyURL.toString());
 		}
 
 		try {
@@ -874,24 +870,55 @@ public class GrabServiceImpl extends BasicGrabService {
 	}
 
 	public void getOTECompanyDetails(Company company, String url) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
-
-		final WebClient webClient = new WebClient(BrowserVersion.CHROME);
-		webClient.getOptions().setJavaScriptEnabled(false);
-		webClient.getOptions().setCssEnabled(false);
-		webClient.getOptions().setThrowExceptionOnScriptError(false);
-
-		HtmlPage detailPage = webClient.getPage(url);
-
-		String companyNameXPath = "/html/body/div[5]/div[2]/div[2]/h1";
-		String employeeCountXPath = "/html/body/div[5]/div[2]/div[3]/p[1]/strong[4]";
-		String descriptionXPath = "/html/body/div[8]/div[2]/div[1]/text()[1]";
-		String phoneSrcXPath = "//*[@id=\"tel_2\"]/img";
-		String contactorXPath = "//*[@id=\"contact\"]/table/tbody/tr[2]/td[2]";
-		String addressXPath = "//*[@id=\"contact\"]/table/tbody/tr[4]/td[2]/text()";
-
-		HtmlHeading1 nameElement = (HtmlHeading1) getFirstElementByXPath(detailPage, companyNameXPath);
-		String description = (String) getFirstElementByXPath(detailPage, descriptionXPath);
-
+		
+		HtmlParserUtilFor138.getInstance().findCompanyDetails(company);
+		
+		// city id, province id completion, in manually grab, the city id is retrieved from detail page
+		if (company.getCityId() == null && StringUtils.isNotBlank(company.getArea())) {
+			
+			String area = company.getArea();
+			Province companyProvince = null;
+			
+			List<Province> allProvinces = provinceRepository.findAll();
+			for (Province singleProvince : allProvinces) {
+				
+				if (area.startsWith(singleProvince.getName())) {
+					companyProvince = singleProvince;
+					break;
+				}
+			}
+			
+			if (companyProvince != null) {
+				
+				company.setProvinceId(companyProvince.getId());
+				
+				City municipalityCity = checkMunicipality(companyProvince.getName());
+				
+				if (municipalityCity == null) {
+					
+					String cityName = area.substring(companyProvince.getName().length());
+					City city = cityRepository.findByName(cityName);
+					
+					if (city != null) {
+						company.setCityId(city.getId());
+					} else {
+						throw new RuntimeException("No matched city");
+					}
+					
+				} else {
+					
+					company.setCityId(municipalityCity.getId());
+				}
+				
+			} else {
+				throw new RuntimeException("No matched city");
+			}
+		}
+	}
+	
+	private City checkMunicipality(String provinceName) {
+		
+		return cityRepository.findByName(provinceName);
 	}
 
 }

@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
-import org.quartz.JobDataMap;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 
@@ -223,5 +223,12 @@ public class XinXinUtils {
 		}
 
 		return null;
+	}
+	
+	public static void main(String[] args) {
+		String tt = "[\"2100.00\",104,0,0]";
+		JSONArray array = JSONArray.fromObject(tt);
+		
+		System.out.println(array.getInt(1));
 	}
 }

@@ -59,7 +59,7 @@ public class GJGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 
 		JobDetail elevenOclockJobDetail = JobBuilder.newJob(GJGrabNewPublishedCompanyURLJob.class).usingJobData(jobDataMap).withIdentity("GanJi_Daily_grab_new_company_url_job", "GRAB_URL").build();
 
-		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(startHour, startMinute).build();
+		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(18, 13).build();
 		elevenOclockTrigger.setName("GanJi_Daily_grab_new_company_url_job_trigger");
 		elevenOclockTrigger.setGroup("GRAB_URL");
 

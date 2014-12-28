@@ -176,7 +176,7 @@ public class GrabAction extends BaseAction {
 				}
 			}
 
-			oteCompanyURLs = oteCompanyURLRepository.findTop20ByCityIdInOrderByIdAsc(userCityIds);
+			oteCompanyURLs = oteCompanyURLRepository.findByCityIdInAndSavedCompanyIsNullAndStatusIsNullOrderByIdDesc(userCityIds);
 
 		} catch (Exception e) {
 			oteCompanyURLs = new ArrayList<OteCompanyURL>();
@@ -209,7 +209,7 @@ public class GrabAction extends BaseAction {
 				}
 			}
 			PageRequest pageRequest = new PageRequest(0, 500);
-			feCompanyURLs = feCompanyURLRepository.findByCityIdInAndSavedCompanyIsNullOrderByIdDesc(userCityIds, pageRequest);
+			feCompanyURLs = feCompanyURLRepository.findByCityIdInAndSavedCompanyIsNullAndStatusIsNullOrderByIdDesc(userCityIds, pageRequest);
 
 		} catch (Exception e) {
 			feCompanyURLs = new ArrayList<FeCompanyURL>();
@@ -267,6 +267,14 @@ public class GrabAction extends BaseAction {
 			ResponseVo responseVo = grabService.grabSingleGJCompanyByUrl(targetDetailUrl);
 
 			setResponse(responseVo);
+		} else if (targetDetailUrl.contains("138job.com")) {
+			
+			ResponseVo responseVo = grabService.grabSingleOTECompanyByUrl(targetDetailUrl);
+
+			setResponse(responseVo);
+			
+		} else {
+			setResponse(ResponseVo.newFailMessage("目前只支持 58同城，赶集网和138美容网的数据采集。"));
 		}
 
 		return SUCCESS;

@@ -64,12 +64,6 @@ public class OTEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetail
 
 		}
 		
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			logger.error("Sleeping failed " + e.getMessage());
-		}
-
 		return ResponseVo.newSuccessMessage("Totally grabed ");
 	}
 
@@ -120,10 +114,6 @@ public class OTEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetail
 				}
 				
 				final HtmlPage customerListPage = webClient.getPage(pageUrl);
-				
-				if (noMoreResults(customerListPage.getWebResponse().getContentAsString())) {
-					break;
-				}
 
 				int startCompanyIndex = 2, endCompanyIndex = 17;
 				for (; startCompanyIndex < endCompanyIndex; startCompanyIndex ++) {
@@ -159,17 +149,24 @@ public class OTEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetail
 							}
 						}
 					} catch (Exception e) {
+						e.printStackTrace();
+						
 						logger.error("grab url fail with url " + pageUrl + e.getMessage());
 					} 
 				}
 				
+				if (noMoreResults(customerListPage.getWebResponse().getContentAsString())) {
+					break;
+				}
 				currentPageIndex++;
 				
 				// safe quite for avoid deap loop errors
 				if (currentPageIndex > 1300) {
 					break;
 				}
-
+				
+				Thread.sleep(1000);
+				
 			} catch (Exception e) {
 				logger.error("Grab URL failed by " + e.getMessage());
 			}

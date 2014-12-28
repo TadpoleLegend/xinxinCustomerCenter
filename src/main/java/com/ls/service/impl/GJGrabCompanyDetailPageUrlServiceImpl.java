@@ -1,11 +1,11 @@
 package com.ls.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.http.HttpURI;
 import org.htmlparser.Parser;
+import org.htmlparser.visitors.LinkFindingVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.ls.entity.CityURL;
 import com.ls.entity.GanjiCompanyURL;
 import com.ls.entity.GrabDetailUrlLog;
@@ -26,7 +25,6 @@ import com.ls.repository.FeCompanyURLRepository;
 import com.ls.repository.GanjiCompanyURLRepository;
 import com.ls.repository.GrabDetailUrlLogRepository;
 import com.ls.service.GrabCompanyDetailPageUrlService;
-import com.ls.util.DateUtils;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.ResponseVo;
 
@@ -118,7 +116,8 @@ public class GJGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 				final HtmlPage customerListPage = webClient.getPage(baseMeirongshiUrl);
 
 				String listHtml = customerListPage.getWebResponse().getContentAsString();
-
+				htmlParser.setInputHTML(listHtml);
+				
 				if (listHtml.contains("请输入验证码继续访问")) {
 					logger.error("Grab URL failed by ip blocked.");
 					break;
@@ -151,6 +150,12 @@ public class GJGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 									ganjiCompanyURL.setCompanyId(resourceId);
 									
 									ganjiCompanyURLRepository.saveAndFlush(ganjiCompanyURL);
+									
+									System.out.println("City " + cityURL.getCity().getName() + ", page " + currentPageIndex + "added -- > " + ganjiCompanyURL.toString());
+								} else {
+									
+									System.out.println("City " + cityURL.getCity().getName() + ", page " + currentPageIndex + "skipped existed -- >" + existedCompanyURL.toString());
+								
 								}
 								
 								
@@ -161,15 +166,13 @@ public class GJGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetailP
 					} 
 				}
 				
-				String nextPageButtonXPath = "//*[@id=\"list-job-id\"]/div[15]/ul/li[11]/a/span";
-				try {
-					List<?> nextpageButton = customerListPage.getByXPath(nextPageButtonXPath);
-					if (null == nextpageButton || nextpageButton.isEmpty()) {
-						break;
-					} 
-				} catch (Exception e) {
-					
-				} 
+				LinkFindingVisitor nextButtonFindingVisitor = new LinkFindingVisitor("下一页");
+				
+				htmlParser.visitAllNodesWith(nextButtonFindingVisitor);
+				
+				if (!nextButtonFindingVisitor.linkTextFound()) {
+					break;
+				}
 				
 				currentPageIndex++;
 				

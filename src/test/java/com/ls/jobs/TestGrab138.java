@@ -50,7 +50,7 @@ public class TestGrab138 {
 	@Test
 	public void testGrabSinglePage() throws Exception {
 		
-		String testUrl = "http://www.138job.com/shtml/Company/08705/C_87347.shtml";
+		String testUrl = "http://www.138job.com/shtml/Company/18006/C_810501.shtml";
 		grabService.grabSingleOTECompanyByUrl(testUrl);
 	}
 	
@@ -58,6 +58,9 @@ public class TestGrab138 {
 	public void testGrabSingleDetailedPage() throws Exception {
 		
 		String testUrl = "http://www.138job.com/shtml/Company/08705/C_87347.shtml";
-		grabService.getOTECompanyDetails(new Company(), testUrl);
+		Company company = new Company();
+		company.setOteUrl(testUrl);
+		
+		grabService.getOTECompanyDetails(company, testUrl);
 	}
 }

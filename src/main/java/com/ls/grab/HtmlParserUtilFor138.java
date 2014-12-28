@@ -1,5 +1,7 @@
 package com.ls.grab;
 
+import static com.ls.util.XinXinUtils.getFirstElementByXPath;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
@@ -29,7 +31,9 @@ import org.htmlparser.visitors.NodeVisitor;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomText;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlHeading1;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -40,28 +44,32 @@ import com.ls.util.XinXinUtils;
 
 public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
-	
-	private static  HtmlParserUtilFor138 htmlParserUtilFor138;
-	private HtmlParserUtilFor138(){}
+	private static HtmlParserUtilFor138 htmlParserUtilFor138;
+
+	private HtmlParserUtilFor138() {
+	}
+
 	private static String address = "http://www.138job.com/AjaxMethods/AjaxLoadContacts.aspx?action=companycontacts&hideEmailTxt=1&comId=";
-	
+
 	private static final WebClient webClient;
-	static{
+	static {
 		webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
 		webClient.getOptions().setCssEnabled(false);
-		login138();
+		webClient.getOptions().setThrowExceptionOnScriptError(false);
+		
+	//	login138();
 	}
-	
-	public static HtmlParserUtilFor138 getInstance(){
-		if(htmlParserUtilFor138 == null){
+
+	public static HtmlParserUtilFor138 getInstance() {
+		if (htmlParserUtilFor138 == null) {
 			return new HtmlParserUtilFor138();
-		}else{
+		} else {
 			return htmlParserUtilFor138;
 		}
 	}
-	
-	public static void login138(){
+
+	public static void login138() {
 		try {
 			String url = "http://cas.138mr.com/login";
 
@@ -88,17 +96,17 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			// Change the value of the text field
 			textField.setValueAttribute("liu_online@163.com");
 			passwordField.setValueAttribute("789321");
-			
+
 			// click login button
 			loginButton.click();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 	public static SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 	public static String todayStr = sf.format(Calendar.getInstance().getTime());
-	
-	
+
 	public List<OteCompanyURL> findPagedCompanyList(String url) {
 
 		final List<OteCompanyURL> companyList = new ArrayList<OteCompanyURL>();
@@ -116,7 +124,7 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 					if (TagFinderUtil.findCompanyFor138(tag)) {
 						Span span = (Span) tag;
-						LinkTag lt = (LinkTag)span.getChild(0);
+						LinkTag lt = (LinkTag) span.getChild(0);
 						OteCompanyURL company = new OteCompanyURL();
 						company.setName(StringUtils.trimToEmpty(lt.getStringText()));
 						company.setUrl(lt.getAttribute("href"));
@@ -125,15 +133,15 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 						for (int i = 0; i < nodes.length; i++) {
 							Node node = nodes[i];
 							if (node instanceof Span) {
-								
+
 								Span nodeTranslated = (Span) node;
 								String className = nodeTranslated.getAttribute("class");
-								if (className!= null && className.equals("d")) {
+								if (className != null && className.equals("d")) {
 									company.setPublishDate(nodeTranslated.getStringText());
 									break;
 								}
 							}
-							
+
 						}
 						Node grandP = span.getParent().getParent();
 						Node[] grandnodes = grandP.getChildren().toNodeArray();
@@ -143,28 +151,28 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 							if (grandN instanceof Div) {
 								Div nodeTranslated = (Div) grandN;
 								String className = nodeTranslated.getAttribute("class");
-								if (className!= null && className.equals("job_gk")) {
-									Node [] nodeTranslatedChilds  = nodeTranslated.getChildrenAsNodeArray();
-									for(int j=0;j<nodeTranslatedChilds.length;j++){
-										if(nodeTranslatedChilds[j] instanceof Div){
+								if (className != null && className.equals("job_gk")) {
+									Node[] nodeTranslatedChilds = nodeTranslated.getChildrenAsNodeArray();
+									for (int j = 0; j < nodeTranslatedChilds.length; j++) {
+										if (nodeTranslatedChilds[j] instanceof Div) {
 											boolean nodeTranslatedChildsFlag = false;
-											Div areaDiv = (Div)nodeTranslatedChilds[j];
-											if("job_area".equals(areaDiv.getAttribute("class"))){
-												Node areaNodes [] =  areaDiv.getChildrenAsNodeArray();
-												for(Node nd:areaNodes){
-													boolean areaNodeFlag =false;
-													if(nd instanceof Span){
-														Span areaSpan = (Span)nd;
-														Node lastNodes [] = areaSpan.getChildrenAsNodeArray();
-														if(lastNodes!=null && lastNodes.length>0){
-															boolean flag  = false;
-															if(lastNodes[1] instanceof  TextNode){
-																TextNode df = (TextNode)lastNodes[1];
-																if(df.getText().contains("地区")){
+											Div areaDiv = (Div) nodeTranslatedChilds[j];
+											if ("job_area".equals(areaDiv.getAttribute("class"))) {
+												Node areaNodes[] = areaDiv.getChildrenAsNodeArray();
+												for (Node nd : areaNodes) {
+													boolean areaNodeFlag = false;
+													if (nd instanceof Span) {
+														Span areaSpan = (Span) nd;
+														Node lastNodes[] = areaSpan.getChildrenAsNodeArray();
+														if (lastNodes != null && lastNodes.length > 0) {
+															boolean flag = false;
+															if (lastNodes[1] instanceof TextNode) {
+																TextNode df = (TextNode) lastNodes[1];
+																if (df.getText().contains("地区")) {
 																	flag = true;
 																}
-																if(flag){
-																	TextNode tn = (TextNode)lastNodes[3];
+																if (flag) {
+																	TextNode tn = (TextNode) lastNodes[3];
 																	company.setArea(tn.getText());
 																	areaNodeFlag = true;
 																	nodeTranslatedChildsFlag = true;
@@ -174,37 +182,37 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 															}
 														}
 													}
-													if(areaNodeFlag){
+													if (areaNodeFlag) {
 														break;
 													}
 												}
 											}
-											if(nodeTranslatedChildsFlag){
+											if (nodeTranslatedChildsFlag) {
 												break;
 											}
 										}
 									}
-									
+
 								}
 							}
-							if(grandPFlag){
+							if (grandPFlag) {
 								break;
 							}
-							
+
 						}
 						String testURL = company.getUrl();
 						int index = testURL.lastIndexOf("/");
-						if(index!=-1){
-							String sub = testURL.substring(index+1);
+						if (index != -1) {
+							String sub = testURL.substring(index + 1);
 							int sIndex = sub.indexOf("shtml");
-							if(sIndex!=-1){
-								String ssub = sub.substring(0,sIndex-1);
-								String []crr = ssub.split("_");
-								if(crr!=null && crr.length==2){
+							if (sIndex != -1) {
+								String ssub = sub.substring(0, sIndex - 1);
+								String[] crr = ssub.split("_");
+								if (crr != null && crr.length == 2) {
 									company.setCompanyId(crr[1]);
 								}
 							}
-							
+
 						}
 						companyList.add(company);
 						return;
@@ -218,41 +226,75 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 			e.printStackTrace();
 		}
-		Map<String,String> map = XinXinUtils.mergeDuplicateCompanyInOnePageFor138(companyList);
-		List<OteCompanyURL> returnCompanyList = reduceDuplicateCompany(companyList,map);
+		Map<String, String> map = XinXinUtils.mergeDuplicateCompanyInOnePageFor138(companyList);
+		List<OteCompanyURL> returnCompanyList = reduceDuplicateCompany(companyList, map);
 		return returnCompanyList;
 	}
-	
-	
-	private List<OteCompanyURL> reduceDuplicateCompany( List<OteCompanyURL> companyList,Map<String,String> map){
+
+	private List<OteCompanyURL> reduceDuplicateCompany(List<OteCompanyURL> companyList, Map<String, String> map) {
 		List<OteCompanyURL> returnCompanyList = new ArrayList<OteCompanyURL>();
-		for(OteCompanyURL company:companyList){
-			if(map.containsKey(company.getCompanyId())){
+		for (OteCompanyURL company : companyList) {
+			if (map.containsKey(company.getCompanyId())) {
 				try {
-					
-					
+
 					map.remove(company.getCompanyId());
 					returnCompanyList.add(company);
 				} catch (FailingHttpStatusCodeException e) {
 					e.printStackTrace();
-				}  catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		return returnCompanyList;
 	}
-	
-	public void findCompanyDetails(Company company){
+
+	public void findCompanyDetails(Company company) {
+		
 		try {
-			String contactDiv =  getContactDiv(company.getoTEresourceId());
-			parseContactDivForTelAndMobile(contactDiv,company);
-			parseContactDivForContactPerson(contactDiv,company);
-			parseContactDivForAddress(contactDiv,company);
+			
+			String contactDiv = getContactDiv(company.getoTEresourceId());
+			
+			parseContactDivForTelAndMobile(contactDiv, company);
+			
+			parseContactDivForContactPerson(contactDiv, company);
+			
+			parseContactDivForAddress(contactDiv, company);
+			
 			HtmlPage mainPage = webClient.getPage(company.getOteUrl());
-			String wholeCityPageHTML = mainPage.getWebResponse().getContentAsString();
-			company.setDescription(findCompanyDescription(wholeCityPageHTML));
-			company.setEmployeeCount(findCompanyEmployeeCount(wholeCityPageHTML));
+			
+			String detailPage = mainPage.getWebResponse().getContentAsString();
+			
+			company.setEmployeeCount(findCompanyEmployeeCountOrArea(detailPage, "员工人数："));
+			company.setArea(findCompanyEmployeeCountOrArea(detailPage, "所在地区："));
+			
+			String descriptionXPath = "/html/body/div[8]/div[2]/div[1]/text()[1]";
+			
+			Object description = getFirstElementByXPath(mainPage, descriptionXPath);
+			
+			if (description instanceof DomText) {
+				
+				DomText descriptionText = (DomText) description;
+				String descriptionStr = descriptionText.asText();
+				if (StringUtils.isNotBlank(descriptionStr) && descriptionStr.length() > 2000) {
+					descriptionStr = descriptionStr.substring(0, 1998);
+				}
+				company.setDescription(descriptionStr);
+				
+			}
+			
+			if (StringUtils.isEmpty(company.getName())) {
+				
+				String companyNameXPath = "/html/body/div[5]/div[2]/div[2]/h1";
+				Object nameElement = XinXinUtils.getFirstElementByXPath(mainPage, companyNameXPath);
+				
+				if (nameElement instanceof HtmlHeading1) {
+					
+					HtmlHeading1 nameH1 = (HtmlHeading1) nameElement;
+					company.setName(nameH1.getFirstChild().asText());
+				
+				}
+			}
 		} catch (FailingHttpStatusCodeException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
@@ -261,8 +303,8 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	private String parseContactDivForAddress(String detailPageHtml,final Company company){
+
+	private String parseContactDivForAddress(String detailPageHtml, final Company company) {
 		final StringBuffer id = new StringBuffer();
 		try {
 			Parser htmlParser = new Parser();
@@ -274,37 +316,37 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 				public boolean accept(Node node) {
 					if (node instanceof TableTag) {
-						TableTag tableTag = (TableTag)node;
-						Node [] nodes = tableTag.getChildrenAsNodeArray();
-						if(nodes!=null){
-							for(int i=0;i<nodes.length;i++){
-								if(nodes[i] instanceof TableRow){
-									TableRow tr = (TableRow)nodes[i];
-									Node [] trNodes = tr.getChildrenAsNodeArray();
-									if(trNodes!=null){
-											if(trNodes[0] instanceof TableColumn){
-												TableColumn td = (TableColumn)trNodes[0];
-												if(td.getStringText()!=null && td.getStringText().contains("联系地址")){
-													TableColumn tdDiv = (TableColumn)trNodes[1];
-													Node tdnodes [] = tdDiv.getChildrenAsNodeArray();
-													if(tdnodes!=null){
-														if(tdnodes.length==1){
-															company.setAddress(tdDiv.getStringText().replace("&nbsp;", ""));
-														}else if(tdnodes.length>1){
-															if(tdnodes[0] instanceof TextNode){
-																TextNode tn = (TextNode)tdnodes[0];
-																company.setAddress(tn.getText().replace("&nbsp;", ""));
-															}
+						TableTag tableTag = (TableTag) node;
+						Node[] nodes = tableTag.getChildrenAsNodeArray();
+						if (nodes != null) {
+							for (int i = 0; i < nodes.length; i++) {
+								if (nodes[i] instanceof TableRow) {
+									TableRow tr = (TableRow) nodes[i];
+									Node[] trNodes = tr.getChildrenAsNodeArray();
+									if (trNodes != null) {
+										if (trNodes[0] instanceof TableColumn) {
+											TableColumn td = (TableColumn) trNodes[0];
+											if (td.getStringText() != null && td.getStringText().contains("联系地址")) {
+												TableColumn tdDiv = (TableColumn) trNodes[1];
+												Node tdnodes[] = tdDiv.getChildrenAsNodeArray();
+												if (tdnodes != null) {
+													if (tdnodes.length == 1) {
+														company.setAddress(tdDiv.getStringText().replace("&nbsp;", ""));
+													} else if (tdnodes.length > 1) {
+														if (tdnodes[0] instanceof TextNode) {
+															TextNode tn = (TextNode) tdnodes[0];
+															company.setAddress(tn.getText().replace("&nbsp;", ""));
 														}
 													}
-													return true;
-													
 												}
+												return true;
+
 											}
+										}
 									}
 								}
 							}
-							
+
 						}
 					}
 					return false;
@@ -314,12 +356,10 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			e.printStackTrace();
 		}
 		return id.toString();
-	
-	
-	}
-	
-	private String parseContactDivForContactPerson(String detailPageHtml,final Company company){
 
+	}
+
+	private String parseContactDivForContactPerson(String detailPageHtml, final Company company) {
 
 		final StringBuffer id = new StringBuffer();
 		try {
@@ -332,31 +372,97 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 
 				public boolean accept(Node node) {
 					if (node instanceof TableTag) {
-						TableTag tableTag = (TableTag)node;
-						Node [] nodes = tableTag.getChildrenAsNodeArray();
-						if(nodes!=null){
-							for(int i=0;i<nodes.length;i++){
-								if(nodes[i] instanceof TableRow){
-									TableRow tr = (TableRow)nodes[i];
-									Node [] trNodes = tr.getChildrenAsNodeArray();
-									if(trNodes!=null){
-											if(trNodes[0] instanceof TableColumn){
-												TableColumn td = (TableColumn)trNodes[0];
-												if(td.getStringText()!=null && td.getStringText().contains("面试联系人")){
-													TableColumn tdDiv = (TableColumn)trNodes[1];
-													String text = tdDiv.getStringText();
-													if(text!=null && text.contains("(联系我时请说明")){
-														company.setContactor(text.substring(0,text.trim().indexOf("(联系我时请说明")));
+						TableTag tableTag = (TableTag) node;
+						Node[] nodes = tableTag.getChildrenAsNodeArray();
+						if (nodes != null) {
+							for (int i = 0; i < nodes.length; i++) {
+								if (nodes[i] instanceof TableRow) {
+									TableRow tr = (TableRow) nodes[i];
+									Node[] trNodes = tr.getChildrenAsNodeArray();
+									if (trNodes != null) {
+										if (trNodes[0] instanceof TableColumn) {
+											TableColumn td = (TableColumn) trNodes[0];
+											if (td.getStringText() != null && td.getStringText().contains("面试联系人")) {
+												TableColumn tdDiv = (TableColumn) trNodes[1];
+												String text = tdDiv.getStringText();
+												if (text != null && text.contains("(联系我时请说明")) {
+													company.setContactor(text.substring(0, text.trim().indexOf("(联系我时请说明")));
+													return true;
+												}
+												return true;
+
+											}
+										}
+									}
+								}
+							}
+
+						}
+					}
+					return false;
+				}
+			});
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+		return id.toString();
+
+	}
+
+	public String parseContactDivForTelAndMobile(String detailPageHtml, final Company company) {
+
+		final StringBuffer id = new StringBuffer();
+		try {
+			Parser htmlParser = new Parser();
+			htmlParser.setInputHTML(detailPageHtml);
+
+			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
+
+				private static final long serialVersionUID = -93037936232004146L;
+
+				public boolean accept(Node node) {
+					if (node instanceof TableTag) {
+						TableTag tableTag = (TableTag) node;
+						Node[] nodes = tableTag.getChildrenAsNodeArray();
+						if (nodes != null) {
+							for (int i = 0; i < nodes.length; i++) {
+								if (nodes[i] instanceof TableRow) {
+									// TableRow tr = (TableRow)nodes[0];
+									TableRow tr = (TableRow) nodes[i];
+									Node[] trNodes = tr.getChildrenAsNodeArray();
+									if (trNodes != null) {
+										if (trNodes[0] instanceof TableColumn) {
+											TableColumn td = (TableColumn) trNodes[0];
+											if (td.getStringText() != null && td.getStringText().contains("预约面试电话")) {
+												TableColumn tdDiv = (TableColumn) trNodes[1];
+												Node spanNode = findNodeById(tdDiv.getStringText(), "tel_2");
+												if (spanNode instanceof Span) {
+													Span span = (Span) spanNode;
+													Node[] spanNodes = span.getChildrenAsNodeArray();
+													if (spanNodes != null) {
+														if (spanNodes[0] instanceof ImageTag) {
+															ImageTag mobile = (ImageTag) spanNodes[0];
+															company.setMobilePhoneSrc(mobile.getAttribute("src"));
+														}
+														if (spanNodes.length > 2) {
+															for (int n = 1; n < spanNodes.length; n++) {
+																if (spanNodes[n] instanceof ImageTag) {
+																	ImageTag tel = (ImageTag) spanNodes[n];
+																	company.setPhoneSrc(tel.getAttribute("src"));
+																}
+															}
+														}
 														return true;
+
 													}
-													return true;
-													
 												}
+												return true;
 											}
+										}
 									}
 								}
 							}
-							
+
 						}
 					}
 					return false;
@@ -366,78 +472,10 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 			e.printStackTrace();
 		}
 		return id.toString();
-	
-	
+
 	}
-	
-	public String parseContactDivForTelAndMobile(String detailPageHtml,final Company company){
 
-		final StringBuffer id = new StringBuffer();
-		try {
-			Parser htmlParser = new Parser();
-			htmlParser.setInputHTML(detailPageHtml);
-
-			htmlParser.extractAllNodesThatMatch(new NodeFilter() {
-
-				private static final long serialVersionUID = -93037936232004146L;
-
-				public boolean accept(Node node) {
-					if (node instanceof TableTag) {
-						TableTag tableTag = (TableTag)node;
-						Node [] nodes = tableTag.getChildrenAsNodeArray();
-						if(nodes!=null){
-							for(int i=0;i<nodes.length;i++){
-								if(nodes[i] instanceof TableRow){
-									//TableRow tr = (TableRow)nodes[0];
-									TableRow tr = (TableRow)nodes[i];
-									Node [] trNodes = tr.getChildrenAsNodeArray();
-									if(trNodes!=null){
-											if(trNodes[0] instanceof TableColumn){
-												TableColumn td = (TableColumn)trNodes[0];
-												if(td.getStringText()!=null && td.getStringText().contains("预约面试电话")){
-													TableColumn tdDiv = (TableColumn)trNodes[1];
-													Node spanNode = findNodeById(tdDiv.getStringText(),"tel_2");
-													if(spanNode instanceof Span){
-														Span span = (Span) spanNode;
-														Node [] spanNodes = span.getChildrenAsNodeArray();
-														if(spanNodes!=null){
-															if(spanNodes[0] instanceof ImageTag){
-																ImageTag mobile = (ImageTag)spanNodes[0];
-																company.setMobilePhoneSrc(mobile.getAttribute("src"));
-															}
-															if(spanNodes.length>2){
-															for(int n=1;n<spanNodes.length;n++){
-															if(spanNodes[n] instanceof ImageTag){
-																ImageTag tel = (ImageTag)spanNodes[n];
-																company.setPhoneSrc(tel.getAttribute("src"));
-															}
-															}
-															}
-															return true;
-															
-														}
-													}
-													return true;
-												}
-											}
-									}
-								}
-							}
-							
-						}
-					}
-					return false;
-				}
-			});
-		} catch (ParserException e) {
-			e.printStackTrace();
-		}
-		return id.toString();
-	
-	}
-	
-	
-	public String getContactDiv(String resourceId){
+	public String getContactDiv(String resourceId) {
 		try {
 			StringBuilder sb = new StringBuilder(address);
 			sb.append(resourceId).append("&t=").append(Calendar.getInstance().getTimeInMillis());
@@ -466,44 +504,44 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 				public boolean accept(Node node) {
 					if (node instanceof Bullet) {
 						Bullet bullet = (Bullet) node;
-						if(bullet.getChildren()!=null){
-						Node[] nodeList = bullet.getChildren().toNodeArray();
+						if (bullet.getChildren() != null) {
+							Node[] nodeList = bullet.getChildren().toNodeArray();
 
-						// find header, find column
-						boolean contactorHeaderFound = false;
-						for (int i = 0; i < nodeList.length; i++) {
-							Node current = nodeList[i];
-							
-							if (!contactorHeaderFound && current instanceof TextNode) {
-								TextNode definitionListBullet = (TextNode) current;
-								String tdConent = definitionListBullet.getText();
-								// found!!!!!!
-								if (tdConent.trim().contains("联系人")) {
-									contactorHeaderFound = true;
+							// find header, find column
+							boolean contactorHeaderFound = false;
+							for (int i = 0; i < nodeList.length; i++) {
+								Node current = nodeList[i];
+
+								if (!contactorHeaderFound && current instanceof TextNode) {
+									TextNode definitionListBullet = (TextNode) current;
+									String tdConent = definitionListBullet.getText();
+									// found!!!!!!
+									if (tdConent.trim().contains("联系人")) {
+										contactorHeaderFound = true;
+									}
 								}
-							}
-							
-							// find his name after title found!!
-							if (contactorHeaderFound) {
-								if(nodeList.length>=(3+i)){
-									Node contactorCurrent = nodeList[i+2];
-									if (contactorCurrent instanceof TextNode) {
-										TextNode contactorTag = (TextNode) contactorCurrent;
+
+								// find his name after title found!!
+								if (contactorHeaderFound) {
+									if (nodeList.length >= (3 + i)) {
+										Node contactorCurrent = nodeList[i + 2];
+										if (contactorCurrent instanceof TextNode) {
+											TextNode contactorTag = (TextNode) contactorCurrent;
 											contactorsBuilder.append(contactorTag.getText());
+											return true;
+										}
+									} else {
+										String text = current.getText();
+										if (text != null) {
+											String nText = text.trim().replace("联系人：", "");
+											contactorsBuilder.append(nText);
+										}
 										return true;
 									}
-								}else{
-									String text = current.getText();
-									if(text!=null){
-										String nText = text.trim().replace("联系人：", "");
-										contactorsBuilder.append(nText);
-									}
-									return true;
 								}
-							}
 
+							}
 						}
-					}
 					}
 					return false;
 				}
@@ -516,36 +554,32 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 		return contactorsBuilder.toString();
 	}
 
-	
-
-	
-	
-	public String findCompanyEmployeeCount(String detailPageHtml) {
+	public String findCompanyEmployeeCountOrArea(String detailPageHtml, String labelName) {
 		try {
-			Node node = findNodeByClassId(detailPageHtml,"companyinfo_details");
-			if(node == null){
+			Node node = findNodeByClassId(detailPageHtml, "companyinfo_details");
+			if (node == null) {
 				return null;
 			}
-			if(node instanceof Div){
-				Div divNode = (Div)node;
-				Node childNodes [] = divNode.getChildrenAsNodeArray();
-				for(Node cNode:childNodes){
-					if(cNode instanceof ParagraphTag){
-						ParagraphTag pp = (ParagraphTag)cNode;
-						if("bg1".equals(pp.getAttribute("class"))){
-							Node pNodes  [] = pp.getChildrenAsNodeArray();
-							if(pNodes !=null){
-								for(int i=0;i<pNodes.length;i++){
+			if (node instanceof Div) {
+				Div divNode = (Div) node;
+				Node childNodes[] = divNode.getChildrenAsNodeArray();
+				for (Node cNode : childNodes) {
+					if (cNode instanceof ParagraphTag) {
+						ParagraphTag pp = (ParagraphTag) cNode;
+						if ("bg1".equals(pp.getAttribute("class"))) {
+							Node pNodes[] = pp.getChildrenAsNodeArray();
+							if (pNodes != null) {
+								for (int i = 0; i < pNodes.length; i++) {
 									boolean flag = false;
-									if(pNodes[i] instanceof TextNode){
-										TextNode tn = (TextNode)pNodes[i];
-										if("员工人数：".equals(tn.getText())){
+									if (pNodes[i] instanceof TextNode) {
+										TextNode tn = (TextNode) pNodes[i];
+										if (labelName.equals(tn.getText())) {
 											flag = true;
 										}
 									}
-									if(flag){
-										if(pNodes[i+2] instanceof TextNode){
-											TextNode tn = (TextNode)pNodes[i+2];
+									if (flag) {
+										if (pNodes[i + 2] instanceof TextNode) {
+											TextNode tn = (TextNode) pNodes[i + 2];
 											return tn.getText();
 										}
 									}
@@ -560,23 +594,24 @@ public class HtmlParserUtilFor138 extends BaseHtmlParseUtil {
 		}
 		return null;
 	}
+
+	
 	
 	public String findCompanyDescription(String html) {
 		try {
-			Node node = findNodeByClassId(html,"companyinfo com_intr");
-			if(node == null){
+			Node node = findNodeByClassId(html, "companyinfo com_intr");
+			if (node == null) {
 				return null;
 			}
-			if(node instanceof Div){
-				Div divNode = (Div)node;
+			if (node instanceof Div) {
+				Div divNode = (Div) node;
 				String desc = divNode.getStringText();
-				return desc == null?null:desc.trim();
+				return desc == null ? null : desc.trim();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 return null;
+		return null;
 	}
-
 
 }
