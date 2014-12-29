@@ -416,7 +416,10 @@ public class GrabServiceImpl extends BasicGrabService {
 			City city = cityRepository.findByName(company.getCityName());
 
 			if (city != null) {
-				company.setCityId(city.getId());
+				
+				if (company.getCityId() == null) {
+					company.setCityId(city.getId());
+				}
 
 				if (company.getProvinceId() == null) {
 					company.setProvinceId(city.getProvince().getId());
@@ -432,13 +435,15 @@ public class GrabServiceImpl extends BasicGrabService {
 
 		company.setName(basicCompanyURL.getName());
 		company.setArea(basicCompanyURL.getArea());
-
+		company.setCityId(basicCompanyURL.getCityId());
+		
 		company.setCityId(basicCompanyURL.getCityId());
 
 		if (basicCompanyURL instanceof FeCompanyURL) {
 
 			company.setfEresourceId(basicCompanyURL.getCompanyId());
 			company.setfEurl(basicCompanyURL.getUrl());
+			
 
 		} else if (basicCompanyURL instanceof GanjiCompanyURL) {
 
@@ -582,6 +587,73 @@ public class GrabServiceImpl extends BasicGrabService {
 
 	}
 
+	@Override
+	public void oteJobDailyWork() {
+
+
+		GrabCompanyDetailLog grabCompanyDetailLog = new GrabCompanyDetailLog();
+
+		int pageNumber = 0;
+		int pageSize = 1000;
+
+		int successCount = 0;
+		int failCount = 0;
+		try {
+			grabCompanyDetailLog.setStartDate(getNow());
+
+			while (true) {
+
+				PageRequest pageRequest = new PageRequest(pageNumber, pageSize);
+
+				Page<OteCompanyURL> otePage = oteCompanyURLRepository.findAll(generateSpecificationForOneThreeEightDailyJobUrl(), pageRequest);
+
+				for (OteCompanyURL oteCompanyURL : otePage) {
+
+					ResponseVo response = null;
+					try {
+						response = this.grabSingleOTECompanyByUrl(oteCompanyURL);
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					if (null == response || response.getType().equals("FAIL")) {
+						failCount++;
+
+						System.out.println("fail--->" + oteCompanyURL.toString());
+					} else {
+						successCount++;
+
+						System.out.println("success--->" + oteCompanyURL.toString());
+					}
+
+				}
+
+				if (otePage.isLastPage()) {
+					break;
+				}
+				pageNumber++;
+			}
+
+			grabCompanyDetailLog.setStatus("success");
+			grabCompanyDetailLog.setEndDate(getNow());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			grabCompanyDetailLog.setMessage(e.getMessage());
+
+			grabCompanyDetailLog.setStatus("fail");
+		}
+
+		grabCompanyDetailLog.setFailCount(failCount);
+		grabCompanyDetailLog.setSuccessCount(successCount);
+		grabCompanyDetailLog.setType("138");
+
+		grabCompanyDetailLogRepository.save(grabCompanyDetailLog);
+
+	
+	}
+
 	private Specification<FeCompanyURL> generateSpecificationForDailyJobUrl() {
 
 		return new Specification<FeCompanyURL>(){
@@ -614,6 +686,22 @@ public class GrabServiceImpl extends BasicGrabService {
 		};
 	}
 
+	private Specification<OteCompanyURL> generateSpecificationForOneThreeEightDailyJobUrl() {
+
+		return new Specification<OteCompanyURL>(){
+
+			public Predicate toPredicate(Root<OteCompanyURL> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+
+				Predicate predicate = criteriaBuilder.conjunction();
+				
+				//URL表中没有已保存的公司ID表示： 1，新的数据。 2，抓取失败的数据。 3，重要数据缺失的公司
+				predicate.getExpressions().add(criteriaBuilder.isNull(root.get("savedCompany")));
+				return predicate;
+			}
+
+		};
+	}
+	
 	@Override
 	public ResponseVo grabSingleFECompanyByUrl(String url) {
 

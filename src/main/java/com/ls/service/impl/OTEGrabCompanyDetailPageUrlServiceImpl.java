@@ -107,11 +107,11 @@ public class OTEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetail
 		while (true) {
 			
 			try {
-				String pageUrl = MessageFormat.format(cityURL.getUrl(), "", "" + currentPageIndex, "");
-				
-				if (StringUtils.isNotBlank(postdate)) {
-					pageUrl += postdate;
+				if (postdate == null) {
+					postdate = "";
 				}
+				
+				String pageUrl = MessageFormat.format(cityURL.getUrl(), "", "" + currentPageIndex, postdate);
 				
 				final HtmlPage customerListPage = webClient.getPage(pageUrl);
 
@@ -176,12 +176,13 @@ public class OTEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetail
 	public void grabTwoDaysRecently() {
 
 		GrabDetailUrlLog grabDetailUrlLog = new GrabDetailUrlLog();
+		
 		try {
 
-			grabDetailUrlLog.setQueryParameter("recent three days");
+			grabDetailUrlLog.setQueryParameter("releaseDate = 3");
 			grabDetailUrlLog.setStartDate(XinXinUtils.getNow());
 
-			ResponseVo response = this.grabUrl("o2");
+			ResponseVo response = this.grabUrl("3");
 
 			grabDetailUrlLog.setCreateDate(XinXinUtils.getNow());
 
@@ -189,7 +190,7 @@ public class OTEGrabCompanyDetailPageUrlServiceImpl implements GrabCompanyDetail
 
 			logger.info(response.toString());
 			grabDetailUrlLog.setStatus("success");
-			grabDetailUrlLog.setType("ganji");
+			grabDetailUrlLog.setType("138");
 
 		} catch (Exception e) {
 

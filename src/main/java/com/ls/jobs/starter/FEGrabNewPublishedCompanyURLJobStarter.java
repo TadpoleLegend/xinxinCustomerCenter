@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.JobScheduleConfiguration;
 import com.ls.jobs.XinXinJobHelper;
-import com.ls.jobs.fe.FEGrabNewPublishedCompanyURLJob;
+import com.ls.jobs.fe.GrabUrlJob;
 import com.ls.repository.GrabDetailUrlLogRepository;
 import com.ls.repository.JobScheduleConfigurationRepository;
 import com.ls.service.GrabCompanyDetailPageUrlService;
@@ -56,11 +56,11 @@ public class FEGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 
 		jobDataMap.put("grabCompanyDetailPageUrlService", grabCompanyDetailPageUrlService);
 
-		JobDetail elevenOclockJobDetail = JobBuilder.newJob(FEGrabNewPublishedCompanyURLJob.class).usingJobData(jobDataMap).withIdentity("FEGrabNewPublishedCompanyURLJob_11_00", "GRAB_URL").build();
+		JobDetail elevenOclockJobDetail = JobBuilder.newJob(GrabUrlJob.class).usingJobData(jobDataMap).withIdentity("five_eight_daily_grab_new_url_job", "FE_GRAB_URL").build();
 
-		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(13, 59).build();
-		elevenOclockTrigger.setName("FEGrabNewPublishedCompanyURLJob_evening_at_eleven_clock");
-		elevenOclockTrigger.setGroup("GRAB_URL");
+		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(10, 43).build();
+		elevenOclockTrigger.setName("five_eight_daily_grab_new_url_job_trigger");
+		elevenOclockTrigger.setGroup("FE_GRAB_URL_TRIGGER");
 
 		Scheduler scheduler = XinXinJobHelper.getScheduler();
 		if (null == scheduler) {

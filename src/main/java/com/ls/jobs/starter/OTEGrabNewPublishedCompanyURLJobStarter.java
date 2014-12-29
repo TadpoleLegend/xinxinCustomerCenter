@@ -18,20 +18,24 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.JobScheduleConfiguration;
 import com.ls.jobs.XinXinJobHelper;
-import com.ls.jobs.fe.GrabCompanyJob;
+import com.ls.jobs.gj.GrabUrlJob;
+import com.ls.repository.GrabDetailUrlLogRepository;
 import com.ls.repository.JobScheduleConfigurationRepository;
-import com.ls.service.GrabService;
+import com.ls.service.GrabCompanyDetailPageUrlService;
 
-@Component("FEGrabNewPublishedCompanyJobStarter")
-public class FEGrabNewPublishedCompanyJobStarter implements InitializingBean {
+@Component("OTEGrabNewPublishedCompanyURLJobStarter")
+public class OTEGrabNewPublishedCompanyURLJobStarter implements InitializingBean {
 
-	private Logger logger = LoggerFactory.getLogger(FEGrabNewPublishedCompanyJobStarter.class);
+	private Logger logger = LoggerFactory.getLogger(OTEGrabNewPublishedCompanyURLJobStarter.class);
 
-	@Resource(name = "grabService")
-	private GrabService grabService;
+	@Autowired
+	private GrabDetailUrlLogRepository grabDetailUrlLogRepository;
 
 	@Autowired
 	private JobScheduleConfigurationRepository jobScheduleConfigurationRepository;
+
+	@Resource(name = "OTEGrabCompanyDetailPageUrlService")
+	private GrabCompanyDetailPageUrlService grabCompanyDetailPageUrlService;
 
 	public void afterPropertiesSet() throws Exception {
 
@@ -51,20 +55,20 @@ public class FEGrabNewPublishedCompanyJobStarter implements InitializingBean {
 
 		JobDataMap jobDataMap = new JobDataMap();
 
-		jobDataMap.put("grabService", grabService);
+		jobDataMap.put("grabCompanyDetailPageUrlService", grabCompanyDetailPageUrlService);
 
-		JobDetail jobDetail = JobBuilder.newJob(GrabCompanyJob.class).usingJobData(jobDataMap).withIdentity("daily_grab_new_company_job_at_11_00", "GRAB_Company_FE").build();
+		JobDetail elevenOclockJobDetail = JobBuilder.newJob(GrabUrlJob.class).usingJobData(jobDataMap).withIdentity("138_Daily_grab_new_company_url_job", "GRAB_URL").build();
 
-		CronTriggerImpl sixOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(10, 42).build();
-		sixOclockTrigger.setName("daily_grab_new_company_job_at_11_night");
-		sixOclockTrigger.setGroup("GRAB_Company_TRIGGER_FE");
+		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(10, 47).build();
+		elevenOclockTrigger.setName("138_Daily_grab_new_company_url_job_trigger");
+		elevenOclockTrigger.setGroup("GRAB_URL_TRIGGER");
 
 		Scheduler scheduler = XinXinJobHelper.getScheduler();
 		if (null == scheduler) {
 			logger.error("schedular null. ");
 			return;
 		} else {
-			scheduler.scheduleJob(jobDetail, sixOclockTrigger);
+			scheduler.scheduleJob(elevenOclockJobDetail, elevenOclockTrigger);
 		}
 
 	}

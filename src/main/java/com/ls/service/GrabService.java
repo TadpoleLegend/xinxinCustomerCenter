@@ -38,6 +38,7 @@ public interface GrabService {
 
 	void feJobDailyWork();
 	void gjJobDailyWork();
+	void oteJobDailyWork();
 	
 	ResponseVo grabCompanyDetailInCityList(List<Integer> userCityIds, String datasourceType);
 	

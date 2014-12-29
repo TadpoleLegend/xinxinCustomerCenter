@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.JobScheduleConfiguration;
 import com.ls.jobs.XinXinJobHelper;
-import com.ls.jobs.gj.GJGrabCompanyDetailDailyJob;
+import com.ls.jobs.gj.GrabCompanyJob;
 import com.ls.repository.JobScheduleConfigurationRepository;
 import com.ls.service.GrabService;
 
@@ -53,9 +53,9 @@ public class GJGrabNewPublishedCompanyJobStarter implements InitializingBean {
 		
 		jobDataMap.put("grabService", grabService);
 
-		JobDetail jobDetail = JobBuilder.newJob(GJGrabCompanyDetailDailyJob.class).usingJobData(jobDataMap).withIdentity("daily_grab_new_company_job", "GRAB_Company").build();
+		JobDetail jobDetail = JobBuilder.newJob(GrabCompanyJob.class).usingJobData(jobDataMap).withIdentity("ganji_daily_grab_new_company_job", "GRAB_Company").build();
 		
-		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(19, 0).build();
+		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(10, 44).build();
 		grabCompanyTrigger.setName("daily_grab_new_company_job_trigger");
 		grabCompanyTrigger.setGroup("GRAB_Company");
 

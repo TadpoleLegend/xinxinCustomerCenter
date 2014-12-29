@@ -18,23 +18,23 @@ import org.springframework.stereotype.Component;
 
 import com.ls.entity.JobScheduleConfiguration;
 import com.ls.jobs.XinXinJobHelper;
-import com.ls.jobs.fe.GrabCompanyJob;
+import com.ls.jobs.ote.GrabCompanyJob;
 import com.ls.repository.JobScheduleConfigurationRepository;
 import com.ls.service.GrabService;
 
-@Component("FEGrabNewPublishedCompanyJobStarter")
-public class FEGrabNewPublishedCompanyJobStarter implements InitializingBean {
+@Component("OTEGrabNewPublishedCompanyJobStarter")
+public class OTEGrabNewPublishedCompanyJobStarter implements InitializingBean {
 
-	private Logger logger = LoggerFactory.getLogger(FEGrabNewPublishedCompanyJobStarter.class);
-
-	@Resource(name = "grabService")
-	private GrabService grabService;
+	private Logger logger = LoggerFactory.getLogger(OTEGrabNewPublishedCompanyJobStarter.class);
 
 	@Autowired
 	private JobScheduleConfigurationRepository jobScheduleConfigurationRepository;
+	
+	@Resource(name = "grabService")
+	private GrabService grabService;
 
 	public void afterPropertiesSet() throws Exception {
-
+		
 		int startHour, startMinute;
 
 		List<JobScheduleConfiguration> onlyOneJobScheduleConfigurations = jobScheduleConfigurationRepository.findAll();
@@ -50,23 +50,23 @@ public class FEGrabNewPublishedCompanyJobStarter implements InitializingBean {
 		}
 
 		JobDataMap jobDataMap = new JobDataMap();
-
+		
 		jobDataMap.put("grabService", grabService);
 
-		JobDetail jobDetail = JobBuilder.newJob(GrabCompanyJob.class).usingJobData(jobDataMap).withIdentity("daily_grab_new_company_job_at_11_00", "GRAB_Company_FE").build();
-
-		CronTriggerImpl sixOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(10, 42).build();
-		sixOclockTrigger.setName("daily_grab_new_company_job_at_11_night");
-		sixOclockTrigger.setGroup("GRAB_Company_TRIGGER_FE");
+		JobDetail jobDetail = JobBuilder.newJob(GrabCompanyJob.class).usingJobData(jobDataMap).withIdentity("138_daily_grab_new_company_job", "GRAB_Company").build();
+		
+		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(10, 46).build();
+		grabCompanyTrigger.setName("138_daily_grab_new_company_job_trigger");
+		grabCompanyTrigger.setGroup("138_GRAB_Company");
 
 		Scheduler scheduler = XinXinJobHelper.getScheduler();
 		if (null == scheduler) {
 			logger.error("schedular null. ");
 			return;
 		} else {
-			scheduler.scheduleJob(jobDetail, sixOclockTrigger);
+			scheduler.scheduleJob(jobDetail, grabCompanyTrigger);
 		}
 
 	}
-
+	
 }

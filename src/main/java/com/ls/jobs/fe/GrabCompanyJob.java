@@ -6,7 +6,7 @@ import org.quartz.JobExecutionException;
 
 import com.ls.service.GrabService;
 
-public class FEGrabCompanyDetailDailyJob implements Job{
+public class GrabCompanyJob implements Job{
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		

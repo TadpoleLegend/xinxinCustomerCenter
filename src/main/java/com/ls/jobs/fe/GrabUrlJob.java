@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.ls.service.GrabCompanyDetailPageUrlService;
 import com.ls.util.XinXinUtils;
 
-public class FEGrabNewPublishedCompanyURLJob implements Job {
+public class GrabUrlJob implements Job {
 	
-	private Logger logger = LoggerFactory.getLogger(FEGrabNewPublishedCompanyURLJob.class);
+	private Logger logger = LoggerFactory.getLogger(GrabUrlJob.class);
 	
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		

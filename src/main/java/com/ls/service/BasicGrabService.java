@@ -130,4 +130,9 @@ public class BasicGrabService implements GrabService {
 		
 	}
 
+	public void oteJobDailyWork() {
+
+		
+	}
+
 }
