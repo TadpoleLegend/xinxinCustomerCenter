@@ -205,7 +205,6 @@ public class GrabServiceImpl extends BasicGrabService {
 		} catch (Throwable e) {
 
 		}
-
 		// second try
 		if (saveCompanyFails(savedCompany)) {
 
@@ -215,25 +214,27 @@ public class GrabServiceImpl extends BasicGrabService {
 
 				baseCompanyURL.setStatus("NON_SB_RETRY_FAIL");
 				commonSaveUrl(baseCompanyURL);
-
+				baseCompanyURL.setHasGet(false);
 				responseVo = makeGeneralErrorResponse(new Exception("第二次尝试保存公司信息失败!"));
 				return responseVo;
 
 			} else {
+				baseCompanyURL.setHasGet(true);
 				baseCompanyURL.setStatus("NON_SB_RETRY_SUCCESS");
+				baseCompanyURL.setSavedCompany("" + savedCompany.getId());
+				
 			}
 
 		} else {
+			baseCompanyURL.setHasGet(true);
 			baseCompanyURL.setStatus("NON_SB_SUCCESS");
+			baseCompanyURL.setSavedCompany("" + savedCompany.getId());
 		}
 
 		if (savedCompany.getCityId() != null && baseCompanyURL.getCityId() == null) {
 			baseCompanyURL.setCityId(savedCompany.getCityId());
 		}
-
-		baseCompanyURL.setHasGet(true);
-		baseCompanyURL.setSavedCompany("" + savedCompany.getId());
-
+		
 		commonSaveUrl(baseCompanyURL);
 
 		responseVo.setObject(savedCompany);
@@ -255,7 +256,7 @@ public class GrabServiceImpl extends BasicGrabService {
 
 			baseCompanyURL.setSavedCompany("" + existedCompany.getId());
 			baseCompanyURL.setComments("duplicate url with other website.");
-			feCompanyURLRepository.saveAndFlush((FeCompanyURL)baseCompanyURL);
+			feCompanyURLRepository.saveAndFlush((FeCompanyURL) baseCompanyURL);
 
 		} else if (baseCompanyURL instanceof GanjiCompanyURL && StringUtils.isEmpty(existedCompany.getGanjiresourceId())) {
 
@@ -589,8 +590,7 @@ public class GrabServiceImpl extends BasicGrabService {
 
 	@Override
 	public void oteJobDailyWork() {
-
-
+		
 		GrabCompanyDetailLog grabCompanyDetailLog = new GrabCompanyDetailLog();
 
 		int pageNumber = 0;
@@ -933,9 +933,7 @@ public class GrabServiceImpl extends BasicGrabService {
 	public ResponseVo grabSingleOTECompanyByUrl(OteCompanyURL oteCompanyURL) {
 
 		Company company = compositeBasicCompanyInfo(oteCompanyURL);
-
 		ResponseVo response = null;
-
 		try {
 
 			getOTECompanyDetails(company, company.getOteUrl());
