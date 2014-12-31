@@ -55,7 +55,7 @@ public class OTEGrabNewPublishedCompanyJobStarter implements InitializingBean {
 
 		JobDetail jobDetail = JobBuilder.newJob(GrabCompanyJob.class).usingJobData(jobDataMap).withIdentity("138_daily_grab_new_company_job", "GRAB_Company").build();
 		
-		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(10, 46).build();
+		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(22, 23).build();
 		grabCompanyTrigger.setName("138_daily_grab_new_company_job_trigger");
 		grabCompanyTrigger.setGroup("138_GRAB_Company");
 

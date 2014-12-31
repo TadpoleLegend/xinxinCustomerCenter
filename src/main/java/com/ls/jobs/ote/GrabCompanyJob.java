@@ -12,7 +12,7 @@ public class GrabCompanyJob implements Job {
 
 		GrabService grabService = (GrabService)context.getJobDetail().getJobDataMap().get("grabService");
 
-		grabService.gjJobDailyWork();
+		grabService.oteJobDailyWork();
 	}
 
 }

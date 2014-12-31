@@ -55,7 +55,7 @@ public class GJGrabNewPublishedCompanyJobStarter implements InitializingBean {
 
 		JobDetail jobDetail = JobBuilder.newJob(GrabCompanyJob.class).usingJobData(jobDataMap).withIdentity("ganji_daily_grab_new_company_job", "GRAB_Company").build();
 		
-		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(10, 44).build();
+		CronTriggerImpl grabCompanyTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(22, 27).build();
 		grabCompanyTrigger.setName("daily_grab_new_company_job_trigger");
 		grabCompanyTrigger.setGroup("GRAB_Company");
 
