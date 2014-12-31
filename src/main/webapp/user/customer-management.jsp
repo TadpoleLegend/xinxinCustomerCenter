@@ -1585,7 +1585,8 @@
 							self.currentIndex(page_index + 1);
 							self.searchCompany();
 							return false;
-						}
+						};
+						
 						self.fillCompany = function(data) {
 							
 							self.companyList.removeAll();

@@ -71,6 +71,9 @@ public class XinXinUtils {
 
 		user.setPhoneCallHistory(null);
 		user.setRoles(null);
+		user.setCities(null);
+		user.setApplyingWillingCustomers(null);
+		
 	}
 
 	public static Map<String, String> mergeDuplicateCompanyInOnePageFor138(List<OteCompanyURL> companyList) {

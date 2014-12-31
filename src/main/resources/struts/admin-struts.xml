@@ -23,6 +23,9 @@
 		<action name="userCityAssign">
 			<result>user-city-assign.jsp</result>
 		</action>
+		<action name="loadStatistics">
+			<result>admin-statistics.jsp</result>
+		</action>
 		<action name="ajaxFindUser" class="userAction" method="ajaxFindUser">
 			<result name="success" type="json">
 				<param name="root">users</param>
@@ -100,6 +103,11 @@
 		<action name="loadChina" class="userAction" method="loadChina">
 			<result name="success" type="json">
 				<param name="root">chinaProvinces</param>
+			</result>
+		</action>
+		<action name="findTop10CityCompanyCount" class="companyAction" method="findTop10CityCompanyCount">
+			<result name="success" type="json">
+				<param name="root">barChartData</param>
 			</result>
 		</action>
 		

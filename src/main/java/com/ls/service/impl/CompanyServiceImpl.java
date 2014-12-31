@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -14,6 +15,8 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.omg.CORBA.COMM_FAILURE;
@@ -44,9 +47,11 @@ import com.ls.enums.CustomerStatusEnum;
 import com.ls.repository.ApplyingWillingCustomerRepository;
 import com.ls.repository.CompanyAdditionalRepository;
 import com.ls.repository.CompanyRepository;
+import com.ls.repository.PhoneCallHistoryRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.repository.ProvinceRepository;
 import com.ls.repository.UserRepository;
+import com.ls.service.CommonService;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.AdvanceSearch;
@@ -73,6 +78,12 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PhoneCallHistoryRepository phoneCallHistoryRepository;
+	
+	@Resource(name = "commonService")
+	private CommonService commonService;
 	
 
 	public List<Company> findCompany(String name) {
@@ -421,5 +432,24 @@ public class CompanyServiceImpl implements CompanyService {
 		
 		return response;
 	}
+
+	public PhoneCallHistory savePhoneCallHistory(String jsonPhonecall, String companyId) throws ParseException {
+		
+		JSONObject jsonObject = JSONObject.fromObject(jsonPhonecall);
+		String nextDate = jsonObject.getString("nextDate");
+		
+		PhoneCallHistory phoneCallHistory = (PhoneCallHistory) JSONObject.toBean(jsonObject, PhoneCallHistory.class);
+		phoneCallHistory.setNextDate(XinXinConstants.SIMPLE_DATE_FORMATTER.parse(nextDate));
+		
+		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		
+		phoneCallHistory.setCreateDate(XinXinUtils.getNow());
+		
+		phoneCallHistory.setCompany(company);
+		phoneCallHistory.setUser(commonService.getCurrentLoggedInUser());
+		
+		return phoneCallHistoryRepository.saveAndFlush(phoneCallHistory);
+	}
+	
 	
 }

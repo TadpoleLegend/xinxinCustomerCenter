@@ -1,6 +1,9 @@
 package com.ls.script;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.json.JSONObject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +40,7 @@ import com.ls.repository.ProvinceRepository;
 import com.ls.repository.RoleRepository;
 import com.ls.repository.StepRepository;
 import com.ls.repository.UserRepository;
+import com.sun.xml.internal.xsom.impl.scd.Iterators.Map;
 
 /**
  * This class is for basic data preparation for the web app starting up. using this class without retrieving data from the UI. The data must not be
@@ -118,8 +122,8 @@ public class TestInitializationScripts {
 		Menu menu7 = new Menu("单页抓取", "/ls/grab/loadSingleGrab.ls", "singleGrab");
 		Menu menu5 = new Menu("意向客户审批", "/ls/wccheck/loadApproveCustomer.ls", "willingCustomerApprove");
 		Menu menu6 = new Menu("城市分配", "/ls/admin/userCityAssign.ls", "userCityAssign");
-		
-		menuRepository.save(ImmutableList.of(menu1, menu2, menu6, menu3, menu4, menu7, menu5));
+		Menu menu8 = new Menu("数据统计", "/ls/admin/loadStatistics.ls", "statistics");
+		menuRepository.save(ImmutableList.of(menu1, menu2, menu6, menu3, menu4, menu7, menu5, menu8));
 		
 	}
 
@@ -328,4 +332,139 @@ public class TestInitializationScripts {
 		
 		userRepository.save(users);
 	}
+	
+	
+	@Test
+	public void testJson() {
+		
+		BarChartData barChartData = new BarChartData();
+		
+		List<String> labels = ImmutableList.of("Shanghai", "BeiJing");
+		barChartData.setLabels(labels);
+		
+		Data data = new Data();
+		data.setData(ImmutableList.of("1110", "233"));
+		barChartData.setDatasets(ImmutableList.of(data));
+		
+		System.out.println(JSONObject.fromObject(barChartData));
+	}
+	
+	/**
+	 * var barChartData = {
+			labels : [ "January", "February", "March", "April", "May", "June",
+					"July" ],
+			datasets : [
+					{
+						fillColor : "rgba(220,220,220,0.5)",
+						strokeColor : "rgba(220,220,220,0.8)",
+						highlightFill : "rgba(220,220,220,0.75)",
+						highlightStroke : "rgba(220,220,220,1)",
+						data : [ randomScalingFactor(), randomScalingFactor(),
+								randomScalingFactor(), randomScalingFactor(),
+								randomScalingFactor(), randomScalingFactor(),
+								randomScalingFactor() ]
+					},
+					{
+						fillColor : "rgba(151,187,205,0.5)",
+						strokeColor : "rgba(151,187,205,0.8)",
+						highlightFill : "rgba(151,187,205,0.75)",
+						highlightStroke : "rgba(151,187,205,1)",
+						data : [ randomScalingFactor(), randomScalingFactor(),
+								randomScalingFactor(), randomScalingFactor(),
+								randomScalingFactor(), randomScalingFactor(),
+								randomScalingFactor() ]
+					} ]
+
+		}
+	 *
+	 */
+	public class BarChartData {
+		private List<String> labels;
+		private List<Data> datasets;
+		
+		public List<String> getLabels() {
+		
+			return labels;
+		}
+		
+		public void setLabels(List<String> labels) {
+		
+			this.labels = labels;
+		}
+		
+		public List<Data> getDatasets() {
+		
+			return datasets;
+		}
+		
+		public void setDatasets(List<Data> datasets) {
+		
+			this.datasets = datasets;
+		}
+		
+	}
+	
+	
+	public class Data {
+		private String fillColor = "rgba(220,220,220,0.5)";
+		private String strokeColor = "rgba(220,220,220,0.8)";
+		private String highlightFill = "rgba(220,220,220,0.75)";
+		private String highlightStroke = "rgba(220,220,220,1)";
+		
+		private List<String> data = new ArrayList<String>();
+		
+		public String getFillColor() {
+		
+			return fillColor;
+		}
+		
+		public void setFillColor(String fillColor) {
+		
+			this.fillColor = fillColor;
+		}
+		
+		public String getStrokeColor() {
+		
+			return strokeColor;
+		}
+		
+		public void setStrokeColor(String strokeColor) {
+		
+			this.strokeColor = strokeColor;
+		}
+		
+		public List<String> getData() {
+		
+			return data;
+		}
+		
+		public void setData(List<String> data) {
+		
+			this.data = data;
+		}
+
+		
+		public String getHighlightFill() {
+		
+			return highlightFill;
+		}
+
+		
+		public void setHighlightFill(String highlightFill) {
+		
+			this.highlightFill = highlightFill;
+		}
+
+		
+		public String getHighlightStroke() {
+		
+			return highlightStroke;
+		}
+		
+		public void setHighlightStroke(String highlightStroke) {
+		
+			this.highlightStroke = highlightStroke;
+		}
+	}
+	
 }

@@ -35,18 +35,20 @@ public class User implements Serializable {
 	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinTable(name = "ls_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	protected List<Role> roles;
-	
-	@OneToOne(mappedBy="user")
-	protected PhoneCallHistory phoneCallHistory;
-	
-	@OneToMany(mappedBy="user")
+
+	@OneToMany(mappedBy = "user")
+	protected List<PhoneCallHistory> phoneCallHistory;
+
+	@OneToMany(mappedBy = "user")
 	protected List<ApplyingWillingCustomer> applyingWillingCustomers;
 
 	public User() {
+
 		super();
 	}
 
 	public User(String name, String username, String password, Boolean active) {
+
 		super();
 		this.name = name;
 		this.username = username;
@@ -54,85 +56,93 @@ public class User implements Serializable {
 		this.active = active;
 	}
 
-
 	public Boolean getActive() {
+
 		return active;
 	}
 
 	public void setActive(Boolean active) {
+
 		this.active = active;
 	}
 
 	public Integer getId() {
+
 		return id;
 	}
 
 	public void setId(Integer id) {
+
 		this.id = id;
 	}
 
 	public String getName() {
+
 		return name;
 	}
 
 	public void setName(String name) {
+
 		this.name = name;
 	}
 
 	public String getUsername() {
+
 		return username;
 	}
 
 	public void setUsername(String username) {
+
 		this.username = username;
 	}
 
 	public String getPassword() {
+
 		return password;
 	}
 
 	public void setPassword(String password) {
+
 		this.password = password;
 	}
-	
+
 	public List<Role> getRoles() {
-	
+
 		return roles;
 	}
-	
+
 	public void setRoles(List<Role> roles) {
-	
+
 		this.roles = roles;
 	}
-	
+
 	public List<City> getCities() {
-	
+
 		return cities;
 	}
-	
+
 	public void setCities(List<City> cities) {
-	
+
 		this.cities = cities;
 	}
 
-	public PhoneCallHistory getPhoneCallHistory() {
+	public List<PhoneCallHistory> getPhoneCallHistory() {
+
 		return phoneCallHistory;
 	}
 
-	public void setPhoneCallHistory(PhoneCallHistory phoneCallHistory) {
+	public void setPhoneCallHistory(List<PhoneCallHistory> phoneCallHistory) {
+
 		this.phoneCallHistory = phoneCallHistory;
 	}
 
-	
 	public List<ApplyingWillingCustomer> getApplyingWillingCustomers() {
-	
+
 		return applyingWillingCustomers;
 	}
 
-	
 	public void setApplyingWillingCustomers(List<ApplyingWillingCustomer> applyingWillingCustomers) {
-	
+
 		this.applyingWillingCustomers = applyingWillingCustomers;
 	}
-	
 }

@@ -13,6 +13,9 @@ import javax.persistence.Table;
 
 import org.apache.struts2.json.annotations.JSON;
 
+import com.ls.constants.XinXinConstants;
+import com.ls.util.XinXinUtils;
+
 
 @Entity
 @Table(name = "ls_phone_call_history")
@@ -25,11 +28,10 @@ public class PhoneCallHistory {
 	protected String description;
 
 	protected Date createDate;
-
 	
 	protected Date nextDate;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	protected User user;
 
@@ -49,6 +51,7 @@ public class PhoneCallHistory {
 		return description;
 	}
 
+	@JSON(format="yyyy-MM-dd HH:mm") 
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -57,17 +60,30 @@ public class PhoneCallHistory {
 		this.createDate = createDate;
 	}
 	
-	@JSON(format="yy-mm-dd") 
+//	//@JSON(format="yyyy-MM-dd") 
+//	public String getNextDate() {
+//		return XinXinConstants.SIMPLE_DATE_FORMATTER.format(nextDate);
+//	}
+//
+//	public void setNextDate(String nextDate) {
+//		this.nextDate = XinXinUtils.getStandardDate(nextDate);
+//	}
+
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@JSON(format="yyyy-MM-dd") 
 	public Date getNextDate() {
+	
 		return nextDate;
 	}
 
+	
 	public void setNextDate(Date nextDate) {
+	
 		this.nextDate = nextDate;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public User getUser() {
