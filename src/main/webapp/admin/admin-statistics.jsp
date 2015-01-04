@@ -25,7 +25,7 @@
 				</div>
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>数据统计</h2>
+						<h2>数据统计 （全国美容行业公司个数排名前20）</h2>
 						<h2 class="right"></h2>
 					</div>
 					<div class="content">

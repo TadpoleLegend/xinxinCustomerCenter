@@ -4,7 +4,7 @@ public enum CustomerStatusEnum {
 
 	NO_WILLING_CUSTOMER(10, "非意向客户", 1), APPLYING_WILLING_CUSTOMER(11, "申请成为意向客户", 2), 
 	WILLING_CUSTOMER(20, "意向客户", 3), INTERNAL_TRAINING_CUSTOMER(30, "内训班	", 4), PUBLIC_COURSE_CUSTOMER(40, "公开课	", 5), 
-	ADVANCED_QUALITY_CUSTOMER(50, "精品班", 6), BOSS_CUSTOMER(60, "院长班", 7), BRANCHES_CUSTOMER(70, "连锁班	", 8);
+	ADVANCED_QUALITY_CUSTOMER(50, "精品班", 6), BOSS_CUSTOMER(60, "院长班", 7), BRANCHES_CUSTOMER(70, "连锁系统", 8);
 
 	private Integer id;
 	private String name;

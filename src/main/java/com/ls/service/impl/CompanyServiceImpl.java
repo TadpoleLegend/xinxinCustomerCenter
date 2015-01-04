@@ -131,7 +131,6 @@ public class CompanyServiceImpl implements CompanyService {
 				query.distinct(true);
 				
 				Predicate predicate = criteriaBuilder.conjunction();
-				
 				String searchId = companySearchVo.getSearchId();
 				if (StringUtils.isNotBlank(searchId)) {
 					

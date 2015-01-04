@@ -112,7 +112,7 @@
 							
 							<div class="row">
 								<div class="three columns">
-													<label>生日类型</label> 
+													<label>感动主题</label> 
 													<select data-bind="options: $root.birthdayTypes,
                       										optionsText: 'optionText',
                        									    value: birthdayType,
@@ -122,10 +122,22 @@
 													</select>
 								</div>
 								<div class="three columns">
-										<label>日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
-								</div>
+										<label>感动年份</label> 
+										<input type="text" data-bind="value : selectedMovingYear" />
+										<!-- <label>日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
+								 --></div>
 								<div class="three columns">
-										<label>培训通知</label>
+										<label>感动月份</label> 
+													<select data-bind="options: $root.monthArray,
+                       									    selectedOption : selectedMovingMonth,
+                       									    optionsCaption: '请选择...'">
+									</select>
+								</div>
+							</div>
+							<div class="row">
+							
+								<div class="three columns">
+									<label>培训预约</label>
 												<select data-bind="options: $root.phases,
                       											   optionsText: 'name',
                        											   value: phase,
@@ -133,6 +145,10 @@
                        											   selectedOption : phase,
                        											   optionsCaption: '请选择...'">
                        							</select>
+									
+								</div>
+								<div class="three columns">
+									
 								</div>
 							</div>
 						</div>
@@ -369,19 +385,18 @@
 										<hr>
 										<div class="row">
 											<div class="three columns">
-												<label>老大生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : firstKidBirthday" />
+												<label>院长生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : bossBirthday" />
 											</div>
 											<div class="three columns">
-												<label>老二生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : secondKidBirthday" />
+												<label>孩子生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : firstKidBirthday" />
 											</div>
 											<div class="three columns">
-												<label>老三生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : thirdKidBirthday" />
+												<label>爱人生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : loverBirthday" />
+											</div>
+											<div class="three columns">
 											</div>
 										</div>
 										<div class="row">
-											<div class="three columns">
-												<label>院长生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : bossBirthday" />
-											</div>
 											<div class="three columns">
 												<label>公司年庆</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : companyAnniversary" />
 											</div>
@@ -389,7 +404,7 @@
 												<label>结婚纪念日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : merryAnniversary" />
 											</div>
 											<div class="three columns">
-												<label>老公生日</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : loverBirthday" />
+												
 											</div>
 										</div>
 										<div class="row">
@@ -863,6 +878,8 @@
 						this.birthdayType = '';
 						this.birthDayValue =  '';
 						this.phase ='';
+						this.selectedMovingMonth = '';
+						this.selectedMovingYear = '';
 					};
 					
 					var CompanyModel = function() {
@@ -900,6 +917,7 @@
 						self.learningHistoryRecords = ko.observableArray([]);
 						self.learningHistory = ko.observable(new LearningHistory());
 						self.phases = ko.observableArray([]);
+						self.monthArray = ['1','2','3','4','5','6','7','8','9','10','11','12'];
 						
 						self.selectedProvinceInDialog = ko.observable(new Province());
 						self.searchConditions = ko.observable(new SearchConditions());

@@ -8,16 +8,12 @@ import net.sf.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.parsing.Problem;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.ls.constants.XinXinConstants;
-import com.ls.entity.City;
-import com.ls.entity.Company;
 import com.ls.entity.Dictionary;
 import com.ls.entity.JobScheduleConfiguration;
 import com.ls.entity.Menu;
@@ -40,7 +36,6 @@ import com.ls.repository.ProvinceRepository;
 import com.ls.repository.RoleRepository;
 import com.ls.repository.StepRepository;
 import com.ls.repository.UserRepository;
-import com.sun.xml.internal.xsom.impl.scd.Iterators.Map;
 
 /**
  * This class is for basic data preparation for the web app starting up. using this class without retrieving data from the UI. The data must not be
@@ -178,9 +173,9 @@ public class TestInitializationScripts {
 		Phase firstPhase = new Phase(10, "一期");
 		Phase secondPhase = new Phase(10, "二期");
 		Phase thirdPhase = new Phase(10, "三期");
-		Phase fourthPhase = new Phase(10, "四期");
+	//	Phase fourthPhase = new Phase(10, "四期");
 		
-		List<Phase> phases = ImmutableList.of(firstPhase, secondPhase, thirdPhase, fourthPhase);
+		List<Phase> phases = ImmutableList.of(firstPhase, secondPhase, thirdPhase/*, fourthPhase*/);
 		
 		phaseRepository.save(phases);
 	}
@@ -249,17 +244,17 @@ public class TestInitializationScripts {
 	public void testAddBirthdayType() {
 		
 		Dictionary bossBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "bossBirthday", "院长生日", "");
-		Dictionary bigKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "firstKidBirthday", "大孩子生日", "");
+		Dictionary bigKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "firstKidBirthday", "孩子生日", "");
 		
-		Dictionary secondKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "secondKidBirthday", "二孩子生日", "");
-		Dictionary thirdKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "thirdKidBirthday", "小孩子生日", "");
-		Dictionary husbandBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "loverBirthday", "老公生日", "");
+		//Dictionary secondKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "secondKidBirthday", "二孩子生日", "");
+		//Dictionary thirdKidBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "thirdKidBirthday", "小孩子生日", "");
+		Dictionary husbandBirthday = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "loverBirthday", "爱人生日", "");
 		Dictionary merryAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "merryAnniversary", "结婚纪念日", "");
 		
 		Dictionary companyAnniversary = new Dictionary(XinXinConstants.BIRTHDAY_TYPE, "companyAnniversary", "公司年庆", "");
 		
 		
-		List<Dictionary> dictionaries = ImmutableList.of(bossBirthday, bigKidBirthday, secondKidBirthday, thirdKidBirthday, husbandBirthday, merryAnniversary, companyAnniversary);
+		List<Dictionary> dictionaries = ImmutableList.of(bossBirthday, bigKidBirthday, /*, secondKidBirthday, thirdKidBirthday, */husbandBirthday, merryAnniversary, companyAnniversary);
 		
 		dropDownRepository.save(dictionaries);
 	}

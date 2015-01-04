@@ -25,7 +25,7 @@
         <sec:intercept-url pattern="/*.png" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <sec:intercept-url pattern="/user/**" access="ROLE_ADMIN,ROLE_SALES_MANAGER,ROLE_CS_MANAGER,ROLE_NEW_GUY,ROLE_WC_APPROVER"/>
         <sec:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
-        <sec:intercept-url pattern="/wccheck/**" access="ROLE_WC_APPROVER"/>
+        <sec:intercept-url pattern="/wccheck/**" access="ROLE_WC_APPROVER,ROLE_ADMIN"/>
         <sec:form-login login-page="/login.ls" default-target-url="/user/load.ls" authentication-failure-url="/login.ls?error=true" />
  		<sec:logout logout-url="/logout" logout-success-url="/login.ls" />
  		<sec:access-denied-handler error-page="/access-denied.jsp"/>

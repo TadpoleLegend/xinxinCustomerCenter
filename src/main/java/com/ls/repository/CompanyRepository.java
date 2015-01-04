@@ -25,6 +25,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer>, JpaS
 
 	Company findByCityIdAndName(Integer cityId, String name);
 	
-	@Query(value="SELECT b.name cityName, count(cityId) count FROM ls.ls_ganji_companyurl a left join ls_city b on a.cityId = b.id group by cityId order by count desc limit 20", nativeQuery=true)
+	@Query(value="SELECT b.name cityName, count(cityId) count FROM ls.ls_company a left join ls_city b on a.cityId = b.id group by cityId order by count desc limit 20", nativeQuery=true)
 	List<?> findTop10CityCompanyCount(); 
 }
