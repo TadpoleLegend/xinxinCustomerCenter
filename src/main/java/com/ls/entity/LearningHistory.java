@@ -62,6 +62,7 @@ public class LearningHistory {
 	
 		this.id = id;
 	}
+	
 	@JSON(format="yyyy-MM-dd") 
 	public Date getStartDate() {
 		return startDate;

@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>抓取</title>
+<title>欣心顾客数据中心</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <link rel="stylesheet" href="/ls/css/jstree-style.css">
 <s:include value="/jsps/common/head.jsp" />

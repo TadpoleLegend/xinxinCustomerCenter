@@ -84,7 +84,7 @@ public class AdvanceSearch {
 	
 	public boolean isEverythingBlank() {
 		
-		if (StringUtils.isEmpty(appointStartDate) && StringUtils.isEmpty(appointEndDate) && StringUtils.isEmpty(birthDayValue) && StringUtils.isEmpty(phase)) {
+		if (StringUtils.isEmpty(appointStartDate) && StringUtils.isEmpty(appointEndDate) && StringUtils.isEmpty(birthDayValue) && StringUtils.isEmpty(phase) && StringUtils.isEmpty(selectedMovingMonth) && StringUtils.isEmpty(selectedMovingYear)) {
 			return true;
 		}
 		

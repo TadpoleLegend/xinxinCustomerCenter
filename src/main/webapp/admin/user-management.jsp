@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>User Management</title>
+<title>欣心顾客数据中心</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <s:include value="/jsps/common/head.jsp" />
 
@@ -35,29 +35,6 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="app-wrapper ui-corner-top">
-					<div class="blue module ui-corner-top clearfix">
-						<h2>搜索</h2>
-					</div>
-					<div class="content">
-						<div class="row">
-							<div class="three columns"></div>
-							<div class="six columns">
-								<div class="row collapse">
-									<div class="eight columns">
-										<input id="userNameInput" type="text" class="addon-postfix" placeholder="" data-bind="value : userName" />
-									</div>
-									<div class="four columns">
-										<button class="small nice blue button postfix" data-bind="click : searchUser">搜索</button>
-									</div>
-								</div>
-							</div>
-							<div class="three columns"></div>
-							<br>
-						</div>
-					</div>
-				</div>
-
 				<div class="row">
 					<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
@@ -128,7 +105,7 @@
 				self.id = '';
 				self.name = '';
 				self.description = '';
-			}
+			};
 					var UserModel = function() {
 						var self = this;
 						self.userName = ko.observable('');

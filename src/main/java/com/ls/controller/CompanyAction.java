@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.xalan.templates.ElemApplyImport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -397,6 +398,8 @@ public class CompanyAction extends BaseAction {
 
 			Company company = companyRepository.findOne(Integer.valueOf(companyId));
 
+			JSONObject learningHistoryJsonObject = JSONObject.fromObject(learningHistoryJson);
+
 			LearningHistory learningHistory = XinXinUtils.getJavaObjectFromJsonString(learningHistoryJson, LearningHistory.class);
 
 			if (learningHistory.getPhase() == null) {
@@ -404,7 +407,41 @@ public class CompanyAction extends BaseAction {
 				return SUCCESS;
 			}
 
-			learningHistory.setFirstPayDate(XinXinUtils.getStandardSimpleDate(learningHistory.getFirstPayDate()));
+			String firstPayDate = learningHistoryJsonObject.getString("firstPayDate");
+			if (StringUtils.isNotBlank(firstPayDate)) {
+				learningHistory.setFirstPayDate(XinXinConstants.SIMPLE_DATE_FORMATTER.parse(firstPayDate));
+			} else {
+				learningHistory.setFirstPayDate(null);
+			}
+
+			String startDate = learningHistoryJsonObject.getString("startDate");
+			if (StringUtils.isNotBlank(startDate) && !startDate.equals("null")) {
+				learningHistory.setStartDate(XinXinConstants.SIMPLE_DATE_FORMATTER.parse(startDate));
+			} else {
+				learningHistory.setStartDate(null);
+			}
+
+			String endDate = learningHistoryJsonObject.getString("endDate");
+			if (StringUtils.isNotBlank(endDate) && !endDate.equals("null")) {
+				learningHistory.setEndDate(XinXinConstants.SIMPLE_DATE_FORMATTER.parse(endDate));
+			} else {
+				learningHistory.setEndDate(null);
+			}
+
+			String payDebtDate = learningHistoryJsonObject.getString("payDebtDate");
+			if (StringUtils.isNotBlank(payDebtDate) && !payDebtDate.equals("null")) {
+				learningHistory.setPayDebtDate(XinXinConstants.SIMPLE_DATE_FORMATTER.parse(payDebtDate));
+			} else {
+				learningHistory.setPayDebtDate(null);
+			}
+
+			String signUpDate = learningHistoryJsonObject.getString("signUpDate");
+			if (StringUtils.isNotBlank(signUpDate) && !signUpDate.equals("null")) {
+				learningHistory.setSignUpDate(XinXinConstants.SIMPLE_DATE_FORMATTER.parse(signUpDate));
+			} else {
+				learningHistory.setSignUpDate(null);
+			}
+
 			learningHistory.setCompany(company);
 			learningHistoryRepository.saveAndFlush(learningHistory);
 

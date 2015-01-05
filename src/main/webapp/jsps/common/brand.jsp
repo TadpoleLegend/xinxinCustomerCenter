@@ -4,13 +4,7 @@
 		<address>
 			<span> 
 				<div class="row">
-					<b data-bind="text : name"></b><label class="label green">1</label>
-					<div data-bind="foreach : roles">
-						<b data-bind="text : description"></b>
-					</div>
-				</div>
-				<div class="row">
-					<a href="/ls/logout"><i class="icon-power-off small"></i></a>
+					<b data-bind="text : name"></b> &nbsp; <a href="/ls/logout"><i class="icon-power-off small"></i></a>
 				</div>
 			</span>
 		</address>

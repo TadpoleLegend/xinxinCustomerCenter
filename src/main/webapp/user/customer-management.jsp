@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>Data Management</title>
+<title>欣心顾客数据中心</title>
 <link rel="stylesheet" href="/ls/css/jquery.raty.css">
 
 <link rel="stylesheet" href="/ls/css/bwizard.css">
@@ -85,7 +85,7 @@
 						</div>
 						<div class="row">
 							<div class="three columns">
-								<label>省/直辖市</label>
+								<label>省或直辖市</label>
 								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
 							<div class="three columns">
@@ -103,7 +103,7 @@
 						<div class="row" data-bind="with : advanceSearch">
 							<div class="row">
 								<div class="three columns">
-									<label>约定联系开始日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointStartDate" />
+									<label>约定联系开始日期</label> <input id="appointStartDateInput" type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointStartDate" />
 								</div>
 								<div class="three columns">
 									<label>约定联系结束日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointEndDate" />
@@ -111,6 +111,7 @@
 							</div>
 							
 							<div class="row">
+								<!-- 
 								<div class="three columns">
 													<label>感动主题</label> 
 													<select data-bind="options: $root.birthdayTypes,
@@ -125,11 +126,14 @@
 										<label>感动年份</label> 
 										<input type="text" data-bind="value : selectedMovingYear" />
 										<!-- <label>日期</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
-								 --></div>
+								</div>
+								 
+								  -->
 								<div class="three columns">
 										<label>感动月份</label> 
 													<select data-bind="options: $root.monthArray,
                        									    selectedOption : selectedMovingMonth,
+                       									    value : selectedMovingMonth,
                        									    optionsCaption: '请选择...'">
 									</select>
 								</div>
@@ -164,7 +168,7 @@
 
 				<div class="app-wrapper ui-corner-top" id="companyList">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>客户列表</h2>
+						<h2>顾客列表</h2>
 						<h2 class="right"><a class="small white button" data-bind="click : $root.openManageCompanyDialog">录入新的顾客资料</a></h2>
 					</div>
 					<div class="content">
@@ -738,7 +742,7 @@
 		});
 	
 		$(document).ready( function() {
-			
+					
 					$("#searchWrapper").accordion({
 						collapsible: true
 					});
@@ -870,6 +874,7 @@
 						this.debtAmount = '';
 						this.payDebtDate = '';
 						this.currentMonthPolicy = '';
+						this.status = '';
 					};
 					
 					var AdvanceSearch = function() {
@@ -942,29 +947,36 @@
 						
 						self.cities = ko.computed(function() {
 							var cityOptions;
-							$.each(self.provinces(), function(i, n){
-								if ( n.id == self.selectedProvince()) {
-									cityOptions = n.cities;
-									console.debug(cityOptions);
-								}
-							});
+							if (self.selectedProvince()) {
+								
+								$.each(self.provinces(), function(i, n){
+									if ( n.id == self.selectedProvince()) {
+										cityOptions = n.cities;
+										console.debug(cityOptions);
+									}
+								});
+							} else {
+								
+								self.selectedCity(null);
+								
+							}
+							
 							return cityOptions;
 						});
 						
 						self.citiesForDialog = ko.computed(function() {
 							var cityOptions;
-							$.each(self.provinces(), function(i, n){
-								if ( n.id == self.selectedProvinceInDialog()) {
-									cityOptions = n.cities;
-									console.debug(cityOptions);
-								}
-							});
+							
+							if (self.selectedProvinceInDialog()) {
+								$.each(self.provinces(), function(i, n){
+									if ( n.id == self.selectedProvinceInDialog()) {
+										cityOptions = n.cities;
+									}
+								});
+							} 
+							
 							return cityOptions;
 						});
-						
-						//self.newCompany.subscribe(function() {
-						//	console.debug(self.selectedProvinceInDialog());
-						//});
 						
 						self.openManageCompanyDialog = function() {
 							$('#wizard').hide();
@@ -1427,8 +1439,6 @@
 						           }
 							 
 						     });
-							 
-							self.searchCompany();
 							
 							self.loadProblemConstants('员工问题');
 							self.loadProblemConstants('顾客问题');
@@ -1610,8 +1620,6 @@
 							self.companyList.removeAll();
 
 							$.each(data.elements, function(index, value) {
-								//var new_phoneSrc = "/ls/img/" + value.phoneSrc;
-								//var new_emailSrc = "/ls/img/" + value.emailSrc;
 								
 								var new_phoneSrc =  value.phoneSrc;
 								var new_emailSrc =  value.emailSrc;
@@ -1650,10 +1658,6 @@
 							
 							return found;
 						};
-						
-						self.searchByCompanyId = function() {
-							
-						};
 					};
 					
 					var companyModel = new CompanyModel();
@@ -1661,6 +1665,23 @@
 					
 					var $container = $("#container")[0];
 					ko.applyBindings(companyModel, $container);
+					
+					var today = new Date();
+					var tomorrow = new Date();
+					tomorrow.setDate(today.getDate() + 1);
+					
+					var todayStanderdString = $.datepicker.formatDate('yy-mm-dd', today);
+					var tomorrowStanderdString = $.datepicker.formatDate('yy-mm-dd', tomorrow);
+					
+					var advanceSearch = new AdvanceSearch();
+					advanceSearch.appointStartDate = todayStanderdString;
+					advanceSearch.appointEndDate = tomorrowStanderdString;
+					companyModel.advanceSearch(advanceSearch);
+					
+					companyModel.searchCompany();
+					companyModel.advanceSearch(new AdvanceSearch());
+					
+					success("以下顾客需要在今明两天跟踪。");
 					
 					$('#submit').click(function() {
 						companyModel.searchId($('#search').val());

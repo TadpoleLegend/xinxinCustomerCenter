@@ -15,6 +15,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 
 import net.sf.json.JSONObject;
 
@@ -167,8 +168,10 @@ public class CompanyServiceImpl implements CompanyService {
 					Integer status = Integer.valueOf(companySearchVo.getCustomerStatus());
 					predicate.getExpressions().add(criteriaBuilder.equal(root.<Integer> get("status"), status));
 				}
-				//TODO
-				predicate.getExpressions().add(criteriaBuilder.or(criteriaBuilder.equal(root.get("ownerUserId"), 1), criteriaBuilder.isNull(root. <Integer> get("ownerUserId")))); //nobody owns it
+				
+				User currentUser = commonService.getCurrentLoggedInUser();
+				
+				predicate.getExpressions().add(criteriaBuilder.or(criteriaBuilder.equal(root.get("ownerUserId"), currentUser.getId()), criteriaBuilder.isNull(root. <Integer> get("ownerUserId")))); //nobody owns it
 				
 				if (StringUtils.isNotBlank(companySearchVo.getCompanyNameParam())) {
 					predicate.getExpressions().add(criteriaBuilder.like(root.<String> get("name"), "%" + companySearchVo.getCompanyNameParam().trim() + "%"));
@@ -217,14 +220,14 @@ public class CompanyServiceImpl implements CompanyService {
 				
 				if (advanceSearch != null && !advanceSearch.isEverythingBlank()) {
 					
-					String birthdayType = advanceSearch.getBirthdayType();
-					String birthdayValue = advanceSearch.getBirthDayValue();
-					
-					if (StringUtils.isNotBlank(birthdayType)  && StringUtils.isNotBlank(birthdayValue)) {
-						
-						Join<Company, CompanyAdditional> companyAddtionalJoin = root.join("addtion", JoinType.LEFT);
-						predicate.getExpressions().add(criteriaBuilder.equal(companyAddtionalJoin.<String> get(birthdayType), birthdayValue));
-					}
+//					String birthdayType = advanceSearch.getBirthdayType();
+//					String birthdayValue = advanceSearch.getBirthDayValue();
+//					
+//					if (StringUtils.isNotBlank(birthdayType)  && StringUtils.isNotBlank(birthdayValue)) {
+//						
+//						Join<Company, CompanyAdditional> companyAddtionalJoin = root.join("addtion", JoinType.LEFT);
+//						predicate.getExpressions().add(criteriaBuilder.equal(companyAddtionalJoin.<String> get(birthdayType), birthdayValue));
+//					}
 					
 					String contactStartDate = advanceSearch.getAppointStartDate();
 					String contactEndDate = advanceSearch.getAppointEndDate();
@@ -271,6 +274,27 @@ public class CompanyServiceImpl implements CompanyService {
 						companyIdInLearningHistorySubquery.select(companySubqueryRoot);
 						
 						predicate.getExpressions().add(criteriaBuilder.greaterThan(root.<Integer>get("status"), 40));
+					}
+					
+					String movingYear = advanceSearch.getSelectedMovingYear();
+					String movingMonth = advanceSearch.getSelectedMovingMonth();
+					String birthdayType = advanceSearch.getBirthdayType();
+					
+					if (StringUtils.isNotBlank(movingMonth)) {
+						if (movingMonth.length() == 1) {
+							
+							movingMonth = "0" + movingMonth;
+						}
+						Join<Company, CompanyAdditional> companyAddtionalJoin = root.join("addtion", JoinType.LEFT);
+						
+						Predicate movingPredicate = criteriaBuilder.or( criteriaBuilder.like(companyAddtionalJoin.<String> get("firstKidBirthday"), movingMonth + "-%"),
+																		criteriaBuilder.like(companyAddtionalJoin.<String> get("bossBirthday"), movingMonth + "-%"),
+																		criteriaBuilder.like(companyAddtionalJoin.<String> get("companyAnniversary"), movingMonth + "-%"),
+																		criteriaBuilder.like(companyAddtionalJoin.<String> get("merryAnniversary"), movingMonth + "-%"),
+																		criteriaBuilder.like(companyAddtionalJoin.<String> get("loverBirthday"), movingMonth + "-%")
+																	);
+						
+						predicate.getExpressions().add(movingPredicate);
 					}
 					
 				}
