@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=GBK"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>���Ĺ˿���������</title>
+<title>欣心顾客数据中心</title>
 <s:include value="/jsps/common/head.jsp" />
 
 </head>
@@ -25,7 +25,7 @@
 			</div>
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>��ҳ�ɼ�</h2>
+						<h2>单页采集</h2>
 						<h2 class="right">
 						</h2>
 					</div>
@@ -33,10 +33,10 @@
 						<form id="urlInputForm">
 							<div class="row">
 								<div class="nine columns">
-									<input id="urlInput" type="text" placeholder="�����빫˾��ϸҳ������ӵ�ַ" required data-bind="value : targetDetailUrl">
+									<input id="urlInput" type="text" placeholder="请输入公司详细页面的链接地址" required data-bind="value : targetDetailUrl">
 								</div>
 								<div class="three columns">
-									<a class="small blue button" href="#" data-bind="click : grabSinglePage">��ʼץȡ</a>
+									<a class="small blue button" href="#" data-bind="click : grabSinglePage">开始抓取</a>
 								</div>
 							</div>
 						</form>
@@ -44,7 +44,7 @@
 						<div class="panel" data-bind="with : grabedNewCompany">
 							<div class="row">
 								<div class="four columns">
-									<label class="right">���</label>
+									<label class="right">编号</label>
 								</div>
 								<div class="eight columns">
 									<span data-bind="text : id"></span>
@@ -52,7 +52,7 @@
 							</div>
 							<div class="row">
 								<div class="four columns">
-									<label class="right">��˾���ƣ�</label>
+									<label class="right">公司名称：</label>
 								</div>
 								<div class="eight columns">
 									<span data-bind="text : name"></span>
@@ -60,7 +60,7 @@
 							</div>
 							<div class="row">
 								<div class="four columns">
-									<label class="right">��ַ��</label>
+									<label class="right">地址：</label>
 								</div>
 								<div class="eight columns">
 									<span data-bind="text : address"></span>
@@ -68,7 +68,7 @@
 							</div>
 							<div class="row">
 								<div class="four columns">
-									<label class="right">��ϵ�ˣ�</label>
+									<label class="right">联系人：</label>
 								</div>
 								<div class="eight columns">
 									<span data-bind="text : contactor"></span>
@@ -76,15 +76,15 @@
 							</div>
 							<div class="row">
 								<div class="four columns">
-									<label class="right">��ϵ�ֻ���</label>
+									<label class="right">联系手机：</label>
 								</div>
 								<div class="eight columns">
-									<img alt="�绰����" data-bind="attr: { 'src' : mobilePhoneSrc }, visible : mobilePhoneSrc != '' ">
+									<img alt="电话号码" data-bind="attr: { 'src' : mobilePhoneSrc }, visible : mobilePhoneSrc != '' ">
 								</div>
 							</div>
 							<div class="row">
 								<div class="four columns">
-									<label class="right">��飺</label>
+									<label class="right">简介：</label>
 								</div>
 								<div class="eight columns">
 									<span data-bind="text : description"></span>
@@ -136,7 +136,7 @@
 				self.grabSinglePage = function(item, event ) {
 					
 					if(!$('#urlInput').val()) {
-						fail("���������ӵ�ַ��");
+						fail("请输入链接地址！");
 						$('#urlInput').focus();
 						return;
 					}

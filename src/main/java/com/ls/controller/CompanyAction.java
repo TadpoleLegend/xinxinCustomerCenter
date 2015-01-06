@@ -105,43 +105,51 @@ public class CompanyAction extends BaseAction {
 
 	public String loadCompanyInPage() {
 
-		String pageNumbersString = getParameter("pageNumber");
-		if (null == pageNumbersString) {
-			pageNumbersString = "1";
+		try {
+			String pageNumbersString = getParameter("pageNumber");
+			if (null == pageNumbersString) {
+				pageNumbersString = "1";
+			}
+
+			String companyNameParam = getParameter("seachCompany");
+			String contactorParam = getParameter("searchContactor");
+			String starParam = getParameter("starInput");
+			String allStarCheckboxParam = getParameter("allStar");
+			String distinctParam = getParameter("searchDistinct");
+			String cityId = getParameter("cityId");
+			String provinceId = getParameter("provinceId");
+			String starLevelOperator = getParameter("starLevelOperator");
+			String searchId = getParameter("searchId");
+			String customerStatus = getParameter("customerStatus");
+			String selectedProblemCategory = getParameter("selectedProblemCategory");
+
+			AdvanceSearch advanceSearch = XinXinUtils.getJavaObjectFromJsonString(getParameter("advanceSearch"), AdvanceSearch.class);
+
+			CompanySearchVo companySearchVo = new CompanySearchVo();
+			companySearchVo.setCompanyNameParam(companyNameParam);
+			companySearchVo.setContactorParam(contactorParam);
+			companySearchVo.setStarParam(starParam);
+			companySearchVo.setAllStarCheckboxParam(allStarCheckboxParam);
+			companySearchVo.setDistinctParam(distinctParam);
+			companySearchVo.setCityId(cityId);
+			companySearchVo.setProvinceId(provinceId);
+			companySearchVo.setPageNumber(pageNumbersString);
+			companySearchVo.setStarLevelOperator(starLevelOperator);
+			companySearchVo.setSearchId(searchId);
+			companySearchVo.setCustomerStatus(customerStatus);
+			companySearchVo.setSelectedProblemCategory(selectedProblemCategory);
+			companySearchVo.setAdvanceSearch(advanceSearch);
+
+			Page<Company> result = companyService.getCompanyInPage(companySearchVo);
+
+			company = new PagedElement<Company>(result);
+		} catch (Exception e) {
+
+			setResponse(XinXinUtils.makeGeneralErrorResponse(e));
+			
+			return ERROR;
+			
 		}
-
-		String companyNameParam = getParameter("seachCompany");
-		String contactorParam = getParameter("searchContactor");
-		String starParam = getParameter("starInput");
-		String allStarCheckboxParam = getParameter("allStar");
-		String distinctParam = getParameter("searchDistinct");
-		String cityId = getParameter("cityId");
-		String provinceId = getParameter("provinceId");
-		String starLevelOperator = getParameter("starLevelOperator");
-		String searchId = getParameter("searchId");
-		String customerStatus = getParameter("customerStatus");
-		String selectedProblemCategory = getParameter("selectedProblemCategory");
-
-		AdvanceSearch advanceSearch = XinXinUtils.getJavaObjectFromJsonString(getParameter("advanceSearch"), AdvanceSearch.class);
-
-		CompanySearchVo companySearchVo = new CompanySearchVo();
-		companySearchVo.setCompanyNameParam(companyNameParam);
-		companySearchVo.setContactorParam(contactorParam);
-		companySearchVo.setStarParam(starParam);
-		companySearchVo.setAllStarCheckboxParam(allStarCheckboxParam);
-		companySearchVo.setDistinctParam(distinctParam);
-		companySearchVo.setCityId(cityId);
-		companySearchVo.setProvinceId(provinceId);
-		companySearchVo.setPageNumber(pageNumbersString);
-		companySearchVo.setStarLevelOperator(starLevelOperator);
-		companySearchVo.setSearchId(searchId);
-		companySearchVo.setCustomerStatus(customerStatus);
-		companySearchVo.setSelectedProblemCategory(selectedProblemCategory);
-		companySearchVo.setAdvanceSearch(advanceSearch);
-
-		Page<Company> result = companyService.getCompanyInPage(companySearchVo);
-
-		company = new PagedElement<Company>(result);
 
 		return SUCCESS;
 	}

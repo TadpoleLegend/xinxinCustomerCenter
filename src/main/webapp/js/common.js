@@ -30,7 +30,7 @@ function success(message) {
 		});
 	} else {
 		Messenger().post({
-			message : '<label class=\"text-success\"> ²Ù×÷<b>³É¹¦</b></label> <i class="icon-smile small icon-green"></i>',
+			message : '<label class=\"text-success\"> æ“ä½œ<b>æˆåŠŸ</b></label> <i class="icon-smile small icon-green"></i>',
 			showCloseButton : true,
 			hideAfter: 2
 		});
@@ -51,7 +51,7 @@ function fail(message) {
 		});
 	} else {
 		Messenger().post({
-			message : '<label class=\"text-error\"> ²Ù×÷´¦Àí·¢ÉúÁË<b>´íÎó</b></label> <i class=\"icon-frown small icon-red\"></i>',
+			message : '<label class=\"text-error\"> æ“ä½œå¤„ç†å‘ç”Ÿäº†<b>é”™è¯¯</b></label> <i class=\"icon-frown small icon-red\"></i>',
 			showCloseButton : true,
 			type : 'error'
 		});
@@ -71,7 +71,7 @@ function changeButtonStyleForPopup(event) {
 }
 
 function isOK (response) {
-	if (response && response.type =='SUCCESS') {
+	if (response && response.type &&  response.type =='SUCCESS') {
 		return true;
 	} else {
 		return false;
@@ -89,7 +89,7 @@ function bIt(message) {
 function handleStanderdResponse(data) {
 	if (!data) {
 		
-		success("²Ù×÷Íê³É£¬·şÎñÆ÷Î´·µ»ØÏûÏ¢");
+		success("æ“ä½œå®Œæˆï¼ŒæœåŠ¡å™¨æœªè¿”å›æ¶ˆæ¯");
 		return;
 	}
 

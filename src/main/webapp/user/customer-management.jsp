@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=gb2312"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>ĞÀĞÄ¹Ë¿ÍÊı¾İÖĞĞÄ</title>
+<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
 <link rel="stylesheet" href="/ls/css/jquery.raty.css">
 
 <link rel="stylesheet" href="/ls/css/bwizard.css">
@@ -24,7 +24,7 @@
 	
 	<div id="searchboxDialog" style="display : none;">
 				<form class="form-wrapper">
-					<input type="text" id="search" placeholder="ÊäÈë¹«Ë¾±àºÅ....." required> <input type="button" value="ËÑË÷" id="submit">
+					<input type="text" id="search" placeholder="è¾“å…¥å…¬å¸ç¼–å·....." required> <input type="button" value="æœç´¢" id="submit">
 				</form>
 	</div>
 	<section class="mainbg">
@@ -37,22 +37,22 @@
 			<div class="row">
 				<div id="searchWrapper" class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>²éÑ¯¹Ë¿ÍĞÅÏ¢</h2>
+						<h2>æŸ¥è¯¢é¡¾å®¢ä¿¡æ¯</h2>
 					</div>
 					<div class="content">
 						<div class="row">
 							<div class="three columns">
-								<label>¹Ë¿Í±àºÅ</label> 
+								<label>é¡¾å®¢ç¼–å·</label> 
 								<input type="text" data-bind="value: searchId">
 							</div>
 							<div class="three columns">
-								<label>ĞÇĞÇ</label>
+								<label>æ˜Ÿæ˜Ÿ</label>
 								<select data-bind="options: $root.starLevelOperators,
                       										optionsText: 'optionText',
                        									    value: $root.starLevelOperator,
                        									    optionsValue : 'optionValue',
                        									    selectedOption : $root.starLevelOperator,
-                       									    optionsCaption: 'ÇëÑ¡Ôñ...'">
+                       									    optionsCaption: 'è¯·é€‰æ‹©...'">
                        			</select>
 							</div>
 							<div class="three columns">
@@ -62,92 +62,92 @@
 						</div>
 						<div class="row">
 							<div class="three columns">
-								<label>¹Ë¿ÍÎÊÌâ</label>
+								<label>é¡¾å®¢é—®é¢˜</label>
 								<select data-bind="options: $root.problemCategories,
                       										optionsText: 'name',
                        									    value: $root.selectedProblemCategory,
                        									    optionsValue : 'name',
                        									    selectedOption : $root.selectedProblemCategory,
-                       									    optionsCaption: 'ÇëÑ¡Ôñ...'">
+                       									    optionsCaption: 'è¯·é€‰æ‹©...'">
                        			</select>
 							</div>
 							<div class="three columns">
-								<label>¹Ë¿Í×´Ì¬</label>
+								<label>é¡¾å®¢çŠ¶æ€</label>
 								<select data-bind="options: $root.allSteps,
                       										optionsText: 'name',
                        									    value: $root.customerStatus,
                        									    optionsValue : 'id',
                        									    selectedOption : $root.customerStatus,
-                       									    optionsCaption: 'ÇëÑ¡Ôñ...'">
+                       									    optionsCaption: 'è¯·é€‰æ‹©...'">
                        			</select>
 							</div>
 							
 						</div>
 						<div class="row">
 							<div class="three columns">
-								<label>Ê¡»òÖ±Ï½ÊĞ</label>
-								<select data-bind="options: provinces, optionsCaption: 'È«²¿', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
+								<label>çœæˆ–ç›´è¾–å¸‚</label>
+								<select data-bind="options: provinces, optionsCaption: 'å…¨éƒ¨', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
 							<div class="three columns">
-								<label>ÊĞ</label> 
-								<select data-bind="options: cities, optionsCaption: 'È«²¿', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
+								<label>å¸‚</label> 
+								<select data-bind="options: cities, optionsCaption: 'å…¨éƒ¨', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
 							</div>
 							<div class="three columns">
-								<label>¹«Ë¾Ãû³Æ</label> 
+								<label>å…¬å¸åç§°</label> 
 								<input type="text" class="addon-postfix" data-bind="value : seachCompany" />
 							</div>
 							<div class="three columns">
-								<label>ÁªÏµÈË</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
+								<label>è”ç³»äºº</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
 							</div>
 						</div>
 						<div class="row" data-bind="with : advanceSearch">
 							<div class="row">
 								<div class="three columns">
-									<label>Ô¼¶¨ÁªÏµ¿ªÊ¼ÈÕÆÚ</label> <input id="appointStartDateInput" type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointStartDate" />
+									<label>çº¦å®šè”ç³»å¼€å§‹æ—¥æœŸ</label> <input id="appointStartDateInput" type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointStartDate" />
 								</div>
 								<div class="three columns">
-									<label>Ô¼¶¨ÁªÏµ½áÊøÈÕÆÚ</label> <input type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointEndDate" />
+									<label>çº¦å®šè”ç³»ç»“æŸæ—¥æœŸ</label> <input type="text" data-bind="datepicker : {dateFormat : 'yy-mm-dd'}, value : appointEndDate" />
 								</div>
 							</div>
 							
 							<div class="row">
 								<!-- 
 								<div class="three columns">
-													<label>¸Ğ¶¯Ö÷Ìâ</label> 
+													<label>æ„ŸåŠ¨ä¸»é¢˜</label> 
 													<select data-bind="options: $root.birthdayTypes,
                       										optionsText: 'optionText',
                        									    value: birthdayType,
                        									    optionsValue : 'optionValue',
                        									    selectedOption : birthdayType,
-                       									    optionsCaption: 'ÇëÑ¡Ôñ...'">
+                       									    optionsCaption: 'è¯·é€‰æ‹©...'">
 													</select>
 								</div>
 								<div class="three columns">
-										<label>¸Ğ¶¯Äê·İ</label> 
+										<label>æ„ŸåŠ¨å¹´ä»½</label> 
 										<input type="text" data-bind="value : selectedMovingYear" />
-										<!-- <label>ÈÕÆÚ</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
+										<!-- <label>æ—¥æœŸ</label> <input type="text" data-bind="datepicker : {dateFormat : 'mm-dd'}, value : birthDayValue" />
 								</div>
 								 
 								  -->
 								<div class="three columns">
-										<label>¸Ğ¶¯ÔÂ·İ</label> 
+										<label>æ„ŸåŠ¨æœˆä»½</label> 
 													<select data-bind="options: $root.monthArray,
                        									    selectedOption : selectedMovingMonth,
                        									    value : selectedMovingMonth,
-                       									    optionsCaption: 'ÇëÑ¡Ôñ...'">
+                       									    optionsCaption: 'è¯·é€‰æ‹©...'">
 									</select>
 								</div>
 							</div>
 							<div class="row">
 							
 								<div class="three columns">
-									<label>ÅàÑµÔ¤Ô¼</label>
+									<label>åŸ¹è®­é¢„çº¦</label>
 												<select data-bind="options: $root.phases,
                       											   optionsText: 'name',
                        											   value: phase,
                        											   optionsValue : 'id',
                        											   selectedOption : phase,
-                       											   optionsCaption: 'ÇëÑ¡Ôñ...'">
+                       											   optionsCaption: 'è¯·é€‰æ‹©...'">
                        							</select>
 									
 								</div>
@@ -159,8 +159,8 @@
 						<hr>
 						<div class="row">
 							<div class="six columns centered">
-								<a class="small blue button" href="#" data-bind="click : searchCompanyForConditions"> ËÑË÷·ûºÏÌõ¼şµÄ¿Í»§ </a>
-								<a class="small blue button" href="#" data-bind="click : clearAllConditions"> Çå³ıËùÓĞËÑË÷Ìõ¼ş </a>
+								<a class="small blue button" href="#" data-bind="click : searchCompanyForConditions"> æœç´¢ç¬¦åˆæ¡ä»¶çš„å®¢æˆ· </a>
+								<a class="small blue button" href="#" data-bind="click : clearAllConditions"> æ¸…é™¤æ‰€æœ‰æœç´¢æ¡ä»¶ </a>
 							</div>
 						</div>
 					</div>
@@ -168,13 +168,13 @@
 
 				<div class="app-wrapper ui-corner-top" id="companyList">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>¹Ë¿ÍÁĞ±í</h2>
-						<h2 class="right"><a class="small white button" data-bind="click : $root.openManageCompanyDialog">Â¼ÈëĞÂµÄ¹Ë¿Í×ÊÁÏ</a></h2>
+						<h2>é¡¾å®¢åˆ—è¡¨</h2>
+						<h2 class="right"><a class="small white button" data-bind="click : $root.openManageCompanyDialog">å½•å…¥æ–°çš„é¡¾å®¢èµ„æ–™</a></h2>
 					</div>
 					<div class="content">
 						<div class="row">
-							¹²ÕÒµ½<label class="green label" data-bind="text: totalPagesCount"></label>
-							×é £¬ 	<label class="yellow label" data-bind="text: totalCompanyCount"></label>¸ö¹Ë¿Í£¬µ±Ç°µÚ<label data-bind="text : currentIndex" class="label ">6</label>Ò³
+							å…±æ‰¾åˆ°<label class="green label" data-bind="text: totalPagesCount"></label>
+							ç»„ ï¼Œ 	<label class="yellow label" data-bind="text: totalCompanyCount"></label>ä¸ªé¡¾å®¢ï¼Œå½“å‰ç¬¬<label data-bind="text : currentIndex" class="label ">6</label>é¡µ
 						</div>
 						<br>
 						<ul class="smartlist nice" data-bind="foreach: companyList">
@@ -190,8 +190,8 @@
 											</div>
 											<div class="three columns">
 												<label class="input-checkbox"> 
-													<img style="margin-left: 45px" alt="µç»°ºÅÂë" data-bind="attr: { 'src' : phoneSrc }, visible : mobilePhoneSrc == '' ">
-													<img style="margin-left: 45px" alt="ÊÖ»úºÅÂë" data-bind="attr: { 'src' : mobilePhoneSrc }, visible : mobilePhoneSrc != '' ">
+													<img style="margin-left: 45px" alt="ç”µè¯å·ç " data-bind="attr: { 'src' : phoneSrc }, visible : mobilePhoneSrc == '' ">
+													<img style="margin-left: 45px" alt="æ‰‹æœºå·ç " data-bind="attr: { 'src' : mobilePhoneSrc }, visible : mobilePhoneSrc != '' ">
 													<span data-bind="text : mobilePhone, visible : mobilePhone != '' "></span>
 													<span data-bind="text : phone, visible : mobilePhone == '' && phone != '' "></span>
 												</label>
@@ -201,14 +201,14 @@
 											</div>
 											<div class="two columns" style="top:35%">
 												<div class="row">
-													<a class="small green button" data-bind="click : $root.trackCustomer, css: { red : id == $root.selectedId()}" href="#">²é¿´ÏêÇé</a>
+													<a class="small green button" data-bind="click : $root.trackCustomer, css: { red : id == $root.selectedId()}" href="#">æŸ¥çœ‹è¯¦æƒ…</a>
 												</div>
 											</div>
 								</div>
 							</li>
 						</ul>
 						<div data-bind="visible : companyList().length == 0">
-							<h4 class="text-center">Ã»ÓĞ²éÑ¯µ½·ûºÏÌõ¼şµÄ¹Ë¿ÍĞÅÏ¢¡£</h4>
+							<h4 class="text-center">æ²¡æœ‰æŸ¥è¯¢åˆ°ç¬¦åˆæ¡ä»¶çš„é¡¾å®¢ä¿¡æ¯ã€‚</h4>
 							<hr>
 						</div>
 						<div class="row" id="companyPagenavigation"></div>
@@ -218,13 +218,13 @@
 					<div class="app-wrapper ui-corner-top">
 						<div class="gray module ui-corner-top clearfix">
 							<h2>
-								ÏêÏ¸ĞÅÏ¢<span class="subheader line" data-bind="text : name"></span>
+								è¯¦ç»†ä¿¡æ¯<span class="subheader line" data-bind="text : name"></span>
 							</h2>
 							<h2 style="margin-left : 200px">
 								<div id="detailStar" class="star" data-bind="attr : {'star' : star, 'companyId' : id}"></div>
 							</h2>
 							<h2 class="right">
-								<a class="small blue button" data-bind="click : $root.backToCustomerList" href="#">·µ»Ø¿Í»§ÁĞ±í</a>
+								<a class="small blue button" data-bind="click : $root.backToCustomerList" href="#">è¿”å›å®¢æˆ·åˆ—è¡¨</a>
 							</h2>
 						</div>
 						<div class="content app-wrapper">
@@ -241,12 +241,12 @@
 							<br>
 							<div id="accordion">
 								<h4>
-									<a href="#">¿Í»§»ù±¾ĞÅÏ¢</a> 
+									<a href="#">å®¢æˆ·åŸºæœ¬ä¿¡æ¯</a> 
 								</h4>
 								<div class="content">
 									<div class="row">
 										<div class="three columns">
-											<label>¿Í»§±àºÅ:</label>  <span  data-bind="text : id" ></span>
+											<label>å®¢æˆ·ç¼–å·:</label>  <span  data-bind="text : id" ></span>
 										</div>
 										<div class="three columns">
 											<a data-bind="attr : {url : oteUrl}, click : $root.showDetail.bind($data, 'ote') "><span data-bind="text : oteUrl"></span></a>
@@ -262,15 +262,15 @@
 									<div class="row">
 										<div class="row">
 											<div class='three columns'>
-												<label>Ãû³Æ </label><input type="text"
+												<label>åç§° </label><input type="text"
 													data-bind="value : name" disabled="disabled">
 											</div>
 											<div class='two columns'>
-												<label>ÇøÓò </label><input type="text"
+												<label>åŒºåŸŸ </label><input type="text"
 													data-bind="value : distinct">
 											</div>
 											<div class='seven columns'>
-												<label>µØÖ· </label> <input type="text"
+												<label>åœ°å€ </label> <input type="text"
 													data-bind="value : address">
 											</div>
 										</div>
@@ -281,131 +281,131 @@
 										</div>
 										<div class="row">
 											<div class='three columns'>
-												<label>ÁªÏµÈË </label><input type="text"
+												<label>è”ç³»äºº </label><input type="text"
 													data-bind="value : contactor">
 											</div>
 											<div class='three columns'>
-												<label>ÊÖ»ú</label>
+												<label>æ‰‹æœº</label>
 												<label class="input-checkbox" data-bind="visible : !mobilePhone"> 
-													<img alt="µç»°ºÅÂë" data-bind="attr: { 'src' : mobilePhoneSrc }  ">
+													<img alt="ç”µè¯å·ç " data-bind="attr: { 'src' : mobilePhoneSrc }  ">
 												</label>
 												<input type="text" data-bind="value : mobilePhone, visible : mobilePhone " />
 											</div>
 											<div class='three columns'>
-												<label>¹Ì¶¨µç»°</label>
+												<label>å›ºå®šç”µè¯</label>
 												<label class="input-checkbox" data-bind="visible : !phone"> 
-													<img alt="µç»°ºÅÂë" data-bind="attr: { 'src' : phoneSrc }">
+													<img alt="ç”µè¯å·ç " data-bind="attr: { 'src' : phoneSrc }">
 												</label>
 												<input type="text" data-bind="value : phone, visible : phone" />
 											</div>
 											
 											<div class='three columns' >
-												<label>µç×ÓÓÊ¼ş</label>
+												<label>ç”µå­é‚®ä»¶</label>
 												<label class="input-checkbox" data-bind="visible : email == ''"> 
-													<img alt="µç×ÓÓÊÏä" data-bind="attr: { 'src' : emailSrc }">
+													<img alt="ç”µå­é‚®ç®±" data-bind="attr: { 'src' : emailSrc }">
 												</label>
 												<input type="text" data-bind="value : email, visible : email" />
 											</div>
 										</div>
 									</div>
 									<div class="row">
-										<label>¹«Ë¾¼ò½é</label>
+										<label>å…¬å¸ç®€ä»‹</label>
 										<textarea data-bind="value : description"></textarea>
 									</div>
 									<br>
-									<h4 class="text-success">²¹³ä¿Í»§ĞÅÏ¢</h4>
+									<h4 class="text-success">è¡¥å……å®¢æˆ·ä¿¡æ¯</h4>
 									<hr>
 									<div id="addtionalCompanyInformation"
 										data-bind="with : $root.addtion">
 										<div class="row">
 											<div class="three columns">
-												<label>¿Í»§ÆÀ¼¶</label>
+												<label>å®¢æˆ·è¯„çº§</label>
 												<select data-bind="options: $root.companyTypes,
                       											   optionsText: 'optionText',
                        											   value: companyLevel,
                        											   optionsValue : 'optionValue',
                        											   selectedOption : companyLevel,
-                       											   optionsCaption: 'Ñ¡Ôñ¿Í»§¼¶±ğ'"
+                       											   optionsCaption: 'é€‰æ‹©å®¢æˆ·çº§åˆ«'"
                        									class="required">
                        							</select>
 											</div>
 										</div>
 										<div class="row">
 											<div class="three columns">
-												<label>Ôº³¤ĞÕÃû</label> <input type="text"
+												<label>é™¢é•¿å§“å</label> <input type="text"
 													data-bind="value : bossName" />
 											</div>
 											<div class="three columns">
-												<label>Ôº³¤ÊÖ»ú</label> <input class="number" type="text"
+												<label>é™¢é•¿æ‰‹æœº</label> <input class="number" type="text"
 													data-bind="value : bossMobile" />
 											</div>
 											<div class="three columns">
-												<label>Ôº³¤µç»°</label> <input class="number" type="text"
+												<label>é™¢é•¿ç”µè¯</label> <input class="number" type="text"
 													data-bind="value : bossTelephone" />
 											</div>
 											<div class="three columns">
-												<label>Ôº³¤QQ»òÕßÎ¢ĞÅºÅ</label> <input type="text"
+												<label>é™¢é•¿QQæˆ–è€…å¾®ä¿¡å·</label> <input type="text"
 													data-bind="value : bossQQorWechat" />
 											</div>
 										</div>
 										<div class="row">
 											<div class="three columns">
-												<label>µê¸öÊı</label> <input class="number" type="text"
+												<label>åº—ä¸ªæ•°</label> <input class="number" type="text"
 													data-bind="value : branchCount" />
 											</div>
 											<div class="three columns">
-												<label>µê³¤ÈËÊı</label> <input class="number" type="text"
+												<label>åº—é•¿äººæ•°</label> <input class="number" type="text"
 													data-bind="value : branchManagerCount" />
 											</div>
 											<div class="three columns">
-												<label>¹ËÎÊÈËÊı</label> <input class="number" type="text"
+												<label>é¡¾é—®äººæ•°</label> <input class="number" type="text"
 													data-bind="value : branchConsultantCount" />
 											</div>
 											<div class="three columns">
-												<label>´²Î»Êı</label> <input class="number" type="text"
+												<label>åºŠä½æ•°</label> <input class="number" type="text"
 													data-bind="value : bedCount" />
 											</div>
 										</div>
 										<div class="row">
 											<div class="three columns">
-												<label>¹æÄ££¨Æ½·½£©</label> <input class="number" type="text"
+												<label>è§„æ¨¡ï¼ˆå¹³æ–¹ï¼‰</label> <input class="number" type="text"
 													data-bind="value : acreage" />
 											</div>
 											<div class="three columns">
-												<label>È¥ÄêÒµ¼¨£¨Íò£©</label> <input class="number" type="text"
+												<label>å»å¹´ä¸šç»©ï¼ˆä¸‡ï¼‰</label> <input class="number" type="text"
 													data-bind="value : lastYearIncome" />
 											</div>
 											<div class="three columns">
-												<label>ÏÖÆ½¾ù¶àÉÙÍò</label> <input class="number" type="text"
+												<label>ç°å¹³å‡å¤šå°‘ä¸‡</label> <input class="number" type="text"
 													data-bind="value : thisYearMonthlyIncome" />
 											</div>
 											<div class="three columns">
-												<label>Ôº³¤ÄêÁä´ó¸Å¶àÉÙËê£¿</label> <input class="number" type="text"
+												<label>é™¢é•¿å¹´é¾„å¤§æ¦‚å¤šå°‘å²ï¼Ÿ</label> <input class="number" type="text"
 													data-bind="value : bossAge" />
 											</div>
 										</div>
 										<br>
-										<h4 class="text-success">¸Ğ¶¯¹Ë¿Í</h4>
+										<h4 class="text-success">æ„ŸåŠ¨é¡¾å®¢</h4>
 										<hr>
 										<div class="row">
 											<div class="three columns">
-												<label>Ôº³¤ÉúÈÕ</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : bossBirthday" />
+												<label>é™¢é•¿ç”Ÿæ—¥</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : bossBirthday" />
 											</div>
 											<div class="three columns">
-												<label>º¢×ÓÉúÈÕ</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : firstKidBirthday" />
+												<label>å­©å­ç”Ÿæ—¥</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : firstKidBirthday" />
 											</div>
 											<div class="three columns">
-												<label>°®ÈËÉúÈÕ</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : loverBirthday" />
+												<label>çˆ±äººç”Ÿæ—¥</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : loverBirthday" />
 											</div>
 											<div class="three columns">
 											</div>
 										</div>
 										<div class="row">
 											<div class="three columns">
-												<label>¹«Ë¾ÄêÇì</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : companyAnniversary" />
+												<label>å…¬å¸å¹´åº†</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : companyAnniversary" />
 											</div>
 											<div class="three columns">
-												<label>½á»é¼ÍÄîÈÕ</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : merryAnniversary" />
+												<label>ç»“å©šçºªå¿µæ—¥</label> <input  type="text" data-bind="datepicker : {dateFormat : 'mm-dd'},value : merryAnniversary" />
 											</div>
 											<div class="three columns">
 												
@@ -413,25 +413,25 @@
 										</div>
 										<div class="row">
 											<div class="six columns">
-												<label>±¸×¢</label> 
+												<label>å¤‡æ³¨</label> 
 												<textarea rows="1" data-bind=" value : comments"></textarea>
 											</div>
 										</div>
 										<div class="row">
-											<a class="small blue button" data-bind="click : $root.saveAddition">±£´æ¿Í»§ĞÅÏ¢</a>
+											<a class="small blue button" data-bind="click : $root.saveAddition">ä¿å­˜å®¢æˆ·ä¿¡æ¯</a>
 										</div>
 									</div>
 								</div>
 
 								<h4>
-									<a href="#">ÎÊÌâ¹éÀà</a>
+									<a href="#">é—®é¢˜å½’ç±»</a>
 								</h4>
 								<div class="app-wrapper content">
 									<div class="row">
 										<div class="four columns">
 											<div class="app-wrapper ui-corner-top">
 												<div class="blue module ui-corner-top clearfix">
-													<h2>Ô±¹¤ÎÊÌâ</h2>
+													<h2>å‘˜å·¥é—®é¢˜</h2>
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantA">
@@ -446,7 +446,7 @@
 										<div class="four columns">
 											<div class="app-wrapper ui-corner-top">
 												<div class="blue module ui-corner-top clearfix">
-													<h2>¹Ë¿ÍÎÊÌâ</h2>
+													<h2>é¡¾å®¢é—®é¢˜</h2>
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantB">
@@ -462,7 +462,7 @@
 										<div class="four columns">
 											<div class="app-wrapper ui-corner-top">
 												<div class="blue module ui-corner-top clearfix">
-													<h2>ÆäËûÎÊÌâ</h2>
+													<h2>å…¶ä»–é—®é¢˜</h2>
 												</div>
 												<div class="content">
 													<div data-bind="foreach : $root.allProblemsConstantC">
@@ -480,22 +480,22 @@
 								</div>
 
 								<h3>
-									<a href="#">µç»°¸ú×Ù</a>
+									<a href="#">ç”µè¯è·Ÿè¸ª</a>
 								</h3>
 								<div class="app-wrapper content">
 									<div class="row">
 										<div class="right">
-											<a class="small blue button" data-bind="click : $root.addHistory">´´½¨ĞÂµÄÍ¨»°¼ÇÂ¼</a>
+											<a class="small blue button" data-bind="click : $root.addHistory">åˆ›å»ºæ–°çš„é€šè¯è®°å½•</a>
 										</div>
 									</div>
 									<div class="row">
 										<table class="display compact" id="phoneCallHistoryListTable">
 											<thead>
 												<tr>
-													<th class="text-center">¼ÇÂ¼±àºÅ</th>
-													<th class="text-center">¸ú×ÙÊ±¼ä</th>
-													<th class="text-center">ÏÂ´Î¸ú×ÙÊ±¼ä</th>
-													<th class="text-center">¹µÍ¨ÄÚÈİ</th>
+													<th class="text-center">è®°å½•ç¼–å·</th>
+													<th class="text-center">è·Ÿè¸ªæ—¶é—´</th>
+													<th class="text-center">ä¸‹æ¬¡è·Ÿè¸ªæ—¶é—´</th>
+													<th class="text-center">æ²Ÿé€šå†…å®¹</th>
 													<th class="text-center"></th>
 												</tr>
 											</thead>
@@ -516,24 +516,24 @@
 									</div>
 								</div>
 								<h3>
-									<a href="#">ÅàÑµ¼ÇÂ¼</a>
+									<a href="#">åŸ¹è®­è®°å½•</a>
 								</h3>
 								<div class="app-wrapper content">
 									<div class="row">
 										<div class="right">
-											<a class="small blue button" data-bind="click : $root.addLearningHistory">´´½¨ĞÂµÄÅàÑµ¼ÇÂ¼</a>
+											<a class="small blue button" data-bind="click : $root.addLearningHistory">åˆ›å»ºæ–°çš„åŸ¹è®­è®°å½•</a>
 										</div>
 									</div>
 									<div>
 										<table class="display compact" id="learningHistoryListTable">
 											<thead>
 												<tr>
-													<th class="text-center">¼ÇÂ¼±àºÅ</th>
-													<th class="text-center">ÆÚÊı</th>
-													<th class="text-center">¿ªÊ¼Ê±¼ä</th>
-													<th class="text-center">½áÊøÊ±¼ä</th>
-													<th class="text-center">ÖĞ²ãÈËÊı</th>
-													<th class="text-center">¸ß²ãÈËÊı</th>
+													<th class="text-center">è®°å½•ç¼–å·</th>
+													<th class="text-center">æœŸæ•°</th>
+													<th class="text-center">å¼€å§‹æ—¶é—´</th>
+													<th class="text-center">ç»“æŸæ—¶é—´</th>
+													<th class="text-center">ä¸­å±‚äººæ•°</th>
+													<th class="text-center">é«˜å±‚äººæ•°</th>
 													<th class="text-center"></th>
 												</tr>
 											</thead>
@@ -556,160 +556,160 @@
 								<div>
 								</div>
 							</div>
-							<div id="phoneCallDialog" title="µç»°¼ÇÂ¼¹ÜÀí" style="display:none;" data-bind="with : $root.phoneCall">
+							<div id="phoneCallDialog" title="ç”µè¯è®°å½•ç®¡ç†" style="display:none;" data-bind="with : $root.phoneCall">
 									<form id="historyForm">
 										<div class="row">
-											<label class="label"> µç»°¼ÇÂ¼±àºÅ £º</label> <span
+											<label class="label"> ç”µè¯è®°å½•ç¼–å· ï¼š</label> <span
 												data-bind="text : id"></span>
 										</div>
 										<br>
 										<hr>
 										<div class="row">
-											<label class="required">µç»°ÄÚÈİ</label>
+											<label class="required">ç”µè¯å†…å®¹</label>
 											<textarea name="descriptionArea" data-bind="value : description" class="required" style="width: 598px; height: 287px;"></textarea>
 										</div>
 										<div class="row">
-											<label>ÏÂ´Î¹µÍ¨ÈÕÆÚ¼°Ê±¼ä</label>
+											<label>ä¸‹æ¬¡æ²Ÿé€šæ—¥æœŸåŠæ—¶é—´</label>
 											 <input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1, onClose : $root.nextDateOnClose}, value : nextDate" class="required">
 										</div>
 									</form>
 							</div>
-							<div id="selectedCompanyDialog" title="¹«Ë¾¹ÜÀí" style="display:none;" data-bind="with : $root.newCompany">
+							<div id="selectedCompanyDialog" title="å…¬å¸ç®¡ç†" style="display:none;" data-bind="with : $root.newCompany">
 							
 									<form id="companyManageForm">
 										<div class="row">
-											<label class="label"> ¹«Ë¾±àºÅ £º</label> <br> <span data-bind="text : id"></span>
+											<label class="label"> å…¬å¸ç¼–å· ï¼š</label> <br> <span data-bind="text : id"></span>
 											</div>
 										<br>
 										<hr>
 										<div class="row">
 											<div class="four columns">
-												<label>Ê¡/Ö±Ï½ÊĞ</label> 
-												<select class="required" data-bind="options: $root.provinces, optionsCaption: 'ÇëÑ¡Ôñ...', optionsText: 'name', optionsValue: 'id', value: $root.selectedProvinceInDialog, valueAllowUnset: true"></select>
+												<label>çœ/ç›´è¾–å¸‚</label> 
+												<select class="required" data-bind="options: $root.provinces, optionsCaption: 'è¯·é€‰æ‹©...', optionsText: 'name', optionsValue: 'id', value: $root.selectedProvinceInDialog, valueAllowUnset: true"></select>
 											</div>
 											<div class="four columns">
-												<label>ÊĞ/Çø</label> 
-												<select data-bind="options: $root.citiesForDialog, optionsCaption: 'ÇëÑ¡Ôñ...', optionsText: 'name', optionsValue: 'id', value: cityId, valueAllowUnset: true"></select>
+												<label>å¸‚/åŒº</label> 
+												<select data-bind="options: $root.citiesForDialog, optionsCaption: 'è¯·é€‰æ‹©...', optionsText: 'name', optionsValue: 'id', value: cityId, valueAllowUnset: true"></select>
 											</div>
 											<div class='four columns'>
-												<label>Ãû³Æ </label><input type="text" data-bind="value : name">
+												<label>åç§° </label><input type="text" data-bind="value : name">
 											</div>
 											
 										</div>
 										
 										<div class="row">
 											<div class='four columns'>
-												<label>ÁªÏµÈË </label>
+												<label>è”ç³»äºº </label>
 												<input type="text" data-bind="value : contactor">
 											</div>
 											<div class='four columns'>
-												<label>ÊÖ»ú</label>
+												<label>æ‰‹æœº</label>
 												<input type="text" data-bind="value : mobilePhone">
 											</div>
 											<div class='four columns'>
-												<label>¹Ì¶¨µç»°</label>
+												<label>å›ºå®šç”µè¯</label>
 												<input type="text" data-bind="value : phone">
 											</div>
 										</div>
 										<div class="row">
 											<div class='six columns'>
-												<label>µç×ÓÓÊ¼ş</label>
+												<label>ç”µå­é‚®ä»¶</label>
 												<input type="text" data-bind="value : email">
 											</div>
 										</div>
 										<div class="row">
-											<label>µØÖ· </label> 
+											<label>åœ°å€ </label> 
 											<input type="text" data-bind="value : address">
 										</div>
 										<div class="row">
-											<label>¹«Ë¾¼ò½é</label> 
+											<label>å…¬å¸ç®€ä»‹</label> 
 											<textarea data-bind="value : description"></textarea>
 										</div>
 									</form>
 							</div>
-							<div id="learningHistoryDialog" title="ÅàÑµ¼ÇÂ¼¹ÜÀí" style="display:none;" data-bind="with : $root.learningHistory">
+							<div id="learningHistoryDialog" title="åŸ¹è®­è®°å½•ç®¡ç†" style="display:none;" data-bind="with : $root.learningHistory">
 									<form id="learningHistoryForm">
 										<div class="row">
 											<div class="four columns">
-												<label>Ñ¡ÔñÅàÑµ×´Ì¬</label>
+												<label>é€‰æ‹©åŸ¹è®­çŠ¶æ€</label>
 												<select data-bind="options: $root.traningStatus,
                       											   optionsText: 'optionText',
                        											   value: status,
                        											   optionsValue : 'optionValue',
                        											   selectedOption : status,
-                       											   optionsCaption: 'Ñ¡Ôñ×´Ì¬'"
+                       											   optionsCaption: 'é€‰æ‹©çŠ¶æ€'"
                        									class="required">
                        							</select>
 											</div>
 										</div>
 										<div class="row">
 											<div class="four columns">
-												<label>±¨ÃûÈÕÆÚ</label>
+												<label>æŠ¥åæ—¥æœŸ</label>
 												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : signUpDate">
 											</div>
 											<div class="four columns">
-												<label>Ê×¸¶ÈÕÆÚ</label>
+												<label>é¦–ä»˜æ—¥æœŸ</label>
 												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : firstPayDate">
 											
 											</div>
 											<div class="four columns">
-												<label>Ê×¸¶½ğ¶î</label>
+												<label>é¦–ä»˜é‡‘é¢</label>
 												<input class="number" type="text" data-bind="value : firstPayAmount" />
 											</div>
 										</div>
 										<div class="row">
 											<div class="four columns">
-												<label>×Ü¿î</label>
+												<label>æ€»æ¬¾</label>
 												<input class="number" type="text" data-bind="value : totalAmount" /></div>
 											<div class="four columns">
-												<label>Ç·¿î</label>
+												<label>æ¬ æ¬¾</label>
 												<input class="number" type="text" data-bind="value : debtAmount" /></div>
 											<div class="four columns">
-												<label>²¹¿îÈÕÆÚ</label>
+												<label>è¡¥æ¬¾æ—¥æœŸ</label>
 												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : payDebtDate">
 											</div>
 											
 										</div>
 										<div class="row">
 											<div class="four columns">
-												<label>µ±ÔÂÕş²ß</label>
+												<label>å½“æœˆæ”¿ç­–</label>
 												<input class="number" type="text" data-bind="value : currentMonthPolicy" />
 											</div>
 										</div>
 										<div class="row">
 											<div class="four columns">
-												<label>ÆÚÊı</label>
+												<label>æœŸæ•°</label>
 												<select data-bind="options: $root.phases,
                       											   optionsText: 'name',
                        											   value: phase.id,
                        											   optionsValue : 'id',
                        											   selectedOption : phase.id,
-                       											   optionsCaption: 'Ñ¡ÔñÆÚÊı'"
+                       											   optionsCaption: 'é€‰æ‹©æœŸæ•°'"
                        									class="required">
                        							</select>
 											</div>
 											<div class="four columns">
-												<label>ÖĞ²ãÈËÊı</label>
+												<label>ä¸­å±‚äººæ•°</label>
 												<input class="number" type="text" data-bind="value : middleLevelManagerCount" />
 											</div>
 											<div class="four columns">
-												<label>¸ß²ãÈËÊı</label>
+												<label>é«˜å±‚äººæ•°</label>
 												<input class="number" type="text" data-bind="value : highLevelManagerCount" />
 											</div>
 										</div>
 										
 										<div class="row">
 											<div class="six columns">
-												<label>¿ªÊ¼ÈÕÆÚ</label>
+												<label>å¼€å§‹æ—¥æœŸ</label>
 												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : startDate">
 											</div>
 											<div class="six columns">
-												<label>½áÊøÈÕÆÚ</label>
+												<label>ç»“æŸæ—¥æœŸ</label>
 												<input type="text" data-bind="datepicker : {showSecond : true, dateFormat : 'yy-mm-dd',stepHour : 1,stepMinute : 1,stepSecond : 1}, value : endDate">
 											</div>
 										</div>
 										<div class="row">
-											<label>±¸×¢</label>
+											<label>å¤‡æ³¨</label>
 											<textarea name="descriptionArea" data-bind="value : comments" style="width: 628px; height: 198px;"></textarea>
 										</div>
 									</form>
@@ -989,10 +989,10 @@
 								},
 								
 								buttons : {
-									'±£´æ¼ÇÂ¼' : function() {
+									'ä¿å­˜è®°å½•' : function() {
 										self.saveCompany();
 									},
-									'¹Ø±Õ´°¿Ú' : function() {
+									'å…³é—­çª—å£' : function() {
 										self.closeDialog('selectedCompanyDialog');
 									}
 								},
@@ -1041,7 +1041,7 @@
 									if (data) {
 										self.learningHistoryRecords(data);
 									} else {
-										fail('¼ÓÔØÑ§Ï°¼ÇÂ¼ÏîÊ§°Ü.');
+										fail('åŠ è½½å­¦ä¹ è®°å½•é¡¹å¤±è´¥.');
 									}
 								}
 							});
@@ -1125,7 +1125,7 @@
 									if (data) {
 										self.historyRecords(data);
 									} else {
-										fail('¼ÓÔØµç»°¼ÇÂ¼ÏîÊ§°Ü.');
+										fail('åŠ è½½ç”µè¯è®°å½•é¡¹å¤±è´¥.');
 									}
 								}
 							});
@@ -1194,7 +1194,7 @@
 						
 						
 						self.removePhoneCallHistory = function(item, event) {
-							if(window.confirm('ÄãÕæµÄÒªÉ¾³ıÕâÌõ¼ÇÂ¼Âğ£¿')) {
+							if(window.confirm('ä½ çœŸçš„è¦åˆ é™¤è¿™æ¡è®°å½•å—ï¼Ÿ')) {
 								$.ajax({
 									url : '/ls/user/removePhoneCallHistory.ls',
 									method : 'POST',
@@ -1218,7 +1218,7 @@
 							
 						};
 						self.removeLearningHistory = function(item, event) {
-							if(window.confirm('ÄãÕæµÄÒªÉ¾³ıÕâÌõ¼ÇÂ¼Âğ£¿')) {
+							if(window.confirm('ä½ çœŸçš„è¦åˆ é™¤è¿™æ¡è®°å½•å—ï¼Ÿ')) {
 								$.ajax({
 									url : '/ls/user/removeLearningHistory.ls',
 									method : 'POST',
@@ -1259,9 +1259,9 @@
 										var showToUser = '';
 										
 										if (checkedFlag) {
-											showToUser = (  self.selectedCompany().name + " Ôö¼ÓÁËÎÊÌâÏî: <b>" + item.name + "</b>¡£");
+											showToUser = (  self.selectedCompany().name + " å¢åŠ äº†é—®é¢˜é¡¹: <b>" + item.name + "</b>ã€‚");
 										} else {
-											showToUser =  self.selectedCompany().name + " È¥³ıÁËÎÊÌâÏî:<b>" + item.name + "</b>¡£";
+											showToUser =  self.selectedCompany().name + " å»é™¤äº†é—®é¢˜é¡¹:<b>" + item.name + "</b>ã€‚";
 										}
 										
 										success(showToUser);
@@ -1283,7 +1283,7 @@
 								success : function(data) {
 									
 									if (data && data.message) {
-										var showToUser =  self.selectedCompany().name + "ÒÑ±»ÆÀÎª <b>" + score + "</b>ĞÇ¡£";
+										var showToUser =  self.selectedCompany().name + "å·²è¢«è¯„ä¸º <b>" + score + "</b>æ˜Ÿã€‚";
 										success(showToUser);
 										
 									} else {
@@ -1303,7 +1303,7 @@
 									
 									if (data && data.id) {
 										self.addtion(data);	
-										success("±£´æ³É¹¦¡£");
+										success("ä¿å­˜æˆåŠŸã€‚");
 									}
 								}
 							});
@@ -1356,10 +1356,10 @@
 								},
 								
 								buttons : {
-									'±£´æ¼ÇÂ¼' : function() {
+									'ä¿å­˜è®°å½•' : function() {
 										self.savePhoneCallHistory();
 									},
-									'¹Ø±Õ´°¿Ú' : function() {
+									'å…³é—­çª—å£' : function() {
 										self.closeDialog('phoneCallDialog');
 									}
 								},
@@ -1378,10 +1378,10 @@
 								},
 								
 								buttons : {
-									'±£´æ¼ÇÂ¼' : function() {
+									'ä¿å­˜è®°å½•' : function() {
 										self.saveLearningHistory();
 									},
-									'¹Ø±Õ´°¿Ú' : function() {
+									'å…³é—­çª—å£' : function() {
 										self.closeDialog('learningHistoryDialog');
 									}
 								},
@@ -1407,7 +1407,7 @@
 										
 										self.problemsTheCompanyHas(selectedIds);
 									} else {
-										fail('¼ÓÔØ¿Í»§ÎÊÌâÑ¡ÏîÊ§°Ü');
+										fail('åŠ è½½å®¢æˆ·é—®é¢˜é€‰é¡¹å¤±è´¥');
 									}
 								}
 							});
@@ -1440,9 +1440,9 @@
 							 
 						     });
 							
-							self.loadProblemConstants('Ô±¹¤ÎÊÌâ');
-							self.loadProblemConstants('¹Ë¿ÍÎÊÌâ');
-							self.loadProblemConstants('ÆäËûÎÊÌâ');
+							self.loadProblemConstants('å‘˜å·¥é—®é¢˜');
+							self.loadProblemConstants('é¡¾å®¢é—®é¢˜');
+							self.loadProblemConstants('å…¶ä»–é—®é¢˜');
 							
 							$.ajax({
 								url : 'findAllProvinces.ls',
@@ -1521,9 +1521,9 @@
 								data : {type : type},
 								success : function(data) {
 									if (data) {
-										if (type == 'Ô±¹¤ÎÊÌâ') {
+										if (type == 'å‘˜å·¥é—®é¢˜') {
 											self.allProblemsConstantA = data;
-										} else if ( type == '¹Ë¿ÍÎÊÌâ'){
+										} else if ( type == 'é¡¾å®¢é—®é¢˜'){
 											self.allProblemsConstantB = data;
 										} else {
 											self.allProblemsConstantC = data;
@@ -1564,7 +1564,7 @@
 								} else if (item.ganjiUrl) {
 									window.open(item.ganjiUrl, '_blank');	
 								} else {
-									fail("Õâ¸ö¹«Ë¾Ã»ÓĞÈÎºÎÍøÂç×ÊÔ´¿ÉÒÔÏÔÊ¾£¡");
+									fail("è¿™ä¸ªå…¬å¸æ²¡æœ‰ä»»ä½•ç½‘ç»œèµ„æºå¯ä»¥æ˜¾ç¤ºï¼");
 								}
 							}
 						};
@@ -1588,19 +1588,28 @@
 										advanceSearch : JSON.stringify(self.advanceSearch())
 										},
 								success : function(data) {
-									self.fillCompany(data);
 									
+									if(data && data.type == 'FAIL') {
+										
+										handleStanderdResponse(data);
+										
+									} else {
+										
+										self.fillCompany(data);
+										
 										$('#companyPagenavigation').pagination(
 												companyModel.totalCompanyCount(), {
-												num_edge_entries: 1, //±ßÔµÒ³Êı
-												num_display_entries: 15, //Ö÷ÌåÒ³Êı
+												num_edge_entries: 1, //è¾¹ç¼˜é¡µæ•°
+												num_display_entries: 15, //ä¸»ä½“é¡µæ•°
 												callback: self.pageselectCallback,
-												items_per_page: 10, //Ã¿Ò³ÏÔÊ¾1Ïî
-												prev_text: "ÉÏÒ»Ò³",
-												next_text: "ÏÂÒ»Ò³",
+												items_per_page: 10, //æ¯é¡µæ˜¾ç¤º1é¡¹
+												prev_text: "ä¸Šä¸€é¡µ",
+												next_text: "ä¸‹ä¸€é¡µ",
 												current_page : self.currentIndex() - 1,
 												load_first_page : false
 											});
+									}
+									
 								},
 								
 								error : function() {
@@ -1681,7 +1690,7 @@
 					companyModel.searchCompany();
 					companyModel.advanceSearch(new AdvanceSearch());
 					
-					success("ÒÔÏÂ¹Ë¿ÍĞèÒªÔÚ½ñÃ÷Á½Ìì¸ú×Ù¡£");
+					success("ä»¥ä¸‹é¡¾å®¢éœ€è¦åœ¨ä»Šæ˜ä¸¤å¤©è·Ÿè¸ªã€‚");
 					
 					$('#submit').click(function() {
 						companyModel.searchId($('#search').val());

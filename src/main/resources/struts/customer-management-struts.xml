@@ -76,6 +76,9 @@
 			<result name="success" type="json">
 				<param name="root">company</param>
 			</result>
+			<result name="error" type="json">
+				<param name="root">response</param>
+			</result>
 		</action>
 		<action name="saveAddtionalCompanyInformation" method="saveAddtionalCompanyInformation" class="companyAction">
 			<result name="input">

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=GBK"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>ÐÀÐÄ¹Ë¿ÍÊý¾ÝÖÐÐÄ</title>
+<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
 <s:include value="/jsps/common/head.jsp" />
 
 </head>
@@ -25,7 +25,7 @@
 				</div>
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>Êý¾ÝÍ³¼Æ £¨È«¹úÃÀÈÝÐÐÒµ¹«Ë¾¸öÊýÅÅÃûÇ°20£©</h2>
+						<h2>æ•°æ®ç»Ÿè®¡ ï¼ˆå…¨å›½ç¾Žå®¹è¡Œä¸šå…¬å¸ä¸ªæ•°æŽ’åå‰20ï¼‰</h2>
 						<h2 class="right"></h2>
 					</div>
 					<div class="content">

@@ -108,6 +108,13 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	public Page<Company> getCompanyInPage(final CompanySearchVo companySearchVo) {
 		
+		User currentUser = commonService.getCurrentLoggedInUser();
+		boolean isNotAdmin = commonService.checkUserNotHasRole(currentUser.getUsername(), "ROLE_ADMIN");
+		
+		if (isNotAdmin && (currentUser.getCities() == null || currentUser.getCities().isEmpty())) {
+			throw new RuntimeException("未分配城市到当前用户。");
+		}
+		
 		 Page<Company> companyPage = companyRepository.findAll(generateSpecification(companySearchVo), new PageRequest(Integer.valueOf(companySearchVo.getPageNumber()) - 1, 10));
 		 
 		 // fuck lazy loading
@@ -132,6 +139,10 @@ public class CompanyServiceImpl implements CompanyService {
 				query.distinct(true);
 				
 				Predicate predicate = criteriaBuilder.conjunction();
+				
+				User currentUser = commonService.getCurrentLoggedInUser();
+				boolean isNotAdmin = commonService.checkUserNotHasRole(currentUser.getUsername(), "ROLE_ADMIN");
+			
 				String searchId = companySearchVo.getSearchId();
 				if (StringUtils.isNotBlank(searchId)) {
 					
@@ -169,8 +180,6 @@ public class CompanyServiceImpl implements CompanyService {
 					predicate.getExpressions().add(criteriaBuilder.equal(root.<Integer> get("status"), status));
 				}
 				
-				User currentUser = commonService.getCurrentLoggedInUser();
-				
 				predicate.getExpressions().add(criteriaBuilder.or(criteriaBuilder.equal(root.get("ownerUserId"), currentUser.getId()), criteriaBuilder.isNull(root. <Integer> get("ownerUserId")))); //nobody owns it
 				
 				if (StringUtils.isNotBlank(companySearchVo.getCompanyNameParam())) {
@@ -181,20 +190,43 @@ public class CompanyServiceImpl implements CompanyService {
 					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("contactor"), companySearchVo.getContactorParam().trim()));
 				}
 				
+				//
 				if (StringUtils.isNotBlank(companySearchVo.getCityId())) {
 					
 					predicate.getExpressions().add(criteriaBuilder.equal(root.<String> get("cityId"), companySearchVo.getCityId().trim()));
 					
 				} else if (StringUtils.isNotBlank(companySearchVo.getProvinceId())) {
-					Province province = provinceRepository.findOne(Integer.valueOf(companySearchVo.getProvinceId()));
-					List<City> cities = province.getCitys();
 					
-					List<Integer> cityIds = new ArrayList<Integer>();
-					for (City city : cities) {
-						cityIds.add(city.getId());
+					Province province = provinceRepository.findOne(Integer.valueOf(companySearchVo.getProvinceId()));
+					
+					{
+						List<City> cities = province.getCitys();
+						
+						List<Integer> cityIds = new ArrayList<Integer>();
+						for (City city : cities) {
+							cityIds.add(city.getId());
+						}
+						
+						if(!cityIds.isEmpty()) {
+							predicate.getExpressions().add(root.get("cityId").in(cityIds));
+						}
 					}
 					
-					predicate.getExpressions().add(root.get("cityId").in(cityIds));
+				} else {
+					
+					if (isNotAdmin) {
+						//need refactor
+						List<City> assignedCities = currentUser.getCities();
+						
+						List<Integer> cityIds = new ArrayList<Integer>();
+						for (City city : assignedCities) {
+							cityIds.add(city.getId());
+						}
+						if(!cityIds.isEmpty()) {
+							predicate.getExpressions().add(root.get("cityId").in(cityIds));
+						}
+					}
+					
 				}
 				
 				String starLevelComparator = companySearchVo.getStarLevelOperator();
@@ -235,13 +267,15 @@ public class CompanyServiceImpl implements CompanyService {
 					if (StringUtils.isNotBlank(contactStartDate) || StringUtils.isNotBlank(contactEndDate)) {
 						
 						Join<Company, PhoneCallHistory> phoneCallHistoryJoin = root.joinList("phoneCallHistories", JoinType.LEFT);
+						Join<PhoneCallHistory, User> historyUserJoin = phoneCallHistoryJoin.join("user");
 						
 						if (StringUtils.isNotBlank(contactStartDate)) {
 							try {
 								Date startDate = XinXinConstants.SIMPLE_DATE_FORMATTER.parse(contactStartDate);
 								predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(phoneCallHistoryJoin.<Date> get("nextDate"), startDate));
+								
 							} catch (ParseException e) {
-								//TODO
+								throw new RuntimeException("日期不符合格式");
 							}
 						}
 						
@@ -250,9 +284,13 @@ public class CompanyServiceImpl implements CompanyService {
 								Date endDate = XinXinConstants.SIMPLE_DATE_FORMATTER.parse(contactEndDate);
 								predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(phoneCallHistoryJoin.<Date> get("nextDate"), endDate));
 							} catch (ParseException e) {
-								//TODO
+								throw new RuntimeException("日期不符合格式");
 							}
 						}
+						if (isNotAdmin) {
+							predicate.getExpressions().add(criteriaBuilder.equal(historyUserJoin.get("id"), currentUser.getId()));
+						}
+						
 					}
 					
 					String phase = advanceSearch.getPhase();
@@ -427,6 +465,10 @@ public class CompanyServiceImpl implements CompanyService {
 			
 			if (applyingWillingCustomer == null) {
 				CompanyAdditional companyAdditional = companyAdditionalRepository.findByCompany(company);
+				
+				if (null == companyAdditional) {
+					throw new RuntimeException("顾客信息不充分，如缺少：院长姓名，联系方式等关键信息。");
+				}
 				
 				ApplyingWillingCustomer applyingWillingCustomerToSave = new ApplyingWillingCustomer();
 				

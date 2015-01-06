@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=gb2312"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>ĞÀĞÄ¹Ë¿ÍÊı¾İÖĞĞÄ</title>
+<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
 <s:include value="/jsps/common/head.jsp" />
 </head>
 <body>
@@ -18,43 +18,43 @@
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id="configurationModelContainer">
-			<div id="problemDialog" style="display: none;" title="ÎÊÌâ±êÇ©" data-bind="with : selectedProblem">
+			<div id="problemDialog" style="display: none;" title="é—®é¢˜æ ‡ç­¾" data-bind="with : selectedProblem">
 
 				<form id="problemForm">
 					<div class="row">
-						<label class="label"> ÎÊÌâ±àºÅ £º</label> <span data-bind="text : id"></span>
+						<label class="label"> é—®é¢˜ç¼–å· ï¼š</label> <span data-bind="text : id"></span>
 					</div>
 					<br>
 					<hr>
 					<div class="row">
-						<label> ÎÊÌâÀà±ğ</label> <input id="categoryInput" type="text" data-bind="value : category" class="required">
+						<label> é—®é¢˜ç±»åˆ«</label> <input id="categoryInput" type="text" data-bind="value : category" class="required">
 					</div>
 					<div class="row">
-						<label> ÎÊÌâÃèÊö</label> <input type="text" data-bind="value : name" class="required">
+						<label> é—®é¢˜æè¿°</label> <input type="text" data-bind="value : name" class="required">
 					</div>
 				</form>
 				<div class="row">
 					<a href="#" class="small blue button"
-							data-bind="click : $root.saveProblem" title="">±£´æ¼ÇÂ¼</a>
+							data-bind="click : $root.saveProblem" title="">ä¿å­˜è®°å½•</a>
 					<a href="#" class="small blue button"
-							data-bind="click : $root.closeDialog" title="">¹Ø±Õ´°¿Ú</a>		
+							data-bind="click : $root.closeDialog" title="">å…³é—­çª—å£</a>		
 				</div>
 			</div>
 			<div class="row">
 
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>¹«Ë¾ÎÊÌâÅäÖÃ</h2>
-						<h2 class="right"> <a class=" tiny green button" href="#" data-bind="click : $root.openProblemDialog">´´½¨ĞÂÎÊÌâ±êÇ©</a></h2>
+						<h2>å…¬å¸é—®é¢˜é…ç½®</h2>
+						<h2 class="right"> <a class=" tiny green button" href="#" data-bind="click : $root.openProblemDialog">åˆ›å»ºæ–°é—®é¢˜æ ‡ç­¾</a></h2>
 					</div>
 					<div class="content">
 						<table class="display compact" id="problemListTable">
 							<thead>
 								<tr>
-									<th class="text-center">±àºÅ</th>
-									<th class="text-center">Àà±ğ</th>
-									<th class="text-center">ÄÚÈİ</th>
-									<th class="text-center">ĞŞ¸Ä/É¾³ı</th>
+									<th class="text-center">ç¼–å·</th>
+									<th class="text-center">ç±»åˆ«</th>
+									<th class="text-center">å†…å®¹</th>
+									<th class="text-center">ä¿®æ”¹/åˆ é™¤</th>
 								</tr>
 							</thead>
 							<tbody data-bind="foreach: problems">
@@ -63,9 +63,9 @@
 									<td class="text-center"><span data-bind="text: category"></span></td>
 									<td class="text-center"><span data-bind="text: name"></span></td>
 									<td class="text-center"><a class=" tiny green button"
-										href="#" data-bind="click : $root.openProblemDialogToEdit">±à¼­</a> <a
+										href="#" data-bind="click : $root.openProblemDialogToEdit">ç¼–è¾‘</a> <a
 										class=" tiny red button" href="#"
-										data-bind="click : $root.deleteProblem">É¾³ı</a></td>
+										data-bind="click : $root.deleteProblem">åˆ é™¤</a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -79,7 +79,7 @@
 	<script src="/ls/js/User.js"></script>
 	<script>
 		$(document).ready( function() {
-					var problemCategoryList = ['Ô±¹¤ÎÊÌâ', '¹Ë¿ÍÎÊÌâ', 'ÆäËûÎÊÌâ'];
+					var problemCategoryList = ['å‘˜å·¥é—®é¢˜', 'é¡¾å®¢é—®é¢˜', 'å…¶ä»–é—®é¢˜'];
 					
 					$('#problemListTable').dataTable({
 						"paging" : false,
@@ -119,7 +119,7 @@
 
 						self.deleteProblem = function(item, event) {
 							
-							if (window.confirm('ÄãÈ·¶¨ÒªÉ¾³ıÕâ¸öÎÊÌâÑ¡ÏîÂğ£¿')) {
+							if (window.confirm('ä½ ç¡®å®šè¦åˆ é™¤è¿™ä¸ªé—®é¢˜é€‰é¡¹å—ï¼Ÿ')) {
 								$.ajax({
 									url : 'deleteProblem.ls',
 									data : {
@@ -151,12 +151,12 @@
 										if (data) {
 											self.findAllProblems();
 											
-											success('ÒÑ³É¹¦´æ´¢');
+											success('å·²æˆåŠŸå­˜å‚¨');
 											
 											self.closeDialog();
 											
 										} else {
-											fail('´æ´¢Ê§°Ü');
+											fail('å­˜å‚¨å¤±è´¥');
 										}
 									}
 								});

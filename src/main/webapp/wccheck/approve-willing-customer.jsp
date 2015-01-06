@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=gb2312"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>ÐÀÐÄ¹Ë¿ÍÊý¾ÝÖÐÐÄ</title>
+<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <s:include value="/jsps/common/head.jsp" />
 </head>
@@ -22,20 +22,20 @@
 				<div class="row">
 					<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
-								<h2>ÉêÇëÁÐ±í</h2>
+								<h2>ç”³è¯·åˆ—è¡¨</h2>
 							</div>
 							<div class="content">
 								<div class="row">
 									<table class="infoTable">
 										<thead>
 											<tr>
-												<th style="text-align: center">¹«Ë¾±àºÅ</th>
-												<th style="text-align: center">¹«Ë¾Ãû³Æ</th>
-												<th style="text-align: center">Ôº³¤ÐÕÃû</th>
-												<th style="text-align: center">ÉêÇëÈË</th>
-												<th style="text-align: center">×´Ì¬</th>
-												<th style="text-align: center">ÉêÇëÈÕÆÚ</th>
-												<th style="text-align: center">²Ù×÷</th>
+												<th style="text-align: center">å…¬å¸ç¼–å·</th>
+												<th style="text-align: center">å…¬å¸åç§°</th>
+												<th style="text-align: center">é™¢é•¿å§“å</th>
+												<th style="text-align: center">ç”³è¯·äºº</th>
+												<th style="text-align: center">çŠ¶æ€</th>
+												<th style="text-align: center">ç”³è¯·æ—¥æœŸ</th>
+												<th style="text-align: center">æ“ä½œ</th>
 											</tr>
 										</thead>
 										<tbody data-bind="foreach : applyingList">
@@ -46,43 +46,43 @@
 												<td style="text-align: center" data-bind="text : applyerName"></td>
 												<td style="text-align: center">
 													<span data-bind="visible: status == 10 ">
-														ÕýÔÚÉêÇë
+														æ­£åœ¨ç”³è¯·
 													</span>
 													<span data-bind="visible: status == 20 ">
-														ÉóºËÍ¨¹ý
+														å®¡æ ¸é€šè¿‡
 													</span>
 													<span data-bind="visible: status == 30 ">
-														Î´Í¨¹ýÉóºË
+														æœªé€šè¿‡å®¡æ ¸
 													</span>
 												</td>
 												<td style="text-align: center" data-bind="text : applyingDate"></td>
 												<td style="text-align: center">
-													<a title="¼ì²é" class="tiny blue button" data-bind="click : $root.checkApplyingCustomer" style="margin-left : 5px;" href="#">¼ì²é</a>
-													<a title="Åú×¼" class="tiny white button" data-bind="click : $root.approveCustomer" style="margin-left : 5px;" href="#">Åú×¼</a>
-													<a title="¾Ü¾ø" class="tiny red button" data-bind="click : $root.rejectCustomer" style="margin-left : 5px;" href="#">¾Ü¾ø</a>
+													<a title="æ£€æŸ¥" class="tiny blue button" data-bind="click : $root.checkApplyingCustomer" style="margin-left : 5px;" href="#">æ£€æŸ¥</a>
+													<a title="æ‰¹å‡†" class="tiny white button" data-bind="click : $root.approveCustomer" style="margin-left : 5px;" href="#">æ‰¹å‡†</a>
+													<a title="æ‹’ç»" class="tiny red button" data-bind="click : $root.rejectCustomer" style="margin-left : 5px;" href="#">æ‹’ç»</a>
 												</td>
 											</tr>
 										</tbody>
 									</table>
 									</div>
 									<br>
-									<div id="checkDuplicationDialog" data-bind="with : willingCustomerCheckResult" style="display : none;" title="¼ì²é½á¹û">
-										<label class="green label"> ÌáÊ¾ £º ËÑË÷½á¹ûÊÇ¹«Ë¾±àºÅÁÐ±í</label>
+									<div id="checkDuplicationDialog" data-bind="with : willingCustomerCheckResult" style="display : none;" title="æ£€æŸ¥ç»“æžœ">
+										<label class="green label"> æç¤º ï¼š æœç´¢ç»“æžœæ˜¯å…¬å¸ç¼–å·åˆ—è¡¨</label>
 										<div class="row">
 											<label>
-												ÐÕÃû¼ì²é: 
+												å§“åæ£€æŸ¥: 
 											</label>
 											<textarea data-bind="text:bossNameResult"></textarea>
 										</div>
 										<div class="row">
 											<label>
-												Ôº³¤ÊÖ»úºÅÂë¼ì²é:
+												é™¢é•¿æ‰‹æœºå·ç æ£€æŸ¥:
 											</label>
 											<textarea data-bind="text:bossMobileResult"></textarea>
 										</div>
 										<div class="row">
 											<label>
-												¹«Ë¾Ãû³Æ¼ì²é:
+												å…¬å¸åç§°æ£€æŸ¥:
 											</label>
 											<textarea data-bind="text:companyNameResult"></textarea>
 										</div>
@@ -141,7 +141,7 @@
 											
 											buttons : {
 												
-												'¹Ø±Õ´°¿Ú' : function() {
+												'å…³é—­çª—å£' : function() {
 													closeDialog('checkDuplicationDialog');
 												}
 											}

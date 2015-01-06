@@ -11,4 +11,6 @@ public interface CommonService {
 	User getCurrentLoggedInUser();
 	
 	List<Province> findUserAssignedCities();
+	
+	boolean checkUserNotHasRole(String username, String roleName);
 }

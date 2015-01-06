@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=gb2312"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>ĞÀĞÄ¹Ë¿ÍÊı¾İÖĞĞÄ</title>
+<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <s:include value="/jsps/common/head.jsp" />
 
@@ -22,8 +22,8 @@
 		<div class="container" id ="userModeContainer">
 			<div id="resetPasswordDialog" style="display : none;">
 				<form class="form-wrapper">
-					<input type="text" id="search" placeholder="ÇëÊäÈëĞÂµÄÃÜÂë" required data-bind="value : newPasswordToReset"> 
-					<input type="button" value="È·¶¨" id="submit" data-bind="click : resetPassword">
+					<input type="text" id="search" placeholder="è¯·è¾“å…¥æ–°çš„å¯†ç " required data-bind="value : newPasswordToReset"> 
+					<input type="button" value="ç¡®å®š" id="submit" data-bind="click : resetPassword">
 				</form>
 			</div>
 			<div class="content" id="userRolesManagementDialog" style="display : none;">
@@ -38,9 +38,9 @@
 				<div class="row">
 					<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
-								<h2>ÓÃ»§ÁĞ±í</h2>
+								<h2>ç”¨æˆ·åˆ—è¡¨</h2>
 								<h2 class="right">
-									<a class="small white button" data-bind="click : $root.openUserManagementDialog">´´½¨ĞÂÓÃ»§</a>
+									<a class="small white button" data-bind="click : $root.openUserManagementDialog">åˆ›å»ºæ–°ç”¨æˆ·</a>
 								</h2>
 							</div>
 							<div class="content">
@@ -48,11 +48,11 @@
 									<table class="infoTable">
 										<thead>
 											<tr>
-												<th>±àºÅ</th>
-												<th>ĞÕÃû</th>
-												<th>ÕËºÅ</th>
-												<th>×´Ì¬</th>
-												<th>²Ù×÷</th>
+												<th>ç¼–å·</th>
+												<th>å§“å</th>
+												<th>è´¦å·</th>
+												<th>çŠ¶æ€</th>
+												<th>æ“ä½œ</th>
 											</tr>
 										</thead>
 										<tbody data-bind="foreach : users">
@@ -62,13 +62,13 @@
 												<td style="text-align: center" data-bind="text : username"></td>
 												<td style="text-align: center">
 												
-													<span data-bind="visible : active">¼¤»î</span>	
-													<span data-bind="visible : !active">¹Ø±Õ</span>											
+													<span data-bind="visible : active">æ¿€æ´»</span>	
+													<span data-bind="visible : !active">å…³é—­</span>											
 												</td>
 												<td style="text-align: center">
-													<a title="·ÖÅä½ÇÉ«" data-bind="click : $root.openAssignRolesDialog" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
-													<a title="ÖØÖÃÃÜÂë" data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-blue"></i></a>
-													<a title="¹Ø±ÕÓÃ»§" data-bind="click : $root.disactiveUser" style="margin-left : 10px;" href="#"><i class="icon-trash small icon-red"></i></a>
+													<a title="åˆ†é…è§’è‰²" data-bind="click : $root.openAssignRolesDialog" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
+													<a title="é‡ç½®å¯†ç " data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-blue"></i></a>
+													<a title="å…³é—­ç”¨æˆ·" data-bind="click : $root.disactiveUser" style="margin-left : 10px;" href="#"><i class="icon-trash small icon-red"></i></a>
 												</td>
 											</tr>
 										</tbody>
@@ -78,18 +78,18 @@
 							</div>
 						</div>
 					</div>
-				<div id="userManagementDialog" class="content" title="ÓÃ»§¹ÜÀí" style="display: none;" data-bind="with : selectedUser">
+				<div id="userManagementDialog" class="content" title="ç”¨æˆ·ç®¡ç†" style="display: none;" data-bind="with : selectedUser">
 					<div class="row">
-							<label>ĞÕÃû</label>
-							<input id="userNameInput" type="text" class="addon-postfix" placeholder="ÇëÊäÈëĞÕÃû" data-bind="value : name" />
+							<label>å§“å</label>
+							<input id="userNameInput" type="text" class="addon-postfix" placeholder="è¯·è¾“å…¥å§“å" data-bind="value : name" />
 					</div>
 					<div class="row">
-							<label>ÓÃ»§Ãû</label>
-							<input type="text" class="addon-postfix" placeholder="ÇëÊäÈëÓÃ»§Ãû" data-bind="value : username" />
+							<label>ç”¨æˆ·å</label>
+							<input type="text" class="addon-postfix" placeholder="è¯·è¾“å…¥ç”¨æˆ·å" data-bind="value : username" />
 					</div>
 					<div class="row">
-							<label>ÃÜÂë</label>
-							<input type="text" class="addon-postfix" placeholder="ÇëÊäÈëÃÜÂë" data-bind="value : password" />
+							<label>å¯†ç </label>
+							<input type="text" class="addon-postfix" placeholder="è¯·è¾“å…¥å¯†ç " data-bind="value : password" />
 					</div>
 				</div>
 			</div>
@@ -156,7 +156,7 @@
 								},
 								
 								buttons : {
-									'¹Ø±Õ´°¿Ú' : function() {
+									'å…³é—­çª—å£' : function() {
 										self.closeDialog('userRolesManagementDialog');
 									}
 								}
@@ -174,7 +174,7 @@
 						};
 						
 						self.disactiveUser = function(item, event) {
-							if (window.confirm('ÄãÕæµÄÈ·¶¨Òª¹Ø±ÕÕâ¸öÓÃ»§Âğ£¿')) {
+							if (window.confirm('ä½ çœŸçš„ç¡®å®šè¦å…³é—­è¿™ä¸ªç”¨æˆ·å—ï¼Ÿ')) {
 								
 								$.ajax({
 									url : 'disactiveUser.ls',
@@ -243,10 +243,10 @@
 								},
 								
 								buttons : {
-									'±£´æÓÃ»§' : function() {
+									'ä¿å­˜ç”¨æˆ·' : function() {
 										self.saveUser();
 									},
-									'¹Ø±Õ´°¿Ú' : function() {
+									'å…³é—­çª—å£' : function() {
 										self.closeDialog('userManagementDialog');
 									}
 								}
@@ -289,15 +289,15 @@
 						self.saveUser = function() {
 							var currentUser = self.selectedUser();
 							if (!currentUser.name) {
-								fail("ÇëÊäÈëÓÃ»§ĞÕÃû");
+								fail("è¯·è¾“å…¥ç”¨æˆ·å§“å");
 								return;
 							}
 							if (!currentUser.username) {
-								fail("ÇëÊäÈëÓÃ»§ÕËºÅ");
+								fail("è¯·è¾“å…¥ç”¨æˆ·è´¦å·");
 								return;
 							}
 							if (!currentUser.password) {
-								fail("ÇëÊäÈëÃÜÂë");
+								fail("è¯·è¾“å…¥å¯†ç ");
 								return;
 							}
 							$.ajax({                        

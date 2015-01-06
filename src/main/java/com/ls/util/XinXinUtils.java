@@ -46,7 +46,7 @@ public class XinXinUtils {
 		if (e == null) {
 			return ResponseVo.newFailMessage("操作失败");
 		}
-		ResponseVo errorResponseVo = ResponseVo.newFailMessage("你的操作在处理时发生了错误！ 异常的消息是 ： " + e.getMessage());
+		ResponseVo errorResponseVo = ResponseVo.newFailMessage("你的操作在处理时发生了错误." + e.getMessage());
 
 		return errorResponseVo;
 	}

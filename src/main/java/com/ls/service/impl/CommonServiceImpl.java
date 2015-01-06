@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.ImmutableList;
 import com.ls.entity.City;
 import com.ls.entity.Province;
+import com.ls.entity.Role;
 import com.ls.entity.User;
 import com.ls.repository.CityRepository;
 import com.ls.repository.UserRepository;
@@ -71,5 +72,19 @@ public class CommonServiceImpl implements CommonService {
 		}
 		
 		return false;
+	}
+
+	public boolean checkUserNotHasRole(String username, String roleName) {
+
+		User userToCheck = userRepository.findByUsername(username);
+		
+		for ( Role role : userToCheck.getRoles()) {
+			
+			if (role.getName().equals(roleName)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

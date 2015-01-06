@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=gb2312"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>ĞÀĞÄ¹Ë¿ÍÊı¾İÖĞĞÄ</title>
+<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <link rel="stylesheet" href="/ls/css/jstree-style.css">
 <s:include value="/jsps/common/head.jsp" />
@@ -24,7 +24,7 @@
 			<div class="row">
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>ËÑË÷</h2>
+						<h2>æœç´¢</h2>
 					</div>
 					<div class="content">
 						<div class="row">
@@ -32,10 +32,10 @@
 							<div class="six columns">
 								<div class="row collapse">
 									<div class="eight columns">
-										<input id="userNameInput" type="text" class="addon-postfix" placeholder="ÇëÊäÈëÓÃ»§ĞÕÃû" data-bind="value : userName" />
+										<input id="userNameInput" type="text" class="addon-postfix" placeholder="è¯·è¾“å…¥ç”¨æˆ·å§“å" data-bind="value : userName" />
 									</div>
 									<div class="four columns">
-										<button class="small nice blue button postfix" data-bind="click : searchUser">ËÑË÷</button>
+										<button class="small nice blue button postfix" data-bind="click : searchUser">æœç´¢</button>
 									</div>
 								</div>
 							</div>
@@ -49,7 +49,7 @@
 					<div class="six columns">
 						<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
-								<h2>ÓÃ»§ÁĞ±í</h2>
+								<h2>ç”¨æˆ·åˆ—è¡¨</h2>
 							</div>
 							<div class="content">
 								<div class="row">
@@ -57,10 +57,10 @@
 										<table class="infoTable">
 										<thead>
 											<tr>
-												<th>±àºÅ</th>
-												<th>ĞÕÃû</th>
-												<th>ÕËºÅ</th>
-												<th>²Ù×÷</th>
+												<th>ç¼–å·</th>
+												<th>å§“å</th>
+												<th>è´¦å·</th>
+												<th>æ“ä½œ</th>
 											</tr>
 										</thead>
 											<tbody data-bind="foreach : users">
@@ -69,7 +69,7 @@
 													<td style="text-align: center" data-bind="text : name"></td>
 													<td style="text-align: center" data-bind="text : username"></td>
 													<td style="text-align: center">
-														<a title="·ÖÅä³ÇÊĞ" data-bind="click : $root.showAssignedCities" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
+														<a title="åˆ†é…åŸå¸‚" data-bind="click : $root.showAssignedCities" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
 													</td>
 												</tr>
 											</tbody>
@@ -82,7 +82,7 @@
 					<div class="six columns">
 							<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
-								<h2>³ÇÊĞ·ÖÅä</h2>
+								<h2>åŸå¸‚åˆ†é…</h2>
 								<h2 class="right" data-bind="with : selectedUser">
 									<span data-bind="text : name"></span>
 								</h2>
@@ -180,7 +180,7 @@
 						self.assignOrCancelCity = function() {
 							
 							if (!self.selectedUser() || !self.selectedUser().id ) {
-								fail("Î´Ñ¡ÔñÓÃ»§!");
+								fail("æœªé€‰æ‹©ç”¨æˆ·!");
 								return;
 							}
 							

@@ -1,6 +1,7 @@
+<%@ page contentType="text/html;charset=utf8"%>
 <header id="brand" data-bind="with : user">
 	<div class="row">
-		<div class="appname hide-on-phones"></div>
+		<div class="appname hide-on-phones">欣心客户数据中心</div>
 		<address>
 			<span> 
 				<div class="row">
@@ -8,6 +9,7 @@
 				</div>
 			</span>
 		</address>
+		<br><br>
 	</div>
 </header>
 <script>

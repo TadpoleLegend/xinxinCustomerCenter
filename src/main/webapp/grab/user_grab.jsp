@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=GBK"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>ÐÀÐÄ¹Ë¿ÍÊý¾ÝÖÐÐÄ</title>
+<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <link rel="stylesheet" href="/ls/css/jstree-style.css">
 <s:include value="/jsps/common/head.jsp" />
@@ -25,7 +25,7 @@
 				<div class="three columns">
 					<div class="app-wrapper ui-corner-top">
 						<div class="blue module ui-corner-top clearfix">
-							<h2>ÎÒµÄÇøÓò</h2>
+							<h2>æˆ‘çš„åŒºåŸŸ</h2>
 						</div>
 						<div>
 							
@@ -51,28 +51,28 @@
 				<div class="nine columns">
 					<div class="app-wrapper ui-corner-top">
 						<div class="blue module ui-corner-top clearfix">
-							<h2>Êý¾Ý×ÊÔ´</h2>
+							<h2>æ•°æ®èµ„æº</h2>
 							<h2 class="right">
-								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, '138')">ËÑË÷138ÃÀÈÝÍø</a>
-								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, '58')">ËÑË÷58Í¬³Ç</a>
-								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, 'gj')">ËÑË÷¸Ï¼¯Íø</a>
+								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, '138')">æœç´¢138ç¾Žå®¹ç½‘</a>
+								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, '58')">æœç´¢58åŒåŸŽ</a>
+								<a class="small white button" href="#" data-bind="click : searchUrlResources.bind($data, 'gj')">æœç´¢èµ¶é›†ç½‘</a>
 							</h2>
 						</div>
 						<div class="content">
 							<div class="row">
 								<div class="nine columns">
-									£¨×î¶àÏÔÊ¾500Ìõ×ÊÔ´¼ÇÂ¼£¬²É¼¯¹ý³Ì¿ÉÄÜÐèÒªºÜ³¤Ê±¼ä£¬ÇëÄÍÐÄµÈ´ý....£©
+									ï¼ˆæœ€å¤šæ˜¾ç¤º500æ¡èµ„æºè®°å½•ï¼Œé‡‡é›†è¿‡ç¨‹å¯èƒ½éœ€è¦å¾ˆé•¿æ—¶é—´ï¼Œè¯·è€å¿ƒç­‰å¾…....ï¼‰
 								</div>
 								<div class="three columns">
-									<a class="small blue button" href="#" data-bind="click : grabSelected">È«²¿×¥È¡</a>
+									<a class="small blue button" href="#" data-bind="click : grabSelected">å…¨éƒ¨æŠ“å–</a>
 								</div>
 							</div>
 							<table class="infoTable">
 									<thead>
 										<tr>
-											<th class="text-center">¹«Ë¾Ãû</th>
-											<th class="text-center">×ÊÔ´±àºÅ</th>
-											<th class="text-center">Á´½Ó</th>
+											<th class="text-center">å…¬å¸å</th>
+											<th class="text-center">èµ„æºç¼–å·</th>
+											<th class="text-center">é“¾æŽ¥</th>
 										</tr>
 									</thead>
 									<tbody data-bind="foreach: otePreviewList">
@@ -95,7 +95,7 @@
 			<div class="row" style="display : none;">
 				<div class="app-wrapper ui-corner-top">
 					<div class="blue module ui-corner-top clearfix">
-						<h2>×¥È¡½á¹û</h2>
+						<h2>æŠ“å–ç»“æžœ</h2>
 					</div>
 					<div class="content">
 						<ul class="smartlist nice" data-bind="foreach: companyList">
@@ -161,7 +161,7 @@
 					} else if (type =='gj') {
 						url = "loadGanjiPreviewList.ls";
 					} else {
-						fail('²Ù×÷´íÎó');
+						fail('æ“ä½œé”™è¯¯');
 						return;
 					}
 					
@@ -176,7 +176,7 @@
 								self.otePreviewList(data);
 								self.totalLength(self.otePreviewList().length);
 							} else {
-								success("Ã»ÓÐ·¢ÏÖ×ÊÔ´Êý¾Ý");
+								success("æ²¡æœ‰å‘çŽ°èµ„æºæ•°æ®");
 							}
 							
 							self.datasourceType(type);

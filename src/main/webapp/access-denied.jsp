@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=gb2312"%>
+<%@ page contentType="text/html;charset=utf8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,7 +10,7 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>Access denied</title>
+<title>没有权限</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <!-- Required CSS Files -->
 <link rel="stylesheet" href="/ls/css/styles.css">
@@ -23,7 +23,7 @@
 	<header id="brand">
 		<div class="container">
 			<div class="row">
-				<div class="appname hide-on-phones"></div>
+				<div class="appname hide-on-phones">欣心客户数据中心</div>
 			</div>
 		</div>
 	</header>
@@ -37,7 +37,7 @@
 	<section class="mainbg">
 		<div class="container">
 				<div class="row">
-					<h4 class="text-center">��Ǹ����û��Ȩ�޷������ҳ�棡����� <a href="javascript:history.go(-1);">������һҳ</a></h4>
+					<h4 class="text-center">抱歉！你没有权限访问这个页面！你可以 <a href="javascript:history.go(-1);">返回上一页</a></h4>
 					
 					<hr>
 				</div>
