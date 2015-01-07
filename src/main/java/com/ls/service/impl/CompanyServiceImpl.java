@@ -495,7 +495,15 @@ public class CompanyServiceImpl implements CompanyService {
 		ApplyingWillingCustomer applyingWillingCustomer = applyingWillingCustomerRepository.findByCompanyIdAndUser(Integer.valueOf(companyId), currentUser);
 
 		Company company = companyRepository.findOne(Integer.valueOf(companyId));
+		Integer currentStatus = company.getStatus();
 		Integer targetStatus = Integer.valueOf(statusId);
+		
+		Integer reduceResult = Math.abs(currentStatus - targetStatus);
+		
+		if (reduceResult > 1) {
+			response = ResponseVo.newFailMessage("一次只能移动一步。");
+			return response;
+		}
 
 		if (company.getStatus() == CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
 
