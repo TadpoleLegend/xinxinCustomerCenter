@@ -13,6 +13,8 @@ public class CompanySearchVo {
 	private String searchId;
 	private String customerStatus;
 	private String selectedProblemCategory;
+	private String selectedDataSourceType;
+	
 	private AdvanceSearch advanceSearch;
 	
 	public AdvanceSearch getAdvanceSearch() {
@@ -30,6 +32,14 @@ public class CompanySearchVo {
 		return selectedProblemCategory;
 	}
 	
+	public String getSelectedDataSourceType() {
+		return selectedDataSourceType;
+	}
+
+	public void setSelectedDataSourceType(String selectedDataSourceType) {
+		this.selectedDataSourceType = selectedDataSourceType;
+	}
+
 	public void setSelectedProblemCategory(String selectedProblemCategory) {
 	
 		this.selectedProblemCategory = selectedProblemCategory;

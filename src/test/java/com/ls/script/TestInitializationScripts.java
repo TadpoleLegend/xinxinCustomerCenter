@@ -192,6 +192,17 @@ public class TestInitializationScripts {
 		dropDownRepository.save(dictionaries);
 	}
 	
+	@Test
+	public void testInitialDatasourceType() throws Exception {
+		
+		Dictionary firstDictionary = new Dictionary(XinXinConstants.SOURCE_TYPE, "M", "手动录入", "");
+		Dictionary secondDictionary = new Dictionary(XinXinConstants.SOURCE_TYPE, "A", "系统采集", "");
+		
+		List<Dictionary> dictionaries = ImmutableList.of(firstDictionary, secondDictionary);
+		
+		dropDownRepository.save(dictionaries);
+	}
+	
 //	@Test
 //	public void removeBuxianCity() {
 //		List<City> cities = cityRepository.findAll();

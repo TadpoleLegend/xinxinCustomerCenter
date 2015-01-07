@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.xalan.templates.ElemApplyImport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -34,7 +33,6 @@ import com.ls.repository.ProblemRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
 import com.ls.vo.AdvanceSearch;
-import com.ls.vo.BarData;
 import com.ls.vo.CompanySearchVo;
 import com.ls.vo.PagedElement;
 import com.ls.vo.ResponseVo;
@@ -122,6 +120,7 @@ public class CompanyAction extends BaseAction {
 			String searchId = getParameter("searchId");
 			String customerStatus = getParameter("customerStatus");
 			String selectedProblemCategory = getParameter("selectedProblemCategory");
+			String selectedDataSourceType = getParameter("selectedDataSourceType");
 
 			AdvanceSearch advanceSearch = XinXinUtils.getJavaObjectFromJsonString(getParameter("advanceSearch"), AdvanceSearch.class);
 
@@ -139,7 +138,8 @@ public class CompanyAction extends BaseAction {
 			companySearchVo.setCustomerStatus(customerStatus);
 			companySearchVo.setSelectedProblemCategory(selectedProblemCategory);
 			companySearchVo.setAdvanceSearch(advanceSearch);
-
+			companySearchVo.setSelectedDataSourceType(selectedDataSourceType);
+			
 			Page<Company> result = companyService.getCompanyInPage(companySearchVo);
 
 			company = new PagedElement<Company>(result);

@@ -89,7 +89,7 @@
 					</div>
 					<div class="row">
 							<label>密码</label>
-							<input type="text" class="addon-postfix" placeholder="请输入密码" data-bind="value : password" />
+							<input type="password" class="addon-postfix" placeholder="请输入密码" data-bind="value : password" />
 					</div>
 				</div>
 			</div>

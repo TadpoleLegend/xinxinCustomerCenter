@@ -99,7 +99,17 @@
 								<label>编号</label> 
 								<input type="text" data-bind="value: searchId">
 							</div>
-							
+							<div class="three columns">
+								<label>数据来源</label> 
+								<select data-bind="options: $root.dataSourceTypes,
+                      											   optionsText: 'optionText',
+                       											   value: selectedDataSourceType,
+                       											   optionsValue : 'optionValue',
+                       											   selectedOption : selectedDataSourceType,
+                       											   optionsCaption: '全部'"
+                       									class="required">
+                       							</select>
+							</div>
 						</div>
 						<div class="row" data-bind="with : advanceSearch">
 							<div class="row">
@@ -932,7 +942,9 @@
 						self.customerStatus = ko.observable('');
 						
 						self.selectedId = ko.observable('');
+						self.selectedDataSourceType = ko.observable('');
 						self.traningStatus = ko.observableArray([]);
+						self.dataSourceTypes = ko.observableArray([]);
 						
 						self.loadMyTaskList = function() {
 							
@@ -949,8 +961,6 @@
 							self.advanceSearch(advanceSearch);
 							
 							self.searchCompany();
-							
-							success("以下顾客需要在今明两天跟踪。");
 						};
 						
 						self.clearAllConditions = function() {
@@ -964,6 +974,7 @@
 							self.selectedProblemCategory('');
 							self.customerStatus('');
 							self.starLevelOperator('');
+							self.dataSourceTypes('');
 							self.advanceSearch(new AdvanceSearch());
 							
 						};
@@ -1544,6 +1555,13 @@
 									self.traningStatus(data);
 								}
 							});
+							$.ajax({
+								url : '/ls/findDropDownDataSouce.ls',
+								data : {identityType : 'ds_type'},
+								success : function(data) {
+									self.dataSourceTypes(data);
+								}
+							});
 							
 							$.ajax({
 								url : '/ls/findProblemCategories.ls',
@@ -1626,7 +1644,8 @@
 										searchId : self.searchId(),
 										customerStatus : self.customerStatus(),
 										selectedProblemCategory : self.selectedProblemCategory(),
-										advanceSearch : JSON.stringify(self.advanceSearch())
+										advanceSearch : JSON.stringify(self.advanceSearch()),
+										selectedDataSourceType : self.selectedDataSourceType()
 										},
 								success : function(data) {
 									

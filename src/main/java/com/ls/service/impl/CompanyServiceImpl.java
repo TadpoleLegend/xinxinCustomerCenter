@@ -148,72 +148,11 @@ public class CompanyServiceImpl implements CompanyService {
 				boolean isNotAdmin = commonService.checkUserNotHasRole(currentUser.getUsername(), "ROLE_ADMIN");
 
 				Predicate privateCustomerPredicate = criteriaBuilder.equal(root.get("ownerUserId"), currentUser.getId());
+				
+				String selectedDatasourceType = companySearchVo.getSelectedDataSourceType();
 
 				if (isNotAdmin && (currentUser.getCities() == null || currentUser.getCities().isEmpty())) {
 					return privateCustomerPredicate;
-				}
-
-				if (StringUtils.isNotBlank(companySearchVo.getCityId())) {
-					
-					Predicate cityIdPredicate = criteriaBuilder.equal(root.<String> get("cityId"), companySearchVo.getCityId().trim());
-
-					predicate.getExpressions().add(criteriaBuilder.or(cityIdPredicate, privateCustomerPredicate));
-
-				} else if (StringUtils.isNotBlank(companySearchVo.getProvinceId())) {
-
-					if (isNotAdmin) {
-
-						List<City> assignedCities = currentUser.getCities();
-
-						List<Integer> cityIds = new ArrayList<Integer>();
-						for (City city : assignedCities) {
-							
-							if (city.getProvince().getId().toString().equals(companySearchVo.getProvinceId())) {
-								cityIds.add(city.getId());
-							}
-						}
-						
-						if (cityIds.isEmpty()) {
-							
-							predicate.getExpressions().add(privateCustomerPredicate);
-							
-						} else {
-							
-							predicate.getExpressions().add(criteriaBuilder.or(root.get("cityId").in(cityIds), privateCustomerPredicate));
-							
-						}
-						
-					} else {
-
-						Province province = provinceRepository.findOne(Integer.valueOf(companySearchVo.getProvinceId()));
-
-						List<City> cities = province.getCitys();
-
-						List<Integer> cityIds = new ArrayList<Integer>();
-						for (City city : cities) {
-							cityIds.add(city.getId());
-						}
-
-						if (!cityIds.isEmpty()) {
-							predicate.getExpressions().add(criteriaBuilder.or(root.get("cityId").in(cityIds), privateCustomerPredicate));
-						}
-					}
-
-				} else {
-
-					if (isNotAdmin) {
-						// need refactor
-						List<City> assignedCities = currentUser.getCities();
-
-						List<Integer> cityIds = new ArrayList<Integer>();
-						for (City city : assignedCities) {
-							cityIds.add(city.getId());
-						}
-						if (!cityIds.isEmpty()) {
-							predicate.getExpressions().add(criteriaBuilder.or(root.get("cityId").in(cityIds), privateCustomerPredicate));
-						}
-					}
-
 				}
 
 				String searchId = companySearchVo.getSearchId();
@@ -353,9 +292,7 @@ public class CompanyServiceImpl implements CompanyService {
 						predicate.getExpressions().add(criteriaBuilder.greaterThan(root.<Integer> get("status"), 40));
 					}
 
-					String movingYear = advanceSearch.getSelectedMovingYear();
 					String movingMonth = advanceSearch.getSelectedMovingMonth();
-					String birthdayType = advanceSearch.getBirthdayType();
 
 					if (StringUtils.isNotBlank(movingMonth)) {
 						if (movingMonth.length() == 1) {
@@ -369,6 +306,88 @@ public class CompanyServiceImpl implements CompanyService {
 								criteriaBuilder.like(companyAddtionalJoin.<String> get("companyAnniversary"), movingMonth + "-%"), criteriaBuilder.like(companyAddtionalJoin.<String> get("merryAnniversary"), movingMonth + "-%"), criteriaBuilder.like(companyAddtionalJoin.<String> get("loverBirthday"), movingMonth + "-%"));
 
 						predicate.getExpressions().add(movingPredicate);
+					}
+
+				}
+
+				if (StringUtils.isNotBlank(selectedDatasourceType)) {
+					
+					if (selectedDatasourceType.equals("M")) {
+						predicate.getExpressions().add(privateCustomerPredicate);
+						
+						return predicate;
+						
+					} else if(selectedDatasourceType.equals("A")) {
+						predicate.getExpressions().add(criteriaBuilder.isNull(root.get("ownerUserId")));
+					} else {
+						predicate.getExpressions().add(criteriaBuilder.or(privateCustomerPredicate, criteriaBuilder.isNull(root.get("ownerUserId"))));
+						
+						return predicate;
+						
+					}
+				}
+				
+				if (StringUtils.isNotBlank(companySearchVo.getCityId())) {
+					
+					Predicate cityIdPredicate = criteriaBuilder.equal(root.<String> get("cityId"), companySearchVo.getCityId().trim());
+
+					//predicate.getExpressions().add(criteriaBuilder.or(cityIdPredicate, privateCustomerPredicate));
+					
+					predicate.getExpressions().add(cityIdPredicate);
+
+				} else if (StringUtils.isNotBlank(companySearchVo.getProvinceId())) {
+
+					if (isNotAdmin) {
+
+						List<City> assignedCities = currentUser.getCities();
+
+						List<Integer> cityIds = new ArrayList<Integer>();
+						for (City city : assignedCities) {
+							
+							if (city.getProvince().getId().toString().equals(companySearchVo.getProvinceId())) {
+								cityIds.add(city.getId());
+							}
+						}
+						
+						if (cityIds.isEmpty()) {
+							
+							throw new RuntimeException("这个省市下未分配任何城市。");
+							
+						} else {
+							
+							predicate.getExpressions().add(root.get("cityId").in(cityIds));
+							
+						}
+						
+					} else {
+
+						Province province = provinceRepository.findOne(Integer.valueOf(companySearchVo.getProvinceId()));
+
+						List<City> cities = province.getCitys();
+
+						List<Integer> cityIds = new ArrayList<Integer>();
+						for (City city : cities) {
+							cityIds.add(city.getId());
+						}
+
+						if (!cityIds.isEmpty()) {
+							predicate.getExpressions().add(root.get("cityId").in(cityIds));
+						}
+					}
+
+				} else {
+
+					if (isNotAdmin) {
+						// need refactor
+						List<City> assignedCities = currentUser.getCities();
+
+						List<Integer> cityIds = new ArrayList<Integer>();
+						for (City city : assignedCities) {
+							cityIds.add(city.getId());
+						}
+						if (!cityIds.isEmpty()) {
+							predicate.getExpressions().add(root.get("cityId").in(cityIds));
+						}
 					}
 
 				}

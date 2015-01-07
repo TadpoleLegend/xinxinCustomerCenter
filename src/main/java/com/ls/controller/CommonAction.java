@@ -119,11 +119,11 @@ public class CommonAction extends BaseAction {
 		String username = XinXinUtils.getCurrentUserName();
 
 		user = userRepository.findByUsername(username);
-
+		
 		user.setCities(null);
-
 		user.setApplyingWillingCustomers(null);
-
+		user.setPhoneCallHistory(null);
+		
 		List<Role> roles = user.getRoles();
 		for (Role role : roles) {
 			role.setUsers(null);

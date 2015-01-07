@@ -35,7 +35,7 @@ public class ApplyingCustomerServiceImpl implements ApplyingCustomerService {
 	@Autowired
 	private CompanyAdditionalRepository companyAdditionalRepository;
 	
-	@Secured("ROLE_WC_APPROVER")
+	@Secured({"ROLE_WC_APPROVER", "ROLE_ADMIN"})
 	@Transactional
 	public ResponseVo approveCustomer(ApplyingWillingCustomer applyingWillingCustomer) {
 		
@@ -45,7 +45,7 @@ public class ApplyingCustomerServiceImpl implements ApplyingCustomerService {
 		return responseVo;
 	}
 	
-	@Secured("ROLE_WC_APPROVER")
+	@Secured({"ROLE_WC_APPROVER", "ROLE_ADMIN"})
 	@Transactional
 	public ResponseVo rejectCustomer(ApplyingWillingCustomer applyingWillingCustomer) {
 		

@@ -26,6 +26,8 @@ public class XinXinConstants {
 	
 	public static final String COMPANY_TYPE = "company_type";
 	
+	public static final String SOURCE_TYPE = "ds_type";
+	
 	public static final String STAR_LEVEL_CONDITION = "star_level_condition";
 	
 	public static final String COMPANY_PROBLEM = "company_problem";
