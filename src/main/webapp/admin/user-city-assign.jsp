@@ -69,7 +69,7 @@
 													<td style="text-align: center" data-bind="text : name"></td>
 													<td style="text-align: center" data-bind="text : username"></td>
 													<td style="text-align: center">
-														<a title="分配城市" data-bind="click : $root.showAssignedCities" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
+														<a title="分配城市" data-bind="click : $root.showAssignedCities" style="margin-left : 10px;" href="#"><i class="icon-key small icon-orange"></i></a>
 													</td>
 												</tr>
 											</tbody>
@@ -91,10 +91,10 @@
 								<div class="row">
 									<div id="userCityTree">
 											<ul data-bind="foreach : userCities">
-												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
+												<li data-jstree='{"opened":false, "icon":"icon-puzzle-piece small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
 													<span datatype="province" data-bind="text : name"></span>
 													<ul data-bind="foreach : citys" > <b data-bind="text : name"></b>
-														<li data-bind="attr : {id : 'city' + id }">
+														<li data-bind="attr : {id : 'city' + id }" data-jstree='{"opened":false, "icon":"icon-screenshot small icon-blue"}'>
 														<span datatype="city" data-bind="text : name, attr : {id : id}"></span></li>
 													</ul>
 												</li>

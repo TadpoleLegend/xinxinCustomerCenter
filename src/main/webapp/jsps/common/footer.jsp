@@ -4,11 +4,11 @@
 		<div class="container">
 			<div class="row">
 				<div class="eight columns">
-					<p>Copyright &copy; 2013 - 2015 上海欣心企业管理咨询有限公司，版权所有。</p>
+					<p>Copyright &copy; 2013 - 2015 上海欣心企业管理咨询有限公司，客户数据中心。</p>
 					<address>
-						<a rel="external" class="display-inline" title="www.baidu.com">Privacy Policy <i class="icon-external-link"></i></a>
-						<a rel="external" title="www.baidu.com">Terms and Conditions <i class="icon-external-link"></i></a>
-						<a rel="external" title="www.baidu.com">Tadpole Studio <i class="icon-external-link"></i></a>
+						<a rel="external" class="display-inline" title="蝌蚪工作室研发">Privacy Policy <i class="icon-external-link"></i></a>
+						<a rel="external" title="蝌蚪工作室研发">Terms and Conditions <i class="icon-external-link"></i></a>
+						<a rel="external" title="蝌蚪工作室研发">Tadpole Studio <i class="icon-external-link"></i></a>
 					</address>
 				</div>
 			</div>
@@ -31,11 +31,11 @@
 		
 		$('#commonErrorMessageDialog').dialog({
 			modal : true,
-			width : 700,
-			height : 700,
+			width : 'auto',
+			height : 'auto',
 			buttons : {
 				
-				'Close Window' : function() {
+				'关闭窗口' : function() {
 					closeDialog('commonErrorMessageDialog');
 				}
 			}

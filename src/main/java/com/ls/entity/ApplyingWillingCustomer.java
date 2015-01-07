@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.struts2.json.annotations.JSON;
+
 @Entity
 @Table(name="ls_applying_willing_customer")
 public class ApplyingWillingCustomer implements Serializable {
@@ -97,7 +99,7 @@ public class ApplyingWillingCustomer implements Serializable {
 	
 		this.companyId = companyId;
 	}
-	
+	@JSON(format="yyyy-MM-dd") 
 	public Date getApplyingDate() {
 	
 		return applyingDate;

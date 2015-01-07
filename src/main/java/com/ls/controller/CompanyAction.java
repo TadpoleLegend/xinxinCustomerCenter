@@ -161,8 +161,10 @@ public class CompanyAction extends BaseAction {
 		Company company = XinXinUtils.getJavaObjectFromJsonString(newCompanyJson, Company.class);
 
 		if (StringUtils.isNotBlank(mannually) && Boolean.valueOf(mannually)) {
-			// TODO
-			company.setOwnerUserId(1);
+			
+			Integer currentUserId = commonService.getCurrentLoggedInUser().getId();
+			
+			company.setOwnerUserId(currentUserId);
 		}
 
 		// set defaults for new company

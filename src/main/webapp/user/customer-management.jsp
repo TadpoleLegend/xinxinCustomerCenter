@@ -42,9 +42,22 @@
 					<div class="content">
 						<div class="row">
 							<div class="three columns">
-								<label>顾客编号</label> 
-								<input type="text" data-bind="value: searchId">
+								<label>省或直辖市</label>
+								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
 							</div>
+							<div class="three columns">
+								<label>市</label> 
+								<select data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
+							</div>
+							<div class="three columns">
+								<label>公司名称</label> 
+								<input type="text" class="addon-postfix" data-bind="value : seachCompany" />
+							</div>
+							<div class="three columns">
+								<label>联系人</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
+							</div>
+						</div>
+						<div class="row">
 							<div class="three columns">
 								<label>星星</label>
 								<select data-bind="options: $root.starLevelOperators,
@@ -62,7 +75,7 @@
 						</div>
 						<div class="row">
 							<div class="three columns">
-								<label>顾客问题</label>
+								<label>问题分类</label>
 								<select data-bind="options: $root.problemCategories,
                       										optionsText: 'name',
                        									    value: $root.selectedProblemCategory,
@@ -82,23 +95,11 @@
                        			</select>
 							</div>
 							
-						</div>
-						<div class="row">
 							<div class="three columns">
-								<label>省或直辖市</label>
-								<select data-bind="options: provinces, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedProvince, valueAllowUnset: true"></select>
+								<label>编号</label> 
+								<input type="text" data-bind="value: searchId">
 							</div>
-							<div class="three columns">
-								<label>市</label> 
-								<select data-bind="options: cities, optionsCaption: '全部', optionsText: 'name', optionsValue: 'id', value: selectedCity, valueAllowUnset: true"></select>
-							</div>
-							<div class="three columns">
-								<label>公司名称</label> 
-								<input type="text" class="addon-postfix" data-bind="value : seachCompany" />
-							</div>
-							<div class="three columns">
-								<label>联系人</label> <input type="text" class="addon-postfix" data-bind="value : searchContactor" />
-							</div>
+							
 						</div>
 						<div class="row" data-bind="with : advanceSearch">
 							<div class="row">
@@ -159,8 +160,9 @@
 						<hr>
 						<div class="row">
 							<div class="six columns centered">
-								<a class="small blue button" href="#" data-bind="click : searchCompanyForConditions"> 搜索符合条件的客户 </a>
+								<a class="small blue button" href="#" data-bind="click : searchCompanyForConditions"> 搜索符合条件的顾客 </a>
 								<a class="small blue button" href="#" data-bind="click : clearAllConditions"> 清除所有搜索条件 </a>
+								<a class="small red button" href="#" data-bind="click : loadMyTaskList">我的任务列表</a>
 							</div>
 						</div>
 					</div>
@@ -488,7 +490,7 @@
 											<a class="small blue button" data-bind="click : $root.addHistory">创建新的通话记录</a>
 										</div>
 									</div>
-									<div class="row">
+									<div class="row" style="max-height : 600px; overflow : scroll;">
 										<table class="display compact" id="phoneCallHistoryListTable">
 											<thead>
 												<tr>
@@ -585,7 +587,7 @@
 										<div class="row">
 											<div class="four columns">
 												<label>省/直辖市</label> 
-												<select class="required" data-bind="options: $root.provinces, optionsCaption: '请选择...', optionsText: 'name', optionsValue: 'id', value: $root.selectedProvinceInDialog, valueAllowUnset: true"></select>
+												<select class="required" data-bind="options: $root.allProvinces, optionsCaption: '请选择...', optionsText: 'name', optionsValue: 'id', value: $root.selectedProvinceInDialog, valueAllowUnset: true"></select>
 											</div>
 											<div class="four columns">
 												<label>市/区</label> 
@@ -911,6 +913,7 @@
 						self.allProblemsConstantB = [];
 						self.allProblemsConstantC = [];
 						self.provinces = ko.observableArray([]);
+						self.allProvinces = ko.observableArray([]);
 						self.selectedProvince =  ko.observable(new Province());
 						self.selectedCompany = ko.observable(new Company());
 						self.newCompany = ko.observable(new Company());
@@ -930,6 +933,26 @@
 						
 						self.selectedId = ko.observable('');
 						self.traningStatus = ko.observableArray([]);
+						
+						self.loadMyTaskList = function() {
+							
+							var today = new Date();
+							var tomorrow = new Date();
+							tomorrow.setDate(today.getDate() + 1);
+							
+							var todayStanderdString = $.datepicker.formatDate('yy-mm-dd', today);
+							var tomorrowStanderdString = $.datepicker.formatDate('yy-mm-dd', tomorrow);
+							
+							var advanceSearch = new AdvanceSearch();
+							advanceSearch.appointStartDate = todayStanderdString;
+							advanceSearch.appointEndDate = tomorrowStanderdString;
+							self.advanceSearch(advanceSearch);
+							
+							self.searchCompany();
+							
+							success("以下顾客需要在今明两天跟踪。");
+						};
+						
 						self.clearAllConditions = function() {
 							
 							self.starInput(0); 
@@ -968,7 +991,7 @@
 							var cityOptions;
 							
 							if (self.selectedProvinceInDialog()) {
-								$.each(self.provinces(), function(i, n){
+								$.each(self.allProvinces(), function(i, n){
 									if ( n.id == self.selectedProvinceInDialog()) {
 										cityOptions = n.cities;
 									}
@@ -1371,8 +1394,8 @@
 							$('#learningHistoryDialog').dialog({
 								autoOpen : false,
 								modal : true,
-								width : 743,
-								height : 1040,
+								height : 'auto',
+								width : 'auto',
 								open : function(e) {
 									changeButtonStyleForPopup(e);
 								},
@@ -1457,6 +1480,24 @@
 										});
 										var province = new Province(value.id, value.name, cities);
 										self.provinces.push(province);
+									});
+								}
+							});
+							
+							$.ajax({
+								url : 'findAllProvinces.ls',
+								data : {'dataRange' : 'all'},
+								success : function(data) {
+									
+									$.each(data, function(index, value) {
+
+										var cities = new Array();
+										$.each(value.citys, function(i, n){
+											var city = new City(n.id, n.name);
+											cities.push(city);
+										});
+										var province = new Province(value.id, value.name, cities);
+										self.allProvinces.push(province);
 									});
 								}
 							});
@@ -1674,23 +1715,6 @@
 					
 					var $container = $("#container")[0];
 					ko.applyBindings(companyModel, $container);
-					
-					var today = new Date();
-					var tomorrow = new Date();
-					tomorrow.setDate(today.getDate() + 1);
-					
-					var todayStanderdString = $.datepicker.formatDate('yy-mm-dd', today);
-					var tomorrowStanderdString = $.datepicker.formatDate('yy-mm-dd', tomorrow);
-					
-					var advanceSearch = new AdvanceSearch();
-					advanceSearch.appointStartDate = todayStanderdString;
-					advanceSearch.appointEndDate = tomorrowStanderdString;
-					companyModel.advanceSearch(advanceSearch);
-					
-					companyModel.searchCompany();
-					companyModel.advanceSearch(new AdvanceSearch());
-					
-					success("以下顾客需要在今明两天跟踪。");
 					
 					$('#submit').click(function() {
 						companyModel.searchId($('#search').val());

@@ -23,7 +23,7 @@
 			<div id="resetPasswordDialog" style="display : none;">
 				<form class="form-wrapper">
 					<input type="text" id="search" placeholder="请输入新的密码" required data-bind="value : newPasswordToReset"> 
-					<input type="button" value="确定" id="submit" data-bind="click : resetPassword">
+					<a type="password" class="small blue button" data-bind="click : resetPassword"> <i class="icon-circle-arrow-right"></i>提交</a>
 				</form>
 			</div>
 			<div class="content" id="userRolesManagementDialog" style="display : none;">
@@ -67,7 +67,7 @@
 												</td>
 												<td style="text-align: center">
 													<a title="分配角色" data-bind="click : $root.openAssignRolesDialog" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
-													<a title="重置密码" data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-blue"></i></a>
+													<a title="重置密码" data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-orange"></i></a>
 													<a title="关闭用户" data-bind="click : $root.disactiveUser" style="margin-left : 10px;" href="#"><i class="icon-trash small icon-red"></i></a>
 												</td>
 											</tr>

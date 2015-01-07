@@ -50,5 +50,10 @@
 				<param name="root">user</param>
 			</result>
 		</action>
+		<action name="resetMyPassword" class="commonAction" method="resetMyPassword">
+			<result name="success" type="json">
+				<param name="root">response</param>
+			</result>
+		</action>
 	</package>	
 </struts>

@@ -34,10 +34,10 @@
 							<div class="row">
 									<div id="userCityTree">
 											<ul data-bind="foreach : userCities">
-												<li data-jstree='{"opened":false, "icon":"icon-user small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
+												<li data-jstree='{"opened":false, "icon":"icon-puzzle-piece small icon-blue"}' data-bind="attr : {id : 'province' + id }"> 
 													<span datatype="province" data-bind="text : name"></span>
 													<ul data-bind="foreach : citys" > <b data-bind="text : name"></b>
-														<li data-bind="attr : {id : 'city' + id }">
+														<li data-bind="attr : {id : 'city' + id }" data-jstree='{"opened":false, "icon":"icon-screenshot small icon-blue"}'>
 														<span datatype="city" data-bind="text : name, attr : {id : id}"></span></li>
 													</ul>
 												</li>
