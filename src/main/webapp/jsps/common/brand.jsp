@@ -1,12 +1,12 @@
-<%@ page contentType="text/html;charset=utf8"%>
+<%@ page contentType="text/html;charset=gbk"%>
 <header id="brand" data-bind="with : user">
 	<div class="row">
-		<div class="appname hide-on-phones">æ¬£å¿ƒå®¢æˆ·æ•°æ®ä¸­å¿ƒ</div>
+		<div class="appname hide-on-phones">ĞÀĞÄ¿Í»§Êı¾İÖĞĞÄ</div>
 		<address>
 			<span>
 				<div class="row">
-					<b data-bind="text : name"></b> &nbsp; <a title="å®‰å…¨é€€å‡ºç³»ç»Ÿ" href="/ls/logout"><i class="icon-power-off small"></i></a> &nbsp;
-					<a title="ä¿®æ”¹å¯†ç " href="#" data-bind="click : $root.openResetMyPasswordDialog"><i class="icon-cog small"></i></a>
+					<b data-bind="text : name"></b> &nbsp; <a title="°²È«ÍË³öÏµÍ³" href="/ls/logout"><i class="icon-power-off small"></i></a> &nbsp;
+					<a title="ĞŞ¸ÄÃÜÂë" href="#" data-bind="click : $root.openResetMyPasswordDialog"><i class="icon-cog small"></i></a>
 				</div>
 			</span>
 		</address>
@@ -14,8 +14,8 @@
 		<br>
 	</div>
 	<div id="resetPasswordDialogInBrandJsp" style="display: none;">
-			<input type="password"  placeholder="è¯·è¾“å…¥æ—§çš„å¯†ç " required data-bind="value : $root.oldPassword"> 
-			<input type="password"  placeholder="è¯·è¾“å…¥æ–°çš„å¯†ç " required data-bind="value : $root.newPassword"> 
+			<input type="password"  placeholder="ÇëÊäÈë¾ÉµÄÃÜÂë" required data-bind="value : $root.oldPassword"> 
+			<input type="password"  placeholder="ÇëÊäÈëĞÂµÄÃÜÂë" required data-bind="value : $root.newPassword"> 
 	</div>
 </header>
 <script>
@@ -50,7 +50,7 @@
 					},
 					
 					buttons : {
-						'æäº¤' : function() {
+						'Ìá½»' : function() {
 							
 							$.ajax({
 								url : '/ls/resetMyPassword.ls',
@@ -72,7 +72,7 @@
 								}
 							});
 						},
-						'å…³é—­çª—å£' : function() {
+						'¹Ø±Õ´°¿Ú' : function() {
 							closeDialog('resetPasswordDialogInBrandJsp');
 						}
 					}

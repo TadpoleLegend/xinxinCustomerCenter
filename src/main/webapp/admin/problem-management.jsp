@@ -143,6 +143,7 @@
 								
 								$.ajax({
 									url : 'saveProblem.ls',
+									method : 'POST',
 									data : {
 										problem : JSON.stringify(self.selectedProblem())
 									},

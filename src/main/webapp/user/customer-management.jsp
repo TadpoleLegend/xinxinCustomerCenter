@@ -739,20 +739,6 @@
 	<script src="/ls/js/jquery.raty.js"></script>
 	<script src="/ls/js/jquery.pagination.js"></script>
 	<script>
-		$(document).bind('keypress.alt_1', function() {
-			
-			$('#searchboxDialog').dialog({
-				modal : true,
-				dialogClass : 'noTitle',
-				height : 'auto',
-				width : 'auto',
-				maxHeight: 'auto',
-				maxWidth:'auto',
-				minHeight:'auto',
-				minWidth:'auto',
-				position : ['center', 200]
-			});
-		});
 	
 		$(document).ready( function() {
 					
@@ -1578,6 +1564,7 @@
 							
 							$.ajax({
 								url : 'findAllProblems.ls',
+								method : 'POST',
 								data : {type : type},
 								success : function(data) {
 									if (data) {

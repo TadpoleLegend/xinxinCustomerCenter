@@ -1,14 +1,14 @@
 <!-- Footer -->
-<%@ page contentType="text/html;charset=utf8"%>
+<%@ page contentType="text/html;charset=gbk"%>
 <footer role="footer">
 		<div class="container">
 			<div class="row">
 				<div class="eight columns">
-					<p>Copyright &copy; 2013 - 2015 ä¸Šæµ·æ¬£å¿ƒä¼ä¸šç®¡ç†å’¨è¯¢æœ‰é™å…¬å¸ï¼Œå®¢æˆ·æ•°æ®ä¸­å¿ƒã€‚</p>
+					<p>Copyright &copy; 2013 - 2015 ÉÏº£ĞÀĞÄÆóÒµ¹ÜÀí×ÉÑ¯ÓĞÏŞ¹«Ë¾£¬¿Í»§Êı¾İÖĞĞÄ¡£</p>
 					<address>
-						<a rel="external" class="display-inline" title="èŒèšªå·¥ä½œå®¤ç ”å‘">Privacy Policy <i class="icon-external-link"></i></a>
-						<a rel="external" title="èŒèšªå·¥ä½œå®¤ç ”å‘">Terms and Conditions <i class="icon-external-link"></i></a>
-						<a rel="external" title="èŒèšªå·¥ä½œå®¤ç ”å‘">Tadpole Studio <i class="icon-external-link"></i></a>
+						<a rel="external" class="display-inline" title="òòò½¹¤×÷ÊÒÑĞ·¢">Privacy Policy <i class="icon-external-link"></i></a>
+						<a rel="external" title="òòò½¹¤×÷ÊÒÑĞ·¢">Terms and Conditions <i class="icon-external-link"></i></a>
+						<a rel="external" title="òòò½¹¤×÷ÊÒÑĞ·¢">Tadpole Studio <i class="icon-external-link"></i></a>
 					</address>
 				</div>
 			</div>
@@ -35,7 +35,7 @@
 			height : 'auto',
 			buttons : {
 				
-				'å…³é—­çª—å£' : function() {
+				'¹Ø±Õ´°¿Ú' : function() {
 					closeDialog('commonErrorMessageDialog');
 				}
 			}

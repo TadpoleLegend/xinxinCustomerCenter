@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=utf8"%>
+<%@ page contentType="text/html;charset=gbk"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -10,20 +10,20 @@
 <head>
 <!-- Set the viewport width to device width for mobile -->
 <meta name="viewport" content="width=device-width" />
-<title>æ¬£å¿ƒé¡¾å®¢æ•°æ®ä¸­å¿ƒ</title>
+<title>ĞÀĞÄ¹Ë¿ÍÊı¾İÖĞĞÄ</title>
 <link rel="stylesheet" href="/ls/css/common.css">
 <s:include value="/jsps/common/head.jsp" />
 
 </head>
 <body>
-	<s:include value="/jsps/common/brand.jsp" />
+	<%@ include file="/jsps/common/brand.jsp" %>
 	<s:include value="/jsps/common/menu.jsp" />
 	<section class="mainbg">
 		<div class="container" id ="userModeContainer">
 			<div id="resetPasswordDialog" style="display : none;">
 				<form class="form-wrapper">
-					<input type="text" id="search" placeholder="è¯·è¾“å…¥æ–°çš„å¯†ç " required data-bind="value : newPasswordToReset"> 
-					<a type="password" class="small blue button" data-bind="click : resetPassword"> <i class="icon-circle-arrow-right"></i>æäº¤</a>
+					<input type="text" id="search" placeholder="ÇëÊäÈëĞÂµÄÃÜÂë" required data-bind="value : newPasswordToReset"> 
+					<a type="password" class="small blue button" data-bind="click : resetPassword"> <i class="icon-circle-arrow-right"></i>Ìá½»</a>
 				</form>
 			</div>
 			<div class="content" id="userRolesManagementDialog" style="display : none;">
@@ -38,9 +38,9 @@
 				<div class="row">
 					<div class="app-wrapper ui-corner-top">
 							<div class="blue module ui-corner-top clearfix">
-								<h2>ç”¨æˆ·åˆ—è¡¨</h2>
+								<h2>ÓÃ»§ÁĞ±í</h2>
 								<h2 class="right">
-									<a class="small white button" data-bind="click : $root.openUserManagementDialog">åˆ›å»ºæ–°ç”¨æˆ·</a>
+									<a class="small white button" data-bind="click : $root.openUserManagementDialog">´´½¨ĞÂÓÃ»§</a>
 								</h2>
 							</div>
 							<div class="content">
@@ -48,11 +48,11 @@
 									<table class="infoTable">
 										<thead>
 											<tr>
-												<th>ç¼–å·</th>
-												<th>å§“å</th>
-												<th>è´¦å·</th>
-												<th>çŠ¶æ€</th>
-												<th>æ“ä½œ</th>
+												<th>±àºÅ</th>
+												<th>ĞÕÃû</th>
+												<th>ÕËºÅ</th>
+												<th>×´Ì¬</th>
+												<th>²Ù×÷</th>
 											</tr>
 										</thead>
 										<tbody data-bind="foreach : users">
@@ -62,13 +62,13 @@
 												<td style="text-align: center" data-bind="text : username"></td>
 												<td style="text-align: center">
 												
-													<span data-bind="visible : active">æ¿€æ´»</span>	
-													<span data-bind="visible : !active">å…³é—­</span>											
+													<span data-bind="visible : active">¼¤»î</span>	
+													<span data-bind="visible : !active">¹Ø±Õ</span>											
 												</td>
 												<td style="text-align: center">
-													<a title="åˆ†é…è§’è‰²" data-bind="click : $root.openAssignRolesDialog" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
-													<a title="é‡ç½®å¯†ç " data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-orange"></i></a>
-													<a title="å…³é—­ç”¨æˆ·" data-bind="click : $root.disactiveUser" style="margin-left : 10px;" href="#"><i class="icon-trash small icon-red"></i></a>
+													<a title="·ÖÅä½ÇÉ«" data-bind="click : $root.openAssignRolesDialog" style="margin-left : 10px;" href="#"><i class="icon-user small icon-blue"></i></a>
+													<a title="ÖØÖÃÃÜÂë" data-bind="click : $root.openResetPasswordDialog" style="margin-left : 10px;" href="#"><i class="icon-pencil small icon-orange"></i></a>
+													<a title="¹Ø±ÕÓÃ»§" data-bind="click : $root.disactiveUser" style="margin-left : 10px;" href="#"><i class="icon-trash small icon-red"></i></a>
 												</td>
 											</tr>
 										</tbody>
@@ -78,18 +78,18 @@
 							</div>
 						</div>
 					</div>
-				<div id="userManagementDialog" class="content" title="ç”¨æˆ·ç®¡ç†" style="display: none;" data-bind="with : selectedUser">
+				<div id="userManagementDialog" class="content" title="ÓÃ»§¹ÜÀí" style="display: none;" data-bind="with : selectedUser">
 					<div class="row">
-							<label>å§“å</label>
-							<input id="userNameInput" type="text" class="addon-postfix" placeholder="è¯·è¾“å…¥å§“å" data-bind="value : name" />
+							<label>ĞÕÃû</label>
+							<input id="userNameInput" type="text" class="addon-postfix" placeholder="ÇëÊäÈëĞÕÃû" data-bind="value : name" />
 					</div>
 					<div class="row">
-							<label>ç”¨æˆ·å</label>
-							<input type="text" class="addon-postfix" placeholder="è¯·è¾“å…¥ç”¨æˆ·å" data-bind="value : username" />
+							<label>ÓÃ»§Ãû</label>
+							<input type="text" class="addon-postfix" placeholder="ÇëÊäÈëÓÃ»§Ãû" data-bind="value : username" />
 					</div>
 					<div class="row">
-							<label>å¯†ç </label>
-							<input type="password" class="addon-postfix" placeholder="è¯·è¾“å…¥å¯†ç " data-bind="value : password" />
+							<label>ÃÜÂë</label>
+							<input type="password" class="addon-postfix" placeholder="ÇëÊäÈëÃÜÂë" data-bind="value : password" />
 					</div>
 				</div>
 			</div>
@@ -156,7 +156,7 @@
 								},
 								
 								buttons : {
-									'å…³é—­çª—å£' : function() {
+									'¹Ø±Õ´°¿Ú' : function() {
 										self.closeDialog('userRolesManagementDialog');
 									}
 								}
@@ -174,7 +174,7 @@
 						};
 						
 						self.disactiveUser = function(item, event) {
-							if (window.confirm('ä½ çœŸçš„ç¡®å®šè¦å…³é—­è¿™ä¸ªç”¨æˆ·å—ï¼Ÿ')) {
+							if (window.confirm('ÄãÕæµÄÈ·¶¨Òª¹Ø±ÕÕâ¸öÓÃ»§Âğ£¿')) {
 								
 								$.ajax({
 									url : 'disactiveUser.ls',
@@ -186,11 +186,11 @@
 										
 										if (isOK(data)) {
 											
-											success();
+											success("Good Job!");
 											self.loadAllUsers();
 											
 										} else {
-											fail();
+											fail("Bad.");
 										}
 									}
 								});
@@ -243,10 +243,10 @@
 								},
 								
 								buttons : {
-									'ä¿å­˜ç”¨æˆ·' : function() {
+									'±£´æÓÃ»§' : function() {
 										self.saveUser();
 									},
-									'å…³é—­çª—å£' : function() {
+									'¹Ø±Õ´°¿Ú' : function() {
 										self.closeDialog('userManagementDialog');
 									}
 								}
@@ -289,15 +289,15 @@
 						self.saveUser = function() {
 							var currentUser = self.selectedUser();
 							if (!currentUser.name) {
-								fail("è¯·è¾“å…¥ç”¨æˆ·å§“å");
+								fail("ÇëÊäÈëÓÃ»§ĞÕÃû");
 								return;
 							}
 							if (!currentUser.username) {
-								fail("è¯·è¾“å…¥ç”¨æˆ·è´¦å·");
+								fail("ÇëÊäÈëÓÃ»§ÕËºÅ");
 								return;
 							}
 							if (!currentUser.password) {
-								fail("è¯·è¾“å…¥å¯†ç ");
+								fail("ÇëÊäÈëÃÜÂë");
 								return;
 							}
 							$.ajax({                        
@@ -315,7 +315,6 @@
 						};
 					};
 					var model = new UserModel();
-					model.loadUserAccouts();
 					model.loadAllUsers();
 					
 					var $userModeContainer = $("#userModeContainer")[0];

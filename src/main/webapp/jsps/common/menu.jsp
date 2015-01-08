@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=utf8"%>
+<%@ page contentType="text/html;charset=gbk"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <nav class="site-nav" id="nav">
 	<div class="row">
