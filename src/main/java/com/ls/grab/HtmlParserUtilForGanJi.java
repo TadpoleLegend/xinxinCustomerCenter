@@ -142,33 +142,24 @@ public class HtmlParserUtilForGanJi extends BaseHtmlParseUtil {
 		return returnCompanyList;
 	}
 
-	public void findCompanyDetails(Company company) {
+	public void findCompanyDetails(Company company) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 
-		try {
-			String detailUrl = company.getGanjiUrl();
-			
-			HtmlPage mainPage = webClient.getPage(detailUrl);
-			
-			String htmlDetail = mainPage.getWebResponse().getContentAsString();
-			
-			compositeCityAndProvince(mainPage, company);
-			
-			parseDetails(company, htmlDetail);
-			
-			parseDescription(mainPage, company);
-			
-			if (StringUtils.isEmpty(company.getName())) {
-				parseName(mainPage, company);
-			}
-			
-			
-		} catch (FailingHttpStatusCodeException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		String detailUrl = company.getGanjiUrl();
+
+		HtmlPage mainPage = webClient.getPage(detailUrl);
+
+		String htmlDetail = mainPage.getWebResponse().getContentAsString();
+
+		compositeCityAndProvince(mainPage, company);
+
+		parseDetails(company, htmlDetail);
+
+		parseDescription(mainPage, company);
+
+		if (StringUtils.isEmpty(company.getName())) {
+			parseName(mainPage, company);
 		}
+
 	}
 
 	

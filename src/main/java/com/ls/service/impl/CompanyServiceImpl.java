@@ -498,10 +498,13 @@ public class CompanyServiceImpl implements CompanyService {
 		Integer currentStatus = company.getStatus();
 		Integer targetStatus = Integer.valueOf(statusId);
 		
-		Integer reduceResult = Math.abs(currentStatus - targetStatus);
+		Integer currentStatusOrder = CustomerStatusEnum.getCustomerStatusById(currentStatus).getOrderNumber();
+		Integer targetStatusOrder = CustomerStatusEnum.getCustomerStatusById(targetStatus).getOrderNumber();
+		
+		Integer reduceResult = Math.abs(currentStatusOrder - targetStatusOrder);
 		
 		if (reduceResult > 1) {
-			response = ResponseVo.newFailMessage("一次只能移动一步。");
+			response = ResponseVo.newFailMessage("一次只能移动一步。慢慢来好不？");
 			return response;
 		}
 
@@ -575,7 +578,10 @@ public class CompanyServiceImpl implements CompanyService {
 		phoneCallHistory.setCreateDate(XinXinUtils.getNow());
 
 		phoneCallHistory.setCompany(company);
-		phoneCallHistory.setUser(commonService.getCurrentLoggedInUser());
+		
+		User currentUser = commonService.getCurrentLoggedInUser();
+		phoneCallHistory.setUser(currentUser);
+		phoneCallHistory.setCreatorName(currentUser.getName());
 
 		return phoneCallHistoryRepository.saveAndFlush(phoneCallHistory);
 	}

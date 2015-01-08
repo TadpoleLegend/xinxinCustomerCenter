@@ -27,6 +27,15 @@ public enum CustomerStatusEnum {
 		return null;
 	}
 
+	public static CustomerStatusEnum getCustomerStatusById(Integer id) {
+		for (CustomerStatusEnum c : CustomerStatusEnum.values()) {
+			if (c.getId().equals(id)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
 	public Integer getId() {
 
 		return id;

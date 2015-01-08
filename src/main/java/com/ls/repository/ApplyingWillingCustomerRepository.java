@@ -1,5 +1,7 @@
 package com.ls.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -8,5 +10,6 @@ import com.ls.entity.User;
 
 public interface ApplyingWillingCustomerRepository extends JpaRepository<ApplyingWillingCustomer, Integer> , JpaSpecificationExecutor<ApplyingWillingCustomer>{
 	
-	public ApplyingWillingCustomer findByCompanyIdAndUser(Integer companyId, User user);
+	 ApplyingWillingCustomer findByCompanyIdAndUser(Integer companyId, User user);
+	 List<ApplyingWillingCustomer> findByStatus(Integer status);
 }

@@ -279,7 +279,7 @@
 											</div>
 											<div class='two columns'>
 												<label>区域 </label><input type="text"
-													data-bind="value : distinct">
+													data-bind="value : area">
 											</div>
 											<div class='seven columns'>
 												<label>地址 </label> <input type="text"
@@ -506,8 +506,8 @@
 												<tr>
 													<th class="text-center">记录编号</th>
 													<th class="text-center">跟踪时间</th>
-													<th class="text-center">下次跟踪时间</th>
-													<th class="text-center">沟通内容</th>
+													<th class="text-center">下次跟踪日期</th>
+													<th class="text-center">创建者</th>
 													<th class="text-center"></th>
 												</tr>
 											</thead>
@@ -516,7 +516,8 @@
 													<td class="text-center"><span class="text-success" data-bind="text: id"></span></td>
 													<td class="text-center"><span data-bind="text: createDate"></span></td>
 													<td class="text-center"><span data-bind="text: nextDate"></span></td>
-													<td class="text-center"><span data-bind="text: description"></span></td>
+													<td class="text-center"><span data-bind="text: creatorName"></span></td>
+													
 													<td class="text-center">
 														<a href="#" data-bind="click : $root.editPhoneCallHistory"><i class="icon-pencil small icon-blue"></i></a> 
 														<a href="#" style="margin-left : 10px;" data-bind="click : $root.removePhoneCallHistory"><i class="icon-trash small icon-red"></i></a>
@@ -528,12 +529,12 @@
 									</div>
 								</div>
 								<h3>
-									<a href="#">培训记录</a>
+									<a href="#">培训预约与登记</a>
 								</h3>
 								<div class="app-wrapper content">
 									<div class="row">
 										<div class="right">
-											<a class="small blue button" data-bind="click : $root.addLearningHistory">创建新的培训记录</a>
+											<a class="small blue button" data-bind="click : $root.addLearningHistory">创建新的培训预约与登记记录</a>
 										</div>
 									</div>
 									<div>
@@ -790,7 +791,7 @@
 						
 					};
 					
-					var Company = function(id, name, contactor, email, emailSrc, phone, phoneSrc, star, address, distinct, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description, ganjiUrl, fEurl) {
+					var Company = function(id, name, contactor, email, emailSrc, phone, phoneSrc, star, address, area, problems, oteUrl, status, mobilePhone, mobilePhoneSrc,description, ganjiUrl, fEurl) {
 						var self = this;
 						
 						self.id = id;
@@ -804,7 +805,7 @@
 						self.mobilePhoneSrc = mobilePhoneSrc;
 						self.star = star;
 						self.address = address;
-						self.distinct = distinct;
+						self.area = area;
 						self.problems = ko.observableArray(problems);
 						self.oteUrl = oteUrl;
 						self.selectedProblem = ko.observable('');
@@ -864,6 +865,7 @@
 							this.nextDate = '';
 							this.createDate = '';
 							this.description = '';
+							this.creatorName = '';
 					};
 					var Phase = function() {
 						
@@ -915,7 +917,7 @@
 						self.totalPagesCount = ko.observable('1');
 						self.totalCompanyCount = ko.observable('0');
 						self.starInput = ko.observable(0);
-						self.distinctInput = ko.observable();
+						self.areaInput = ko.observable();
 						self.seachCompany = ko.observable('');
 						self.searchContactor =  ko.observable('');
 						self.searchId = ko.observable('');
@@ -971,10 +973,10 @@
 							self.selectedCity('');
 							self.selectedProvince('');
 							self.searchId('');
-							self.selectedProblemCategory('');
+							self.selectedProblemCategory('');	
 							self.customerStatus('');
 							self.starLevelOperator('');
-							self.dataSourceTypes('');
+							self.selectedDataSourceType('');
 							self.advanceSearch(new AdvanceSearch());
 							
 						};
@@ -986,7 +988,6 @@
 								$.each(self.provinces(), function(i, n){
 									if ( n.id == self.selectedProvince()) {
 										cityOptions = n.cities;
-										console.debug(cityOptions);
 									}
 								});
 							} else {

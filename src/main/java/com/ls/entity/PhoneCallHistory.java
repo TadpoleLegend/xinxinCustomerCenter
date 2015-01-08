@@ -31,6 +31,8 @@ public class PhoneCallHistory {
 	
 	protected Date nextDate;
 
+	protected String creatorName;
+	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	protected User user;
@@ -72,6 +74,18 @@ public class PhoneCallHistory {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	
+	public String getCreatorName() {
+	
+		return creatorName;
+	}
+
+	
+	public void setCreatorName(String creatorName) {
+	
+		this.creatorName = creatorName;
 	}
 
 	@JSON(format="yyyy-MM-dd") 

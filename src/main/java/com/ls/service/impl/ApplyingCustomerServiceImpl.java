@@ -76,8 +76,8 @@ public class ApplyingCustomerServiceImpl implements ApplyingCustomerService {
 		freshApplyingWillingCustomer.setStatus(statusId);
 		freshApplyingWillingCustomer.setUpdateDate(XinXinUtils.getNow());
 		
-		companyRepository.save(company);
-		applyingWillingCustomerRepository.save(freshApplyingWillingCustomer);
+		companyRepository.saveAndFlush(company);
+		applyingWillingCustomerRepository.saveAndFlush(freshApplyingWillingCustomer);
 	}
 
 	public WillCustomerCheckResult checkApplyingCustomer(ApplyingWillingCustomer applyingWillingCustomer) throws ApplicationException {

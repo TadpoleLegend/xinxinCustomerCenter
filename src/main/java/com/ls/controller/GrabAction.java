@@ -259,22 +259,26 @@ public class GrabAction extends BaseAction {
 			return SUCCESS;
 		}
 
-		if (targetDetailUrl.contains("58.com")) {
-			ResponseVo responseVo = grabService.grabSingleFECompanyByUrl(targetDetailUrl);
+		try {
+			if (targetDetailUrl.contains("58.com")) {
+				ResponseVo responseVo = grabService.grabSingleFECompanyByUrl(targetDetailUrl);
 
-			setResponse(responseVo);
-		} else if (targetDetailUrl.contains("ganji.com")) {
-			ResponseVo responseVo = grabService.grabSingleGJCompanyByUrl(targetDetailUrl);
+				setResponse(responseVo);
+			} else if (targetDetailUrl.contains("ganji.com")) {
+				ResponseVo responseVo = grabService.grabSingleGJCompanyByUrl(targetDetailUrl);
 
-			setResponse(responseVo);
-		} else if (targetDetailUrl.contains("138job.com")) {
-			
-			ResponseVo responseVo = grabService.grabSingleOTECompanyByUrl(targetDetailUrl);
+				setResponse(responseVo);
+			} else if (targetDetailUrl.contains("138job.com")) {
+				
+				ResponseVo responseVo = grabService.grabSingleOTECompanyByUrl(targetDetailUrl);
 
-			setResponse(responseVo);
-			
-		} else {
-			setResponse(ResponseVo.newFailMessage("目前只支持 58同城，赶集网和138美容网的数据采集。"));
+				setResponse(responseVo);
+				
+			} else {
+				setResponse(ResponseVo.newFailMessage("目前只支持 58同城，赶集网和138美容网的数据采集。"));
+			}
+		} catch (Exception e) {
+			setResponse(ResponseVo.newFailMessage("采集数据时发生了错误。" + e.getMessage()));
 		}
 
 		return SUCCESS;

@@ -36,7 +36,8 @@ public class ApproveCustomerAction extends BaseAction {
 
 	public String getAllApplyingList() {
 		
-		applyingWillingCustomers = applyingWillingCustomerRepository.findAll();
+		applyingWillingCustomers = applyingWillingCustomerRepository.findByStatus(ApplyingCustomerStatus.APPLYING.getId());
+		
 		for (ApplyingWillingCustomer applyingWillingCustomer : applyingWillingCustomers) {
 			applyingWillingCustomer.setUser(null);
 		}

@@ -819,7 +819,25 @@ public class GrabServiceImpl extends BasicGrabService {
 
 		ResponseVo response = null;
 
-		HtmlParserUtilForGanJi.getInstance().findCompanyDetails(company);
+		try {
+			HtmlParserUtilForGanJi.getInstance().findCompanyDetails(company);
+			
+		} catch (FailingHttpStatusCodeException e1) {
+			
+			response = ResponseVo.newFailMessage("采集数据时从赶集网返回了异常状态，当前的地址可能无法访问。" + e1.getMessage());
+			
+			return response;
+			
+		} catch (MalformedURLException e1) {
+			
+			response = ResponseVo.newFailMessage("采集数据时从赶集网返回了异常状态，当前的地址可能无法访问。" + e1.getMessage());
+			
+			return response;
+		} catch (IOException e1 ) {
+			response = ResponseVo.newFailMessage("采集数据时从赶集网返回了IO错误。" + e1.getMessage());
+			
+			return response;
+		}
 
 		handleLocation(company);
 
