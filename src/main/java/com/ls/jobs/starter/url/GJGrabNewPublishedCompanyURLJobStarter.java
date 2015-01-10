@@ -1,6 +1,4 @@
-package com.ls.jobs.starter;
-
-import java.util.List;
+package com.ls.jobs.starter.url;
 
 import javax.annotation.Resource;
 
@@ -16,7 +14,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ls.entity.JobScheduleConfiguration;
+import com.ls.constants.XinXinPropertiesReader;
 import com.ls.jobs.XinXinJobHelper;
 import com.ls.jobs.gj.GrabUrlJob;
 import com.ls.repository.GrabDetailUrlLogRepository;
@@ -39,27 +37,19 @@ public class GJGrabNewPublishedCompanyURLJobStarter implements InitializingBean 
 
 	public void afterPropertiesSet() throws Exception {
 
-		int startHour, startMinute;
-
-		List<JobScheduleConfiguration> onlyOneJobScheduleConfigurations = jobScheduleConfigurationRepository.findAll();
-
-		if (onlyOneJobScheduleConfigurations == null || onlyOneJobScheduleConfigurations.isEmpty()) {
-			startHour = 20;
-			startMinute = 20;
-		} else {
-
-			JobScheduleConfiguration configuration = onlyOneJobScheduleConfigurations.get(0);
-			startHour = configuration.getFeStartHour();
-			startMinute = configuration.getFeStartMinute();
-		}
-
+		String startHourString = XinXinPropertiesReader.getString("urlStartHour");
+		String startMinuteString = XinXinPropertiesReader.getString("urlStartMin");
+		
+		int startHour = Integer.valueOf(startHourString);
+		int startMin = Integer.valueOf(startMinuteString);
+		
 		JobDataMap jobDataMap = new JobDataMap();
 
 		jobDataMap.put("grabCompanyDetailPageUrlService", grabCompanyDetailPageUrlService);
 
 		JobDetail elevenOclockJobDetail = JobBuilder.newJob(GrabUrlJob.class).usingJobData(jobDataMap).withIdentity("GanJi_Daily_grab_new_company_url_job", "GRAB_URL").build();
 
-		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl)CronScheduleBuilder.dailyAtHourAndMinute(15, 18).build();
+		CronTriggerImpl elevenOclockTrigger = (CronTriggerImpl) CronScheduleBuilder.dailyAtHourAndMinute(startHour, startMin + 1).build();
 		elevenOclockTrigger.setName("GanJi_Daily_grab_new_company_url_job_trigger");
 		elevenOclockTrigger.setGroup("GRAB_URL_TRIGGER");
 
