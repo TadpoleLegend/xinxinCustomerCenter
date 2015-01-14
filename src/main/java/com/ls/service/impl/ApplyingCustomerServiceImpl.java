@@ -85,6 +85,9 @@ public class ApplyingCustomerServiceImpl implements ApplyingCustomerService {
 		if (applyingWillingCustomer.getCompanyAdditionalId() == null) {
 			throw new ApplicationException("院长信息缺失！");
 		}
+		
+		//TODO need check duplicate request from different users.
+		
 		CompanyAdditional companyAdditional = companyAdditionalRepository.findOne(applyingWillingCustomer.getCompanyAdditionalId());
 		Company company = companyRepository.findOne(applyingWillingCustomer.getCompanyId());
 		
@@ -111,6 +114,7 @@ public class ApplyingCustomerServiceImpl implements ApplyingCustomerService {
 		} else {
 			willCustomerCheckResult.setCompanyNameResult(commaJoiner.join(geCompanyIdList(listWithSameCompanyName)));
 		}
+		
 		
 		return willCustomerCheckResult;
 	}

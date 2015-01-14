@@ -4,6 +4,7 @@ public class WillCustomerCheckResult {
 	private String bossNameResult;
 	private String bossMobileResult;
 	private String companyNameResult;
+	private String duplicateApplyingRequest;
 	
 	public String getBossNameResult() {
 	
@@ -34,4 +35,17 @@ public class WillCustomerCheckResult {
 	
 		this.companyNameResult = companyNameResult;
 	}
+
+	
+	public String getDuplicateApplyingRequest() {
+	
+		return duplicateApplyingRequest;
+	}
+
+	
+	public void setDuplicateApplyingRequest(String duplicateApplyingRequest) {
+	
+		this.duplicateApplyingRequest = duplicateApplyingRequest;
+	}
+	
 }

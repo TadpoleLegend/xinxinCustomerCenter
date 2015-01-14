@@ -183,7 +183,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 					Join<Company, Problem> problemJoin = root.joinList("problems", JoinType.LEFT);
 
-					predicate.getExpressions().add(criteriaBuilder.equal(problemJoin.<Integer> get("category"), companySearchVo.getSelectedProblemCategory()));
+					predicate.getExpressions().add(criteriaBuilder.equal(problemJoin.<Integer> get("categoryCode"), companySearchVo.getSelectedProblemCategory()));
 				}
 
 				// status
@@ -492,11 +492,16 @@ public class CompanyServiceImpl implements CompanyService {
 		String currentUsername = XinXinUtils.getCurrentUserName();
 		User currentUser = userRepository.findByUsername(currentUsername);
 
-		ApplyingWillingCustomer applyingWillingCustomer = applyingWillingCustomerRepository.findByCompanyIdAndUser(Integer.valueOf(companyId), currentUser);
+		ApplyingWillingCustomer applyingWillingCustomer = applyingWillingCustomerRepository.findByCompanyIdAndUserAndStatus(Integer.valueOf(companyId), currentUser, ApplyingCustomerStatus.APPLYING.getId());
 
 		Company company = companyRepository.findOne(Integer.valueOf(companyId));
 		Integer currentStatus = company.getStatus();
 		Integer targetStatus = Integer.valueOf(statusId);
+		
+		if (currentStatus == targetStatus) {
+			response = ResponseVo.newFailMessage("无效的重复点击。");
+			return response;
+		}
 		
 		Integer currentStatusOrder = CustomerStatusEnum.getCustomerStatusById(currentStatus).getOrderNumber();
 		Integer targetStatusOrder = CustomerStatusEnum.getCustomerStatusById(targetStatus).getOrderNumber();
@@ -514,7 +519,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 				response = ResponseVo.newFailMessage("该顾客正在意向客户申请中，不能改变状态！");
 				return response;
-			} else if (targetStatus > CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
+			} else if (targetStatus == CustomerStatusEnum.APPLYING_WILLING_CUSTOMER.getId()) {
 
 				response = ResponseVo.newFailMessage("该顾客已经在意向客户申请中！");
 				return response;

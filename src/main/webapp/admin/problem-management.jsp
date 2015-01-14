@@ -27,7 +27,15 @@
 					<br>
 					<hr>
 					<div class="row">
-						<label> 问题类别</label> <input id="categoryInput" type="text" data-bind="value : category" class="required">
+						<label class="required"> 问题类别</label> 
+						<select data-bind="options: $root.problemCategories,
+                      											   optionsText: 'optionText',
+                       											   value: categoryCode,
+                       											   optionsValue : 'optionValue',
+                       											   selectedOption : categoryCode,
+                       											   optionsCaption: '全部'"
+                       									class="required">
+                       	</select>
 					</div>
 					<div class="row">
 						<label> 问题描述</label> <input type="text" data-bind="value : name" class="required">
@@ -79,7 +87,6 @@
 	<script src="/ls/js/User.js"></script>
 	<script>
 		$(document).ready( function() {
-					var problemCategoryList = ['员工问题', '顾客问题', '其他问题'];
 					
 					$('#problemListTable').dataTable({
 						"paging" : false,
@@ -94,6 +101,7 @@
 						self.id = id;
 						self.name = name;
 						self.category = category;
+						self.categoryCode = '';
 					};
 
 					var ConfigurationModel = function() {
@@ -103,7 +111,7 @@
 						self.newProblenName = ko.observable();
 						self.problems = ko.observableArray([]);
 						self.newType = ko.observable();
-
+						self.problemCategories = ko.observableArray([]);
 						self.selectedProblem = ko.observable(new Problem());
 
 						self.categoryList = [];
@@ -116,7 +124,15 @@
 								}
 							});
 						};
-
+						
+						$.ajax({
+							url : '/ls/findDropDownDataSouce.ls',
+							data : {identityType : 'problem_category'},
+							success : function(data) {
+								self.problemCategories(data);
+							}
+						});
+						
 						self.deleteProblem = function(item, event) {
 							
 							if (window.confirm('你确定要删除这个问题选项吗？')) {
@@ -138,7 +154,7 @@
 						};
 
 						self.saveProblem = function() {
-							
+								console.debug(self.selectedProblem());
 							if ($('#problemForm').valid()) {
 								
 								$.ajax({
@@ -173,13 +189,7 @@
 									changeButtonStyleForPopup(e);
 								}
 							});
-							
-							$('#categoryInput').autocomplete({source : problemCategoryList, minLength: 0, 
-								select: function( event, ui ) {
-										self.selectedProblem().category = (ui.item.label);	
-							}});
-							
-							$('#categoryInput').autocomplete("search", "");
+						
 						};
 						
 						self.closeDialog = function() {
@@ -195,6 +205,7 @@
 
 					var configurationModel = new ConfigurationModel();
 					configurationModel.findAllProblems();
+					
 					var $configurationModelContainer = $("#configurationModelContainer")[0];
 					ko.applyBindings(configurationModel, configurationModelContainer);
 					

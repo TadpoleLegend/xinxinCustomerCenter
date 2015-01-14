@@ -77,9 +77,9 @@
 							<div class="three columns">
 								<label>问题分类</label>
 								<select data-bind="options: $root.problemCategories,
-                      										optionsText: 'name',
+                      										optionsText: 'optionText',
                        									    value: $root.selectedProblemCategory,
-                       									    optionsValue : 'name',
+                       									    optionsValue : 'optionValue',
                        									    selectedOption : $root.selectedProblemCategory,
                        									    optionsCaption: '请选择...'">
                        			</select>
@@ -1551,7 +1551,8 @@
 							});
 							
 							$.ajax({
-								url : '/ls/findProblemCategories.ls',
+								url : '/ls/findDropDownDataSouce.ls',
+								data : {identityType : 'problem_category'},
 								success : function(data) {
 									self.problemCategories(data);
 								}

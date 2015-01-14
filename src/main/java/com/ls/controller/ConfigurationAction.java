@@ -11,7 +11,9 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
+import com.ls.constants.XinXinConstants;
 import com.ls.entity.Problem;
+import com.ls.repository.DropDownRepository;
 import com.ls.repository.ProblemRepository;
 import com.ls.service.CompanyService;
 import com.ls.util.XinXinUtils;
@@ -27,6 +29,9 @@ public class ConfigurationAction extends BaseAction {
 
 	@Autowired
 	private ProblemRepository problemRepository;
+	
+	@Autowired
+	private DropDownRepository dropDownRepository;
 
 
 	private Problem problemOperating;
@@ -38,6 +43,9 @@ public class ConfigurationAction extends BaseAction {
 		String problemJson = getParameter("problem");
 		
 		Problem problem = XinXinUtils.getJavaObjectFromJsonString(problemJson, Problem.class);
+		
+		String category = dropDownRepository.findByIdentityAndOptionValue(XinXinConstants.PROBLEM_CATEGORY, problem.getCategoryCode()).getOptionText();
+		problem.setCategory(category);
 		
 		problemOperating = problemRepository.saveAndFlush(problem);
 		

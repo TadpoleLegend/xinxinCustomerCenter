@@ -144,29 +144,6 @@ public class TestInitializationScripts {
 
 	}
 	
-//	/**
-//	 * init company data
-//	 * 
-//	 * star : 0
-//	 * status : no willing 
-//	 * istracked : false
-//	 * 
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void testInitialCompanyStatus() throws Exception {
-//
-//		List<Company> companies = companyRepository.findAll();
-//		for (Company company : companies) {
-//			company.setStatus(CustomerStatusEnum.NO_WILLING_CUSTOMER.getId());
-//			company.setIsTracked(false);
-//			company.setStar(0);
-//			
-//			companyRepository.save(company);
-//		}
-//		
-//	}
-//	
 	@Test
 	public void testInitialPhase() throws Exception {
 		
@@ -203,26 +180,6 @@ public class TestInitializationScripts {
 		dropDownRepository.save(dictionaries);
 	}
 	
-//	@Test
-//	public void removeBuxianCity() {
-//		List<City> cities = cityRepository.findAll();
-//		for (City city : cities) {
-//			if (city.getName().contains("不限")) {
-//				cityRepository.delete(city);
-//			}
-//		}
-//	}
-//	
-//	@Test
-//	public void removeProblems() {
-//		problemRepository.deleteAll();
-//	}
-//	
-//	@Test
-//	public void removeCompany() {
-//		companyRepository.deleteAll();
-//	}
-	
 	@Test
 	public void testAddStarLevel() {
 		
@@ -242,13 +199,21 @@ public class TestInitializationScripts {
 	@Test
 	public void testAddCustomerProblems () {
 		
-		ProblemCategory customerProblemCategory = new ProblemCategory("顾客问题");
-		ProblemCategory employeeProblemCategory = new ProblemCategory("员工问题");
-		ProblemCategory otherCategory = new ProblemCategory("其他问题");
+//		ProblemCategory customerProblemCategory = new ProblemCategory("顾客问题");
+//		ProblemCategory employeeProblemCategory = new ProblemCategory("员工问题");
+//		ProblemCategory otherCategory = new ProblemCategory("其他问题");
+//		
+//		List<ProblemCategory> categories = ImmutableList.of(customerProblemCategory, employeeProblemCategory, otherCategory);
+//		
+//		problemCategoryRepository.save(categories);
 		
-		List<ProblemCategory> categories = ImmutableList.of(customerProblemCategory, employeeProblemCategory, otherCategory);
+		Dictionary customerProblemCategory = new Dictionary(XinXinConstants.PROBLEM_CATEGORY, "CUSTOMER", "顾客问题", "");
+		Dictionary employeeProblemCategory = new Dictionary(XinXinConstants.PROBLEM_CATEGORY, "EMPLOYEE", "员工问题", "");
+		Dictionary otherCategory = new Dictionary(XinXinConstants.PROBLEM_CATEGORY, "OTHERS", "其他问题", "");
 		
-		problemCategoryRepository.save(categories);
+		List<Dictionary> dictionaries = ImmutableList.of(customerProblemCategory, employeeProblemCategory, otherCategory);
+		
+		dropDownRepository.save(dictionaries);
 	}
 	
 	@Test

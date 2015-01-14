@@ -31,6 +31,8 @@ public class ApplyingWillingCustomer implements Serializable {
 	
 	protected String bossName;
 	
+	protected String bossPhoneNumber;
+	
 	protected Integer status;
 	
 	protected Date applyingDate;
@@ -50,6 +52,15 @@ public class ApplyingWillingCustomer implements Serializable {
 		this.id = id;
 	}
 	
+	public String getBossPhoneNumber() {
+	
+		return bossPhoneNumber;
+	}
+	
+	public void setBossPhoneNumber(String bossPhoneNumber) {
+	
+		this.bossPhoneNumber = bossPhoneNumber;
+	}
 	public String getCompanyName() {
 	
 		return companyName;
@@ -99,7 +110,7 @@ public class ApplyingWillingCustomer implements Serializable {
 	
 		this.companyId = companyId;
 	}
-	@JSON(format="yyyy-MM-dd") 
+	@JSON(format="yyyy年MM月dd日 HH点mm分 ") 
 	public Date getApplyingDate() {
 	
 		return applyingDate;

@@ -11,4 +11,6 @@ public interface DropDownRepository extends JpaRepository<Dictionary, Integer> ,
 	
 	List<Dictionary> findByIdentity(String identity);
 	
+	Dictionary findByIdentityAndOptionValue(String identity, String optionValue);
+	
 }
